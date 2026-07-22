@@ -112,6 +112,7 @@ type InternalRefs = {
   landmarksCanvas: HTMLCanvasElement | null;
   rafId: number;
   lastInferTs: number;
+  lastTimestampMs: number;
   lastVideoTime: number;
   inferBusy: boolean;
   candidateBits: boolean[];
@@ -151,11 +152,30 @@ export type UseFistGestureResult = FistGesturePublicState & {
   checkPermission: () => Promise<void>;
 };
 
-function syncLandmarksCanvasSize(canvas: HTMLCanvasElement) {
-  const rect = canvas.getBoundingClientRect();
-  const cssW = Math.max(1, Math.floor(rect.width));
-  const cssH = Math.max(1, Math.floor(rect.height));
-  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+function syncLandmarksCanvasSize(
+  canvas: HTMLCanvasElement,
+  video?: HTMLVideoElement | null,
+) {
+  let cssW = Math.floor(canvas.getBoundingClientRect().width);
+  let cssH = Math.floor(canvas.getBoundingClientRect().height);
+
+  // Mobile layout can briefly report 0×0 on the canvas itself.
+  if (cssW < 2 || cssH < 2) {
+    const parent = canvas.parentElement;
+    if (parent) {
+      const pr = parent.getBoundingClientRect();
+      cssW = Math.floor(pr.width);
+      cssH = Math.floor(pr.height);
+    }
+  }
+  if ((cssW < 2 || cssH < 2) && video) {
+    cssW = Math.max(video.clientWidth, video.videoWidth, 160);
+    cssH = Math.max(video.clientHeight, video.videoHeight, 120);
+  }
+  cssW = Math.max(1, cssW);
+  cssH = Math.max(1, cssH);
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const w = Math.floor(cssW * dpr);
   const h = Math.floor(cssH * dpr);
   if (canvas.width !== w || canvas.height !== h) {
@@ -172,11 +192,29 @@ async function loadRecognizer(): Promise<GestureRecognizer> {
   const modelPath = mediapipeAssetUrl(GESTURE_ASSET_PATHS.modelFile);
   const wasmRoot = wasmPath.replace(/\/$/, "");
   const vision = await FilesetResolver.forVisionTasks(wasmRoot);
-  return GestureRecognizer.createFromOptions(vision, {
-    baseOptions: { modelAssetPath: modelPath },
-    runningMode: "VIDEO",
-    numHands: gestureConfig.numHands,
-  });
+  // CPU is more reliable on iOS / mid-range Android WebGL stacks.
+  const preferCpu = prefersTapToStartCamera();
+  const delegates: Array<"CPU" | "GPU"> = preferCpu
+    ? ["CPU", "GPU"]
+    : ["GPU", "CPU"];
+
+  let lastError: unknown;
+  for (const delegate of delegates) {
+    try {
+      return await GestureRecognizer.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath: modelPath,
+          delegate,
+        },
+        runningMode: "VIDEO",
+        numHands: gestureConfig.numHands,
+      });
+    } catch (err) {
+      lastError = err;
+      logGestureDev("error", `GestureRecognizer ${delegate} failed`, err);
+    }
+  }
+  throw lastError ?? new Error("GestureRecognizer failed to load");
 }
 
 function delay(ms: number) {
@@ -273,6 +311,7 @@ export function useFistGesture(): UseFistGestureResult {
     landmarksCanvas: null,
     rafId: 0,
     lastInferTs: 0,
+    lastTimestampMs: 0,
     lastVideoTime: -1,
     inferBusy: false,
     candidateBits: [],
@@ -346,8 +385,9 @@ export function useFistGesture(): UseFistGestureResult {
     (landmarks: NormalizedLandmark[] | null, phase: GestureCameraPhase) => {
       const canvas =
         landmarksCanvasRef.current ?? internal.current.landmarksCanvas;
+      const video = videoRef.current ?? internal.current.video;
       if (!canvas) return;
-      const { cssW, cssH, ctx } = syncLandmarksCanvasSize(canvas);
+      const { cssW, cssH, ctx } = syncLandmarksCanvasSize(canvas, video);
       if (!ctx) return;
       ctx.clearRect(0, 0, cssW, cssH);
       if (!landmarks?.length) return;
@@ -356,8 +396,12 @@ export function useFistGesture(): UseFistGestureResult {
         landmarks,
         cssW,
         cssH,
-        false,
+        // Canvas is outside the CSS-mirrored video wrapper — flip in draw space.
+        true,
         drawStateForPhase(phase),
+        prefersTapToStartCamera() ? 1.7 : 1,
+        video?.videoWidth ?? 0,
+        video?.videoHeight ?? 0,
       );
     },
     [],
@@ -401,6 +445,7 @@ export function useFistGesture(): UseFistGestureResult {
     refs.noHandSince = null;
     refs.smoothedCenter = null;
     refs.lastInferTs = 0;
+    refs.lastTimestampMs = 0;
     refs.lastVideoTime = -1;
     refs.inferBusy = false;
     refs.completed = false;
@@ -484,27 +529,35 @@ export function useFistGesture(): UseFistGestureResult {
     const refs = internal.current;
     if (disposedRef.current || refs.completed || !mountedRef.current) return;
 
-    const video = refs.video;
+    const video = refs.video ?? videoRef.current;
+    if (video && !refs.video) refs.video = video;
     const recognizer = refs.recognizer;
     const minInterval = 1000 / getInferenceFps();
     const now = performance.now();
 
+    // Do NOT gate on video.currentTime — iOS / some Android camera streams
+    // often keep currentTime stuck, which would skip all landmark inference.
     if (
       video &&
       recognizer &&
       video.readyState >= 2 &&
+      video.videoWidth > 0 &&
       !refs.inferBusy &&
-      now - refs.lastInferTs >= minInterval &&
-      video.currentTime !== refs.lastVideoTime
+      now - refs.lastInferTs >= minInterval
     ) {
       refs.lastInferTs = now;
       refs.lastVideoTime = video.currentTime;
       refs.inferBusy = true;
 
+      // MediaPipe requires strictly increasing timestamps (ms).
+      refs.lastTimestampMs = Math.max(now, refs.lastTimestampMs + 1);
+      const timestamp = refs.lastTimestampMs;
+
       let result;
       try {
-        result = recognizer.recognizeForVideo(video, now);
-      } catch {
+        result = recognizer.recognizeForVideo(video, timestamp);
+      } catch (err) {
+        logGestureDev("error", "recognizeForVideo failed", err);
         result = null;
       }
       refs.inferBusy = false;

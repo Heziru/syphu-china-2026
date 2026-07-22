@@ -48,10 +48,46 @@ const STATE_COLORS: Record<
   },
 };
 
+/** Map normalized landmarks into a box the same way `object-fit: cover` crops video. */
+export function coverLandmarkPoint(
+  lm: NormalizedLandmark,
+  boxW: number,
+  boxH: number,
+  videoW: number,
+  videoH: number,
+  mirrored: boolean,
+) {
+  const vw = Math.max(1, videoW);
+  const vh = Math.max(1, videoH);
+  const videoAspect = vw / vh;
+  const boxAspect = boxW / boxH;
+  let drawW: number;
+  let drawH: number;
+  let offsetX: number;
+  let offsetY: number;
+  if (videoAspect > boxAspect) {
+    drawH = boxH;
+    drawW = boxH * videoAspect;
+    offsetX = (boxW - drawW) / 2;
+    offsetY = 0;
+  } else {
+    drawW = boxW;
+    drawH = boxW / videoAspect;
+    offsetX = 0;
+    offsetY = (boxH - drawH) / 2;
+  }
+  const nx = mirrored ? 1 - lm.x : lm.x;
+  return {
+    x: nx * drawW + offsetX,
+    y: lm.y * drawH + offsetY,
+  };
+}
+
 /**
  * Draw 21 hand landmarks + connections.
  * If `mirrored` is true, x is flipped in draw space (use when canvas is NOT CSS-mirrored).
  * If the video+canvas wrapper already uses scaleX(-1), pass mirrored=false.
+ * Pass video intrinsic size so dots align with `object-fit: cover` video.
  */
 export function drawHandLandmarks(
   ctx: CanvasRenderingContext2D,
@@ -60,14 +96,23 @@ export function drawHandLandmarks(
   height: number,
   mirrored: boolean,
   state: LandmarkDrawState,
+  scale = 1,
+  videoWidth = 0,
+  videoHeight = 0,
 ) {
   if (!landmarks.length || width < 1 || height < 1) return;
 
   const colors = STATE_COLORS[state];
-  const pt = (lm: NormalizedLandmark) => ({
-    x: mirrored ? (1 - lm.x) * width : lm.x * width,
-    y: lm.y * height,
-  });
+  const vw = videoWidth > 0 ? videoWidth : width;
+  const vh = videoHeight > 0 ? videoHeight : height;
+  const pt = (lm: NormalizedLandmark) =>
+    coverLandmarkPoint(lm, width, height, vw, vh, mirrored);
+
+  const s = Math.max(0.8, scale);
+  const underR = 3.1 * s;
+  const dotR = 2.2 * s;
+  const underStroke = 2.6 * s;
+  const stroke = 1.5 * s;
 
   ctx.save();
   ctx.lineCap = "round";
@@ -75,7 +120,7 @@ export function drawHandLandmarks(
 
   // Soft dark under-stroke for contrast on light skin
   ctx.strokeStyle = "rgba(10, 20, 16, 0.45)";
-  ctx.lineWidth = 2.6;
+  ctx.lineWidth = underStroke;
   for (const [a, b] of HAND_CONNECTIONS) {
     const pa = landmarks[a];
     const pb = landmarks[b];
@@ -89,7 +134,7 @@ export function drawHandLandmarks(
   }
 
   ctx.strokeStyle = colors.stroke;
-  ctx.lineWidth = 1.5;
+  ctx.lineWidth = stroke;
   for (const [a, b] of HAND_CONNECTIONS) {
     const pa = landmarks[a];
     const pb = landmarks[b];
@@ -106,11 +151,11 @@ export function drawHandLandmarks(
     const { x, y } = pt(lm);
     ctx.beginPath();
     ctx.fillStyle = "rgba(10, 20, 16, 0.4)";
-    ctx.arc(x, y, 3.1, 0, Math.PI * 2);
+    ctx.arc(x, y, underR, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
     ctx.fillStyle = colors.fill;
-    ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+    ctx.arc(x, y, dotR, 0, Math.PI * 2);
     ctx.fill();
   }
 

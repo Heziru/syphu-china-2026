@@ -110,12 +110,13 @@ export function FistGestureControls({
             muted
             autoPlay
           />
-          <canvas
-            ref={fist.landmarksCanvasRef}
-            className="gesture-landmarks"
-            aria-hidden="true"
-          />
         </div>
+        {/* Keep canvas outside CSS mirror — iOS often blanks canvas under transform. */}
+        <canvas
+          ref={fist.landmarksCanvasRef}
+          className="gesture-landmarks"
+          aria-hidden="true"
+        />
 
         {!showLive && (
           <div className="gesture-preview__placeholder">
