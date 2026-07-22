@@ -14,13 +14,15 @@ type Props = {
   onCheckPermission: () => void;
   onDisable: () => void;
   onTapToStart: () => void;
+  /** Phones / iOS: show a tap CTA instead of auto-requesting the camera. */
+  requireTapToEnable?: boolean;
   reducedMotion: boolean;
   hidden: boolean;
 };
 
 /**
- * Bottom-left camera PiP — always visible during hero interaction.
- * No Enable button; Home auto-requests permission on mount.
+ * Bottom-left camera PiP.
+ * Desktop auto-requests; mobile waits for an explicit tap (browser policy).
  */
 export function FistGestureControls({
   fist,
@@ -29,6 +31,7 @@ export function FistGestureControls({
   onCheckPermission,
   onDisable,
   onTapToStart,
+  requireTapToEnable = false,
   reducedMotion,
   hidden,
 }: Props) {
@@ -41,10 +44,16 @@ export function FistGestureControls({
   const isRequesting = fist.phase === "requesting-permission";
   const isLoading = fist.phase === "loading-model";
   const fadingOut = fist.phase === "completed";
+  const awaitingTap =
+    requireTapToEnable &&
+    !fist.cameraEnabled &&
+    !isError &&
+    (fist.phase === "idle" || fist.needsTapToStart);
   const showLive =
     fist.cameraEnabled &&
     !isError &&
-    fist.phase !== "requesting-permission";
+    fist.phase !== "requesting-permission" &&
+    !fist.needsTapToStart;
 
   const progress = Math.min(1, Math.max(0, assemblyProgress));
   const stillWaiting = fist.permissionWaitLevel === "still-waiting";
@@ -52,7 +61,10 @@ export function FistGestureControls({
 
   let frameTitle: string = gestureUiCopy.requestingTitle;
   let frameBody: string = gestureUiCopy.requestingBody;
-  if (isLoading) {
+  if (awaitingTap) {
+    frameTitle = "CAMERA";
+    frameBody = gestureUiCopy.tapHint;
+  } else if (isLoading) {
     frameTitle = gestureUiCopy.loadingTitle;
     frameBody = gestureUiCopy.loadingBody;
   } else if (isError) {
@@ -72,17 +84,17 @@ export function FistGestureControls({
         : fist.statusText;
   }
 
-  const showRetry =
-    isError || timedOut;
+  const showRetry = isError || timedOut;
   const showCheckPermission =
     isRequesting && (stillWaiting || timedOut);
+  const showTapCta = awaitingTap || fist.needsTapToStart;
 
   return (
     <div
       className={`gesture-dock${fadingOut ? " gesture-dock--fade" : ""}`}
     >
       <div
-        className={`gesture-preview${isError || timedOut ? " gesture-preview--error" : ""}${isRequesting || isLoading ? " gesture-preview--placeholder" : ""}`}
+        className={`gesture-preview${isError || timedOut ? " gesture-preview--error" : ""}${isRequesting || isLoading || awaitingTap ? " gesture-preview--placeholder" : ""}`}
         style={
           {
             "--gesture-progress": String(progress),
@@ -90,12 +102,7 @@ export function FistGestureControls({
         }
         aria-label={gestureUiCopy.previewAria}
       >
-        <div
-          className={
-            showLive ? "gesture-preview__mirror" : "home-sr-only"
-          }
-          aria-hidden={!showLive}
-        >
+        <div className="gesture-preview__mirror">
           <video
             ref={fist.videoRef}
             className="gesture-preview__video"
@@ -114,7 +121,7 @@ export function FistGestureControls({
           <div className="gesture-preview__placeholder">
             <span className="gesture-preview__eyebrow">{frameTitle}</span>
             <span className="gesture-preview__body">{frameBody}</span>
-            {(isRequesting || isLoading) && !timedOut && (
+            {(isRequesting || isLoading) && !timedOut && !awaitingTap && (
               <span className="gesture-preview__privacy">
                 {gestureUiCopy.privacy}
               </span>
@@ -159,19 +166,26 @@ export function FistGestureControls({
           <div className="gesture-preview__progress" aria-hidden="true" />
         )}
 
-        {fist.needsTapToStart && (
+        {showTapCta && (
           <button
             type="button"
             className="gesture-tap-start"
             onClick={onTapToStart}
-            aria-label={gestureUiCopy.tapToStartAria}
+            aria-label={
+              awaitingTap
+                ? gestureUiCopy.tapToEnableAria
+                : gestureUiCopy.tapToStartAria
+            }
           >
-            {gestureUiCopy.tapToStart}
+            {awaitingTap
+              ? gestureUiCopy.tapToEnable
+              : gestureUiCopy.tapToStart}
           </button>
         )}
 
         {!isError &&
           !timedOut &&
+          !awaitingTap &&
           fist.phase !== "requesting-permission" && (
             <button
               type="button"

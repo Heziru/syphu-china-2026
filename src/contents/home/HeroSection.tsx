@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FistGestureControls } from "./FistGestureControls";
 import { heroGestureHints } from "./gesture/gestureConfig";
+import { prefersTapToStartCamera } from "./gesture/mobileCamera";
 import { heroCopy } from "./homeCopy";
 import { useFistGesture } from "./hooks/useFistGesture";
 import { useReducedMotion } from "./hooks/useReducedMotion";
@@ -31,9 +32,11 @@ function pageHint(
   if (cameraFailed || assemblyPhase === "scatteredError") {
     return heroGestureHints.error;
   }
+  if (fistPhase === "idle" || fistPhase === "needs-tap") {
+    return heroGestureHints.tapToEnable;
+  }
   if (fistPhase === "requesting-permission") return heroGestureHints.requesting;
   if (fistPhase === "loading-model") return heroGestureHints.loading;
-  if (fistPhase === "needs-tap") return heroGestureHints.loading;
   if (fistStable || assemblyPhase === "assembling") {
     return heroGestureHints.assembling;
   }
@@ -104,13 +107,21 @@ export function HeroSection() {
   );
 
   /**
-   * Auto-request camera on mount.
-   * StrictMode: cleanup invalidates the first enable(); this effect runs again
-   * and MUST call enable() again — no permanent session lock.
+   * Desktop: auto-request after a short settle delay (StrictMode-safe).
+   * Mobile / iOS: do NOT auto-call getUserMedia — browsers require a tap.
    */
   useEffect(() => {
     if (reducedMotion) return;
-    void fist.enable();
+    if (prefersTapToStartCamera()) return;
+
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      if (!cancelled) void fist.enable();
+    }, 120);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- mount / remount auto-start only
   }, [reducedMotion]);
 
@@ -155,7 +166,10 @@ export function HeroSection() {
         onRetry={() => {
           cameraStoppedRef.current = false;
           setAssemblyProgress(0);
-          void fist.enable();
+          // Brief pause so Windows can release a previously locked device.
+          window.setTimeout(() => {
+            void fist.enable();
+          }, 350);
         }}
         onCheckPermission={() => {
           void fist.checkPermission();
@@ -171,8 +185,10 @@ export function HeroSection() {
           setAssemblyProgress(0);
         }}
         onTapToStart={() => {
+          // Mobile: this tap is the required user gesture for getUserMedia + play.
           void fist.resumePlayback();
         }}
+        requireTapToEnable={prefersTapToStartCamera()}
         reducedMotion={reducedMotion}
         hidden={hideDock}
       />

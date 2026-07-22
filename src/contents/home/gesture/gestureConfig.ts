@@ -33,11 +33,23 @@ export const gestureConfig = {
   fistCenterLerp: 0.18,
 
   videoConstraints: {
-    facingMode: "user" as const,
+    facingMode: { ideal: "user" },
     width: { ideal: 640 },
     height: { ideal: 480 },
-    frameRate: { ideal: 24, max: 30 },
   },
+
+  /** Fallback constraints if the ideal set is overconstrained / busy. */
+  videoConstraintsFallback: {
+    facingMode: { ideal: "user" },
+  },
+
+  /** Lower inference rate on phones to keep recognition stable. */
+  mobileInferenceFps: 10,
+
+  /** Slightly softer fist score on mobile cameras. */
+  mobileCandidateScoreMin: 0.6,
+
+  mobileWindowHitsRequired: 5,
 } as const;
 
 export const gestureUiCopy = {
@@ -74,7 +86,10 @@ export const gestureUiCopy = {
   disableAria: "Disable camera",
   previewAria: "Live camera preview for hand gesture recognition",
   tapToStart: "Tap to start camera",
-  tapToStartAria: "Tap to start camera preview",
+  tapToStartAria: "Tap to start camera and hand recognition",
+  tapToEnable: "Tap to enable camera",
+  tapToEnableAria: "Tap to enable camera for fist gesture recognition",
+  tapHint: "On phones, tap the button below to allow the camera.",
 } as const;
 
 export const heroGestureHints = {
@@ -86,6 +101,7 @@ export const heroGestureHints = {
   denied: "Camera access is required to reassemble.",
   error: "Camera access is required to reassemble.",
   disabled: "Camera access is required to reassemble.",
+  tapToEnable: "Tap the camera box to begin.",
 } as const;
 
 export function mediapipeAssetUrl(relativePath: string): string {

@@ -42,7 +42,7 @@ export type AssemblyPhase =
   | "quoteFade"
   | "completed";
 
-export const HOLD_DURATION_MS = 2200;
+export const HOLD_DURATION_MS = 6600;
 /** Hold fully assembled shards before soft reveal begins. */
 export const HOLD_SETTLE_MS = 260;
 /** Soft crossfade duration (shard → clean logo), opacity only. */

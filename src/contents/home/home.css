@@ -317,15 +317,24 @@
   top: 50%;
   z-index: 5;
   transform: translate(-50%, -50%);
-  height: 34px;
-  padding: 0 0.85rem;
-  border: 1px solid rgba(168, 220, 192, 0.4);
+  min-height: 40px;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid rgba(168, 220, 192, 0.45);
   border-radius: 9px;
-  background: rgba(14, 23, 21, 0.82);
+  background: rgba(14, 23, 21, 0.88);
   color: rgba(236, 246, 240, 0.95);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
+  line-height: 1.25;
   cursor: pointer;
-  white-space: nowrap;
+  white-space: normal;
+  max-width: calc(100% - 16px);
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.gesture-tap-start:active {
+  border-color: rgba(126, 207, 74, 0.7);
 }
 
 @media (max-width: 640px) {

@@ -17,6 +17,10 @@ import {
   logGestureDev,
   mediapipeAssetUrl,
 } from "../gesture/gestureConfig";
+import {
+  prefersTapToStartCamera,
+  prepareCameraVideoElement,
+} from "../gesture/mobileCamera";
 import type {
   CameraErrorKind,
   FistGesturePublicState,
@@ -24,6 +28,24 @@ import type {
   InteractionPoint,
   PermissionWaitLevel,
 } from "../gesture/gestureTypes";
+
+function getInferenceFps() {
+  return prefersTapToStartCamera()
+    ? gestureConfig.mobileInferenceFps
+    : gestureConfig.inferenceFps;
+}
+
+function getFistScoreMin() {
+  return prefersTapToStartCamera()
+    ? gestureConfig.mobileCandidateScoreMin
+    : gestureConfig.candidateScoreMin;
+}
+
+function getWindowHitsRequired() {
+  return prefersTapToStartCamera()
+    ? gestureConfig.mobileWindowHitsRequired
+    : gestureConfig.windowHitsRequired;
+}
 
 function phaseStatus(
   phase: GestureCameraPhase,
@@ -155,6 +177,63 @@ async function loadRecognizer(): Promise<GestureRecognizer> {
     runningMode: "VIDEO",
     numHands: gestureConfig.numHands,
   });
+}
+
+function delay(ms: number) {
+  return new Promise<void>((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+/**
+ * Request a camera stream with constraint fallbacks and a short retry for
+ * NotReadableError (common when StrictMode briefly double-opens the camera).
+ */
+async function requestCameraStream(): Promise<MediaStream> {
+  const constraintSets: Array<MediaTrackConstraints | boolean> = [
+    { ...gestureConfig.videoConstraints },
+    { ...gestureConfig.videoConstraintsFallback },
+    true,
+  ];
+
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) {
+      // Let the OS release the previous track after StrictMode cleanup.
+      await delay(400 * attempt);
+    }
+
+    for (const video of constraintSets) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video,
+        });
+        return stream;
+      } catch (err) {
+        lastError = err;
+        const name = err instanceof Error ? err.name : "";
+        logGestureDev(
+          "error",
+          `getUserMedia attempt failed (${name})`,
+          err,
+        );
+        if (
+          name === "NotAllowedError" ||
+          name === "PermissionDeniedError" ||
+          name === "SecurityError"
+        ) {
+          throw err;
+        }
+        // Overconstrained / NotReadable / Abort → try next constraint or retry.
+      }
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Camera could not be started");
 }
 
 async function queryCameraPermission(): Promise<PermissionState | "unknown"> {
@@ -407,7 +486,7 @@ export function useFistGesture(): UseFistGestureResult {
 
     const video = refs.video;
     const recognizer = refs.recognizer;
-    const minInterval = 1000 / gestureConfig.inferenceFps;
+    const minInterval = 1000 / getInferenceFps();
     const now = performance.now();
 
     if (
@@ -445,7 +524,7 @@ export function useFistGesture(): UseFistGestureResult {
       }
 
       const hasHand = Boolean(landmarks && landmarks.length > 0);
-      const isClosedFist = closedScore >= gestureConfig.candidateScoreMin;
+      const isClosedFist = closedScore >= getFistScoreMin();
 
       if (hasHand && landmarks) {
         const center = fistCenterFromLandmarks(landmarks);
@@ -471,8 +550,9 @@ export function useFistGesture(): UseFistGestureResult {
       const hits = refs.candidateBits.filter(Boolean).length;
       const windowFull =
         refs.candidateBits.length >= gestureConfig.windowSize;
+      const hitsRequired = getWindowHitsRequired();
 
-      if (windowFull && hits >= gestureConfig.windowHitsRequired) {
+      if (windowFull && hits >= hitsRequired) {
         refs.fistStable = true;
       } else if (
         !windowFull ? !isClosedFist : hits <= gestureConfig.windowReleaseMax
@@ -620,10 +700,8 @@ export function useFistGesture(): UseFistGestureResult {
     }, 20000);
 
     // Camera first (parallel model load) — never block the permission prompt on MediaPipe.
-    const cameraPromise = navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: gestureConfig.videoConstraints,
-    });
+    // Use fallbacks + delayed retry to survive StrictMode double-mount camera locks.
+    const cameraPromise = requestCameraStream();
     const recognizerPromise = loadRecognizer();
 
     let stream: MediaStream;
@@ -710,8 +788,7 @@ export function useFistGesture(): UseFistGestureResult {
     }
 
     video.srcObject = stream;
-    video.muted = true;
-    video.playsInline = true;
+    prepareCameraVideoElement(video);
     internal.current.video = video;
     internal.current.landmarksCanvas = landmarksCanvasRef.current;
 
@@ -832,7 +909,15 @@ export function useFistGesture(): UseFistGestureResult {
   const resumePlayback = useCallback(async () => {
     const refs = internal.current;
     const video = videoRef.current ?? refs.video;
-    if (!video || !refs.stream || !refs.recognizer) return;
+
+    // No stream yet (typical mobile: waiting for a user tap) → full enable.
+    if (!refs.stream || !refs.recognizer) {
+      await enable();
+      return;
+    }
+    if (!video) return;
+
+    prepareCameraVideoElement(video);
     try {
       await video.play();
       publish("ready", {
@@ -848,7 +933,7 @@ export function useFistGesture(): UseFistGestureResult {
         cameraEnabled: true,
       });
     }
-  }, [publish, startInference]);
+  }, [enable, publish, startInference]);
 
   useEffect(() => {
     mountedRef.current = true;
