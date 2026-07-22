@@ -1,3 +1,6 @@
+/* Home page styles (scoped under .home / .sedimentation-*) */
+@import "../../contents/home/home.css";
+
 body {
   padding-top: 56px;
 }
