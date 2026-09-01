@@ -109,28 +109,36 @@ export function shapeDensity(i: number, time: number, spread: number) {
   return bandDensity(i, spread);
 }
 
-/** 固定蓝紫白，初始化后不变 */
+/** 固定蓝紫白：核心偏白，边缘深靛蓝/蓝紫 */
 export function bandParticleColor(i: number, density: number) {
   const m = hash(i, 77);
   const tone = hash(i, 78);
 
-  let r = 0.58 + m * 0.06;
-  let g = 0.7 + m * 0.07;
-  let b = 0.88 + m * 0.06;
+  // 深靛蓝 #4a6aad / 蓝紫 #6b5cb8 / 核心淡白 #d8e4ff
+  let r = 0.38 + m * 0.08;
+  let g = 0.48 + m * 0.1;
+  let b = 0.82 + m * 0.1;
 
-  if (tone > 0.55) {
-    r = 0.62 + m * 0.05;
-    g = 0.7 + m * 0.06;
-    b = 0.88 + m * 0.05;
-  } else if (tone < 0.25) {
-    r = 0.72 + m * 0.04;
-    g = 0.8 + m * 0.05;
-    b = 0.92 + m * 0.04;
+  if (tone > 0.58) {
+    // 蓝紫 lavender-indigo
+    r = 0.42 + m * 0.07;
+    g = 0.36 + m * 0.08;
+    b = 0.88 + m * 0.08;
+  } else if (tone < 0.22) {
+    // 核心高亮：白里带蓝
+    r = 0.78 + m * 0.06;
+    g = 0.82 + m * 0.06;
+    b = 0.98 + m * 0.02;
+  } else {
+    // 中间调：钴蓝
+    r = 0.32 + m * 0.06;
+    g = 0.52 + m * 0.08;
+    b = 0.92 + m * 0.06;
   }
 
-  const core = 0.35 + density * 0.65;
-  const dim = (0.12 + density * 0.22) * core;
-  return { r: r * dim, g: g * dim, b: b * dim };
+  const core = 0.4 + density * 0.6;
+  const lum = 0.32 + density * 0.48;
+  return { r: r * lum * core, g: g * lum * core, b: b * lum * core };
 }
 
 export function bandParticleSize(i: number, density: number) {
@@ -151,6 +159,6 @@ export function bokehPoint(i: number, time: number): Vec3 {
 
 export function bokehColor(i: number) {
   const m = hash(i, 93);
-  const dim = 0.025 + m * 0.02;
-  return { r: dim * 0.72, g: dim * 0.8, b: dim * 0.95 };
+  const dim = 0.055 + m * 0.035;
+  return { r: dim * 0.55, g: dim * 0.62, b: dim * 1.0 };
 }

@@ -74,7 +74,7 @@ export function mountNocturneOpening(
   for (let i = 0; i < coreCount; i++) {
     const density = shapeDensity(i, 0, SPREAD);
     sizes[i] = bandParticleSize(i, density);
-    alphas[i] = 0.18 + density * 0.42;
+    alphas[i] = 0.34 + density * 0.52;
     const col = bandParticleColor(i, density);
     const j = i * 3;
     colors[j] = col.r;
@@ -84,7 +84,7 @@ export function mountNocturneOpening(
   for (let i = 0; i < bokehCount; i++) {
     const idx = coreCount + i;
     sizes[idx] = 1.1 + (i % 5) * 0.18;
-    alphas[idx] = 0.06 + (i % 4) * 0.015;
+    alphas[idx] = 0.1 + (i % 4) * 0.022;
     const bc = bokehColor(i);
     const o = idx * 3;
     colors[o] = bc.r;

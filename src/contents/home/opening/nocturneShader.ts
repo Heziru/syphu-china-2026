@@ -31,8 +31,9 @@ const FRAG = /* glsl */ `
     if (d > 1.0) discard;
     float halo = smoothstep(1.0, 0.15, d);
     float core = exp(-d * d * 14.0);
-    float alpha = (halo * 0.55 + core * 0.45) * vAlpha;
-    vec3 col = vColor * (0.85 + core * 0.15);
+    float alpha = (halo * 0.62 + core * 0.55) * vAlpha;
+    vec3 col = vColor * (1.05 + core * 0.35);
+    col.b = min(col.b * 1.08, 1.0);
     gl_FragColor = vec4(col, alpha);
   }
 `;
