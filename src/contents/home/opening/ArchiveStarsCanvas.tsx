@@ -9,7 +9,29 @@ export function ArchiveStarsCanvas() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    return mountArchiveStars(canvas, reducedMotion).dispose;
+
+    let handle: ReturnType<typeof mountArchiveStars> | undefined;
+    let observer: ResizeObserver | undefined;
+
+    const start = () => {
+      handle?.dispose();
+      handle = mountArchiveStars(canvas, reducedMotion);
+    };
+
+    // 等布局完成后再初始化，避免 clientWidth/Height 为 0
+    const raf = requestAnimationFrame(() => {
+      start();
+      observer = new ResizeObserver(() => {
+        handle?.resize();
+      });
+      observer.observe(canvas.parentElement ?? canvas);
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer?.disconnect();
+      handle?.dispose();
+    };
   }, [reducedMotion]);
 
   return (

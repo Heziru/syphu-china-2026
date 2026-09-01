@@ -1,5 +1,6 @@
 export type ArchiveStarsHandle = {
   dispose: () => void;
+  resize: () => void;
 };
 
 type Star = {
@@ -28,7 +29,7 @@ export function mountArchiveStars(
   reduced: boolean,
 ): ArchiveStarsHandle {
   const ctx = canvas.getContext("2d", { alpha: true });
-  if (!ctx) return { dispose: () => undefined };
+  if (!ctx) return { dispose: () => undefined, resize: () => undefined };
 
   const palette: [number, number, number][] = [
     [239, 224, 196],
@@ -60,14 +61,21 @@ export function mountArchiveStars(
     }, frameInterval);
   };
 
-  const bounds = () => ({
-    w: canvas.clientWidth || window.innerWidth,
-    h: canvas.clientHeight || window.innerHeight,
-  });
+  const bounds = () => {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    return {
+      w: w > 0 ? w : window.innerWidth,
+      h: h > 0 ? h : window.innerHeight,
+    };
+  };
 
   const makeStars = () => {
     const { w, h } = bounds();
-    const count = Math.max(120, Math.min(260, Math.round((w * h) / 7200)));
+    const count = Math.max(
+      120,
+      Math.min(260, Math.round((w * h) / 7200)),
+    );
     stars = Array.from({ length: count }, () => {
       const roll = Math.random();
       const depthRoll = Math.random();
@@ -123,7 +131,7 @@ export function mountArchiveStars(
     canvas.style.height = `${h}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     makeStars();
-    if (reduced) drawStars(0, false);
+    drawStars(reduced ? 0 : performance.now(), !reduced);
   };
 
   const drawStars = (time: number, loop = true) => {
@@ -225,7 +233,6 @@ export function mountArchiveStars(
   const onResize = () => {
     cancelStarFrame();
     resizeStars();
-    if (!reduced) scheduleStarFrame();
   };
 
   const onVisibility = () => {
@@ -238,18 +245,18 @@ export function mountArchiveStars(
     }
   };
 
-  canvas.addEventListener("pointermove", onPointerMove, { passive: true });
+  window.addEventListener("pointermove", onPointerMove, { passive: true });
   canvas.addEventListener("pointerleave", onPointerLeave);
   window.addEventListener("resize", onResize, { passive: true });
   document.addEventListener("visibilitychange", onVisibility);
 
   resizeStars();
-  if (!reduced) scheduleStarFrame();
 
   return {
+    resize: onResize,
     dispose: () => {
       cancelStarFrame();
-      canvas.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointermove", onPointerMove);
       canvas.removeEventListener("pointerleave", onPointerLeave);
       window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibility);

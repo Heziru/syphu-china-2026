@@ -16,7 +16,6 @@ export function NocturneSplash() {
 
   return (
     <div className="nocturne-archive">
-      <ArchiveStarsCanvas />
       <div className="nocturne-archive__grain" aria-hidden="true" />
       <div className="nocturne-archive__cosmic" aria-hidden="true" />
 
@@ -35,6 +34,9 @@ export function NocturneSplash() {
       </header>
 
       <section className="nocturne-archive__hero" aria-label="Opening">
+        <ArchiveStarsCanvas />
+        <div className="nocturne-archive__hero-vignette" aria-hidden="true" />
+
         <div className="nocturne-archive__hero-copy">
           <div className="nocturne-archive__kicker">
             MEMORY OBSERVATORY / CONTINUITY 01
