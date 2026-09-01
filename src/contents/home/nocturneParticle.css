@@ -1,4 +1,4 @@
-/* 时光碎片开屏 — 纯黑粒子场，末尾标题飞出 */
+/* 时光碎片开屏 — 荧光粒子 + 末尾标题 */
 
 .nocturne-particle {
   position: relative;
@@ -22,6 +22,24 @@
   cursor: none;
 }
 
+.nocturne-particle__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 72% 58% at 50% 48%,
+      rgba(40, 120, 200, 0.07) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 90% 75% at 50% 50%,
+      transparent 35%,
+      rgba(0, 0, 0, 0.72) 100%
+    );
+}
+
 .nocturne-particle__title {
   position: absolute;
   inset: 0;
@@ -30,7 +48,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.65rem, 2vh, 1rem);
+  gap: clamp(0.75rem, 2.2vh, 1.15rem);
   pointer-events: none;
   text-align: center;
   padding: 0 1.5rem;
@@ -38,28 +56,34 @@
 
 .nocturne-particle__title-en {
   margin: 0;
-  font-size: clamp(1.65rem, 5.5vw, 3.2rem);
+  font-size: clamp(1.5rem, 5vw, 2.85rem);
   font-weight: 300;
-  letter-spacing: 0.38em;
-  text-indent: 0.38em;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow:
+    0 0 24px rgba(120, 190, 255, 0.35),
+    0 0 48px rgba(80, 140, 255, 0.15);
   opacity: 0;
-  transform: translate3d(-18vw, 12px, 0) scale(0.94);
-  filter: blur(6px);
-  animation: nocturne-title-en 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform: translate3d(-14vw, 16px, 0) scale(0.92);
+  filter: blur(8px);
+  animation: nocturne-title-en 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .nocturne-particle__title-zh {
   margin: 0;
-  font-size: clamp(1rem, 2.8vw, 1.35rem);
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
-  color: rgba(232, 184, 74, 0.88);
+  font-size: clamp(0.95rem, 2.6vw, 1.25rem);
+  letter-spacing: 0.48em;
+  text-indent: 0.48em;
+  color: rgba(232, 184, 74, 0.92);
+  text-shadow:
+    0 0 20px rgba(232, 184, 74, 0.45),
+    0 0 40px rgba(232, 140, 40, 0.2);
   opacity: 0;
-  transform: translate3d(16vw, 18px, 0) scale(0.96);
-  filter: blur(5px);
-  animation: nocturne-title-zh 1.85s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards;
+  transform: translate3d(12vw, 20px, 0) scale(0.94);
+  filter: blur(7px);
+  animation: nocturne-title-zh 2.1s cubic-bezier(0.16, 1, 0.3, 1) 0.28s forwards;
 }
 
 @keyframes nocturne-title-en {
@@ -79,10 +103,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nocturne-particle {
-    cursor: pointer;
-  }
-
+  .nocturne-particle,
   .nocturne-particle__canvas {
     cursor: pointer;
   }

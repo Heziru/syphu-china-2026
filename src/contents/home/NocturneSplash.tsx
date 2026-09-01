@@ -33,6 +33,7 @@ export function NocturneSplash() {
       tabIndex={showTitle ? 0 : -1}
     >
       <NocturneThreeCanvas onPhase={setPhase} />
+      <div className="nocturne-particle__overlay" aria-hidden="true" />
 
       {showTitle && (
         <div className="nocturne-particle__title" aria-live="polite">
