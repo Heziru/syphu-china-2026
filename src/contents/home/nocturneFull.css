@@ -1,0 +1,23 @@
+.nocturne-full {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px);
+  overflow: hidden;
+  background: #000;
+  cursor: none;
+}
+
+.nocturne-full__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: none;
+}
+
+.nc-home--splash-only {
+  background: #000;
+  overflow: hidden;
+}
