@@ -2,11 +2,11 @@ import * as THREE from "three";
 import { createNocturneMaterial, setNocturneDpr } from "./nocturneShader";
 import { MOUSE_K, lerp, smoothstep, type Vec3 } from "./nocturneMath";
 import {
-  bandParticleColor,
   bandParticleSize,
   bokehColor,
   bokehPoint,
   morphPoint,
+  particleColor,
   SCENE_SCALE,
   shapeDensity,
 } from "./nocturneShapes";
@@ -75,7 +75,7 @@ export function mountNocturneOpening(
     const density = shapeDensity(i, 0, SPREAD);
     sizes[i] = bandParticleSize(i, density);
     alphas[i] = 0.34 + density * 0.52;
-    const col = bandParticleColor(i, density);
+    const col = particleColor(i, density, 0);
     const j = i * 3;
     colors[j] = col.r;
     colors[j + 1] = col.g;
@@ -152,6 +152,12 @@ export function mountNocturneOpening(
       positions[j] = m.x;
       positions[j + 1] = m.y;
       positions[j + 2] = p.z;
+
+      const density = shapeDensity(i, cycle, SPREAD);
+      const col = particleColor(i, density, cycle);
+      colors[j] = col.r;
+      colors[j + 1] = col.g;
+      colors[j + 2] = col.b;
     }
 
     for (let i = 0; i < bokehCount; i++) {
@@ -164,6 +170,7 @@ export function mountNocturneOpening(
     }
 
     geo.attributes.position!.needsUpdate = true;
+    geo.attributes.color!.needsUpdate = true;
     renderer.render(scene, camera);
   };
 
