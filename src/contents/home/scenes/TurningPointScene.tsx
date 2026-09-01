@@ -7,28 +7,22 @@ export function TurningPointScene() {
   const c = sceneCopy.turning;
 
   return (
-    <Scene tone="paper" travel={1.45} ariaLabel="A new therapeutic direction">
+    <Scene tone="panel" travel={1.45} ariaLabel="A new therapeutic direction">
       {({ progress, pinned }) => {
-        const brighten = pinned ? windowProgress(progress, 0.35, 0.88) : 0.55;
         const active = pinned
           ? Math.min(3, Math.floor(windowProgress(progress, 0.08, 0.72) * 4))
           : 3;
 
         return (
-          <div
-            className="moto-turn"
-            style={{
-              ["--moto-brighten" as string]: String(brighten),
-            }}
-          >
+          <div className="moto-turn">
             <div className="moto-turn__curve" aria-hidden="true">
               <svg viewBox="0 0 560 280" className="moto-turn__svg">
                 <path
                   d="M40 220 C120 210, 160 180, 220 170 S360 120, 520 80"
                   fill="none"
-                  stroke="#2e8b57"
+                  stroke="#818cf8"
                   strokeWidth="2.5"
-                  opacity={0.35 + brighten * 0.5}
+                  opacity={0.55 + (active / 3) * 0.35}
                 />
                 {c.milestones.map((m, i) => {
                   const x = 80 + i * 130;
@@ -36,8 +30,8 @@ export function TurningPointScene() {
                   const on = i <= active;
                   return (
                     <g key={m.label} opacity={on ? 1 : 0.25}>
-                      <circle cx={x} cy={y} r="7" fill={i === 3 ? "#7ecf4a" : "#a85a42"} />
-                      <text x={x} y={y + 28} textAnchor="middle" fill="#1a2421" fontSize="10">
+                      <circle cx={x} cy={y} r="7" fill={i === 3 ? "#6366f1" : "#a855f7"} />
+                      <text x={x} y={y + 28} textAnchor="middle" fill="#94a3b8" fontSize="10">
                         {m.label.split(" ")[0]}
                       </text>
                     </g>

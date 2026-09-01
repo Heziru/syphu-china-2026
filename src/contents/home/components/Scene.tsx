@@ -12,7 +12,7 @@ type Props = {
   }) => ReactNode;
   travel?: number;
   className?: string;
-  tone?: "deep" | "cream" | "paper" | "ink";
+  tone?: "deep" | "panel" | "void";
   ariaLabel: string;
 };
 
@@ -20,7 +20,7 @@ export function Scene({
   children,
   travel = 1.35,
   className = "",
-  tone = "cream",
+  tone = "panel",
   ariaLabel,
 }: Props) {
   const ref = useRef<HTMLElement | null>(null);
@@ -37,12 +37,12 @@ export function Scene({
   return (
     <section
       ref={ref}
-      className={`moto-scene moto-scene--${tone}${pinned ? " moto-scene--pin" : " moto-scene--static"}${className ? ` ${className}` : ""}`}
+      className={`nc-scene nc-scene--${tone}${pinned ? " nc-scene--pin" : " nc-scene--static"}${className ? ` ${className}` : ""}`}
       style={pinStyle}
       aria-label={ariaLabel}
     >
       <div
-        className="moto-scene__stage"
+        className="nc-scene__stage"
         style={pinned ? { opacity } : undefined}
       >
         {children({

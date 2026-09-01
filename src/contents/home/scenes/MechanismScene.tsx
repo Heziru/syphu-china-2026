@@ -14,9 +14,8 @@ export function MechanismScene() {
   const c = sceneCopy.mechanism;
 
   return (
-    <Scene tone="cream" travel={1.75} ariaLabel="Mechanism of LBP-Mototype">
+    <Scene tone="deep" travel={1.75} ariaLabel="Mechanism of LBP-Mototype">
       {({ progress, pinned }) => {
-        const brighten = pinned ? windowProgress(progress, 0.08, 0.92) : 0.6;
         let activeStep = -1;
         if (pinned) {
           for (let i = 0; i < STEP_WINDOWS.length; i++) {
@@ -34,10 +33,7 @@ export function MechanismScene() {
           : 1;
 
         return (
-          <div
-            className="moto-mech"
-            style={{ ["--moto-brighten" as string]: String(brighten) }}
-          >
+          <div className="moto-mech">
             {showGene && (
               <div className="moto-mech__gene" style={{ opacity: geneOpacity }}>
                 <svg viewBox="0 0 420 120" className="moto-mech__gene-svg" aria-hidden="true">
@@ -65,7 +61,7 @@ export function MechanismScene() {
 
             <div className="moto-mech__stage" aria-hidden="true">
               <svg viewBox="0 0 560 300" className="moto-mech__svg">
-                <rect width="560" height="300" fill={`rgba(243, 239, 230, ${0.55 + brighten * 0.45})`} />
+                <rect width="560" height="300" fill="#141b2d" />
                 <ellipse cx="280" cy="150" rx="120" ry="70" fill="#e8f0ea" stroke="#2e8b57" strokeWidth="1.5" />
                 <circle cx="340" cy="150" r="28" fill="#c45c4a" opacity={activeStep >= 0 ? 0.35 : 0.1} />
                 <ellipse

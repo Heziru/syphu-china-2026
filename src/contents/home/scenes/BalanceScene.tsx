@@ -10,10 +10,10 @@ function TaijiSvg({ spin = 0, opacity = 1 }: { spin?: number; opacity?: number }
       style={{ transform: `rotate(${spin}deg)`, opacity }}
       aria-hidden="true"
     >
-      <circle cx="100" cy="100" r="96" fill="#f3efe6" stroke="#1a2421" strokeWidth="2" />
-      <path d="M100 4 A96 96 0 0 1 100 196 A48 48 0 0 0 100 100 A48 48 0 0 1 100 4" fill="#1a2421" />
-      <circle cx="100" cy="52" r="10" fill="#f3efe6" />
-      <circle cx="100" cy="148" r="10" fill="#1a2421" />
+      <circle cx="100" cy="100" r="96" fill="#1a2238" stroke="#6366f1" strokeWidth="2" />
+      <path d="M100 4 A96 96 0 0 1 100 196 A48 48 0 0 0 100 100 A48 48 0 0 1 100 4" fill="#f1f5f9" />
+      <circle cx="100" cy="52" r="10" fill="#1a2238" />
+      <circle cx="100" cy="148" r="10" fill="#f1f5f9" />
     </svg>
   );
 }
@@ -39,7 +39,7 @@ export function BalanceScene() {
   const c = sceneCopy.balance;
 
   return (
-    <Scene tone="cream" travel={1.55} ariaLabel="Balance and harmony">
+    <Scene tone="panel" travel={1.55} ariaLabel="Balance and harmony">
       {({ progress, pinned }) => {
         const lineIndex = pinned
           ? progress < 0.28

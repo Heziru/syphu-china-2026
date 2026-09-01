@@ -7,7 +7,7 @@ export function DiseaseScene() {
   const c = sceneCopy.disease;
 
   return (
-    <Scene tone="ink" travel={1.65} ariaLabel="Disease and failed treatments">
+    <Scene tone="void" travel={1.65} ariaLabel="Disease and failed treatments">
       {({ progress, pinned }) => {
         const tilt = pinned ? 8 + progress * 18 : 14;
         const showFailed = !pinned || progress >= 0.42;

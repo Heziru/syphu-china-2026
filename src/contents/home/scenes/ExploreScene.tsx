@@ -8,25 +8,25 @@ export function ExploreScene() {
   const [active, setActive] = useState<string | null>(null);
 
   return (
-    <section className="moto-scene moto-scene--cream moto-scene--static moto-explore" aria-label="Explore the project">
-      <div className="moto-scene__stage">
-        <p className="moto-explore__zh">{c.chineseOnce}</p>
-        <nav className="moto-explore__nav" aria-label="Primary project pages">
+    <section className="nc-scene nc-scene--static nc-explore" aria-label="Explore the project">
+      <div className="nc-scene__stage">
+        <p className="nc-explore__zh">{c.chineseOnce}</p>
+        <nav className="nc-explore__nav" aria-label="Primary project pages">
           {c.links.map((link) => {
             const on = active === link.label;
             return (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`moto-explore__link${on ? " is-active" : ""}`}
+                className={`nc-explore__link${on ? " is-active" : ""}`}
                 onMouseEnter={() => setActive(link.label)}
                 onMouseLeave={() => setActive(null)}
                 onFocus={() => setActive(link.label)}
                 onBlur={() => setActive(null)}
               >
-                <span className="moto-explore__label">{link.label}</span>
-                <span className="moto-explore__blurb">{link.blurb}</span>
-                <span className="moto-explore__arrow" aria-hidden="true">
+                <span className="nc-explore__label">{link.label}</span>
+                <span className="nc-explore__blurb">{link.blurb}</span>
+                <span className="nc-explore__arrow" aria-hidden="true">
                   →
                 </span>
               </Link>
@@ -34,7 +34,7 @@ export function ExploreScene() {
           })}
         </nav>
         <div
-          className={`moto-explore__symbol${active ? " is-visible" : ""}`}
+          className={`nc-explore__symbol${active ? " is-visible" : ""}`}
           aria-hidden="true"
         >
           <ProjectSymbol size="mark" />

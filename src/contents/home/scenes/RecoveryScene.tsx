@@ -7,7 +7,7 @@ export function RecoveryScene() {
   const c = sceneCopy.recovery;
 
   return (
-    <Scene tone="paper" travel={1.35} ariaLabel="Recovery and balance restored">
+    <Scene tone="panel" travel={1.35} ariaLabel="Recovery and balance restored">
       {({ progress, pinned }) => {
         const balance = pinned ? 1 - windowProgress(progress, 0.1, 0.75) * 0.85 : 0.15;
         const figureY = pinned ? -20 + windowProgress(progress, 0.35, 0.8) * 28 : 0;
