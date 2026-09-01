@@ -1,13 +1,17 @@
 import * as THREE from "three";
 import { createNocturneMaterial, setNocturneDpr } from "./nocturneShader";
-import { MOUSE_K, lerp, lerp3, smoothstep, type Vec3 } from "./nocturneMath";
-import { bokehPoint, shapeColor, shapePoint } from "./nocturneShapes";
-import { isDynamic, sampleTimeline, type SceneMode } from "./nocturneTimeline";
+import { MOUSE_K, type Vec3 } from "./nocturneMath";
+import { bandParticleColor, bandPoint, bokehPoint, bokehColor } from "./nocturneShapes";
 
 export type NocturneOpeningHandle = {
   resize: () => void;
   dispose: () => void;
 };
+
+/** 水平银河带阶段固定参数（参考视频 ~6s 帧） */
+const CAM_Z = 38;
+const ROT_X = 0.22;
+const SPREAD = 0.95;
 
 function applyMouse(x: number, y: number, px: number, py: number, active: boolean) {
   if (!active) return { x, y };
@@ -48,11 +52,11 @@ export function mountNocturneOpening(
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 250);
-  camera.position.set(0, 0.15, 38);
+  camera.position.set(0, 0.12, CAM_Z);
 
   const mobile = window.matchMedia("(max-width: 768px)").matches;
   const coreCount = mobile ? 20000 : 48000;
-  const bokehCount = mobile ? 70 : 140;
+  const bokehCount = mobile ? 60 : 120;
   const total = coreCount + bokehCount;
 
   const positions = new Float32Array(total * 3);
@@ -60,10 +64,22 @@ export function mountNocturneOpening(
   const sizes = new Float32Array(total);
 
   for (let i = 0; i < coreCount; i++) {
-    sizes[i] = 0.52 + (i % 19) * 0.022;
+    sizes[i] = 0.48 + (i % 17) * 0.018;
+    const p = bandPoint(i, coreCount, 0, SPREAD);
+    const col = bandParticleColor(i, Math.abs(p.y));
+    const j = i * 3;
+    colors[j] = col.r;
+    colors[j + 1] = col.g;
+    colors[j + 2] = col.b;
   }
   for (let i = 0; i < bokehCount; i++) {
-    sizes[coreCount + i] = 2.1 + (i % 8) * 0.32;
+    const idx = coreCount + i;
+    sizes[idx] = 1.8 + (i % 7) * 0.28;
+    const bc = bokehColor(i);
+    const o = idx * 3;
+    colors[o] = bc.r;
+    colors[o + 1] = bc.g;
+    colors[o + 2] = bc.b;
   }
 
   const geo = new THREE.BufferGeometry();
@@ -74,29 +90,9 @@ export function mountNocturneOpening(
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const mat = createNocturneMaterial(dpr);
   const group = new THREE.Group();
+  group.rotation.x = ROT_X;
   group.add(new THREE.Points(geo, mat));
   scene.add(group);
-
-  const orbitGroup = new THREE.Group();
-  const orbitMat = new THREE.LineBasicMaterial({
-    color: 0x3a3a48,
-    transparent: true,
-    opacity: 0.35,
-  });
-  for (let r = 0; r < 4; r++) {
-    const pts: THREE.Vector3[] = [];
-    const rad = [7.5, 9.2, 11, 13.5][r]!;
-    for (let k = 0; k <= 128; k++) {
-      const a = (k / 128) * Math.PI * 2;
-      pts.push(new THREE.Vector3(Math.cos(a) * rad, 0, Math.sin(a) * rad * 0.35));
-    }
-    const line = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), orbitMat);
-    line.rotation.x = 0.35 + r * 0.12;
-    line.rotation.z = r * 0.4;
-    orbitGroup.add(line);
-  }
-  orbitGroup.visible = false;
-  scene.add(orbitGroup);
 
   const mouseNdc = new THREE.Vector2(999, 999);
   const mouseWorld = new THREE.Vector3();
@@ -118,84 +114,41 @@ export function mountNocturneOpening(
 
   let raf = 0;
   const t0 = performance.now();
-  let frame = 0;
 
   const tick = (now: number) => {
     raf = requestAnimationFrame(tick);
-    frame++;
-    const elapsed = (now - t0) * 0.001;
-    const time = reduced ? 12 : elapsed;
-    const sceneState = sampleTimeline(time);
-    const morphT = smoothstep(sceneState.blend);
-    const modeA = sceneState.mode;
-    const modeB = sceneState.next.mode;
+    const time = reduced ? 0 : (now - t0) * 0.001;
 
-    const camZ = lerp(sceneState.camZ, sceneState.next.camZ, morphT);
-    const rotX = lerp(sceneState.rotX, sceneState.next.rotX, morphT);
-    const rotY = lerp(sceneState.rotY, sceneState.next.rotY, morphT);
-    const spread = lerp(sceneState.spread, sceneState.next.spread, morphT);
-    const tint = morphT < 0.5 ? sceneState.tint : sceneState.next.tint;
-    const activeMode: SceneMode = morphT < 0.5 ? modeA : modeB;
-
-    camera.position.z = camZ;
-    group.rotation.x = rotX + Math.sin(time * 0.07) * 0.025;
-    group.rotation.y = rotY + time * 0.018;
-    group.rotation.z = Math.sin(time * 0.05) * 0.02;
-
-    orbitGroup.visible = activeMode === "orbit";
-    orbitGroup.rotation.y = time * 0.04;
+    group.rotation.y = Math.sin(time * 0.018) * 0.06;
+    group.rotation.z = Math.sin(time * 0.025) * 0.012;
 
     raycaster.setFromCamera(mouseNdc, camera);
     const hit = raycaster.ray.intersectPlane(plane, mouseWorld);
     const mx = pointerActive && hit ? mouseWorld.x : 0;
     const my = pointerActive && hit ? mouseWorld.y : 0;
 
-    const warmBias = tint === "warm" ? 0.75 : 0;
-    const updateShapes = !reduced || frame % 2 === 0;
-
-    for (let i = 0; i < coreCount; i++) {
-      let p: Vec3;
-      if (updateShapes) {
-        const pa = shapePoint(modeA, i, coreCount, time, spread);
-        if (modeB === modeA) {
-          p = pa;
-        } else {
-          const pb = shapePoint(modeB, i, coreCount, time, spread);
-          p = isDynamic(modeA) && !isDynamic(modeB) ? pb : isDynamic(modeB) && !isDynamic(modeA) ? pa : lerp3(pa, pb, morphT);
-        }
-      } else {
+    if (!reduced) {
+      for (let i = 0; i < coreCount; i++) {
+        const p: Vec3 = bandPoint(i, coreCount, time, SPREAD);
+        const m = applyMouse(p.x, p.y, mx, my, pointerActive);
         const j = i * 3;
-        p = { x: positions[j]!, y: positions[j + 1]!, z: positions[j + 2]! };
+        positions[j] = m.x;
+        positions[j + 1] = m.y;
+        positions[j + 2] = p.z;
       }
 
-      const m = applyMouse(p.x, p.y, mx, my, pointerActive);
-      const j = i * 3;
-      positions[j] = m.x;
-      positions[j + 1] = m.y;
-      positions[j + 2] = p.z;
+      for (let i = 0; i < bokehCount; i++) {
+        const idx = coreCount + i;
+        const o = idx * 3;
+        const bp = bokehPoint(i, time);
+        positions[o] = bp.x;
+        positions[o + 1] = bp.y;
+        positions[o + 2] = bp.z;
+      }
 
-      const dist = Math.hypot(p.x, p.y, p.z);
-      const col = shapeColor(activeMode, tint, i, dist, warmBias);
-      colors[j] = col.r;
-      colors[j + 1] = col.g;
-      colors[j + 2] = col.b;
+      geo.attributes.position!.needsUpdate = true;
     }
 
-    for (let i = 0; i < bokehCount; i++) {
-      const idx = coreCount + i;
-      const o = idx * 3;
-      const bp = bokehPoint(i, time);
-      const alpha = 0.1 + (i % 5) * 0.018;
-      positions[o] = bp.x;
-      positions[o + 1] = bp.y;
-      positions[o + 2] = bp.z;
-      colors[o] = alpha;
-      colors[o + 1] = alpha * 1.05;
-      colors[o + 2] = alpha * 1.15;
-    }
-
-    geo.attributes.position!.needsUpdate = true;
-    geo.attributes.color!.needsUpdate = true;
     renderer.render(scene, camera);
   };
 
@@ -222,10 +175,6 @@ export function mountNocturneOpening(
       canvas.removeEventListener("pointerleave", onLeave);
       geo.dispose();
       mat.dispose();
-      orbitMat.dispose();
-      orbitGroup.traverse((o) => {
-        if (o instanceof THREE.LineLoop) o.geometry.dispose();
-      });
       renderer.dispose();
     },
   };
