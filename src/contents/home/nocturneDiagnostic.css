@@ -1,0 +1,298 @@
+/* Ported from nocturne_memory backend/frontend_builder.py render_diagnostic_html() */
+
+.nocturne-diag {
+  --bg: #0b0f19;
+  --card-bg: #141b2d;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --accent: #6366f1;
+  --accent-glow: rgba(99, 102, 241, 0.25);
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --code-bg: #070a13;
+
+  min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.nocturne-diag *,
+.nocturne-diag *::before,
+.nocturne-diag *::after {
+  box-sizing: border-box;
+}
+
+.nocturne-diag__container {
+  width: 100%;
+  max-width: 680px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 2.25rem;
+  box-shadow:
+    0 20px 40px -15px rgba(0, 0, 0, 0.5),
+    0 0 50px -10px var(--accent-glow);
+}
+
+.nocturne-diag__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--card-border);
+  gap: 1rem;
+}
+
+.nocturne-diag__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nocturne-diag__logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.nocturne-diag__brand h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.nocturne-diag__brand-sub {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.nocturne-diag__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.nocturne-diag__badge--building {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.nocturne-diag__badge--ready {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.nocturne-diag__badge--error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.nocturne-diag__pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: nocturne-diag-pulse 1.5s infinite;
+}
+
+.nocturne-diag__badge--ready .nocturne-diag__pulse-dot {
+  animation: none;
+}
+
+@keyframes nocturne-diag-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.nocturne-diag__status-section {
+  margin: 1.5rem 0;
+}
+
+.nocturne-diag__status-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.nocturne-diag__status-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.nocturne-diag__progress-container {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 1.25rem 0;
+}
+
+.nocturne-diag__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.nocturne-diag__code-box {
+  background: var(--code-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  position: relative;
+}
+
+.nocturne-diag__code-box pre {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.nocturne-diag__code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.nocturne-diag__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  font-family: inherit;
+}
+
+.nocturne-diag__btn--primary {
+  background: #6366f1;
+  color: white;
+}
+
+.nocturne-diag__btn--primary:hover:not(:disabled) {
+  background: #4f46e5;
+}
+
+.nocturne-diag__btn--primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.nocturne-diag__btn--secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border: 1px solid var(--card-border);
+}
+
+.nocturne-diag__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nocturne-diag__btn--small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.nocturne-diag__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.nocturne-diag__toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 999;
+}
+
+.nocturne-diag__toast.is-show {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .nocturne-diag__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nocturne-diag__container {
+    padding: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nocturne-diag__pulse-dot {
+    animation: none;
+  }
+
+  .nocturne-diag__progress-bar {
+    transition: none;
+  }
+}
