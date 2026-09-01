@@ -3,171 +3,125 @@ import * as THREE from "three";
 const SIGMA = 10;
 const RHO = 28;
 const BETA = 8 / 3;
-const DT = 0.0048;
+const DT = 0.005;
 const SCALE = 0.11;
 const Z_OFFSET = 25;
-/** Kaprekar constant — scales cursor “black hole” pull (reference: 6174). */
-const PULL_K = 6174 / 1_000_000;
+/** Kaprekar constant — cursor “black hole” pull strength. */
+const PULL_K = 6174 / 800_000;
+const MOBIUS_PARTICLES = 900;
 
-type LorenzStream = {
-  pos: THREE.Vector3;
-  line: THREE.Line;
-  positions: Float32Array;
-  hue: "blue" | "gold";
+type StreamState = {
+  x: number;
+  y: number;
+  z: number;
   mirror: 1 | -1;
   xShift: number;
+  /** Ring buffer — latest sample at index 0. */
+  trail: Float32Array;
+  gold: boolean;
 };
 
 export type NocturneSceneHandle = {
   resize: () => void;
   dispose: () => void;
+  particleCount: number;
 };
 
-function lorenzStep(
-  v: THREE.Vector3,
-  mouse: THREE.Vector3,
+function lorenzIntegrate(
+  s: StreamState,
+  mouseX: number,
+  mouseY: number,
   pull: boolean,
-  mirror: 1 | -1,
-  xShift: number,
-): THREE.Vector3 {
-  let { x, y, z } = v;
+) {
+  let { x, y, z } = s;
   if (pull) {
-    const px = mirror * x * SCALE + xShift;
+    const px = s.mirror * x * SCALE + s.xShift;
     const py = y * SCALE;
-    const dxm = mouse.x - px;
-    const dym = mouse.y - py;
-    const distSq = dxm * dxm + dym * dym + 90;
+    const dxm = mouseX - px;
+    const dym = mouseY - py;
+    const distSq = dxm * dxm + dym * dym + 70;
     const f = PULL_K / distSq;
-    x += (dxm / SCALE) * f * 12 * mirror;
-    y += (dym / SCALE) * f * 12;
+    x += (dxm / SCALE) * f * 14 * s.mirror;
+    y += (dym / SCALE) * f * 14;
   }
   const dx = SIGMA * (y - x) * DT;
   const dy = (x * (RHO - z) - y) * DT;
   const dz = (x * y - BETA * z) * DT;
-  return new THREE.Vector3(x + dx, y + dy, z + dz);
+  s.x = x + dx;
+  s.y = y + dy;
+  s.z = z + dz;
 }
 
-function mobiusPoint(u: number, v: number, r: number): THREE.Vector3 {
+function pushTrail(s: StreamState, trailLen: number) {
+  const t = s.trail;
+  for (let i = trailLen - 1; i > 0; i--) {
+    const j = i * 3;
+    t[j] = t[j - 3]!;
+    t[j + 1] = t[j - 2]!;
+    t[j + 2] = t[j - 1]!;
+  }
+  t[0] = s.mirror * s.x * SCALE + s.xShift;
+  t[1] = s.y * SCALE;
+  t[2] = (s.z - Z_OFFSET) * SCALE * 0.85;
+}
+
+function mobiusPoint(u: number, v: number): THREE.Vector3 {
   const hu = u * 0.5;
   const rv = v * 0.42;
   return new THREE.Vector3(
-    (r + rv * Math.cos(hu)) * Math.cos(u),
-    (r + rv * Math.cos(hu)) * Math.sin(u),
+    (1 + rv * Math.cos(hu)) * Math.cos(u),
+    (1 + rv * Math.cos(hu)) * Math.sin(u),
     rv * Math.sin(hu),
   );
 }
 
-function createMobius(): THREE.Line {
-  const segments = 220;
-  const verts: number[] = [];
-  for (let i = 0; i <= segments; i++) {
-    const u = (i / segments) * Math.PI * 2;
-    const p = mobiusPoint(u, 0.92, 1);
-    verts.push(p.x * 3.2, p.y * 3.2, p.z * 3.2);
+function fillColor(
+  out: Float32Array,
+  idx: number,
+  gold: boolean,
+  fade: number,
+) {
+  const i = idx * 3;
+  const a = 0.35 + fade * 0.65;
+  if (gold) {
+    out[i] = 0.95 * a;
+    out[i + 1] = 0.76 * a;
+    out[i + 2] = 0.35 * a;
+  } else {
+    out[i] = 0.35 * a;
+    out[i + 1] = 0.78 * a;
+    out[i + 2] = 1 * a;
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.Float32BufferAttribute(verts, 3));
-  const mat = new THREE.LineBasicMaterial({
-    color: 0xf5f0e6,
-    transparent: true,
-    opacity: 0.55,
-    blending: THREE.AdditiveBlending,
-  });
-  return new THREE.Line(geo, mat);
 }
 
-function createMobiusInner(): THREE.Line {
-  const segments = 220;
-  const verts: number[] = [];
-  for (let i = 0; i <= segments; i++) {
-    const u = (i / segments) * Math.PI * 2;
-    const p = mobiusPoint(u, -0.92, 1);
-    verts.push(p.x * 3.15, p.y * 3.15, p.z * 3.15);
-  }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.Float32BufferAttribute(verts, 3));
-  const mat = new THREE.LineBasicMaterial({
-    color: 0xd4af6a,
-    transparent: true,
-    opacity: 0.38,
-    blending: THREE.AdditiveBlending,
-  });
-  return new THREE.Line(geo, mat);
-}
-
-function createStars(count: number): THREE.Points {
-  const pos = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    pos[i * 3] = (Math.random() - 0.5) * 120;
-    pos[i * 3 + 1] = (Math.random() - 0.5) * 80;
-    pos[i * 3 + 2] = (Math.random() - 0.5) * 60 - 20;
-  }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-  const mat = new THREE.PointsMaterial({
-    color: 0xffffff,
-    size: 0.06,
-    transparent: true,
-    opacity: 0.35,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-  });
-  return new THREE.Points(geo, mat);
-}
-
-function createLorenzWing(
+function createStreams(
   count: number,
   trailLen: number,
   mirror: 1 | -1,
   xShift: number,
-): LorenzStream[] {
-  const streams: LorenzStream[] = [];
+): StreamState[] {
+  const streams: StreamState[] = [];
   for (let i = 0; i < count; i++) {
-    const positions = new Float32Array(trailLen * 3);
-    const start = new THREE.Vector3(
-      0.1 + (Math.random() - 0.5) * 0.4,
-      0.1 + (Math.random() - 0.5) * 0.4,
-      19 + Math.random() * 12,
-    );
-    if (mirror < 0) start.x *= -1;
-
+    const trail = new Float32Array(trailLen * 3);
+    const sx = (0.1 + (Math.random() - 0.5) * 0.45) * (mirror < 0 ? -1 : 1);
+    const sy = 0.1 + (Math.random() - 0.5) * 0.45;
+    const sz = 19 + Math.random() * 12;
     for (let t = 0; t < trailLen; t++) {
-      positions[t * 3] = mirror * start.x * SCALE + xShift;
-      positions[t * 3 + 1] = start.y * SCALE;
-      positions[t * 3 + 2] = (start.z - Z_OFFSET) * SCALE * 0.85;
+      trail[t * 3] = mirror * sx * SCALE + xShift;
+      trail[t * 3 + 1] = sy * SCALE;
+      trail[t * 3 + 2] = (sz - Z_OFFSET) * SCALE * 0.85;
     }
-
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    const hue = i % 3 === 0 ? "gold" : "blue";
-    const mat = new THREE.LineBasicMaterial({
-      color: hue === "gold" ? 0xe8b84a : 0x4db8ff,
-      transparent: true,
-      opacity: hue === "gold" ? 0.72 : 0.58,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
+    streams.push({
+      x: sx,
+      y: sy,
+      z: sz,
+      mirror,
+      xShift,
+      trail,
+      gold: i % 3 === 0,
     });
-    const line = new THREE.Line(geo, mat);
-    streams.push({ pos: start.clone(), line, positions, hue, mirror, xShift });
   }
   return streams;
-}
-
-function shiftTrail(
-  positions: Float32Array,
-  trailLen: number,
-  x: number,
-  y: number,
-  z: number,
-) {
-  for (let i = trailLen - 1; i > 0; i--) {
-    positions[i * 3] = positions[(i - 1) * 3]!;
-    positions[i * 3 + 1] = positions[(i - 1) * 3 + 1]!;
-    positions[i * 3 + 2] = positions[(i - 1) * 3 + 2]!;
-  }
-  positions[0] = x;
-  positions[1] = y;
-  positions[2] = z;
 }
 
 export function mountNocturneScene(
@@ -187,24 +141,89 @@ export function mountNocturneScene(
   camera.position.set(0, 0, 38);
 
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
-  const streamCount = isMobile ? 36 : 64;
-  const trailLen = isMobile ? 120 : 200;
+  const streamsPerWing = isMobile ? 100 : 140;
+  const particlesPerStream = isMobile ? 40 : 50;
+  const trailLen = particlesPerStream;
+  const lorenzParticleCount = streamsPerWing * 2 * particlesPerStream;
+  const starCount = isMobile ? 1800 : 3200;
+  const totalParticles = lorenzParticleCount + MOBIUS_PARTICLES + starCount;
 
-  const wingL = createLorenzWing(streamCount, trailLen, 1, -5.5);
-  const wingR = createLorenzWing(streamCount, trailLen, -1, 5.5);
+  const wingL = createStreams(streamsPerWing, trailLen, 1, -5.8);
+  const wingR = createStreams(streamsPerWing, trailLen, -1, 5.8);
   const allStreams = [...wingL, ...wingR];
 
+  const lorenzPositions = new Float32Array(lorenzParticleCount * 3);
+  const lorenzColors = new Float32Array(lorenzParticleCount * 3);
+  const lorenzGeo = new THREE.BufferGeometry();
+  lorenzGeo.setAttribute("position", new THREE.BufferAttribute(lorenzPositions, 3));
+  lorenzGeo.setAttribute("color", new THREE.BufferAttribute(lorenzColors, 3));
+
+  const lorenzMat = new THREE.PointsMaterial({
+    size: isMobile ? 0.038 : 0.048,
+    sizeAttenuation: true,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.92,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const lorenzPoints = new THREE.Points(lorenzGeo, lorenzMat);
   const lorenzGroup = new THREE.Group();
-  for (const s of allStreams) lorenzGroup.add(s.line);
+  lorenzGroup.add(lorenzPoints);
   scene.add(lorenzGroup);
 
+  const mobiusPositions = new Float32Array(MOBIUS_PARTICLES * 3);
+  const mobiusColors = new Float32Array(MOBIUS_PARTICLES * 3);
+  const mobiusPhase = new Float32Array(MOBIUS_PARTICLES);
+  for (let i = 0; i < MOBIUS_PARTICLES; i++) {
+    mobiusPhase[i] = Math.random() * Math.PI * 2;
+    const gold = i % 4 === 0;
+    fillColor(mobiusColors, i, gold, 0.75);
+  }
+  const mobiusGeo = new THREE.BufferGeometry();
+  mobiusGeo.setAttribute(
+    "position",
+    new THREE.BufferAttribute(mobiusPositions, 3),
+  );
+  mobiusGeo.setAttribute("color", new THREE.BufferAttribute(mobiusColors, 3));
+  const mobiusPoints = new THREE.Points(
+    mobiusGeo,
+    new THREE.PointsMaterial({
+      size: isMobile ? 0.032 : 0.04,
+      sizeAttenuation: true,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    }),
+  );
   const mobiusGroup = new THREE.Group();
-  const mobiusA = createMobius();
-  const mobiusB = createMobiusInner();
-  mobiusGroup.add(mobiusA, mobiusB);
+  mobiusGroup.add(mobiusPoints);
   scene.add(mobiusGroup);
 
-  scene.add(createStars(isMobile ? 600 : 1400));
+  const starPositions = new Float32Array(starCount * 3);
+  for (let i = 0; i < starCount; i++) {
+    starPositions[i * 3] = (Math.random() - 0.5) * 130;
+    starPositions[i * 3 + 1] = (Math.random() - 0.5) * 90;
+    starPositions[i * 3 + 2] = (Math.random() - 0.5) * 70 - 25;
+  }
+  const starGeo = new THREE.BufferGeometry();
+  starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+  scene.add(
+    new THREE.Points(
+      starGeo,
+      new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.035,
+        transparent: true,
+        opacity: 0.28,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+    ),
+  );
+  const starPoints = scene.children[scene.children.length - 1] as THREE.Points;
 
   const mouseNdc = new THREE.Vector2(999, 999);
   const mouseWorld = new THREE.Vector3();
@@ -244,35 +263,81 @@ export function mountNocturneScene(
     raycaster.ray.intersectPlane(plane, mouseWorld);
   };
 
+  const applyCursorPull = (px: number, py: number) => {
+    if (!pointerActive) return { px, py };
+    const dx = mouseWorld.x - px;
+    const dy = mouseWorld.y - py;
+    const distSq = dx * dx + dy * dy;
+    const r = 6.5;
+    if (distSq > r * r) return { px, py };
+    const f = (1 - Math.sqrt(distSq) / r) * 0.85;
+    return { px: px + dx * f, py: py + dy * f };
+  };
+
+  const syncLorenzParticles = () => {
+    let ptr = 0;
+    for (let s = 0; s < allStreams.length; s++) {
+      const stream = allStreams[s]!;
+      for (let p = 0; p < particlesPerStream; p++) {
+        const ti = p * 3;
+        let px = stream.trail[ti]!;
+        let py = stream.trail[ti + 1]!;
+        let pz = stream.trail[ti + 2]!;
+        const pulled = applyCursorPull(px, py);
+        px = pulled.px;
+        py = pulled.py;
+
+        const o = ptr * 3;
+        lorenzPositions[o] = px;
+        lorenzPositions[o + 1] = py;
+        lorenzPositions[o + 2] = pz;
+        fillColor(lorenzColors, ptr, stream.gold, 1 - p / particlesPerStream);
+        ptr++;
+      }
+    }
+    (lorenzGeo.getAttribute("position") as THREE.BufferAttribute).needsUpdate =
+      true;
+    (lorenzGeo.getAttribute("color") as THREE.BufferAttribute).needsUpdate =
+      true;
+  };
+
+  const syncMobiusParticles = (time: number) => {
+    const R = 3.1;
+    for (let i = 0; i < MOBIUS_PARTICLES; i++) {
+      const u = mobiusPhase[i]! + time * 0.22 + (i / MOBIUS_PARTICLES) * Math.PI * 2;
+      const v = Math.sin(time * 0.35 + i * 0.07) * 0.92;
+      const p = mobiusPoint(u, v);
+      const o = i * 3;
+      mobiusPositions[o] = p.x * R;
+      mobiusPositions[o + 1] = p.y * R;
+      mobiusPositions[o + 2] = p.z * R;
+    }
+    (mobiusGeo.getAttribute("position") as THREE.BufferAttribute).needsUpdate =
+      true;
+  };
+
+  syncLorenzParticles();
+
   const tick = (now: number) => {
     raf = requestAnimationFrame(tick);
     const time = (now - t0) * 0.001;
     updateMouseWorld();
 
     if (!reducedMotion) {
-      const steps = isMobile ? 2 : 3;
-      for (let step = 0; step < steps; step++) {
+      const substeps = isMobile ? 1 : 2;
+      for (let step = 0; step < substeps; step++) {
         for (const stream of allStreams) {
-          stream.pos = lorenzStep(
-            stream.pos,
-            mouseWorld,
-            pointerActive,
-            stream.mirror,
-            stream.xShift,
-          );
-          const px = stream.mirror * stream.pos.x * SCALE + stream.xShift;
-          const py = stream.pos.y * SCALE;
-          const pz = (stream.pos.z - Z_OFFSET) * SCALE * 0.85;
-          shiftTrail(stream.positions, trailLen, px, py, pz);
-          const attr = stream.line.geometry.getAttribute("position");
-          (attr as THREE.BufferAttribute).needsUpdate = true;
+          lorenzIntegrate(stream, mouseWorld.x, mouseWorld.y, pointerActive);
+          pushTrail(stream, trailLen);
         }
       }
+      syncLorenzParticles();
+      syncMobiusParticles(time);
 
-      lorenzGroup.rotation.y = Math.sin(time * 0.12) * 0.08;
-      lorenzGroup.rotation.x = Math.cos(time * 0.09) * 0.04;
-      mobiusGroup.rotation.z = time * 0.14;
-      mobiusGroup.rotation.x = 0.62 + Math.sin(time * 0.2) * 0.08;
+      lorenzGroup.rotation.y = Math.sin(time * 0.11) * 0.07;
+      lorenzGroup.rotation.x = Math.cos(time * 0.08) * 0.035;
+      mobiusGroup.rotation.z = time * 0.13;
+      mobiusGroup.rotation.x = 0.62 + Math.sin(time * 0.19) * 0.07;
     }
 
     renderer.render(scene, camera);
@@ -285,16 +350,14 @@ export function mountNocturneScene(
     cancelAnimationFrame(raf);
     canvas.removeEventListener("pointermove", onPointerMove);
     canvas.removeEventListener("pointerleave", onLeave);
-    for (const s of allStreams) {
-      s.line.geometry.dispose();
-      (s.line.material as THREE.Material).dispose();
-    }
-    mobiusA.geometry.dispose();
-    (mobiusA.material as THREE.Material).dispose();
-    mobiusB.geometry.dispose();
-    (mobiusB.material as THREE.Material).dispose();
+    lorenzGeo.dispose();
+    lorenzMat.dispose();
+    mobiusGeo.dispose();
+    (mobiusPoints.material as THREE.Material).dispose();
+    starGeo.dispose();
+    (starPoints.material as THREE.Material).dispose();
     renderer.dispose();
   };
 
-  return { resize, dispose };
+  return { resize, dispose, particleCount: totalParticles };
 }

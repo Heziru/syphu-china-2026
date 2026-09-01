@@ -60,6 +60,9 @@ export function NocturneSplash() {
         <p className="nocturne-particle__quote">
           洛伦兹吸引子 — 永远在动，却永远逃不出那个形
         </p>
+        <p className="nocturne-particle__count" aria-hidden="true">
+          14,000+ particles · cursor gravity
+        </p>
         <p className="nocturne-particle__sub">{heroCopy.persistenceZh}</p>
 
         <div className="nocturne-particle__loader" aria-hidden="true">
