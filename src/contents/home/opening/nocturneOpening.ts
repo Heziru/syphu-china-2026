@@ -1,38 +1,44 @@
 import * as THREE from "three";
 import { createNocturneMaterial, setNocturneDpr } from "./nocturneShader";
 import { MOUSE_K, type Vec3 } from "./nocturneMath";
-import { bandParticleColor, bandPoint, bokehPoint, bokehColor } from "./nocturneShapes";
+import {
+  bandDensity,
+  bandParticleColor,
+  bandParticleSize,
+  bandPoint,
+  bokehColor,
+  bokehPoint,
+} from "./nocturneShapes";
 
 export type NocturneOpeningHandle = {
   resize: () => void;
   dispose: () => void;
 };
 
-/** 水平银河带阶段固定参数（参考视频 ~6s 帧） */
-const CAM_Z = 38;
-const ROT_X = 0.22;
-const SPREAD = 0.95;
+const CAM_Z = 36;
+const ROT_X = 0.28;
+const SPREAD = 1.05;
 
 function applyMouse(x: number, y: number, px: number, py: number, active: boolean) {
   if (!active) return { x, y };
   const dx = x - px;
   const dy = y - py;
   const distSq = dx * dx + dy * dy;
-  const voidR = 2.4;
-  const inf = 10;
+  const voidR = 2.2;
+  const inf = 9;
   if (distSq > inf * inf) return { x, y };
   const dist = Math.sqrt(distSq) + 0.04;
   let nx = x;
   let ny = y;
-  if (dist < voidR * 2.8) {
-    const push = ((voidR * 2.8 - dist) / (voidR * 2.8)) ** 1.35 * 1.85;
+  if (dist < voidR * 2.6) {
+    const push = ((voidR * 2.6 - dist) / (voidR * 2.6)) ** 1.3 * 1.5;
     nx += (dx / dist) * push;
     ny += (dy / dist) * push;
   }
-  const f = MOUSE_K / (distSq + 55);
-  nx += dx * f * 90;
-  ny += dy * f * 90;
-  const swirl = (1 - dist / inf) * 0.36;
+  const f = MOUSE_K / (distSq + 60);
+  nx += dx * f * 70;
+  ny += dy * f * 70;
+  const swirl = (1 - dist / inf) * 0.3;
   nx += (-dy / dist) * swirl;
   ny += (dx / dist) * swirl;
   return { x: nx, y: ny };
@@ -51,22 +57,25 @@ export function mountNocturneOpening(
   renderer.setClearColor(0x000000, 1);
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 250);
-  camera.position.set(0, 0.12, CAM_Z);
+  const camera = new THREE.PerspectiveCamera(44, 1, 0.1, 250);
+  camera.position.set(0, 0.08, CAM_Z);
 
   const mobile = window.matchMedia("(max-width: 768px)").matches;
-  const coreCount = mobile ? 20000 : 48000;
-  const bokehCount = mobile ? 60 : 120;
+  const coreCount = mobile ? 9000 : 16000;
+  const bokehCount = mobile ? 45 : 90;
   const total = coreCount + bokehCount;
+  const timeScale = reduced ? 0.35 : 1;
 
   const positions = new Float32Array(total * 3);
   const colors = new Float32Array(total * 3);
   const sizes = new Float32Array(total);
+  const alphas = new Float32Array(total);
 
   for (let i = 0; i < coreCount; i++) {
-    sizes[i] = 0.48 + (i % 17) * 0.018;
-    const p = bandPoint(i, coreCount, 0, SPREAD);
-    const col = bandParticleColor(i, Math.abs(p.y));
+    const density = bandDensity(i, SPREAD);
+    sizes[i] = bandParticleSize(i, density);
+    alphas[i] = 0.18 + density * 0.42;
+    const col = bandParticleColor(i, density);
     const j = i * 3;
     colors[j] = col.r;
     colors[j + 1] = col.g;
@@ -74,7 +83,8 @@ export function mountNocturneOpening(
   }
   for (let i = 0; i < bokehCount; i++) {
     const idx = coreCount + i;
-    sizes[idx] = 1.8 + (i % 7) * 0.28;
+    sizes[idx] = 1.1 + (i % 5) * 0.18;
+    alphas[idx] = 0.06 + (i % 4) * 0.015;
     const bc = bokehColor(i);
     const o = idx * 3;
     colors[o] = bc.r;
@@ -86,6 +96,7 @@ export function mountNocturneOpening(
   geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
   geo.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
+  geo.setAttribute("aAlpha", new THREE.BufferAttribute(alphas, 1));
 
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const mat = createNocturneMaterial(dpr);
@@ -117,38 +128,36 @@ export function mountNocturneOpening(
 
   const tick = (now: number) => {
     raf = requestAnimationFrame(tick);
-    const time = reduced ? 0 : (now - t0) * 0.001;
+    const time = ((now - t0) * 0.001) * timeScale;
 
-    group.rotation.y = Math.sin(time * 0.018) * 0.06;
-    group.rotation.z = Math.sin(time * 0.025) * 0.012;
+    group.rotation.y = time * 0.045 + Math.sin(time * 0.12) * 0.08;
+    group.rotation.x = ROT_X + Math.sin(time * 0.09) * 0.05;
+    group.rotation.z = Math.sin(time * 0.07) * 0.025;
 
     raycaster.setFromCamera(mouseNdc, camera);
     const hit = raycaster.ray.intersectPlane(plane, mouseWorld);
     const mx = pointerActive && hit ? mouseWorld.x : 0;
     const my = pointerActive && hit ? mouseWorld.y : 0;
 
-    if (!reduced) {
-      for (let i = 0; i < coreCount; i++) {
-        const p: Vec3 = bandPoint(i, coreCount, time, SPREAD);
-        const m = applyMouse(p.x, p.y, mx, my, pointerActive);
-        const j = i * 3;
-        positions[j] = m.x;
-        positions[j + 1] = m.y;
-        positions[j + 2] = p.z;
-      }
-
-      for (let i = 0; i < bokehCount; i++) {
-        const idx = coreCount + i;
-        const o = idx * 3;
-        const bp = bokehPoint(i, time);
-        positions[o] = bp.x;
-        positions[o + 1] = bp.y;
-        positions[o + 2] = bp.z;
-      }
-
-      geo.attributes.position!.needsUpdate = true;
+    for (let i = 0; i < coreCount; i++) {
+      const p: Vec3 = bandPoint(i, coreCount, time, SPREAD);
+      const m = applyMouse(p.x, p.y, mx, my, pointerActive);
+      const j = i * 3;
+      positions[j] = m.x;
+      positions[j + 1] = m.y;
+      positions[j + 2] = p.z;
     }
 
+    for (let i = 0; i < bokehCount; i++) {
+      const idx = coreCount + i;
+      const o = idx * 3;
+      const bp = bokehPoint(i, time);
+      positions[o] = bp.x;
+      positions[o + 1] = bp.y;
+      positions[o + 2] = bp.z;
+    }
+
+    geo.attributes.position!.needsUpdate = true;
     renderer.render(scene, camera);
   };
 
