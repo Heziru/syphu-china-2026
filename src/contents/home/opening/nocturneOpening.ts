@@ -1,22 +1,21 @@
 import * as THREE from "three";
 import { createNocturneMaterial, setNocturneDpr } from "./nocturneShader";
-import { MOUSE_K, type Vec3 } from "./nocturneMath";
+import { MOUSE_K, lerp, smoothstep, type Vec3 } from "./nocturneMath";
 import {
-  bandDensity,
   bandParticleColor,
   bandParticleSize,
-  bandPoint,
   bokehColor,
   bokehPoint,
+  morphPoint,
+  shapeDensity,
 } from "./nocturneShapes";
+import { DURATION, sampleTimeline } from "./nocturneTimeline";
 
 export type NocturneOpeningHandle = {
   resize: () => void;
   dispose: () => void;
 };
 
-const CAM_Z = 36;
-const ROT_X = 0.28;
 const SPREAD = 1.05;
 
 function applyMouse(x: number, y: number, px: number, py: number, active: boolean) {
@@ -58,13 +57,13 @@ export function mountNocturneOpening(
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(44, 1, 0.1, 250);
-  camera.position.set(0, 0.08, CAM_Z);
+  camera.position.set(0, 0.08, 38);
 
   const mobile = window.matchMedia("(max-width: 768px)").matches;
   const coreCount = mobile ? 9000 : 16000;
   const bokehCount = mobile ? 45 : 90;
   const total = coreCount + bokehCount;
-  const timeScale = reduced ? 0.35 : 1;
+  const timeScale = reduced ? 0.55 : 1;
 
   const positions = new Float32Array(total * 3);
   const colors = new Float32Array(total * 3);
@@ -72,7 +71,7 @@ export function mountNocturneOpening(
   const alphas = new Float32Array(total);
 
   for (let i = 0; i < coreCount; i++) {
-    const density = bandDensity(i, SPREAD);
+    const density = shapeDensity(i, 0, SPREAD);
     sizes[i] = bandParticleSize(i, density);
     alphas[i] = 0.18 + density * 0.42;
     const col = bandParticleColor(i, density);
@@ -101,7 +100,6 @@ export function mountNocturneOpening(
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const mat = createNocturneMaterial(dpr);
   const group = new THREE.Group();
-  group.rotation.x = ROT_X;
   group.add(new THREE.Points(geo, mat));
   scene.add(group);
 
@@ -128,11 +126,18 @@ export function mountNocturneOpening(
 
   const tick = (now: number) => {
     raf = requestAnimationFrame(tick);
-    const time = ((now - t0) * 0.001) * timeScale;
+    const elapsed = ((now - t0) * 0.001) * timeScale;
+    const cycle = elapsed % DURATION;
+    const sceneState = sampleTimeline(cycle);
+    const morphT = smoothstep(sceneState.blend);
 
-    group.rotation.y = time * 0.045 + Math.sin(time * 0.12) * 0.08;
-    group.rotation.x = ROT_X + Math.sin(time * 0.09) * 0.05;
-    group.rotation.z = Math.sin(time * 0.07) * 0.025;
+    const camZ = lerp(sceneState.camZ, sceneState.next.camZ, morphT);
+    const rotX = lerp(sceneState.rotX, sceneState.next.rotX, morphT);
+
+    camera.position.z = camZ;
+    group.rotation.x = rotX + Math.sin(elapsed * 0.35) * 0.04;
+    group.rotation.y = elapsed * 0.12 + Math.sin(elapsed * 0.5) * 0.06;
+    group.rotation.z = Math.sin(elapsed * 0.28) * 0.02;
 
     raycaster.setFromCamera(mouseNdc, camera);
     const hit = raycaster.ray.intersectPlane(plane, mouseWorld);
@@ -140,7 +145,7 @@ export function mountNocturneOpening(
     const my = pointerActive && hit ? mouseWorld.y : 0;
 
     for (let i = 0; i < coreCount; i++) {
-      const p: Vec3 = bandPoint(i, coreCount, time, SPREAD);
+      const p: Vec3 = morphPoint(i, coreCount, cycle, SPREAD);
       const m = applyMouse(p.x, p.y, mx, my, pointerActive);
       const j = i * 3;
       positions[j] = m.x;
@@ -151,7 +156,7 @@ export function mountNocturneOpening(
     for (let i = 0; i < bokehCount; i++) {
       const idx = coreCount + i;
       const o = idx * 3;
-      const bp = bokehPoint(i, time);
+      const bp = bokehPoint(i, elapsed);
       positions[o] = bp.x;
       positions[o + 1] = bp.y;
       positions[o + 2] = bp.z;
