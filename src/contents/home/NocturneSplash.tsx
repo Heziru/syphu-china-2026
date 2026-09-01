@@ -1,13 +1,11 @@
-import { ArchiveStarsCanvas } from "./opening/ArchiveStarsCanvas";
+import { NocturneOpeningCanvas } from "./opening/NocturneOpeningCanvas";
 import "./nocturneFull.css";
 
-/** Home = Nocturne-Memory-Core dashboard gate (initArchiveStars only, no copy) */
+/** 视频反推：洛伦兹双翼 + 倾斜星环，无文字 */
 export function NocturneSplash() {
   return (
     <div className="nocturne-gate">
-      <ArchiveStarsCanvas />
-      <div className="nocturne-gate__grain" aria-hidden="true" />
-      <div className="nocturne-gate__cosmic" aria-hidden="true" />
+      <NocturneOpeningCanvas />
     </div>
   );
 }
