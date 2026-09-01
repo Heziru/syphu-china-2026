@@ -1,19 +1,12 @@
 import { heroCopy } from "./homeCopy";
-import { useReducedMotion } from "./hooks/useReducedMotion";
-import {
-  NocturneThreeCanvas,
-  useOpeningPhase,
-} from "./opening/NocturneThreeCanvas";
-import "./nocturneParticle.css";
+import { ArchiveStarsCanvas } from "./opening/ArchiveStarsCanvas";
+import "./nocturneArchive.css";
 
 /**
- * 时光碎片 → 银河汇聚 → 鼠标扰动 → 再散开 → 标题飞出
+ * Nocturne-Memory-Core dashboard gate — archive-stars + archive-hero
+ * @see https://github.com/Pyruslili/Nocturne-Memory-Core dashboard.html
  */
 export function NocturneSplash() {
-  const reducedMotion = useReducedMotion();
-  const { phase, setPhase } = useOpeningPhase();
-  const showTitle = phase === "title" || reducedMotion;
-
   const enter = () => {
     document.getElementById("home-story")?.scrollIntoView({
       behavior: "smooth",
@@ -22,25 +15,48 @@ export function NocturneSplash() {
   };
 
   return (
-    <section
-      className={`nocturne-particle${showTitle ? " nocturne-particle--ready" : ""}`}
-      aria-label="LBP-Mototype opening"
-      onClick={showTitle ? enter : undefined}
-      onKeyDown={(e) => {
-        if (showTitle && (e.key === "Enter" || e.key === " ")) enter();
-      }}
-      role={showTitle ? "button" : undefined}
-      tabIndex={showTitle ? 0 : -1}
-    >
-      <NocturneThreeCanvas onPhase={setPhase} />
-      <div className="nocturne-particle__overlay" aria-hidden="true" />
+    <div className="nocturne-archive">
+      <ArchiveStarsCanvas />
+      <div className="nocturne-archive__grain" aria-hidden="true" />
+      <div className="nocturne-archive__cosmic" aria-hidden="true" />
 
-      {showTitle && (
-        <div className="nocturne-particle__title" aria-live="polite">
-          <h1 className="nocturne-particle__title-en">{heroCopy.title}</h1>
-          <p className="nocturne-particle__title-zh">{heroCopy.persistenceZh}</p>
+      <header className="nocturne-archive__topbar">
+        <div className="nocturne-archive__brand">
+          <svg className="nocturne-archive__brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <circle cx="16" cy="16" r="12" stroke="currentColor" strokeWidth="0.7" />
+            <path d="M12 5 A12 12 0 0 0 12 27 A9 9 0 0 1 12 5 Z" fill="currentColor" />
+            <circle cx="25" cy="8" r="0.5" fill="currentColor" />
+            <circle cx="27" cy="12" r="0.4" fill="currentColor" />
+          </svg>
+          <span className="nocturne-archive__brand-name">{heroCopy.title}</span>
+          <span className="nocturne-archive__brand-sep">/</span>
+          <span className="nocturne-archive__stats-line">SYPHU-CHINA · iGEM 2026</span>
         </div>
-      )}
-    </section>
+      </header>
+
+      <section className="nocturne-archive__hero" aria-label="Opening">
+        <div className="nocturne-archive__hero-copy">
+          <div className="nocturne-archive__kicker">
+            MEMORY OBSERVATORY / CONTINUITY 01
+          </div>
+          <h1 className="nocturne-archive__title">
+            A private archive
+            <em>for what stayed.</em>
+          </h1>
+          <p className="nocturne-archive__subtitle">
+            Fragments, breaths, and signals still in orbit.
+          </p>
+          <div className="nocturne-archive__ledger">{heroCopy.persistenceZh}</div>
+        </div>
+
+        <button
+          type="button"
+          className="nocturne-archive__scroll-cue"
+          onClick={enter}
+        >
+          Enter quietly
+        </button>
+      </section>
+    </div>
   );
 }
