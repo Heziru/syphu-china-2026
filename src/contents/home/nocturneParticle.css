@@ -1,4 +1,4 @@
-/* Nocturne particle opening — black void, Lorenz + Möbius (three.js) */
+/* 时光碎片开屏 — 纯黑粒子场，末尾标题飞出 */
 
 .nocturne-particle {
   position: relative;
@@ -6,7 +6,11 @@
   min-height: calc(100dvh - 56px);
   background: #000;
   overflow: hidden;
-  cursor: default;
+  cursor: none;
+}
+
+.nocturne-particle--ready {
+  cursor: pointer;
 }
 
 .nocturne-particle__canvas {
@@ -15,148 +19,79 @@
   width: 100%;
   height: 100%;
   display: block;
+  cursor: none;
 }
 
-.nocturne-particle__overlay {
+.nocturne-particle__title {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 80% 65% at 50% 42%, transparent 30%, rgba(0, 0, 0, 0.55) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 22%, transparent 78%, rgba(0, 0, 0, 0.85) 100%);
-}
-
-.nocturne-particle__brand {
-  position: absolute;
-  top: clamp(1rem, 3vh, 1.75rem);
-  left: clamp(1rem, 4vw, 2.5rem);
   z-index: 2;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
+  justify-content: center;
+  gap: clamp(0.65rem, 2vh, 1rem);
   pointer-events: none;
-}
-
-.nocturne-particle__logo-mark {
-  font-size: 1.1rem;
-  color: rgba(245, 240, 230, 0.85);
-  filter: drop-shadow(0 0 8px rgba(232, 184, 74, 0.45));
-}
-
-.nocturne-particle__logo-text {
-  font-size: 0.72rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.nocturne-particle__aside {
-  position: absolute;
-  left: clamp(1rem, 4vw, 2.5rem);
-  top: 50%;
-  z-index: 2;
-  transform: translateY(-50%);
-  margin: 0;
-  max-width: 8ch;
-  font-size: 0.62rem;
-  line-height: 1.55;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.38);
-  pointer-events: none;
-}
-
-.nocturne-particle__footer {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(1.25rem, 4vh, 2.5rem);
-  z-index: 2;
-  transform: translateX(-50%);
-  width: min(92vw, 640px);
   text-align: center;
-  pointer-events: none;
+  padding: 0 1.5rem;
 }
 
-.nocturne-particle__quote {
+.nocturne-particle__title-en {
   margin: 0;
-  font-size: clamp(0.82rem, 2vw, 0.95rem);
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.nocturne-particle__count {
-  margin: 0.35rem 0 0;
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
+  font-size: clamp(1.65rem, 5.5vw, 3.2rem);
+  font-weight: 300;
+  letter-spacing: 0.38em;
+  text-indent: 0.38em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.32);
+  color: rgba(255, 255, 255, 0.92);
+  opacity: 0;
+  transform: translate3d(-18vw, 12px, 0) scale(0.94);
+  filter: blur(6px);
+  animation: nocturne-title-en 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.nocturne-particle__sub {
-  margin: 0.45rem 0 0;
-  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
-  letter-spacing: 0.2em;
-  color: rgba(232, 184, 74, 0.82);
+.nocturne-particle__title-zh {
+  margin: 0;
+  font-size: clamp(1rem, 2.8vw, 1.35rem);
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: rgba(232, 184, 74, 0.88);
+  opacity: 0;
+  transform: translate3d(16vw, 18px, 0) scale(0.96);
+  filter: blur(5px);
+  animation: nocturne-title-zh 1.85s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards;
 }
 
-.nocturne-particle__loader {
-  margin: 1rem auto 0;
-  width: 36px;
-  height: 36px;
+@keyframes nocturne-title-en {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
 }
 
-.nocturne-particle__loader-svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-
-.nocturne-particle__loader-track {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.12);
-  stroke-width: 1.2;
-}
-
-.nocturne-particle__loader-arc {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.65);
-  stroke-width: 1.2;
-  stroke-dasharray: 100;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.15s linear;
-}
-
-.nocturne-particle__enter {
-  pointer-events: auto;
-  margin-top: 0.85rem;
-  padding: 0.45rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 999px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.68rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition:
-    border-color 0.25s ease,
-    color 0.25s ease;
-}
-
-.nocturne-particle__enter:hover {
-  border-color: rgba(232, 184, 74, 0.75);
-  color: rgba(232, 184, 74, 0.95);
-}
-
-@media (max-width: 768px) {
-  .nocturne-particle__aside {
-    display: none;
+@keyframes nocturne-title-zh {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nocturne-particle__loader-arc {
-    transition: none;
-    stroke-dashoffset: 0;
+  .nocturne-particle {
+    cursor: pointer;
+  }
+
+  .nocturne-particle__canvas {
+    cursor: pointer;
+  }
+
+  .nocturne-particle__title-en,
+  .nocturne-particle__title-zh {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }
