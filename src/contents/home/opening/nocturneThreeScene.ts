@@ -15,9 +15,25 @@ export type NocturneSceneHandle = {
 
 type PhaseListener = (phase: OpeningPhase) => void;
 
+type GalaxyPoint = {
+  x: number;
+  y: number;
+  z: number;
+  core: number;
+  kind: 0 | 1 | 2;
+  turb: number;
+};
+
 const CONVERGE_SEC = 6;
 const INTERACTIVE_SEC = 8;
 const DISPERSE_SEC = 5;
+
+const SIGMA = 10;
+const RHO = 28;
+const BETA = 8 / 3;
+const L_DT = 0.007;
+const L_SCALE = 0.115;
+const L_Z = 25;
 
 function hash01(i: number, salt: number) {
   const x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453;
@@ -32,58 +48,118 @@ function easeInOutQuart(t: number) {
   return t < 0.5 ? 8 * t * t * t * t : 1 - (-2 * t + 2) ** 4 / 2;
 }
 
-/** 屏幕可见范围内的散落起点 */
 function scatterTarget(i: number) {
-  const hx = hash01(i, 1);
-  const hy = hash01(i, 2);
-  const hz = hash01(i, 3);
-  const shell = 0.35 + hash01(i, 4) * 0.65;
+  const shell = 0.4 + hash01(i, 4) * 0.6;
   return {
-    x: (hx - 0.5) * 38 * shell,
-    y: (hy - 0.5) * 24 * shell,
-    z: (hz - 0.5) * 16 * shell,
+    x: (hash01(i, 1) - 0.5) * 36 * shell,
+    y: (hash01(i, 2) - 0.5) * 22 * shell,
+    z: (hash01(i, 3) - 0.5) * 14 * shell,
   };
 }
 
-/** 对数螺旋银河 + 致密核心 */
-function galaxyTarget(i: number, n: number, arms: number) {
-  const arm = i % arms;
-  const bucket = Math.floor(i / arms);
-  const u = bucket / (n / arms);
-  const t = 0.35 + u ** 0.62 * 9.5;
-  const angle = (arm / arms) * Math.PI * 2 + t * 1.05 + hash01(i, 5) * 0.08;
-  const r = 0.25 + t ** 1.08 * 1.55;
-  const j = hash01(i, 6) - 0.5;
+/** 洛伦兹轨迹采样 — 有机混沌，整体仍呈双翼 */
+function lorenzTarget(i: number, mirror: 1 | -1): GalaxyPoint {
+  let x = 0.06 + hash01(i, 20) * 0.55;
+  let y = 0.06 + hash01(i, 21) * 0.55;
+  let z = 17 + hash01(i, 22) * 14;
+  if (mirror < 0) x *= -1;
+
+  const steps = 24 + Math.floor(hash01(i, 23) * 260);
+  for (let s = 0; s < steps; s++) {
+    const dx = SIGMA * (y - x) * L_DT;
+    const dy = (x * (RHO - z) - y) * L_DT;
+    const dz = (x * y - BETA * z) * L_DT;
+    x += dx;
+    y += dy;
+    z += dz;
+  }
+
+  const jx = (hash01(i, 24) - 0.5) * 0.55;
+  const jy = (hash01(i, 25) - 0.5) * 0.38;
+  const jz = (hash01(i, 26) - 0.5) * 0.45;
+
   return {
-    x: Math.cos(angle) * r + j * 0.22,
-    y: Math.sin(angle) * r * 0.42 + (hash01(i, 7) - 0.5) * 0.14,
-    z: (hash01(i, 8) - 0.5) * 1.1,
-    core: Math.max(0, 1 - r / 2.8),
-    arm: arm,
+    x: mirror * x * L_SCALE + (mirror > 0 ? -4.2 : 4.2) + jx,
+    y: y * L_SCALE + jy,
+    z: (z - L_Z) * L_SCALE * 0.65 + jz,
+    core: Math.max(0, 1 - Math.hypot(x * L_SCALE, y * L_SCALE) / 3.2),
+    kind: 0,
+    turb: hash01(i, 27) * Math.PI * 2,
   };
+}
+
+/** 弥散星云 — 不规则团块，无连续臂 */
+function nebulaTarget(i: number): GalaxyPoint {
+  const cluster = Math.floor(hash01(i, 30) * 18);
+  const ca = (cluster / 18) * Math.PI * 2 + hash01(i, 31) * 1.4;
+  const cr = 0.6 + hash01(i, 32) ** 0.55 * 5.5;
+  const spread = 0.35 + hash01(i, 33) * 1.6;
+  const lx = Math.cos(ca) * cr * 0.52;
+  const ly = Math.sin(ca) * cr * 0.34;
+  return {
+    x: lx + (hash01(i, 34) - 0.5) * spread,
+    y: ly + (hash01(i, 35) - 0.5) * spread * 0.7,
+    z: (hash01(i, 36) - 0.5) * 2.2,
+    core: Math.max(0, 1 - cr / 6),
+    kind: 1,
+    turb: hash01(i, 37) * Math.PI * 2,
+  };
+}
+
+/** 断裂丝状团 — 仅暗示旋臂，不连成线 */
+function clumpTarget(i: number): GalaxyPoint {
+  const arm = Math.floor(hash01(i, 40) * 4);
+  const blob = Math.floor(hash01(i, 41) * 9);
+  const baseA = (arm / 4) * Math.PI * 2;
+  const blobA = baseA + (blob / 9) * 0.65 + (hash01(i, 42) - 0.5) * 1.1;
+  const blobR = 1.2 + (blob / 9) * 4.2 + (hash01(i, 43) - 0.5) * 1.8;
+  const fuzz = 0.5 + hash01(i, 44) * 1.4;
+  return {
+    x: Math.cos(blobA) * blobR * 0.48 + (hash01(i, 45) - 0.5) * fuzz,
+    y: Math.sin(blobA) * blobR * 0.32 + (hash01(i, 46) - 0.5) * fuzz * 0.65,
+    z: (hash01(i, 47) - 0.5) * 1.6,
+    core: Math.max(0, 1 - blobR / 5.5) * 0.6,
+    kind: 2,
+    turb: hash01(i, 48) * Math.PI * 2,
+  };
+}
+
+function buildGalaxyTarget(i: number): GalaxyPoint {
+  const roll = hash01(i, 0);
+  if (roll < 0.52) {
+    return lorenzTarget(i, i % 2 === 0 ? 1 : -1);
+  }
+  if (roll < 0.82) {
+    return nebulaTarget(i);
+  }
+  return clumpTarget(i);
 }
 
 function fillParticleColor(
   out: Float32Array,
   i: number,
-  core: number,
-  arm: number,
+  g: GalaxyPoint,
 ) {
   const o = i * 3;
-  const warm = core > 0.55 || hash01(i, 9) > 0.82;
   const mix = hash01(i, 10);
-  if (warm) {
-    out[o] = 0.98 + mix * 0.02;
-    out[o + 1] = 0.72 + mix * 0.18;
-    out[o + 2] = 0.28 + mix * 0.2;
-  } else if (arm % 2 === 0) {
-    out[o] = 0.38 + mix * 0.22;
-    out[o + 1] = 0.82 + mix * 0.12;
-    out[o + 2] = 1;
+  const dim = 0.72 + hash01(i, 11) * 0.22;
+
+  if (g.kind === 0 && g.core > 0.45) {
+    out[o] = (0.62 + mix * 0.18) * dim;
+    out[o + 1] = (0.48 + mix * 0.12) * dim;
+    out[o + 2] = (0.18 + mix * 0.08) * dim;
+  } else if (g.kind === 0) {
+    out[o] = (0.14 + mix * 0.1) * dim;
+    out[o + 1] = (0.38 + mix * 0.14) * dim;
+    out[o + 2] = (0.62 + mix * 0.12) * dim;
+  } else if (g.kind === 1) {
+    out[o] = (0.16 + mix * 0.08) * dim;
+    out[o + 1] = (0.34 + mix * 0.12) * dim;
+    out[o + 2] = (0.55 + mix * 0.1) * dim;
   } else {
-    out[o] = 0.55 + mix * 0.2;
-    out[o + 1] = 0.92 + mix * 0.08;
-    out[o + 2] = 1;
+    out[o] = (0.22 + mix * 0.1) * dim;
+    out[o + 1] = (0.36 + mix * 0.1) * dim;
+    out[o + 2] = (0.52 + mix * 0.08) * dim;
   }
 }
 
@@ -103,14 +179,13 @@ export function mountNocturneScene(
   renderer.setPixelRatio(dpr);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x000000, 0.012);
+  scene.fog = new THREE.FogExp2(0x000000, 0.018);
 
   const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
   camera.position.set(0, 0, 32);
 
   const isMobile = window.matchMedia("(max-width: 768px)").matches;
   const count = isMobile ? 72000 : 185000;
-  const arms = 4;
 
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
@@ -118,12 +193,12 @@ export function mountNocturneScene(
 
   const scatter = new Float32Array(count * 3);
   const galaxy = new Float32Array(count * 3);
-  const coreWeight = new Float32Array(count);
-  const driftPhase = new Float32Array(count);
+  const meta: GalaxyPoint[] = new Array(count);
 
   for (let i = 0; i < count; i++) {
     const s = scatterTarget(i);
-    const g = galaxyTarget(i, count, arms);
+    const g = buildGalaxyTarget(i);
+    meta[i] = g;
     const o = i * 3;
     scatter[o] = s.x;
     scatter[o + 1] = s.y;
@@ -135,12 +210,10 @@ export function mountNocturneScene(
     positions[o + 1] = s.y;
     positions[o + 2] = s.z;
 
-    coreWeight[i] = g.core;
-    driftPhase[i] = hash01(i, 11) * Math.PI * 2;
-    fillParticleColor(colors, i, g.core, g.arm);
+    fillParticleColor(colors, i, g);
 
-    const base = 1.2 + hash01(i, 12) * 1.6;
-    sizes[i] = base + g.core * 2.8;
+    const base = 0.65 + hash01(i, 12) * 0.85;
+    sizes[i] = base + g.core * 0.9;
   }
 
   const geo = new THREE.BufferGeometry();
@@ -206,23 +279,23 @@ export function mountNocturneScene(
     const dx = x - mouseWorld.x;
     const dy = y - mouseWorld.y;
     const distSq = dx * dx + dy * dy;
-    const influenceR = 8;
+    const influenceR = 7.5;
     if (distSq > influenceR * influenceR) return { x, y };
 
     const dist = Math.sqrt(distSq) + 0.05;
     let nx = x;
     let ny = y;
-    const voidR = 2.2;
+    const voidR = 2;
 
-    if (dist < voidR * 2.5) {
-      const push = ((voidR * 2.5 - dist) / (voidR * 2.5)) ** 1.4 * 2.1;
+    if (dist < voidR * 2.4) {
+      const push = ((voidR * 2.4 - dist) / (voidR * 2.4)) ** 1.5 * 1.6;
       nx += (dx / dist) * push;
       ny += (dy / dist) * push;
     }
 
-    const swirl = (1 - dist / influenceR) * 0.48;
-    nx += (-dy / dist) * swirl * Math.sin(time * 1.4 + dist * 0.8);
-    ny += (dx / dist) * swirl * Math.sin(time * 1.4 + dist * 0.8);
+    const swirl = (1 - dist / influenceR) * 0.32;
+    nx += (-dy / dist) * swirl * Math.sin(time * 1.2 + dist);
+    ny += (dx / dist) * swirl * Math.sin(time * 1.2 + dist);
 
     return { x: nx, y: ny };
   };
@@ -257,22 +330,24 @@ export function mountNocturneScene(
             )
           : 0;
 
-      const spin = elapsed * 0.065;
-      const breathe = 1 + Math.sin(elapsed * 0.9) * 0.04;
+      const spin = elapsed * 0.045;
       const galaxyScale =
-        (phase === "interactive" ? breathe : 1 - disperseT * 0.2) *
-        (0.85 + convergeT * 0.15);
+        (phase === "interactive"
+          ? 1 + Math.sin(elapsed * 0.7) * 0.025
+          : 1 - disperseT * 0.15) *
+        (0.88 + convergeT * 0.12);
 
       setGlowBrightness(
         mat,
         phase === "converge"
-          ? 0.85 + convergeT * 0.65
+          ? 0.42 + convergeT * 0.22
           : phase === "title"
-            ? 0.75
-            : 1.35 - disperseT * 0.35,
+            ? 0.48
+            : 0.62 - disperseT * 0.12,
       );
 
       for (let i = 0; i < count; i++) {
+        const g = meta[i]!;
         const o = i * 3;
         let gx = galaxy[o]! * galaxyScale;
         let gy = galaxy[o + 1]! * galaxyScale;
@@ -280,39 +355,45 @@ export function mountNocturneScene(
 
         const cs = Math.cos(spin);
         const sn = Math.sin(spin);
-        const rx = gx * cs - gy * sn * 0.55;
-        const ry = gx * sn * 0.55 + gy * cs;
+        const rx = gx * cs - gy * sn * 0.45;
+        const ry = gx * sn * 0.45 + gy * cs;
         gx = rx;
         gy = ry;
 
-        const core = coreWeight[i]!;
-        const stagger = hash01(i, 13) * 0.35;
+        const stagger = hash01(i, 13) * 0.45;
         const localConverge = Math.min(
           1,
-          Math.max(0, (convergeT - stagger * 0.4) / (1 - stagger * 0.4)),
+          Math.max(0, (convergeT - stagger * 0.5) / (1 - stagger * 0.5)),
         );
 
-        let x = scatter[o]! * (1 - localConverge) + gx * localConverge;
-        let y = scatter[o + 1]! * (1 - localConverge) + gy * localConverge;
+        const turb =
+          phase === "interactive" || phase === "converge"
+            ? Math.sin(elapsed * (0.6 + g.kind * 0.15) + g.turb) *
+              (0.04 + g.core * 0.06)
+            : 0;
+
+        let x = scatter[o]! * (1 - localConverge) + (gx + turb) * localConverge;
+        let y =
+          scatter[o + 1]! * (1 - localConverge) +
+          (gy + turb * 0.7) * localConverge;
         let z =
           scatter[o + 2]! * (1 - localConverge) +
-          gz * localConverge +
-          Math.sin(elapsed * 0.8 + driftPhase[i]!) * core * 0.08;
+          (gz + Math.sin(elapsed * 0.55 + g.turb) * 0.06) * localConverge;
 
         if (disperseT > 0) {
           const drift =
-            Math.sin(elapsed * 0.5 + driftPhase[i]!) *
-            (1.8 + hash01(i, 14) * 2.5) *
+            Math.sin(elapsed * 0.45 + g.turb) *
+            (1.4 + hash01(i, 14) * 2) *
             disperseT;
           x =
-            gx * (1 - disperseT * 0.35) +
-            scatter[o]! * disperseT * 0.55 +
+            gx * (1 - disperseT * 0.4) +
+            scatter[o]! * disperseT * 0.5 +
             drift;
           y =
-            gy * (1 - disperseT * 0.35) +
-            scatter[o + 1]! * disperseT * 0.55 +
-            Math.cos(elapsed * 0.38 + driftPhase[i]!) * drift * 0.45;
-          z += disperseT * hash01(i, 15) * 6;
+            gy * (1 - disperseT * 0.4) +
+            scatter[o + 1]! * disperseT * 0.5 +
+            Math.cos(elapsed * 0.35 + g.turb) * drift * 0.4;
+          z += disperseT * hash01(i, 15) * 4;
         }
 
         if (phase === "interactive" || phase === "disperse") {
@@ -328,9 +409,8 @@ export function mountNocturneScene(
 
       (geo.getAttribute("position") as THREE.BufferAttribute).needsUpdate = true;
 
-      group.rotation.y = Math.sin(elapsed * 0.06) * 0.035;
-      group.rotation.x = Math.cos(elapsed * 0.05) * 0.02;
-      camera.position.z = 32 + Math.sin(elapsed * 0.15) * 0.6;
+      group.rotation.y = Math.sin(elapsed * 0.05) * 0.025;
+      group.rotation.x = Math.cos(elapsed * 0.04) * 0.015;
     }
 
     renderer.render(scene, camera);

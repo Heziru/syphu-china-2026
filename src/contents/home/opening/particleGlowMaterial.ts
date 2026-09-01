@@ -11,9 +11,9 @@ const VERT = /* glsl */ `
     vColor = color;
     vec4 mv = modelViewMatrix * vec4(position, 1.0);
     float dist = max(-mv.z, 1.0);
-    gl_PointSize = aSize * uPixelRatio * (420.0 / dist);
+    gl_PointSize = aSize * uPixelRatio * (340.0 / dist);
     gl_Position = projectionMatrix * mv;
-    vAlpha = smoothstep(120.0, 8.0, dist);
+    vAlpha = smoothstep(100.0, 12.0, dist);
   }
 `;
 
@@ -27,10 +27,11 @@ const FRAG = /* glsl */ `
     float d = length(uv) * 2.0;
     if (d > 1.0) discard;
 
-    float halo = smoothstep(1.0, 0.15, d);
-    float core = exp(-d * d * 14.0);
-    float alpha = (halo * 0.55 + core * 0.95) * vAlpha;
-    vec3 col = vColor * uBrightness * (0.65 + core * 1.8);
+    float halo = smoothstep(1.0, 0.25, d);
+    float core = exp(-d * d * 10.0);
+    float alpha = (halo * 0.28 + core * 0.52) * vAlpha * 0.75;
+    vec3 col = vColor * uBrightness * (0.42 + core * 0.65);
+    col = min(col, vec3(0.62, 0.58, 0.55));
 
     gl_FragColor = vec4(col, alpha);
   }
@@ -42,7 +43,7 @@ export function createGlowPointsMaterial(
   return new THREE.ShaderMaterial({
     uniforms: {
       uPixelRatio: { value: pixelRatio },
-      uBrightness: { value: 1.35 },
+      uBrightness: { value: 0.58 },
     },
     vertexShader: VERT,
     fragmentShader: FRAG,
