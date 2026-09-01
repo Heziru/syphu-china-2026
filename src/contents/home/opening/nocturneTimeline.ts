@@ -11,12 +11,12 @@ export type Keyframe = {
 };
 
 export const KEYFRAMES: Keyframe[] = [
-  { t: 0, phase: "scatter", camZ: 38, rotX: 0.08 },
-  { t: 2, phase: "band", camZ: 36, rotX: 0.28 },
-  { t: 4.5, phase: "band", camZ: 35, rotX: 0.26 },
-  { t: 5.5, phase: "body", camZ: 33, rotX: 0.06 },
-  { t: 8, phase: "body", camZ: 31.5, rotX: 0.04 },
-  { t: 10, phase: "body", camZ: 31.5, rotX: 0.04 },
+  { t: 0, phase: "scatter", camZ: 30, rotX: 0.08 },
+  { t: 2, phase: "band", camZ: 27, rotX: 0.28 },
+  { t: 4.5, phase: "band", camZ: 26, rotX: 0.26 },
+  { t: 5.5, phase: "body", camZ: 24.5, rotX: 0.06 },
+  { t: 8, phase: "body", camZ: 23, rotX: 0.04 },
+  { t: 10, phase: "body", camZ: 23, rotX: 0.04 },
 ];
 
 export type TimelineState = Keyframe & { next: Keyframe; blend: number };

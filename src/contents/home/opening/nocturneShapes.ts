@@ -1,6 +1,9 @@
 import { hash, type Vec3 } from "./nocturneMath";
 import { phaseWeight, sampleTimeline, type Phase } from "./nocturneTimeline";
 
+/** 全场景缩放 — 填满视口 */
+export const SCENE_SCALE = 1.85;
+
 /** 近似正态 — 多 uniform 叠加 */
 function gauss(i: number, seed: number) {
   let s = 0;
@@ -83,9 +86,9 @@ export function morphPoint(i: number, _n: number, time: number, spread: number):
   if (wSum < 0.001) return b;
 
   return {
-    x: (s.x * ws + b.x * wb + body.x * wbody) / wSum,
-    y: (s.y * ws + b.y * wb + body.y * wbody) / wSum,
-    z: (s.z * ws + b.z * wb + body.z * wbody) / wSum,
+    x: (s.x * ws + b.x * wb + body.x * wbody) / wSum * SCENE_SCALE,
+    y: (s.y * ws + b.y * wb + body.y * wbody) / wSum * SCENE_SCALE,
+    z: (s.z * ws + b.z * wb + body.z * wbody) / wSum * SCENE_SCALE,
   };
 }
 
@@ -132,7 +135,7 @@ export function bandParticleColor(i: number, density: number) {
 
 export function bandParticleSize(i: number, density: number) {
   const m = hash(i, 79);
-  return 0.22 + m * 0.18 + density * 0.12;
+  return 0.28 + m * 0.2 + density * 0.14;
 }
 
 export function bokehPoint(i: number, time: number): Vec3 {

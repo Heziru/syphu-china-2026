@@ -7,6 +7,7 @@ import {
   bokehColor,
   bokehPoint,
   morphPoint,
+  SCENE_SCALE,
   shapeDensity,
 } from "./nocturneShapes";
 import { DURATION, sampleTimeline } from "./nocturneTimeline";
@@ -16,15 +17,15 @@ export type NocturneOpeningHandle = {
   dispose: () => void;
 };
 
-const SPREAD = 1.05;
+const SPREAD = 1.32;
 
 function applyMouse(x: number, y: number, px: number, py: number, active: boolean) {
   if (!active) return { x, y };
   const dx = x - px;
   const dy = y - py;
   const distSq = dx * dx + dy * dy;
-  const voidR = 2.2;
-  const inf = 9;
+  const voidR = 2.2 * SCENE_SCALE;
+  const inf = 9 * SCENE_SCALE;
   if (distSq > inf * inf) return { x, y };
   const dist = Math.sqrt(distSq) + 0.04;
   let nx = x;
