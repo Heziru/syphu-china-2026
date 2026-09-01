@@ -1,152 +1,43 @@
 import * as THREE from "three";
 import { createNocturneMaterial, setNocturneDpr } from "./nocturneShader";
+import { MOUSE_K, lerp, lerp3, smoothstep, type Vec3 } from "./nocturneMath";
+import { bokehPoint, shapeColor, shapePoint } from "./nocturneShapes";
+import { isDynamic, sampleTimeline, type SceneMode } from "./nocturneTimeline";
 
 export type NocturneOpeningHandle = {
   resize: () => void;
   dispose: () => void;
 };
 
-/** 6174 — Kaprekar 常数，控制鼠标空洞强度（参考视频描述） */
-const PULL_K = 6174 / 900_000;
-
-const SIGMA = 10;
-const RHO = 28;
-const BETA = 8 / 3;
-const L_DT = 0.0055;
-const L_SCALE = 0.108;
-const L_Z = 25;
-
-type Stream = {
-  x: number;
-  y: number;
-  z: number;
-  mirror: 1 | -1;
-  shift: number;
-  trail: Float32Array;
-  warm: boolean;
-};
-
-type RingDef = {
-  rx: number;
-  ry: number;
-  tiltX: number;
-  tiltZ: number;
-  speed: number;
-  phase: number;
-};
-
-const RINGS: RingDef[] = [
-  { rx: 5.6, ry: 1.15, tiltX: 0.62, tiltZ: 0.18, speed: 0.038, phase: 0 },
-  { rx: 4.8, ry: 0.95, tiltX: 0.38, tiltZ: -0.22, speed: 0.052, phase: 1.2 },
-  { rx: 6.4, ry: 0.82, tiltX: 0.78, tiltZ: 0.42, speed: 0.028, phase: 2.4 },
-];
-
-function h(i: number, s: number) {
-  const x = Math.sin(i * 127.1 + s * 311.7) * 43758.5453;
-  return x - Math.floor(x);
-}
-
-function lorenzStep(s: Stream) {
-  let { x, y, z } = s;
-  const dx = SIGMA * (y - x) * L_DT;
-  const dy = (x * (RHO - z) - y) * L_DT;
-  const dz = (x * y - BETA * z) * L_DT;
-  s.x = x + dx;
-  s.y = y + dy;
-  s.z = z + dz;
-}
-
-function pushTrail(s: Stream, len: number) {
-  const t = s.trail;
-  for (let i = len - 1; i > 0; i--) {
-    const j = i * 3;
-    t[j] = t[j - 3]!;
-    t[j + 1] = t[j - 2]!;
-    t[j + 2] = t[j - 1]!;
+function applyMouse(x: number, y: number, px: number, py: number, active: boolean) {
+  if (!active) return { x, y };
+  const dx = x - px;
+  const dy = y - py;
+  const distSq = dx * dx + dy * dy;
+  const voidR = 2.4;
+  const inf = 10;
+  if (distSq > inf * inf) return { x, y };
+  const dist = Math.sqrt(distSq) + 0.04;
+  let nx = x;
+  let ny = y;
+  if (dist < voidR * 2.8) {
+    const push = ((voidR * 2.8 - dist) / (voidR * 2.8)) ** 1.35 * 1.85;
+    nx += (dx / dist) * push;
+    ny += (dy / dist) * push;
   }
-  t[0] = s.mirror * s.x * L_SCALE + s.shift;
-  t[1] = s.y * L_SCALE;
-  t[2] = (s.z - L_Z) * L_SCALE * 0.7;
-}
-
-function createStreams(n: number, len: number, mirror: 1 | -1, shift: number) {
-  const out: Stream[] = [];
-  for (let i = 0; i < n; i++) {
-    const trail = new Float32Array(len * 3);
-    let x = 0.05 + h(i, 1) * 0.55;
-    let y = 0.05 + h(i, 2) * 0.55;
-    let z = 17 + h(i, 3) * 13;
-    if (mirror < 0) x *= -1;
-    for (let t = 0; t < len; t++) {
-      trail[t * 3] = mirror * x * L_SCALE + shift;
-      trail[t * 3 + 1] = y * L_SCALE;
-      trail[t * 3 + 2] = (z - L_Z) * L_SCALE * 0.7;
-    }
-    out.push({ x, y, z, mirror, shift, trail, warm: i % 7 === 0 });
-  }
-  return out;
-}
-
-function ringPoint(
-  i: number,
-  n: number,
-  ring: RingDef,
-  time: number,
-) {
-  const u = (i / n) * Math.PI * 2 + ring.phase + time * ring.speed;
-  const fuzz = (h(i, ring.phase * 10) - 0.5) * 1.1;
-  const rx = ring.rx + fuzz * 0.35;
-  const ry = ring.ry + fuzz * 0.18;
-  let x = Math.cos(u) * rx;
-  let y = Math.sin(u) * ry;
-  let z = (h(i, 11) - 0.5) * 0.55 + Math.sin(u * 3 + ring.phase) * 0.12;
-  const cy = y * Math.cos(ring.tiltX) - z * Math.sin(ring.tiltX);
-  const cz = y * Math.sin(ring.tiltX) + z * Math.cos(ring.tiltX);
-  y = cy;
-  z = cz;
-  const cx = x * Math.cos(ring.tiltZ) - y * Math.sin(ring.tiltZ);
-  const sy = x * Math.sin(ring.tiltZ) + y * Math.cos(ring.tiltZ);
-  return { x: cx, y: sy, z };
-}
-
-function writeColor(
-  out: Float32Array,
-  idx: number,
-  kind: "wing" | "ring" | "dust",
-  fade: number,
-  warm: boolean,
-  i: number,
-) {
-  const o = idx * 3;
-  const m = h(i, 77);
-  if (kind === "wing" && warm) {
-    out[o] = 0.52 + m * 0.12;
-    out[o + 1] = 0.58 + m * 0.1;
-    out[o + 2] = 0.72 + m * 0.08;
-  } else if (kind === "wing") {
-    out[o] = 0.2 + m * 0.1;
-    out[o + 1] = 0.42 + m * 0.12;
-    out[o + 2] = 0.68 + m * 0.1;
-  } else if (kind === "ring") {
-    out[o] = 0.24 + m * 0.08;
-    out[o + 1] = 0.46 + m * 0.1;
-    out[o + 2] = 0.7 + m * 0.08;
-  } else {
-    out[o] = 0.15 + m * 0.06;
-    out[o + 1] = 0.28 + m * 0.08;
-    out[o + 2] = 0.45 + m * 0.06;
-  }
-  const d = 0.5 + fade * 0.5;
-  out[o] *= d;
-  out[o + 1] *= d;
-  out[o + 2] *= d;
+  const f = MOUSE_K / (distSq + 55);
+  nx += dx * f * 90;
+  ny += dy * f * 90;
+  const swirl = (1 - dist / inf) * 0.36;
+  nx += (-dy / dist) * swirl;
+  ny += (dx / dist) * swirl;
+  return { x: nx, y: ny };
 }
 
 export function mountNocturneOpening(
   canvas: HTMLCanvasElement,
   reduced: boolean,
 ): NocturneOpeningHandle {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
@@ -157,38 +48,22 @@ export function mountNocturneOpening(
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 250);
-  camera.position.set(0, 0.2, 38);
+  camera.position.set(0, 0.15, 38);
 
   const mobile = window.matchMedia("(max-width: 768px)").matches;
-  const streamsPerWing = mobile ? 260 : 380;
-  const trailLen = mobile ? 75 : 95;
-  const ringParticles = mobile ? 7000 : 15000;
-  const dustCount = mobile ? 1200 : 2800;
-  const lorenzCount = streamsPerWing * 2 * trailLen;
-  const total = lorenzCount + ringParticles + dustCount;
-
-  const streams = [
-    ...createStreams(streamsPerWing, trailLen, 1, -4.6),
-    ...createStreams(streamsPerWing, trailLen, -1, 4.6),
-  ];
+  const coreCount = mobile ? 20000 : 48000;
+  const bokehCount = mobile ? 70 : 140;
+  const total = coreCount + bokehCount;
 
   const positions = new Float32Array(total * 3);
   const colors = new Float32Array(total * 3);
   const sizes = new Float32Array(total);
 
-  for (let i = 0; i < lorenzCount; i++) {
-    sizes[i] = 0.62 + h(i, 40) * 0.55;
+  for (let i = 0; i < coreCount; i++) {
+    sizes[i] = 0.52 + (i % 19) * 0.022;
   }
-  for (let i = 0; i < ringParticles; i++) {
-    sizes[lorenzCount + i] = 0.48 + h(i, 41) * 0.38;
-  }
-  for (let i = 0; i < dustCount; i++) {
-    const o = (lorenzCount + ringParticles + i) * 3;
-    positions[o] = (h(i, 60) - 0.5) * 40;
-    positions[o + 1] = (h(i, 61) - 0.5) * 26;
-    positions[o + 2] = (h(i, 62) - 0.5) * 18 - 6;
-    writeColor(colors, lorenzCount + ringParticles + i, "dust", 0.4, false, i);
-    sizes[lorenzCount + ringParticles + i] = 0.35 + h(i, 63) * 0.25;
+  for (let i = 0; i < bokehCount; i++) {
+    sizes[coreCount + i] = 2.1 + (i % 8) * 0.32;
   }
 
   const geo = new THREE.BufferGeometry();
@@ -196,10 +71,32 @@ export function mountNocturneOpening(
   geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
   geo.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
 
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const mat = createNocturneMaterial(dpr);
   const group = new THREE.Group();
   group.add(new THREE.Points(geo, mat));
   scene.add(group);
+
+  const orbitGroup = new THREE.Group();
+  const orbitMat = new THREE.LineBasicMaterial({
+    color: 0x3a3a48,
+    transparent: true,
+    opacity: 0.35,
+  });
+  for (let r = 0; r < 4; r++) {
+    const pts: THREE.Vector3[] = [];
+    const rad = [7.5, 9.2, 11, 13.5][r]!;
+    for (let k = 0; k <= 128; k++) {
+      const a = (k / 128) * Math.PI * 2;
+      pts.push(new THREE.Vector3(Math.cos(a) * rad, 0, Math.sin(a) * rad * 0.35));
+    }
+    const line = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), orbitMat);
+    line.rotation.x = 0.35 + r * 0.12;
+    line.rotation.z = r * 0.4;
+    orbitGroup.add(line);
+  }
+  orbitGroup.visible = false;
+  scene.add(orbitGroup);
 
   const mouseNdc = new THREE.Vector2(999, 999);
   const mouseWorld = new THREE.Vector3();
@@ -208,9 +105,9 @@ export function mountNocturneOpening(
   let pointerActive = false;
 
   const onMove = (e: PointerEvent) => {
-    const r = canvas.getBoundingClientRect();
-    mouseNdc.x = ((e.clientX - r.left) / r.width) * 2 - 1;
-    mouseNdc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    const rect = canvas.getBoundingClientRect();
+    mouseNdc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseNdc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     pointerActive = true;
   };
   const onLeave = () => {
@@ -219,97 +116,86 @@ export function mountNocturneOpening(
   canvas.addEventListener("pointermove", onMove);
   canvas.addEventListener("pointerleave", onLeave);
 
-  const applyMouse = (x: number, y: number, px: number, py: number) => {
-    if (!pointerActive) return { x, y };
-    const dx = x - px;
-    const dy = y - py;
-    const distSq = dx * dx + dy * dy;
-    const voidR = 2.2;
-    const inf = 9;
-    if (distSq > inf * inf) return { x, y };
-    const dist = Math.sqrt(distSq) + 0.05;
-    let nx = x;
-    let ny = y;
-    if (dist < voidR * 2.6) {
-      const push = ((voidR * 2.6 - dist) / (voidR * 2.6)) ** 1.4 * 1.65;
-      nx += (dx / dist) * push;
-      ny += (dy / dist) * push;
-    }
-    const f = PULL_K / (distSq + 60);
-    nx += dx * f * 80;
-    ny += dy * f * 80;
-    const swirl = (1 - dist / inf) * 0.32;
-    nx += (-dy / dist) * swirl;
-    ny += (dx / dist) * swirl;
-    return { x: nx, y: ny };
-  };
-
-  const syncLorenz = (px: number, py: number) => {
-    let ptr = 0;
-    for (const s of streams) {
-      for (let p = 0; p < trailLen; p++) {
-        const ti = p * 3;
-        let x = s.trail[ti]!;
-        let y = s.trail[ti + 1]!;
-        const z = s.trail[ti + 2]!;
-        const m = applyMouse(x, y, px, py);
-        x = m.x;
-        y = m.y;
-        const o = ptr * 3;
-        positions[o] = x;
-        positions[o + 1] = y;
-        positions[o + 2] = z;
-        writeColor(colors, ptr, "wing", 1 - p / trailLen, s.warm, ptr);
-        ptr++;
-      }
-    }
-  };
-
-  const syncRings = (time: number, px: number, py: number) => {
-    const perRing = Math.floor(ringParticles / RINGS.length);
-    for (let i = 0; i < ringParticles; i++) {
-      const ring = RINGS[i % RINGS.length]!;
-      const p = ringPoint(i % perRing, perRing, ring, time);
-      const m = applyMouse(p.x, p.y, px, py);
-      const o = (lorenzCount + i) * 3;
-      positions[o] = m.x;
-      positions[o + 1] = m.y;
-      positions[o + 2] = p.z;
-      writeColor(colors, lorenzCount + i, "ring", 0.85, false, i);
-    }
-  };
-
-  const updateMouse = () => {
-    if (!pointerActive) return { x: 0, y: 0 };
-    raycaster.setFromCamera(mouseNdc, camera);
-    raycaster.ray.intersectPlane(plane, mouseWorld);
-    return { x: mouseWorld.x, y: mouseWorld.y };
-  };
-
-  syncLorenz(0, 0);
-
   let raf = 0;
   const t0 = performance.now();
+  let frame = 0;
 
   const tick = (now: number) => {
     raf = requestAnimationFrame(tick);
-    const time = (now - t0) * 0.001;
-    const mouse = updateMouse();
+    frame++;
+    const elapsed = (now - t0) * 0.001;
+    const time = reduced ? 12 : elapsed;
+    const sceneState = sampleTimeline(time);
+    const morphT = smoothstep(sceneState.blend);
+    const modeA = sceneState.mode;
+    const modeB = sceneState.next.mode;
 
-    if (!reduced) {
-      for (let step = 0; step < (mobile ? 1 : 2); step++) {
-        for (const s of streams) {
-          lorenzStep(s);
-          pushTrail(s, trailLen);
+    const camZ = lerp(sceneState.camZ, sceneState.next.camZ, morphT);
+    const rotX = lerp(sceneState.rotX, sceneState.next.rotX, morphT);
+    const rotY = lerp(sceneState.rotY, sceneState.next.rotY, morphT);
+    const spread = lerp(sceneState.spread, sceneState.next.spread, morphT);
+    const tint = morphT < 0.5 ? sceneState.tint : sceneState.next.tint;
+    const activeMode: SceneMode = morphT < 0.5 ? modeA : modeB;
+
+    camera.position.z = camZ;
+    group.rotation.x = rotX + Math.sin(time * 0.07) * 0.025;
+    group.rotation.y = rotY + time * 0.018;
+    group.rotation.z = Math.sin(time * 0.05) * 0.02;
+
+    orbitGroup.visible = activeMode === "orbit";
+    orbitGroup.rotation.y = time * 0.04;
+
+    raycaster.setFromCamera(mouseNdc, camera);
+    const hit = raycaster.ray.intersectPlane(plane, mouseWorld);
+    const mx = pointerActive && hit ? mouseWorld.x : 0;
+    const my = pointerActive && hit ? mouseWorld.y : 0;
+
+    const warmBias = tint === "warm" ? 0.75 : 0;
+    const updateShapes = !reduced || frame % 2 === 0;
+
+    for (let i = 0; i < coreCount; i++) {
+      let p: Vec3;
+      if (updateShapes) {
+        const pa = shapePoint(modeA, i, coreCount, time, spread);
+        if (modeB === modeA) {
+          p = pa;
+        } else {
+          const pb = shapePoint(modeB, i, coreCount, time, spread);
+          p = isDynamic(modeA) && !isDynamic(modeB) ? pb : isDynamic(modeB) && !isDynamic(modeA) ? pa : lerp3(pa, pb, morphT);
         }
+      } else {
+        const j = i * 3;
+        p = { x: positions[j]!, y: positions[j + 1]!, z: positions[j + 2]! };
       }
-      syncLorenz(mouse.x, mouse.y);
-      syncRings(time, mouse.x, mouse.y);
-      group.rotation.y = time * 0.055;
-      group.rotation.x = 0.48 + Math.sin(time * 0.09) * 0.05;
-      group.rotation.z = Math.sin(time * 0.06) * 0.035;
+
+      const m = applyMouse(p.x, p.y, mx, my, pointerActive);
+      const j = i * 3;
+      positions[j] = m.x;
+      positions[j + 1] = m.y;
+      positions[j + 2] = p.z;
+
+      const dist = Math.hypot(p.x, p.y, p.z);
+      const col = shapeColor(activeMode, tint, i, dist, warmBias);
+      colors[j] = col.r;
+      colors[j + 1] = col.g;
+      colors[j + 2] = col.b;
     }
 
+    for (let i = 0; i < bokehCount; i++) {
+      const idx = coreCount + i;
+      const o = idx * 3;
+      const bp = bokehPoint(i, time);
+      const alpha = 0.1 + (i % 5) * 0.018;
+      positions[o] = bp.x;
+      positions[o + 1] = bp.y;
+      positions[o + 2] = bp.z;
+      colors[o] = alpha;
+      colors[o + 1] = alpha * 1.05;
+      colors[o + 2] = alpha * 1.15;
+    }
+
+    geo.attributes.position!.needsUpdate = true;
+    geo.attributes.color!.needsUpdate = true;
     renderer.render(scene, camera);
   };
 
@@ -336,6 +222,10 @@ export function mountNocturneOpening(
       canvas.removeEventListener("pointerleave", onLeave);
       geo.dispose();
       mat.dispose();
+      orbitMat.dispose();
+      orbitGroup.traverse((o) => {
+        if (o instanceof THREE.LineLoop) o.geometry.dispose();
+      });
       renderer.dispose();
     },
   };
