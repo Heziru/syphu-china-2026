@@ -1,53 +1,51 @@
-/** 10s 开屏叙事：星尘 → 银河带 → 人体轮廓（人体即小宇宙） */
+import { smoothstep } from "./nocturneMath";
+
+/** 10s 循环 — 设计稿分镜 */
 export const DURATION = 10;
 
-export type Phase = "scatter" | "band" | "body";
+export const MARKS = {
+  bandEnd: 2,
+  bodyFormed: 5.5,
+  gutLit: 7,
+  loop: 10,
+} as const;
 
-export type Keyframe = {
-  t: number;
-  phase: Phase;
-  camZ: number;
-  rotX: number;
-};
-
-export const KEYFRAMES: Keyframe[] = [
-  { t: 0, phase: "scatter", camZ: 30, rotX: 0.08 },
-  { t: 2, phase: "band", camZ: 27, rotX: 0.28 },
-  { t: 4.5, phase: "band", camZ: 26, rotX: 0.26 },
-  { t: 5.5, phase: "body", camZ: 24.5, rotX: 0.06 },
-  { t: 8, phase: "body", camZ: 23, rotX: 0.04 },
-  { t: 10, phase: "body", camZ: 23, rotX: 0.04 },
-];
-
-export type TimelineState = Keyframe & { next: Keyframe; blend: number };
-
-export function sampleTimeline(time: number): TimelineState {
+/** 0–2s：水平银河带 */
+export function bandWeight(time: number) {
   const t = ((time % DURATION) + DURATION) % DURATION;
-  let a = KEYFRAMES[0]!;
-  let b = KEYFRAMES[1]!;
-  for (let i = 0; i < KEYFRAMES.length - 1; i++) {
-    const cur = KEYFRAMES[i]!;
-    const nxt = KEYFRAMES[i + 1]!;
-    if (t >= cur.t && t < nxt.t) {
-      a = cur;
-      b = nxt;
-      break;
-    }
-    if (i === KEYFRAMES.length - 2) {
-      a = cur;
-      b = nxt;
-    }
-  }
-  const span = Math.max(0.001, b.t - a.t);
-  return { ...a, next: b, blend: (t - a.t) / span };
+  if (t <= MARKS.bandEnd) return 1;
+  if (t >= MARKS.bodyFormed) return 0;
+  return 1 - smoothstep((t - MARKS.bandEnd) / (MARKS.bodyFormed - MARKS.bandEnd));
 }
 
-/** 当前阶段权重（用于多阶段 morph） */
-export function phaseWeight(time: number, phase: Phase): number {
-  const { phase: a, next, blend } = sampleTimeline(time);
-  const b = next.phase;
-  if (a === phase && b === phase) return 1;
-  if (a === phase) return 1 - blend;
-  if (b === phase) return blend;
-  return 0;
+/** 2–5.5s：聚合成人体 */
+export function bodyWeight(time: number) {
+  const t = ((time % DURATION) + DURATION) % DURATION;
+  if (t <= MARKS.bandEnd) return 0;
+  if (t >= MARKS.bodyFormed) return 1;
+  return smoothstep((t - MARKS.bandEnd) / (MARKS.bodyFormed - MARKS.bandEnd));
+}
+
+/** 5.5–7s：腹腔变红 */
+export function gutRedWeight(time: number) {
+  const t = ((time % DURATION) + DURATION) % DURATION;
+  if (t <= MARKS.bodyFormed) return 0;
+  if (t >= MARKS.gutLit) return 1;
+  return smoothstep((t - MARKS.bodyFormed) / (MARKS.gutLit - MARKS.bodyFormed));
+}
+
+/** 7s+：稳定态呼吸增强 */
+export function stableWeight(time: number) {
+  const t = ((time % DURATION) + DURATION) % DURATION;
+  if (t <= MARKS.gutLit) return 0;
+  return smoothstep((t - MARKS.gutLit) / 1.2);
+}
+
+export function sampleCamera(time: number) {
+  const t = ((time % DURATION) + DURATION) % DURATION;
+  const bw = bodyWeight(t);
+  return {
+    camZ: 30 - bw * 7,
+    rotX: 0.28 - bw * 0.22,
+  };
 }

@@ -1,23 +1,24 @@
 import * as THREE from "three";
 import { createNocturneMaterial, setNocturneDpr } from "./nocturneShader";
-import { MOUSE_K, lerp, smoothstep, type Vec3 } from "./nocturneMath";
+import { MOUSE_K, type Vec3 } from "./nocturneMath";
 import {
-  bandParticleSize,
   bokehColor,
   bokehPoint,
   morphPoint,
+  particleAlpha,
   particleColor,
+  particleSize,
   SCENE_SCALE,
   shapeDensity,
 } from "./nocturneShapes";
-import { DURATION, sampleTimeline } from "./nocturneTimeline";
+import { bandWeight, DURATION, sampleCamera } from "./nocturneTimeline";
 
 export type NocturneOpeningHandle = {
   resize: () => void;
   dispose: () => void;
 };
 
-const SPREAD = 1.32;
+const SPREAD = 1.28;
 
 function applyMouse(x: number, y: number, px: number, py: number, active: boolean) {
   if (!active) return { x, y };
@@ -58,39 +59,18 @@ export function mountNocturneOpening(
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(44, 1, 0.1, 250);
-  camera.position.set(0, 0.08, 38);
+  camera.position.set(0, 0.05, 30);
 
   const mobile = window.matchMedia("(max-width: 768px)").matches;
-  const coreCount = mobile ? 9000 : 16000;
-  const bokehCount = mobile ? 45 : 90;
+  const coreCount = mobile ? 12000 : 20000;
+  const bokehCount = mobile ? 120 : 220;
   const total = coreCount + bokehCount;
-  const timeScale = reduced ? 0.55 : 1;
+  const timeScale = reduced ? 0.6 : 1;
 
   const positions = new Float32Array(total * 3);
   const colors = new Float32Array(total * 3);
   const sizes = new Float32Array(total);
   const alphas = new Float32Array(total);
-
-  for (let i = 0; i < coreCount; i++) {
-    const density = shapeDensity(i, 0, SPREAD);
-    sizes[i] = bandParticleSize(i, density);
-    alphas[i] = 0.34 + density * 0.52;
-    const col = particleColor(i, density, 0);
-    const j = i * 3;
-    colors[j] = col.r;
-    colors[j + 1] = col.g;
-    colors[j + 2] = col.b;
-  }
-  for (let i = 0; i < bokehCount; i++) {
-    const idx = coreCount + i;
-    sizes[idx] = 1.1 + (i % 5) * 0.18;
-    alphas[idx] = 0.1 + (i % 4) * 0.022;
-    const bc = bokehColor(i);
-    const o = idx * 3;
-    colors[o] = bc.r;
-    colors[o + 1] = bc.g;
-    colors[o + 2] = bc.b;
-  }
 
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
@@ -129,16 +109,13 @@ export function mountNocturneOpening(
     raf = requestAnimationFrame(tick);
     const elapsed = ((now - t0) * 0.001) * timeScale;
     const cycle = elapsed % DURATION;
-    const sceneState = sampleTimeline(cycle);
-    const morphT = smoothstep(sceneState.blend);
+    const cam = sampleCamera(cycle);
+    const bandW = bandWeight(cycle);
 
-    const camZ = lerp(sceneState.camZ, sceneState.next.camZ, morphT);
-    const rotX = lerp(sceneState.rotX, sceneState.next.rotX, morphT);
-
-    camera.position.z = camZ;
-    group.rotation.x = rotX + Math.sin(elapsed * 0.35) * 0.04;
-    group.rotation.y = elapsed * 0.12 + Math.sin(elapsed * 0.5) * 0.06;
-    group.rotation.z = Math.sin(elapsed * 0.28) * 0.02;
+    camera.position.z = cam.camZ;
+    group.rotation.x = cam.rotX + Math.sin(elapsed * 0.3) * 0.03;
+    group.rotation.y = elapsed * (0.06 + bandW * 0.06) + Math.sin(elapsed * 0.45) * 0.04;
+    group.rotation.z = Math.sin(elapsed * 0.22) * 0.015;
 
     raycaster.setFromCamera(mouseNdc, camera);
     const hit = raycaster.ray.intersectPlane(plane, mouseWorld);
@@ -146,7 +123,7 @@ export function mountNocturneOpening(
     const my = pointerActive && hit ? mouseWorld.y : 0;
 
     for (let i = 0; i < coreCount; i++) {
-      const p: Vec3 = morphPoint(i, coreCount, cycle, SPREAD);
+      const p: Vec3 = morphPoint(i, cycle, SPREAD);
       const m = applyMouse(p.x, p.y, mx, my, pointerActive);
       const j = i * 3;
       positions[j] = m.x;
@@ -158,6 +135,8 @@ export function mountNocturneOpening(
       colors[j] = col.r;
       colors[j + 1] = col.g;
       colors[j + 2] = col.b;
+      sizes[i] = particleSize(i, density, cycle);
+      alphas[i] = particleAlpha(i, density, cycle);
     }
 
     for (let i = 0; i < bokehCount; i++) {
@@ -167,10 +146,18 @@ export function mountNocturneOpening(
       positions[o] = bp.x;
       positions[o + 1] = bp.y;
       positions[o + 2] = bp.z;
+      const bc = bokehColor(i);
+      colors[o] = bc.r;
+      colors[o + 1] = bc.g;
+      colors[o + 2] = bc.b;
+      sizes[idx] = 0.9 + (i % 4) * 0.15;
+      alphas[idx] = 0.08 + (i % 3) * 0.02;
     }
 
     geo.attributes.position!.needsUpdate = true;
     geo.attributes.color!.needsUpdate = true;
+    geo.attributes.aSize!.needsUpdate = true;
+    geo.attributes.aAlpha!.needsUpdate = true;
     renderer.render(scene, camera);
   };
 
