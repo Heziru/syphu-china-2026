@@ -1,16 +1,20 @@
 import { HeroSection } from "./home/HeroSection";
-import { ChallengeScene } from "./home/scenes/ChallengeScene";
+import { BalanceScene } from "./home/scenes/BalanceScene";
+import { DiseaseScene } from "./home/scenes/DiseaseScene";
 import { ExploreScene } from "./home/scenes/ExploreScene";
-import { LivingInterfaceScene } from "./home/scenes/LivingInterfaceScene";
-import { MototypeScene } from "./home/scenes/MototypeScene";
+import { MechanismScene } from "./home/scenes/MechanismScene";
+import { RecoveryScene } from "./home/scenes/RecoveryScene";
+import { TurningPointScene } from "./home/scenes/TurningPointScene";
 
 export function Home() {
   return (
     <div className="mototype-home home">
       <HeroSection />
-      <ChallengeScene />
-      <LivingInterfaceScene />
-      <MototypeScene />
+      <BalanceScene />
+      <DiseaseScene />
+      <TurningPointScene />
+      <MechanismScene />
+      <RecoveryScene />
       <ExploreScene />
     </div>
   );

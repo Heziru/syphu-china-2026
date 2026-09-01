@@ -21,7 +21,7 @@ export function PersistenceQuote({
   reducedMotion,
   onFinished,
 }: Props) {
-  const full = heroCopy.persistence;
+  const full = `${heroCopy.persistence}\n\n${heroCopy.persistenceZh}`;
   const [visible, setVisible] = useState("");
   const [mode, setMode] = useState<"idle" | "typing" | "hold" | "fade" | "gone">(
     "idle",

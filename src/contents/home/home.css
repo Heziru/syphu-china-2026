@@ -480,11 +480,306 @@
   color: var(--moto-muted);
 }
 
+.moto-scene-zh {
+  margin: 0 0 0.65rem;
+  font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+  letter-spacing: 0.06em;
+  color: var(--moto-emerald);
+}
+
+.moto-scene-zh--secondary {
+  margin-top: 0.85rem;
+  color: var(--moto-muted);
+  max-width: 32ch;
+  line-height: 1.55;
+}
+
+.moto-scene-zh--on-ink {
+  color: #9ed4b8;
+}
+
 .moto-scene--ink .moto-scene-sub {
   color: #9bb5ad;
 }
 
-/* Challenge */
+/* Balance — storyboard I */
+.moto-balance {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.moto-balance__visual {
+  position: relative;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+}
+
+.moto-balance__scale {
+  width: min(100%, 320px);
+  height: auto;
+}
+
+.moto-balance__taiji {
+  position: absolute;
+  width: min(42%, 140px);
+  right: 8%;
+  bottom: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* Disease — storyboard III–IV */
+.moto-disease {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.moto-disease__figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(168, 220, 192, 0.12);
+}
+
+.moto-disease__timeline {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.moto-disease__step {
+  display: grid;
+  gap: 0.15rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid rgba(155, 181, 173, 0.35);
+}
+
+.moto-disease__step.is-active {
+  border-left-color: #7ecf4a;
+}
+
+.moto-disease__year {
+  font-family: var(--moto-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #c9e6d8;
+}
+
+.moto-disease__note {
+  font-size: 0.92rem;
+  color: #9bb5ad;
+}
+
+.moto-disease__failed {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(168, 220, 192, 0.15);
+}
+
+.moto-disease__failed-zh {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  color: #c45c4a;
+  letter-spacing: 0.04em;
+}
+
+.moto-disease__failed-title {
+  margin: 0 0 0.5rem;
+  font-family: var(--moto-display);
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  color: #f3faf6;
+}
+
+.moto-disease__failed-body {
+  margin: 0 0 1rem;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: #9bb5ad;
+}
+
+.moto-disease__treatments {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.moto-disease__treatments li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid rgba(196, 92, 74, 0.45);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: #f3cfc7;
+}
+
+.moto-disease__x {
+  color: #c45c4a;
+  font-weight: 700;
+}
+
+/* Turning point — storyboard V */
+.moto-turn {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  background: linear-gradient(
+    180deg,
+    rgba(247, 243, 235, 1) 0%,
+    rgba(243, 239, 230, calc(0.75 + var(--moto-brighten, 0.5) * 0.25)) 100%
+  );
+  border-radius: 12px;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.moto-turn__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.moto-turn__milestones {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.moto-turn__milestones li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.88rem;
+  color: var(--moto-muted);
+  opacity: 0.45;
+}
+
+.moto-turn__milestones li.is-active {
+  opacity: 1;
+  color: var(--moto-ink);
+}
+
+.moto-turn__milestones strong {
+  font-weight: 600;
+}
+
+/* Mechanism — storyboard VI–VII */
+.moto-mech {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+  display: grid;
+  gap: 1.5rem;
+  background: linear-gradient(
+    180deg,
+    rgba(16, 24, 22, calc(0.08 - var(--moto-brighten, 0.5) * 0.08)) 0%,
+    rgba(243, 239, 230, calc(0.55 + var(--moto-brighten, 0.5) * 0.45)) 55%
+  );
+  border-radius: 12px;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.moto-mech__gene {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem 1.5rem;
+  align-items: center;
+}
+
+.moto-mech__gene-svg {
+  width: min(100%, 280px);
+  height: auto;
+}
+
+.moto-mech__gene-title {
+  margin: 0 0 0.35rem;
+  font-family: var(--moto-display);
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+}
+
+.moto-mech__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(36, 48, 44, 0.1);
+}
+
+.moto-mech__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.moto-mech__steps li p {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--moto-muted);
+}
+
+.moto-mech__step-label {
+  font-family: var(--moto-display);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  letter-spacing: 0.06em;
+  color: var(--moto-ink);
+}
+
+.moto-mech__step-zh {
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--moto-emerald);
+}
+
+/* Recovery — storyboard VIII */
+.moto-recovery {
+  width: min(900px, calc(100% - 2.5rem));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.moto-recovery__visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.moto-recovery__svg {
+  width: min(100%, 280px);
+  height: auto;
+}
+
+.moto-recovery__figure {
+  position: absolute;
+  width: 80px;
+  bottom: -8px;
+  right: 12%;
+}
+
+/* Challenge (legacy — unused) */
 .moto-challenge {
   width: min(1120px, calc(100% - 2.5rem));
   margin-inline: auto;
@@ -726,7 +1021,15 @@
   }
 
   .moto-challenge,
-  .moto-living {
+  .moto-living,
+  .moto-balance,
+  .moto-disease,
+  .moto-turn,
+  .moto-recovery {
+    grid-template-columns: 1fr;
+  }
+
+  .moto-mech__gene {
     grid-template-columns: 1fr;
   }
 
