@@ -1,5 +1,6 @@
 import type { LabObjectId } from "../types/laboratory";
 import { LAB_COLORS } from "./labPalette";
+import { MicroscopePlaceholder } from "./MicroscopePlaceholder";
 
 type Props = { id: LabObjectId };
 
@@ -8,7 +9,7 @@ export function PlaceholderObject({ id }: Props) {
     case "computer":
       return <ComputerMesh />;
     case "microscope":
-      return <MicroscopeMesh />;
+      return <MicroscopePlaceholder />;
     case "researcher":
       return <ResearcherMesh />;
     case "bookshelf":
@@ -38,29 +39,6 @@ function ComputerMesh() {
       <mesh position={[0.42, 0.62, 0.18]}>
         <boxGeometry args={[0.18, 0.04, 0.24]} />
         <meshStandardMaterial color={LAB_COLORS.coral} />
-      </mesh>
-    </group>
-  );
-}
-
-function MicroscopeMesh() {
-  return (
-    <group>
-      <mesh position={[0, 0.92, 0]} castShadow>
-        <cylinderGeometry args={[0.16, 0.22, 0.18, 12]} />
-        <meshStandardMaterial color={LAB_COLORS.teal} roughness={0.4} />
-      </mesh>
-      <mesh position={[0, 1.22, 0]} castShadow>
-        <cylinderGeometry args={[0.08, 0.1, 0.46, 10]} />
-        <meshStandardMaterial color={LAB_COLORS.dark} />
-      </mesh>
-      <mesh position={[0, 1.52, 0.12]} rotation={[0.7, 0, 0]} castShadow>
-        <cylinderGeometry args={[0.07, 0.09, 0.38, 10]} />
-        <meshStandardMaterial color={LAB_COLORS.teal} />
-      </mesh>
-      <mesh position={[0, 0.78, 0.22]} castShadow>
-        <boxGeometry args={[0.42, 0.08, 0.42]} />
-        <meshStandardMaterial color={LAB_COLORS.dark} />
       </mesh>
     </group>
   );

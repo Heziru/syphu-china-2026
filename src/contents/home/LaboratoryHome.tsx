@@ -86,6 +86,7 @@ export function LaboratoryHome() {
         <div className="lab-brand">
           <p className="lab-brand__mark">LBP-Mototype</p>
           <p className="lab-brand__hint">Click a station in the lab, or use the chapter list.</p>
+          <p className="lab-brand__asset">Microscope is a procedural placeholder until a licensed GLB is available.</p>
         </div>
         <ChapterDirectory />
         <ObjectTooltip />

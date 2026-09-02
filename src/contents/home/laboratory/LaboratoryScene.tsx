@@ -1,3 +1,4 @@
+import { ContactShadows } from "@react-three/drei";
 import { LAB_ASSET_MANIFEST } from "../data/assetManifest";
 import { LAB_OBJECTS } from "../data/labObjects";
 import { CameraController } from "./CameraController";
@@ -28,6 +29,14 @@ export function LaboratoryScene({
       <SceneLifecycle paused={paused} />
       <Lighting shadows={placeholders ? shadows : shadows} />
       <RoomShell />
+      <ContactShadows
+        position={[0.08, 0.003, 0.28]}
+        opacity={0.28}
+        scale={7.5}
+        blur={2.1}
+        far={3.2}
+        frames={30}
+      />
       {LAB_OBJECTS.map((def) => (
         <InteractiveObject
           key={def.id}

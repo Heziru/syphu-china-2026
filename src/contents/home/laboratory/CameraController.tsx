@@ -117,12 +117,12 @@ export function CameraController({ mobile, reduced, onNavigate }: Props) {
       enablePan={false}
       enableDamping
       dampingFactor={0.08}
-      minDistance={7}
-      maxDistance={16}
-      minPolarAngle={0.42}
-      maxPolarAngle={1.22}
-      minAzimuthAngle={-0.55}
-      maxAzimuthAngle={0.85}
+      minDistance={1.55}
+      maxDistance={12}
+      minPolarAngle={0.48}
+      maxPolarAngle={1.18}
+      minAzimuthAngle={-0.48}
+      maxAzimuthAngle={0.78}
       enabled={phase === "idle"}
     />
   );

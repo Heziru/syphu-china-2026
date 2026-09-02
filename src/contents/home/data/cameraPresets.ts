@@ -2,13 +2,13 @@ import type { CameraShot } from "../types/laboratory";
 
 export const OVERVIEW_CAMERA = {
   desktop: {
-    position: [5.6, 4.8, 7.2],
-    target: [0, 1.05, -0.15],
+    position: [4.05, 3.15, 5.05],
+    target: [0.35, 0.95, 0.05],
   },
   mobile: {
-    position: [4.6, 5.4, 8.0],
-    target: [0, 1.2, 0.1],
+    position: [2.55, 3.55, 5.35],
+    target: [0.12, 1.02, 0.28],
   },
 } as const satisfies { desktop: CameraShot; mobile: CameraShot };
 
-export const ENTER_CAMERA_OFFSET = 2.4;
+export const ENTER_CAMERA_OFFSET = 1.6;
