@@ -10,6 +10,8 @@ type Props = {
   paused: boolean;
   onNavigate: (path: string) => void;
   onContextLost: () => void;
+  review?: boolean;
+  reviewView?: "ref" | "side" | "back";
 };
 
 export default function LaboratoryCanvas({
@@ -17,6 +19,8 @@ export default function LaboratoryCanvas({
   paused,
   onNavigate,
   onContextLost,
+  review = false,
+  reviewView = "ref",
 }: Props) {
   const { dpr, shadows, mobile } = useQualityProfile();
   const phase = useLaboratoryStore((s) => s.phase);
@@ -33,13 +37,13 @@ export default function LaboratoryCanvas({
       dpr={dpr}
       shadows={shadows}
       frameloop={paused ? "never" : "always"}
-      camera={{ fov: mobile ? 42 : 38, near: 0.1, far: 80 }}
+      camera={{ fov: review ? 28 : mobile ? 42 : 38, near: 0.1, far: 80 }}
       gl={{ antialias: !mobile, powerPreference: "high-performance", alpha: false }}
       onCreated={({ gl }) => {
         gl.toneMapping = ACESFilmicToneMapping;
         gl.toneMappingExposure = 1.16;
         gl.outputColorSpace = SRGBColorSpace;
-        gl.setClearColor("#E8E4DA", 1);
+        gl.setClearColor(review ? "#F4F5F0" : "#E8E4DA", 1);
         gl.domElement.addEventListener("webglcontextlost", (event) => {
           event.preventDefault();
           onContextLost();
@@ -52,6 +56,8 @@ export default function LaboratoryCanvas({
         reduced={reduced}
         paused={paused}
         onNavigate={onNavigate}
+        review={review}
+        reviewView={reviewView}
       />
     </Canvas>
   );

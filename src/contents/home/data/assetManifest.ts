@@ -7,8 +7,8 @@ export const LAB_ASSET_MANIFEST = {
   objects: {
     computer: { kind: "placeholder" as const, note: "灰模对照，尚未精修。" },
     microscope: {
-      kind: "placeholder" as const,
-      note: "结构清晰的程序化占位：底座、弯臂、双目、转盘、载物台、旋钮、底灯。不是授权 GLB，也不是精细工业模型。",
+      kind: "procedural" as const,
+      note: "Reference-matched procedural compound microscope: horseshoe base, C-arm, monocular tube, turret, stage, coaxial knobs.",
     },
     researcher: { kind: "placeholder" as const, note: "基础几何体占位，不是角色资产。" },
     bookshelf: { kind: "placeholder" as const, note: "灰模对照，尚未精修。" },

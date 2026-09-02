@@ -1,6 +1,6 @@
 import type { LabObjectId } from "../types/laboratory";
 import { LAB_COLORS } from "./labPalette";
-import { MicroscopePlaceholder } from "./MicroscopePlaceholder";
+import { MicroscopeModel } from "./microscope/MicroscopeModel";
 
 type Props = { id: LabObjectId };
 
@@ -9,7 +9,7 @@ export function PlaceholderObject({ id }: Props) {
     case "computer":
       return <ComputerMesh />;
     case "microscope":
-      return <MicroscopePlaceholder />;
+      return <MicroscopeModel />;
     case "researcher":
       return <ResearcherMesh />;
     case "bookshelf":

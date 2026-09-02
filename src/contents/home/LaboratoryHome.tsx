@@ -2,6 +2,10 @@ import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { isWebGLAvailable } from "./laboratory/labPalette";
+import {
+  readLabReview,
+  type MicroscopeReviewView,
+} from "./laboratory/microscope/reviewShots";
 import { useLaboratoryStore } from "./store/laboratoryStore";
 import { ChapterDirectory } from "./ui/ChapterDirectory";
 import { LaboratoryFallback } from "./ui/LaboratoryFallback";
@@ -11,6 +15,11 @@ import { SceneErrorBoundary } from "./ui/SceneErrorBoundary";
 import "./styles/laboratory.css";
 
 const LaboratoryCanvas = lazy(() => import("./laboratory/LaboratoryCanvas"));
+const MicroscopeReviewHud = lazy(() =>
+  import("./laboratory/microscope/MicroscopeReviewHud").then((mod) => ({
+    default: mod.MicroscopeReviewHud,
+  })),
+);
 
 export function LaboratoryHome() {
   const navigate = useNavigate();
@@ -23,6 +32,8 @@ export function LaboratoryHome() {
   const setLocked = useLaboratoryStore((s) => s.setLocked);
   const [paused, setPaused] = useState(false);
   const [webgl] = useState(() => isWebGLAvailable());
+  const [review] = useState(() => readLabReview().active);
+  const [reviewView, setReviewView] = useState<MicroscopeReviewView>(() => readLabReview().view);
 
   useEffect(() => {
     resetSession();
@@ -58,7 +69,11 @@ export function LaboratoryHome() {
   const show3d = webgl && !simpleMode && phase !== "fallback";
 
   return (
-    <div className={`lab-home${phase === "transitioning" ? " lab-home--leave" : ""}`}>
+    <div
+      className={`lab-home${phase === "transitioning" ? " lab-home--leave" : ""}${
+        review ? " lab-home--review" : ""
+      }`}
+    >
       {show3d ? (
         <SceneErrorBoundary onError={goFallback}>
           <Suspense fallback={<LoadingOverlay visible />}>
@@ -67,6 +82,8 @@ export function LaboratoryHome() {
               paused={paused}
               onNavigate={onNavigate}
               onContextLost={goFallback}
+              review={review}
+              reviewView={reviewView}
             />
           </Suspense>
         </SceneErrorBoundary>
@@ -80,24 +97,30 @@ export function LaboratoryHome() {
         />
       )}
 
-      <LoadingOverlay visible={show3d && phase === "loading"} />
+      <LoadingOverlay visible={show3d && !review && phase === "loading"} />
 
-      <div className="lab-hud">
-        <div className="lab-brand">
-          <p className="lab-brand__mark">LBP-Mototype</p>
-          <p className="lab-brand__hint">Click a station in the lab, or use the chapter list.</p>
-          <p className="lab-brand__asset">Microscope is a procedural placeholder until a licensed GLB is available.</p>
+      {review ? (
+        <Suspense fallback={null}>
+          <MicroscopeReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : (
+        <div className="lab-hud">
+          <div className="lab-brand">
+            <p className="lab-brand__mark">LBP-Mototype</p>
+            <p className="lab-brand__hint">Click a station in the lab, or use the chapter list.</p>
+            <p className="lab-brand__asset">Microscope rebuilt as a procedural station model from the reference drawing.</p>
+          </div>
+          <ChapterDirectory />
+          <ObjectTooltip />
+          <button
+            type="button"
+            className="lab-simple"
+            onClick={() => setSimpleMode(!simpleMode)}
+          >
+            {simpleMode ? "Show 3D lab" : "Simple mode"}
+          </button>
         </div>
-        <ChapterDirectory />
-        <ObjectTooltip />
-        <button
-          type="button"
-          className="lab-simple"
-          onClick={() => setSimpleMode(!simpleMode)}
-        >
-          {simpleMode ? "Show 3D lab" : "Simple mode"}
-        </button>
-      </div>
+      )}
     </div>
   );
 }

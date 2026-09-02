@@ -5,11 +5,17 @@ import gsap from "gsap";
 import { ENTER_CAMERA_OFFSET, OVERVIEW_CAMERA } from "../data/cameraPresets";
 import { chapterForObject, labObjectById } from "../data/labObjects";
 import { useLaboratoryStore } from "../store/laboratoryStore";
+import {
+  MICROSCOPE_REVIEW_SHOTS,
+  type MicroscopeReviewView,
+} from "./microscope/reviewShots";
 
 type Props = {
   mobile: boolean;
   reduced: boolean;
   onNavigate: (path: string) => void;
+  review?: boolean;
+  reviewView?: MicroscopeReviewView;
 };
 
 type OrbitHandle = {
@@ -18,7 +24,13 @@ type OrbitHandle = {
   update: () => void;
 };
 
-export function CameraController({ mobile, reduced, onNavigate }: Props) {
+export function CameraController({
+  mobile,
+  reduced,
+  onNavigate,
+  review = false,
+  reviewView = "ref",
+}: Props) {
   const controls = useRef<OrbitHandle | null>(null);
   const { camera } = useThree();
   const phase = useLaboratoryStore((s) => s.phase);
@@ -28,6 +40,16 @@ export function CameraController({ mobile, reduced, onNavigate }: Props) {
   const overview = mobile ? OVERVIEW_CAMERA.mobile : OVERVIEW_CAMERA.desktop;
 
   useEffect(() => {
+    if (review) {
+      const shot = MICROSCOPE_REVIEW_SHOTS[reviewView];
+      camera.position.set(shot.position[0], shot.position[1], shot.position[2]);
+      camera.lookAt(shot.target[0], shot.target[1], shot.target[2]);
+      controls.current?.target.set(shot.target[0], shot.target[1], shot.target[2]);
+      controls.current?.update();
+      setPhase("idle");
+      return;
+    }
+
     camera.position.set(
       overview.position[0],
       overview.position[1] + (reduced ? 0 : ENTER_CAMERA_OFFSET),
@@ -60,10 +82,10 @@ export function CameraController({ mobile, reduced, onNavigate }: Props) {
     return () => {
       tween.kill();
     };
-  }, [camera, overview, reduced, setPhase]);
+  }, [camera, overview, reduced, review, reviewView, setPhase]);
 
   useEffect(() => {
-    if (phase !== "focusing" || !selectedId) return;
+    if (review || phase !== "focusing" || !selectedId) return;
     const def = labObjectById(selectedId);
     const chapter = chapterForObject(selectedId);
     if (!def || !chapter) return;
@@ -108,7 +130,7 @@ export function CameraController({ mobile, reduced, onNavigate }: Props) {
       lookTween.kill();
       if (orbit) orbit.enabled = true;
     };
-  }, [camera, mobile, onNavigate, overview.target, phase, selectedId, setLocked, setPhase]);
+  }, [camera, mobile, onNavigate, overview.target, phase, review, selectedId, setLocked, setPhase]);
 
   return (
     <OrbitControls
@@ -117,12 +139,12 @@ export function CameraController({ mobile, reduced, onNavigate }: Props) {
       enablePan={false}
       enableDamping
       dampingFactor={0.08}
-      minDistance={1.55}
-      maxDistance={12}
-      minPolarAngle={0.48}
-      maxPolarAngle={1.18}
-      minAzimuthAngle={-0.48}
-      maxAzimuthAngle={0.78}
+      minDistance={review ? 1.2 : 1.55}
+      maxDistance={review ? 4.2 : 12}
+      minPolarAngle={review ? 0.18 : 0.48}
+      maxPolarAngle={review ? 1.45 : 1.18}
+      minAzimuthAngle={review ? -Math.PI : -0.48}
+      maxAzimuthAngle={review ? Math.PI : 0.78}
       enabled={phase === "idle"}
     />
   );

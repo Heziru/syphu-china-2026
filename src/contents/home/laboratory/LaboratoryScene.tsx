@@ -4,6 +4,8 @@ import { LAB_OBJECTS } from "../data/labObjects";
 import { CameraController } from "./CameraController";
 import { InteractiveObject } from "./InteractiveObject";
 import { Lighting } from "./Lighting";
+import { MicroscopeModel } from "./microscope/MicroscopeModel";
+import type { MicroscopeReviewView } from "./microscope/reviewShots";
 import { RoomShell } from "./RoomShell";
 import { SceneLifecycle } from "./SceneLifecycle";
 
@@ -13,6 +15,8 @@ type Props = {
   reduced: boolean;
   paused: boolean;
   onNavigate: (path: string) => void;
+  review?: boolean;
+  reviewView?: MicroscopeReviewView;
 };
 
 export function LaboratoryScene({
@@ -21,8 +25,31 @@ export function LaboratoryScene({
   reduced,
   paused,
   onNavigate,
+  review = false,
+  reviewView = "ref",
 }: Props) {
   const placeholders = LAB_ASSET_MANIFEST.room.kind === "placeholder";
+
+  if (review) {
+    return (
+      <>
+        <SceneLifecycle paused={paused} />
+        <Lighting shadows={shadows} studio />
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.001, 0]} receiveShadow>
+          <planeGeometry args={[6.5, 6.5]} />
+          <meshStandardMaterial color="#F3F4EF" roughness={0.92} />
+        </mesh>
+        <MicroscopeModel studio />
+        <CameraController
+          mobile={mobile}
+          reduced={reduced}
+          onNavigate={onNavigate}
+          review
+          reviewView={reviewView}
+        />
+      </>
+    );
+  }
 
   return (
     <>
