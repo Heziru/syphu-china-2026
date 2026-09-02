@@ -1,9 +1,5 @@
-import { NocturneSplash } from "./home/NocturneSplash";
+import { LaboratoryHome } from "./home/LaboratoryHome";
 
 export function Home() {
-  return (
-    <div className="nc-home nc-home--splash-only">
-      <NocturneSplash />
-    </div>
-  );
+  return <LaboratoryHome />;
 }
