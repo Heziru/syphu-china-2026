@@ -14,9 +14,9 @@ import {
 
 /**
  * BioFlo-class benchtop bioprocess controller.
- * Phase 5.1: tall silhouette + three vertical front pumps (no culture vessel).
+ * Phase 5.2: thicker front pumps, mounting recess, weighty base (proportions unchanged).
  */
-export const BIOREACTOR_REVISION = 5;
+export const BIOREACTOR_REVISION = 6;
 
 export const BIOREACTOR_COLORS = {
   shell: "#F3F1EC",
@@ -167,15 +167,24 @@ export function measureGroup(root: Group): BioreactorStats {
 
 function createLowerBase(mats: Mats) {
   const group = part("lowerBase");
+  // Deep gray weight strip under the white shell
   addMesh(
     group,
-    extrudeY(roundedRect(W * 0.92, D * 0.92, 0.09), BASE_H, 0.01),
+    extrudeY(roundedRect(W * 0.96, D * 0.96, 0.09), BASE_H * 0.55, 0.008),
     mats.base,
-    "plinth",
+    "baseStrip",
     [0, 0, 0],
   );
-  const fx = W * 0.3;
-  const fz = D * 0.3;
+  addMesh(
+    group,
+    extrudeY(roundedRect(W * 0.88, D * 0.88, 0.08), BASE_H * 0.5, 0.008),
+    mats.dark,
+    "plinthInset",
+    [0, BASE_H * 0.45, 0],
+  );
+  // Side foot pads (weight / stance)
+  const fx = W * 0.34;
+  const fz = D * 0.34;
   (
     [
       [0, -fx, -fz],
@@ -186,24 +195,23 @@ function createLowerBase(mats: Mats) {
   ).forEach(([i, x, z]) => {
     addMesh(
       group,
-      new CylinderGeometry(0.024, 0.028, 0.016, 8),
+      new BoxGeometry(0.07, 0.022, 0.07),
       mats.base,
-      `foot${i}`,
-      [x, 0.008, z],
+      `footPad${i}`,
+      [x, 0.01, z],
     );
   });
   return group;
 }
 
 /**
- * Tall rounded shell + front recess frame.
- * Single continuous height stack (not a squat double-box).
+ * Tall rounded shell + deeper front pump mounting recess.
+ * Proportions locked from Phase 5.1.
  */
 function createMainBody(mats: Mats) {
   const group = part("mainBody");
   const y0 = BASE_H;
 
-  // One tall rounded shell — primary silhouette
   addMesh(
     group,
     extrudeY(roundedRect(W, D, 0.11), H, 0.022),
@@ -212,22 +220,30 @@ function createMainBody(mats: Mats) {
     [0, y0, 0],
   );
 
-  // Front panel recess (dark inset plate for pumps + screen hierarchy)
   const frontPanel = part("frontPanel");
+  // Wide dark face plate
   addMesh(
     frontPanel,
-    new BoxGeometry(W * 0.72, H * 0.78, 0.035),
+    new BoxGeometry(W * 0.7, H * 0.78, 0.03),
     mats.dark,
     "frontRecess",
-    [0.02, y0 + H * 0.48, FRONT_Z + 0.01],
+    [0.02, y0 + H * 0.48, FRONT_Z + 0.008],
   );
-  // Pump bay border / mounting frame
+  // Pump mounting recess — cavity so pumps read as embedded
   addMesh(
     frontPanel,
-    new BoxGeometry(W * 0.48, H * 0.52, 0.02),
+    new BoxGeometry(W * 0.42, H * 0.5, 0.055),
+    mats.dark,
+    "pumpMountingRecess",
+    [0.05, y0 + H * 0.36, FRONT_Z - 0.01],
+  );
+  // Thin shell lip around recess (frame)
+  addMesh(
+    frontPanel,
+    new BoxGeometry(W * 0.46, H * 0.54, 0.018),
     mats.shell,
     "pumpBayFrame",
-    [0.04, y0 + H * 0.36, FRONT_Z + 0.03],
+    [0.05, y0 + H * 0.36, FRONT_Z + 0.028],
   );
 
   const upperControlArea = part("upperControlArea");
@@ -269,40 +285,38 @@ function createMainBody(mats: Mats) {
 }
 
 /**
- * One BioFlo pump head — MUST protrude on +Z (not extrude along Y).
- * blueFrontCap + darkLowerHousing + centerHub
+ * Thick BioFlo pump head — readable in front and side views.
+ * blueCap + darkHousing + centerHub
  */
 function createPump(mats: Mats, name: string, y: number) {
   const group = part(name);
-  const x = 0.04;
-  const pumpW = 0.22;
-  const pumpH = 0.14;
-  const darkD = 0.1;
-  const blueD = 0.08;
+  const x = 0.05;
+  const pumpW = 0.24;
+  const pumpH = 0.15;
+  // Deeper stack so side view shows volume (not a flat sticker)
+  const housingD = 0.12;
+  const capD = 0.11;
 
-  // Dark housing sits against front, extends outward
   addMesh(
     group,
-    new BoxGeometry(pumpW, pumpH * 0.55, darkD),
+    new BoxGeometry(pumpW, pumpH * 0.62, housingD),
     mats.dark,
-    "darkLowerHousing",
-    [x, y - pumpH * 0.12, FRONT_Z + darkD * 0.5 + 0.02],
+    "darkHousing",
+    [x, y - pumpH * 0.08, FRONT_Z + housingD * 0.35],
   );
-  // Blue cap — primary identity, clearly in front
   addMesh(
     group,
-    new BoxGeometry(pumpW * 0.95, pumpH * 0.55, blueD),
+    new BoxGeometry(pumpW * 0.96, pumpH * 0.58, capD),
     mats.pumpBlue,
-    "blueFrontCap",
-    [x, y + pumpH * 0.18, FRONT_Z + darkD + blueD * 0.35],
+    "blueCap",
+    [x, y + pumpH * 0.2, FRONT_Z + housingD * 0.55 + capD * 0.35],
   );
-  // Hub faces camera
   addMesh(
     group,
-    new CylinderGeometry(0.035, 0.035, 0.04, 10),
+    new CylinderGeometry(0.04, 0.042, 0.05, 10),
     mats.metal,
     "centerHub",
-    [x, y, FRONT_Z + darkD + blueD * 0.55],
+    [x, y + 0.01, FRONT_Z + housingD * 0.55 + capD * 0.75],
     [Math.PI / 2, 0, 0],
   );
   return group;
@@ -312,29 +326,29 @@ function createMiddlePumpArea(mats: Mats) {
   const group = part("middlePumpArea");
   const y0 = BASE_H + H * 0.22;
   const gap = H * 0.18;
-  // Top → bottom: pump01, pump02, pump03
   group.add(createPump(mats, "pump01", y0 + gap * 2));
   group.add(createPump(mats, "pump02", y0 + gap));
   group.add(createPump(mats, "pump03", y0));
   return group;
 }
 
-/** 6 simplified left-side ports (within 5–8). */
+/** 6 ports — size hierarchy only (no count change). */
 function createSidePorts(mats: Mats) {
   const group = part("leftSidePorts");
   const x = -W * 0.5;
-  const ports: Array<[number, number, number]> = [
-    [BASE_H + H * 0.82, 0.08, 0.04],
-    [BASE_H + H * 0.82, -0.08, 0.04],
-    [BASE_H + H * 0.58, 0.06, 0.028],
-    [BASE_H + H * 0.5, 0.06, 0.028],
-    [BASE_H + H * 0.34, 0.0, 0.025],
-    [BASE_H + H * 0.26, 0.0, 0.025],
+  // [y, z, radius, length] — larger gas → mid sensors → smaller liquid
+  const ports: Array<[number, number, number, number]> = [
+    [BASE_H + H * 0.82, 0.09, 0.045, 0.075],
+    [BASE_H + H * 0.82, -0.09, 0.045, 0.075],
+    [BASE_H + H * 0.58, 0.05, 0.03, 0.055],
+    [BASE_H + H * 0.5, 0.05, 0.03, 0.055],
+    [BASE_H + H * 0.34, 0.0, 0.022, 0.045],
+    [BASE_H + H * 0.26, 0.0, 0.022, 0.045],
   ];
-  ports.forEach(([y, z, r], i) => {
+  ports.forEach(([y, z, r, len], i) => {
     addMesh(
       group,
-      new CylinderGeometry(r, r, 0.06, 8),
+      new CylinderGeometry(r, r, len, 8),
       mats.metal,
       `port${i}`,
       [x, y, z],
