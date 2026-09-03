@@ -2,6 +2,8 @@ import { ContactShadows } from "@react-three/drei";
 import { LAB_ASSET_MANIFEST } from "../data/assetManifest";
 import { LAB_OBJECTS } from "../data/labObjects";
 import { CameraController } from "./CameraController";
+import { BioreactorModel } from "./bioreactor/BioreactorModel";
+import type { BioreactorReviewView } from "./bioreactor/reviewShots";
 import { ComputerModel } from "./computer/ComputerModel";
 import type { ComputerReviewView } from "./computer/reviewShots";
 import { InteractiveObject } from "./InteractiveObject";
@@ -12,7 +14,7 @@ import type { MicroscopeReviewView } from "./microscope/reviewShots";
 import { RoomShell } from "./RoomShell";
 import { SceneLifecycle } from "./SceneLifecycle";
 
-type ReviewView = MicroscopeReviewView | ComputerReviewView;
+type ReviewView = MicroscopeReviewView | ComputerReviewView | BioreactorReviewView;
 
 type Props = {
   mobile: boolean;
@@ -46,7 +48,13 @@ export function LaboratoryScene({
           <planeGeometry args={[6.5, 6.5]} />
           <meshStandardMaterial color="#F3F4EF" roughness={0.92} />
         </mesh>
-        {reviewAsset === "computer" ? <ComputerModel studio /> : <MicroscopeModel studio />}
+        {reviewAsset === "computer" ? (
+          <ComputerModel studio />
+        ) : reviewAsset === "bioreactor" ? (
+          <BioreactorModel studio />
+        ) : (
+          <MicroscopeModel studio />
+        )}
         <CameraController
           mobile={mobile}
           reduced={reduced}

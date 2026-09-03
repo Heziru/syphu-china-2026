@@ -26,6 +26,11 @@ const ComputerReviewHud = lazy(() =>
     default: mod.ComputerReviewHud,
   })),
 );
+const BioreactorReviewHud = lazy(() =>
+  import("./laboratory/bioreactor/BioreactorReviewHud").then((mod) => ({
+    default: mod.BioreactorReviewHud,
+  })),
+);
 
 export function LaboratoryHome() {
   const navigate = useNavigate();
@@ -115,6 +120,10 @@ export function LaboratoryHome() {
       ) : review && reviewAsset === "computer" ? (
         <Suspense fallback={null}>
           <ComputerReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "bioreactor" ? (
+        <Suspense fallback={null}>
+          <BioreactorReviewHud view={reviewView} onView={setReviewView} />
         </Suspense>
       ) : (
         <div className="lab-hud">

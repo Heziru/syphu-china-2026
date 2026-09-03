@@ -133,14 +133,14 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     hoverAnim: "highlight",
     clickAnim: "pulse",
     placeholder: "geometry",
-    modelSource: "placeholder",
+    modelSource: "procedural",
     category: "device",
     metadata: {
       id: "device",
       name: "Project",
       route: "/description",
       category: "device",
-      description: "Laboratory prototype / bioreactor station",
+      description: "Desktop bioreactor / engineering production station",
     },
   },
 ];

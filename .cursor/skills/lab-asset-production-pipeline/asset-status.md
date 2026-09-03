@@ -33,12 +33,12 @@ Review remains available at `?labReview=computer` (does not block production).
 
 ## pending
 
-- bioreactor
+- bioreactor (Phase 4 Implementation done — awaiting Phase 5 Review)
 - researcher
 - bookshelf
 
 ## notes
 
-- Scene id for bioreactor / prototype station is currently `device` in `LAB_OBJECTS`.
+- Scene id for bioreactor / prototype station is currently `device` in `LAB_OBJECTS` (design asset: bioreactor).
 - Microscope: procedural `concept` style shipped; visual polish may continue under the same id.
 - Never mark complete without review evidence (tris/materials + 3/4/side/back).

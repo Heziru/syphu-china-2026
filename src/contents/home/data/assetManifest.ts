@@ -15,7 +15,10 @@ export const LAB_ASSET_MANIFEST = {
     },
     researcher: { kind: "placeholder" as const, note: "基础几何体占位，不是角色资产。" },
     bookshelf: { kind: "placeholder" as const, note: "灰模对照，尚未精修。" },
-    device: { kind: "placeholder" as const, note: "灰模对照，尚未精修。" },
+    device: {
+      kind: "procedural" as const,
+      note: "Desktop bioreactor: transparent culture chamber, soft green medium, headplate + drive motor, sparse tubing.",
+    },
   },
 };
 
