@@ -11,6 +11,7 @@ import {
 } from "./microscope/reviewShots";
 import { COMPUTER_REVIEW_SHOTS } from "./computer/reviewShots";
 import { BIOREACTOR_REVIEW_SHOTS } from "./bioreactor/reviewShots";
+import { GLASSWARE_STATION_REVIEW_SHOTS } from "./glassware-station/reviewShots";
 import { RESEARCHER_REVIEW_SHOTS } from "./researcher/reviewShots";
 import type { LabReviewAsset } from "./labReview";
 
@@ -54,7 +55,9 @@ export function CameraController({
             ? BIOREACTOR_REVIEW_SHOTS
             : reviewAsset === "researcher"
               ? RESEARCHER_REVIEW_SHOTS
-              : MICROSCOPE_REVIEW_SHOTS;
+              : reviewAsset === "glassware-station"
+                ? GLASSWARE_STATION_REVIEW_SHOTS
+                : MICROSCOPE_REVIEW_SHOTS;
       const shot = shotTable[reviewView];
       camera.position.set(shot.position[0], shot.position[1], shot.position[2]);
       camera.lookAt(shot.target[0], shot.target[1], shot.target[2]);

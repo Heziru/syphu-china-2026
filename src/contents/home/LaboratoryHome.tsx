@@ -36,6 +36,11 @@ const ResearcherReviewHud = lazy(() =>
     default: mod.ResearcherReviewHud,
   })),
 );
+const GlasswareStationReviewHud = lazy(() =>
+  import("./laboratory/glassware-station/GlasswareStationReviewHud").then((mod) => ({
+    default: mod.GlasswareStationReviewHud,
+  })),
+);
 
 export function LaboratoryHome() {
   const navigate = useNavigate();
@@ -133,6 +138,10 @@ export function LaboratoryHome() {
       ) : review && reviewAsset === "researcher" ? (
         <Suspense fallback={null}>
           <ResearcherReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "glassware-station" ? (
+        <Suspense fallback={null}>
+          <GlasswareStationReviewHud view={reviewView} onView={setReviewView} />
         </Suspense>
       ) : (
         <div className="lab-hud">

@@ -11,6 +11,8 @@ import type { LabReviewAsset } from "./labReview";
 import { Lighting } from "./Lighting";
 import { MicroscopeModel } from "./microscope/MicroscopeModel";
 import type { MicroscopeReviewView } from "./microscope/reviewShots";
+import { GlasswareStationModel } from "./glassware-station/GlasswareStationModel";
+import type { GlasswareStationReviewView } from "./glassware-station/reviewShots";
 import { ResearcherModel } from "./researcher/ResearcherModel";
 import type { ResearcherReviewView } from "./researcher/reviewShots";
 import { RoomShell } from "./RoomShell";
@@ -20,7 +22,8 @@ type ReviewView =
   | MicroscopeReviewView
   | ComputerReviewView
   | BioreactorReviewView
-  | ResearcherReviewView;
+  | ResearcherReviewView
+  | GlasswareStationReviewView;
 
 type Props = {
   mobile: boolean;
@@ -60,6 +63,8 @@ export function LaboratoryScene({
           <BioreactorModel studio />
         ) : reviewAsset === "researcher" ? (
           <ResearcherModel studio />
+        ) : reviewAsset === "glassware-station" ? (
+          <GlasswareStationModel studio />
         ) : (
           <MicroscopeModel studio />
         )}
