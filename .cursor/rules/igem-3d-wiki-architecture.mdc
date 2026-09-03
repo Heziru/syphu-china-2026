@@ -1,0 +1,50 @@
+---
+description: SYPHU-China 2026 Interactive 3D Wiki — Home 实验室入口与场景架构总则
+globs: src/contents/home/**/*.{ts,tsx},src/components/**/*.{ts,tsx},src/pages.ts,src/containers/App/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Interactive 3D Wiki 总则
+
+Home 是可探索的 3D 实验室入口，不是普通落地页。用户点击实验室物件进入 Wiki 章节。
+
+## 技术栈
+
+React + TypeScript + React Router；R3F + Three.js；GSAP；Zustand。保持高性能 WebGL，可维护、可扩展。
+
+## 场景拆分
+
+不要把一切塞进单一巨大 Scene。按职责拆分并组合：
+
+- `LaboratoryCanvas` / `LaboratoryScene`：场景编排
+- `RoomShell` / Lighting / 环境：空间与灯光
+- `CameraController`：总览、聚焦、review 相机
+- `InteractiveObject`：统一交互壳
+- 独立模型模块（如 `laboratory/microscope/`）
+
+```tsx
+// ❌ BAD：整台设备写死在 LaboratoryScene 里
+// ✅ GOOD：InteractiveObject + PlaceholderObject / 独立 Model 组件
+```
+
+## 交互映射
+
+| 物件 | 去向 |
+|------|------|
+| Computer | Dry Lab / Model |
+| Microscope | Wet Lab / Experiments |
+| Researcher | Team |
+| Bookshelf | Human Practices |
+| Device（生物反应器/原型） | Project / Description → Results 等 |
+
+新增可交互物件必须走统一数据接口（`LabObjectDef` + `LAB_OBJECTS`），保留 `id`、hitbox、点击导航与 `camera` 聚焦。
+
+## 代码组织
+
+- 模型 / 场景组件 / Wiki 页面 / 数据（`data/`、`types/`、`store/`）分离
+- 程序化模型做成独立工厂；接口上预留日后换成 GLB/GLTF 的能力
+- Wiki 正文仍在 `src/contents/*` 与 `src/pages.ts`；资产遵守 iGEM uploads / 无外链 CDN 规则
+
+## img2threejs
+
+图片分析后拆成独立物件，优先生成模块化 Three.js 组件。使用前先确认技能已安装；未安装就明确说明，不要假装调用 forge 管线。精修细节见 `lab-procedural-props` 规则。
