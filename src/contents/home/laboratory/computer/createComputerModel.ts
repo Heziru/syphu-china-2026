@@ -15,7 +15,7 @@ import {
 } from "three";
 
 /** Bump when factory geometry changes so the R3F wrapper remounts. */
-export const COMPUTER_REVISION = 5;
+export const COMPUTER_REVISION = 6;
 
 export const COMPUTER_COLORS = {
   wood: "#E2C9A8",
@@ -283,10 +283,20 @@ function createLaptop(mats: Mats) {
     mats.laptopShell,
     "baseShell",
   );
-  addMesh(base, new BoxGeometry(0.36, 0.008, 0.18), mats.device, "keyDeck", [0, baseT + 0.002, -0.02]);
-  addMesh(base, new BoxGeometry(0.12, 0.006, 0.08), mats.device, "trackpad", [
+  // Key/trackpad centers sit clearly above the beveled base top to avoid z-fighting.
+  // BoxGeometry is centered on Y, so bottom ≈ centerY - halfHeight.
+  const keyboardSurfaceY = baseT + 0.008;
+  const keyDeckH = 0.012;
+  const trackpadH = 0.01;
+  const keyLift = 0.016;
+  addMesh(base, new BoxGeometry(0.36, keyDeckH, 0.18), mats.device, "keyDeck", [
     0,
-    baseT + 0.001,
+    keyboardSurfaceY + keyLift + keyDeckH * 0.5,
+    -0.02,
+  ]);
+  addMesh(base, new BoxGeometry(0.12, trackpadH, 0.08), mats.device, "trackpad", [
+    0,
+    keyboardSurfaceY + keyLift + trackpadH * 0.5,
     0.08,
   ]);
 
