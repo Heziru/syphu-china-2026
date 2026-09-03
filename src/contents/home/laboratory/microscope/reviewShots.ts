@@ -2,11 +2,17 @@ import type { CameraShot } from "../../types/laboratory";
 
 export type MicroscopeReviewView = "ref" | "side" | "back";
 
-/** Matching the attached illustration: front-left three-quarter, slightly down. */
+/**
+ * Review-only cameras for ?labReview=microscope.
+ * Formal scene cameras stay in labObjects.ts / CameraController overview path.
+ */
 export const MICROSCOPE_REVIEW_SHOTS: Record<MicroscopeReviewView, CameraShot> = {
-  ref: { position: [1.55, 1.42, 2.15], target: [0.0, 0.5, 0.04] },
-  side: { position: [2.15, 0.55, 0.05], target: [0, 0.5, 0.02] },
-  back: { position: [0.02, 0.7, -2.15], target: [0, 0.5, 0.0] },
+  // A. 3/4 — binocular head, C-arm, stage, turret
+  ref: { position: [1.35, 1.15, 1.85], target: [0.0, 0.52, 0.06] },
+  // B. Side — C opening, focus knob, eyepiece angle (pull back so head is not cropped)
+  side: { position: [2.35, 0.58, 0.12], target: [0, 0.48, 0.05] },
+  // C. Back — arm thickness, base proportion
+  back: { position: [0.0, 0.68, -2.15], target: [0, 0.46, 0.02] },
 };
 
 export function readLabReview() {
