@@ -1,9 +1,10 @@
+import { createComputerModel, type ComputerBuild } from "../laboratory/computer/createComputerModel";
 import { createMicroscopeModel, type MicroscopeBuild } from "../laboratory/microscope/createMicroscopeModel";
 import type { LabObjectId, ModelSource } from "../types/laboratory";
 import type { LabStationContract, ProceduralModelBuild } from "../types/labStation";
 
 export type LabModelRegistryEntry = Pick<
-  LabStationContract<ProceduralModelBuild | MicroscopeBuild>,
+  LabStationContract<ProceduralModelBuild | MicroscopeBuild | ComputerBuild>,
   "modelSource" | "createModel" | "gltfUrl"
 > & {
   id: LabObjectId;
@@ -16,12 +17,12 @@ export type LabModelRegistryEntry = Pick<
 export const MODEL_REGISTRY: Record<LabObjectId, LabModelRegistryEntry> = {
   computer: {
     id: "computer",
-    modelSource: "placeholder",
+    modelSource: "procedural",
+    createModel: () => createComputerModel(),
   },
   microscope: {
     id: "microscope",
     modelSource: "procedural",
-    // Phase 1: keep zero-arg export. Phase 2 will pass MicroscopeModelOptions.
     createModel: () => createMicroscopeModel(),
   },
   researcher: {

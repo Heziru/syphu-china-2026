@@ -1,5 +1,6 @@
 import type { LabObjectId } from "../types/laboratory";
 import { LAB_COLORS } from "./labPalette";
+import { ComputerModel } from "./computer/ComputerModel";
 import { MicroscopeModel } from "./microscope/MicroscopeModel";
 
 type Props = { id: LabObjectId };
@@ -7,7 +8,7 @@ type Props = { id: LabObjectId };
 export function PlaceholderObject({ id }: Props) {
   switch (id) {
     case "computer":
-      return <ComputerMesh />;
+      return <ComputerModel />;
     case "microscope":
       return <MicroscopeModel />;
     case "researcher":
@@ -19,29 +20,6 @@ export function PlaceholderObject({ id }: Props) {
     default:
       return null;
   }
-}
-
-function ComputerMesh() {
-  return (
-    <group>
-      <mesh position={[0, 0.95, -0.12]} castShadow>
-        <boxGeometry args={[0.92, 0.62, 0.08]} />
-        <meshStandardMaterial color={LAB_COLORS.dark} roughness={0.4} />
-      </mesh>
-      <mesh position={[0, 0.95, -0.07]}>
-        <boxGeometry args={[0.78, 0.48, 0.02]} />
-        <meshStandardMaterial color={LAB_COLORS.screen} emissive={LAB_COLORS.teal} emissiveIntensity={0.18} />
-      </mesh>
-      <mesh position={[0, 0.58, 0.16]} castShadow>
-        <boxGeometry args={[0.86, 0.06, 0.42]} />
-        <meshStandardMaterial color={LAB_COLORS.dark} />
-      </mesh>
-      <mesh position={[0.42, 0.62, 0.18]}>
-        <boxGeometry args={[0.18, 0.04, 0.24]} />
-        <meshStandardMaterial color={LAB_COLORS.coral} />
-      </mesh>
-    </group>
-  );
 }
 
 function ResearcherMesh() {

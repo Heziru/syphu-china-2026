@@ -5,7 +5,10 @@ export const LAB_ASSET_MANIFEST = {
     note: "房间壳仍为灰模；仅中央实验台进入程序化精修。",
   },
   objects: {
-    computer: { kind: "placeholder" as const, note: "灰模对照，尚未精修。" },
+    computer: {
+      kind: "procedural" as const,
+      note: "Concept Dry Lab workstation: mint desk, black top, monitor, keyboard/mouse (no chair).",
+    },
     microscope: {
       kind: "procedural" as const,
       note: "Reference-matched procedural compound microscope: horseshoe base, C-arm, monocular tube, turret, stage, coaxial knobs.",
