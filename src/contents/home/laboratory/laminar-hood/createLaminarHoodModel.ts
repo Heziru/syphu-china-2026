@@ -17,7 +17,7 @@ import {
   type Material,
 } from "three";
 
-export const LAMINAR_HOOD_REVISION = 4;
+export const LAMINAR_HOOD_REVISION = 6;
 
 export const LAMINAR_HOOD_COLORS = {
   shell: "#F2F4F6",
@@ -50,7 +50,6 @@ type Mats = ReturnType<typeof makeMaterials>;
 
 const H = 0.88;
 const WB = 0.44;
-const WT = 0.26;
 const DB = 0.36;
 const DT = 0.2;
 const FLOOR_Y = 0.14;
@@ -58,17 +57,25 @@ const GLASS_TOP = 0.5;
 const CONTROL_BOTTOM = 0.5;
 const CONTROL_TOP = 0.62;
 const LOGO_TOP = H;
+const FRAME = 0.016;
+const FRAME_DEPTH = 0.013;
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function widthAt(y: number) {
-  return lerp(WB, WT, y / H);
-}
-
 function depthAt(y: number) {
   return lerp(DB, DT, y / H);
+}
+
+function glassOpening() {
+  const openW = WB * 2 - FRAME * 4 - 0.032;
+  const openH = GLASS_TOP - FLOOR_Y - FRAME * 2;
+  const openY0 = FLOOR_Y + FRAME;
+  const openY1 = GLASS_TOP - FRAME;
+  const openMidY = (openY0 + openY1) * 0.5;
+  const frameZ = depthAt(FLOOR_Y) + 0.005;
+  return { openW, openH, openY0, openY1, openMidY, frameZ };
 }
 
 function part(name: string): Group {
@@ -241,58 +248,52 @@ function makeMaterials() {
 
 function buildTrapezoidShell(parent: Group, mats: Mats) {
   const shell = part("cabinetShell");
-  const zf = DB;
   const zb = -DB;
-  const zfT = DT;
-  const zbT = -DT;
+  const zf0 = DB;
 
   addMesh(
     shell,
-    quad([-WB, 0, zb], [-WB, 0, zf], [-WT, H, zfT], [-WT, H, zbT]),
+    quad([-WB, 0, zb], [-WB, 0, zf0], [-WB, H, depthAt(H)], [-WB, H, zb]),
     mats.shell,
     "leftWall",
   );
   addMesh(
     shell,
-    quad([WB, 0, zf], [WB, 0, zb], [WT, H, zbT], [WT, H, zfT]),
+    quad([WB, 0, zf0], [WB, 0, zb], [WB, H, zb], [WB, H, depthAt(H)]),
     mats.shell,
     "rightWall",
   );
   addMesh(
     shell,
-    quad([-WB, 0, zb], [WB, 0, zb], [WT, H, zbT], [-WT, H, zbT]),
+    quad([-WB, 0, zb], [WB, 0, zb], [WB, H, zb], [-WB, H, zb]),
     mats.shell,
     "backWall",
   );
   addMesh(
     shell,
-    quad([-WT, H, zfT], [WT, H, zfT], [WT, H, zbT], [-WT, H, zbT]),
+    quad([-WB, H, zb], [WB, H, zb], [WB, H, depthAt(H)], [-WB, H, depthAt(H)]),
     mats.shell,
     "topCap",
   );
   addMesh(
     shell,
-    quad([-WB, 0, zb], [WB, 0, zb], [WB, 0, zf], [-WB, 0, zf]),
+    quad([-WB, 0, zb], [WB, 0, zb], [WB, 0, zf0], [-WB, 0, zf0]),
     mats.shell,
     "bottomDeck",
   );
 
-  const wGlass = widthAt(GLASS_TOP);
-  const dGlass = depthAt(GLASS_TOP);
-  const wTop = widthAt(CONTROL_TOP);
   const dTop = depthAt(CONTROL_TOP);
-
   addMesh(
     shell,
-    quad([-wTop, CONTROL_TOP, dTop], [wTop, CONTROL_TOP, dTop], [WT, H, zfT], [-WT, H, zfT]),
+    quad([-WB, CONTROL_TOP, dTop], [WB, CONTROL_TOP, dTop], [WB, H, depthAt(H)], [-WB, H, depthAt(H)]),
     mats.shell,
     "frontTopFace",
   );
 
-  const sillH = FLOOR_Y;
+  const dGlass = depthAt(GLASS_TOP);
   addMesh(
     shell,
-    quad([-WB, 0, zf], [WB, 0, zf], [wGlass, sillH, dGlass], [-wGlass, sillH, dGlass]),
+    quad([-WB, 0, zf0], [WB, 0, zf0], [WB, FLOOR_Y, dGlass], [-WB, FLOOR_Y, dGlass]),
     mats.shell,
     "frontSill",
   );
@@ -300,10 +301,30 @@ function buildTrapezoidShell(parent: Group, mats: Mats) {
   parent.add(shell);
 }
 
+function buildBackPanel(parent: Group, mats: Mats) {
+  const panel = part("backPanel");
+  const inset = 0.028;
+  addMesh(
+    panel,
+    new BoxGeometry(WB * 2 - inset * 2, H - 0.06, 0.012),
+    mats.shell,
+    "backPlate",
+    [0, H * 0.5, -DB - 0.006],
+  );
+  addMesh(
+    panel,
+    new BoxGeometry(WB * 2 - inset * 2 - 0.04, H - 0.14, 0.006),
+    mats.duct,
+    "backRecess",
+    [0, H * 0.48, -DB - 0.014],
+  );
+  parent.add(panel);
+}
+
 function buildLogoBand(parent: Group, mats: Mats) {
   const midY = (CONTROL_TOP + LOGO_TOP) * 0.5;
   const bandH = LOGO_TOP - CONTROL_TOP - 0.02;
-  const bandW = widthAt(midY) * 1.88;
+  const bandW = WB * 1.88;
   const bandZ = depthAt(midY) + 0.006;
   addMesh(
     parent,
@@ -319,7 +340,7 @@ function buildLogoBand(parent: Group, mats: Mats) {
 function buildControlBand(parent: Group, mats: Mats) {
   const midY = (CONTROL_BOTTOM + CONTROL_TOP) * 0.5;
   const bandH = CONTROL_TOP - CONTROL_BOTTOM;
-  const bandW = widthAt(midY) * 1.94;
+  const bandW = WB * 1.92;
   const bandZ = depthAt(midY) + 0.028;
   addMesh(
     parent,
@@ -334,45 +355,62 @@ function buildControlBand(parent: Group, mats: Mats) {
 
 function buildFrontFrame(parent: Group, mats: Mats) {
   const frame = part("frontFrame");
-  const frameW = 0.018;
-  const openingW = widthAt(FLOOR_Y) * 1.72;
-  const openingH = GLASS_TOP - FLOOR_Y;
-  const midY = FLOOR_Y + openingH * 0.5;
-  const frontZ = depthAt(FLOOR_Y) + 0.004;
+  const { openW, openH, openY0, openY1, openMidY, frameZ } = glassOpening();
+  const outerW = openW + FRAME * 2;
 
   addMesh(
     frame,
-    new BoxGeometry(frameW, openingH + 0.02, 0.012),
+    new BoxGeometry(FRAME, openH, FRAME_DEPTH),
     mats.shell,
     "frameLeft",
-    [-openingW * 0.5 - frameW * 0.5, midY, frontZ],
+    [-outerW * 0.5 + FRAME * 0.5, openMidY, frameZ],
     undefined,
     7,
   );
   addMesh(
     frame,
-    new BoxGeometry(frameW, openingH + 0.02, 0.012),
+    new BoxGeometry(FRAME, openH, FRAME_DEPTH),
     mats.shell,
     "frameRight",
-    [openingW * 0.5 + frameW * 0.5, midY, frontZ],
+    [outerW * 0.5 - FRAME * 0.5, openMidY, frameZ],
     undefined,
     7,
   );
   addMesh(
     frame,
-    new BoxGeometry(openingW + frameW * 2, frameW, 0.012),
+    new BoxGeometry(outerW, FRAME, FRAME_DEPTH),
     mats.shell,
     "frameBottom",
-    [0, FLOOR_Y + frameW * 0.5, frontZ],
+    [0, openY0 - FRAME * 0.5, frameZ],
     undefined,
     7,
   );
   addMesh(
     frame,
-    new BoxGeometry(openingW + frameW * 2, frameW, 0.012),
+    new BoxGeometry(outerW, FRAME, FRAME_DEPTH),
     mats.shell,
     "frameTop",
-    [0, GLASS_TOP - frameW * 0.5, frontZ],
+    [0, openY1 + FRAME * 0.5, frameZ],
+    undefined,
+    7,
+  );
+
+  const sideFrameZ = -DB * 0.08;
+  addMesh(
+    frame,
+    new BoxGeometry(FRAME, openH, FRAME_DEPTH),
+    mats.shell,
+    "sideFrameLeft",
+    [-WB + FRAME * 0.5, openMidY, sideFrameZ],
+    undefined,
+    7,
+  );
+  addMesh(
+    frame,
+    new BoxGeometry(FRAME, openH, FRAME_DEPTH),
+    mats.shell,
+    "sideFrameRight",
+    [WB - FRAME * 0.5, openMidY, sideFrameZ],
     undefined,
     7,
   );
@@ -494,40 +532,41 @@ function buildWorkChamber(parent: Group, mats: Mats) {
 
 function buildGlassSash(parent: Group, mats: Mats) {
   const sash = part("sash");
-  const sashH = GLASS_TOP - FLOOR_Y - 0.06;
-  const sashY = FLOOR_Y + sashH * 0.5 + 0.03;
-  const frontZ = depthAt(FLOOR_Y) + 0.022;
-  const sashW = widthAt(FLOOR_Y) * 1.68;
-  const tilt = -0.32;
+  const { openW, openH, openMidY, frameZ } = glassOpening();
+  const tilt = -0.3;
+  const glassW = openW - 0.012;
+  const glassH = (openH - 0.012) * Math.cos(Math.abs(tilt));
+  const glassY = openMidY - openH * Math.sin(Math.abs(tilt)) * 0.1;
+  const glassZ = frameZ + FRAME_DEPTH * 0.5 + 0.001;
 
   addMesh(
     sash,
-    new PlaneGeometry(sashW, sashH),
+    new PlaneGeometry(glassW, glassH),
     mats.glass,
     "frontGlass",
-    [0, sashY, frontZ],
+    [0, glassY, glassZ],
     [tilt, 0, 0],
     10,
   );
 
-  const sideH = sashH * 0.98;
-  const sideY = sashY - 0.01;
-  const sideDepth = depthAt(FLOOR_Y) * 1.52;
+  const sideGlassX = WB - FRAME - 0.004;
+  const sideGlassD = DB * 2 - 0.12;
+  const sideGlassZ = -DB + sideGlassD * 0.5 + 0.03;
   addMesh(
     sash,
-    new PlaneGeometry(sideDepth, sideH),
+    new PlaneGeometry(sideGlassD, glassH),
     mats.glass,
     "leftGlass",
-    [-WB + 0.028, sideY, -0.015],
+    [-sideGlassX, openMidY, sideGlassZ],
     [0, Math.PI / 2, 0],
     10,
   );
   addMesh(
     sash,
-    new PlaneGeometry(sideDepth, sideH),
+    new PlaneGeometry(sideGlassD, glassH),
     mats.glass,
     "rightGlass",
-    [WB - 0.028, sideY, -0.015],
+    [sideGlassX, openMidY, sideGlassZ],
     [0, Math.PI / 2, 0],
     10,
   );
@@ -569,6 +608,7 @@ function buildStand(parent: Group, mats: Mats, cabinetBottom: number) {
 function buildCabinet(parent: Group, mats: Mats) {
   buildWorkChamber(parent, mats);
   buildTrapezoidShell(parent, mats);
+  buildBackPanel(parent, mats);
   buildLogoBand(parent, mats);
   buildControlBand(parent, mats);
   buildFrontFrame(parent, mats);
