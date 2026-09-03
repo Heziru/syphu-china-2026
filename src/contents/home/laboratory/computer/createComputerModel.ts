@@ -9,12 +9,13 @@ import {
   Shape,
   SphereGeometry,
   TorusGeometry,
+  Vector3,
   type BufferGeometry,
   type Material,
 } from "three";
 
 /** Bump when factory geometry changes so the R3F wrapper remounts. */
-export const COMPUTER_REVISION = 3;
+export const COMPUTER_REVISION = 4;
 
 export const COMPUTER_COLORS = {
   wood: "#E2C9A8",
@@ -164,23 +165,144 @@ function createDeskPlatform(mats: Mats) {
   return group;
 }
 
-function addDigitalBars(
+/** Thin cylinder between two points (screen-space edges / DNA rungs). */
+function addLink(
   parent: Group,
   mats: Mats,
-  origin: [number, number, number],
-  count: number,
+  name: string,
+  a: [number, number, number],
+  b: [number, number, number],
+  radius: number,
   cool: boolean,
 ) {
-  for (let i = 0; i < count; i += 1) {
-    const h = 0.04 + (i % 3) * 0.025;
+  const from = new Vector3(...a);
+  const to = new Vector3(...b);
+  const dir = new Vector3().subVectors(to, from);
+  const len = dir.length() || 0.001;
+  const mesh = addMesh(
+    parent,
+    new CylinderGeometry(radius, radius, len, 6),
+    cool ? mats.accentCool : mats.accent,
+    name,
+    [(a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5, (a[2] + b[2]) * 0.5],
+  );
+  mesh.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), dir.normalize());
+}
+
+function addDnaCurve(parent: Group, mats: Mats, z: number) {
+  const turns = 5;
+  const amp = 0.055;
+  const x0 = -0.2;
+  const x1 = 0.2;
+  const yMid = 0.04;
+  for (let i = 0; i < turns; i += 1) {
+    const t0 = i / (turns - 1);
+    const t1 = (i + 0.5) / (turns - 1);
+    const xA = x0 + (x1 - x0) * t0;
+    const xB = x0 + (x1 - x0) * Math.min(1, t1);
+    const phase = t0 * Math.PI * 2.2;
+    const yA = yMid + Math.sin(phase) * amp;
+    const yB = yMid + Math.sin(phase + Math.PI) * amp;
+    const yA2 = yMid + Math.sin(phase + 0.55) * amp;
+    const yB2 = yMid + Math.sin(phase + Math.PI + 0.55) * amp;
+    const pA: [number, number, number] = [xA, yA, z];
+    const pB: [number, number, number] = [xA, yB, z];
+    const pA2: [number, number, number] = [xB, yA2, z];
+    const pB2: [number, number, number] = [xB, yB2, z];
+    addMesh(parent, new SphereGeometry(0.012, 6, 6), mats.accent, `dnaA${i}`, pA);
+    addMesh(parent, new SphereGeometry(0.012, 6, 6), mats.accentCool, `dnaB${i}`, pB);
+    addLink(parent, mats, `dnaRung${i}`, pA, pB, 0.004, i % 2 === 0);
+    if (i < turns - 1) {
+      addLink(parent, mats, `dnaStrandA${i}`, pA, pA2, 0.005, false);
+      addLink(parent, mats, `dnaStrandB${i}`, pB, pB2, 0.005, true);
+    }
+  }
+}
+
+function addWaveform(parent: Group, mats: Mats, z: number) {
+  const samples = 10;
+  const x0 = -0.22;
+  const x1 = 0.22;
+  const yBase = -0.1;
+  let prev: [number, number, number] | null = null;
+  for (let i = 0; i < samples; i += 1) {
+    const t = i / (samples - 1);
+    const x = x0 + (x1 - x0) * t;
+    const y = yBase + Math.sin(t * Math.PI * 3.2) * 0.045 + Math.sin(t * Math.PI * 7) * 0.012;
+    const p: [number, number, number] = [x, y, z];
+    addMesh(parent, new SphereGeometry(0.007, 5, 5), mats.accentCool, `waveDot${i}`, p);
+    if (prev) addLink(parent, mats, `waveSeg${i}`, prev, p, 0.0035, true);
+    prev = p;
+  }
+}
+
+function addConnectedNodes(parent: Group, mats: Mats, z: number) {
+  const nodes: [number, number, number][] = [
+    [-0.18, 0.12, z],
+    [-0.05, 0.16, z],
+    [0.08, 0.13, z],
+    [0.18, 0.09, z],
+  ];
+  nodes.forEach((p, i) => {
     addMesh(
       parent,
-      new BoxGeometry(0.035, h, 0.006),
-      cool || i % 2 === 0 ? mats.accentCool : mats.accent,
-      `bar${i}`,
-      [origin[0] + i * 0.048, origin[1] + h * 0.5 - 0.08, origin[2]],
+      new SphereGeometry(i === 1 ? 0.018 : 0.014, 6, 6),
+      i % 2 === 0 ? mats.accent : mats.accentCool,
+      `node${i}`,
+      p,
     );
-  }
+  });
+  addLink(parent, mats, "nodeEdge0", nodes[0], nodes[1], 0.0035, true);
+  addLink(parent, mats, "nodeEdge1", nodes[1], nodes[2], 0.0035, false);
+  addLink(parent, mats, "nodeEdge2", nodes[2], nodes[3], 0.0035, true);
+  addLink(parent, mats, "nodeEdge3", nodes[1], nodes[3], 0.003, false);
+}
+
+function addMicrobiomeNetwork(parent: Group, mats: Mats, z: number) {
+  const hubs: [number, number, number][] = [
+    [0.0, 0.05, z],
+    [-0.1, 0.0, z],
+    [0.1, 0.02, z],
+    [-0.06, 0.1, z],
+    [0.08, 0.1, z],
+    [-0.14, 0.06, z],
+    [0.14, -0.02, z],
+  ];
+  hubs.forEach((p, i) => {
+    addMesh(
+      parent,
+      new SphereGeometry(i === 0 ? 0.016 : 0.01, 6, 6),
+      i === 0 ? mats.accent : mats.accentCool,
+      `micro${i}`,
+      p,
+    );
+  });
+  const edges: [number, number][] = [
+    [0, 1],
+    [0, 2],
+    [0, 3],
+    [0, 4],
+    [1, 5],
+    [2, 6],
+    [3, 5],
+    [4, 6],
+  ];
+  edges.forEach(([i, j], e) => {
+    addLink(parent, mats, `microEdge${e}`, hubs[i], hubs[j], 0.0028, e % 2 === 0);
+  });
+}
+
+function addDataLines(parent: Group, mats: Mats, z: number) {
+  const lengths = [0.22, 0.16, 0.28, 0.12];
+  lengths.forEach((w, i) => {
+    addMesh(
+      parent,
+      new BoxGeometry(w, 0.006, 0.004),
+      i % 2 === 0 ? mats.accentCool : mats.accent,
+      `dataLine${i}`,
+      [-0.14 + w * 0.15, -0.08 + i * 0.028, z],
+    );
+  });
 }
 
 function createMonitor(mats: Mats) {
@@ -227,26 +349,18 @@ function createLaptop(mats: Mats) {
   return group;
 }
 
-/** Procedural abstract UI glyphs — no PNG, no readable text, no logos. */
+/** Procedural biological computation glyphs — no PNG, text, logos, or UI panels. */
 function createDigitalElements(mats: Mats) {
   const group = part("digitalElements");
   const deskY = 0.09;
+  const screenZ = 0.052;
 
   const monitorUi = part("monitorUi");
   monitorUi.position.set(0.28, deskY + 0.38, -0.14);
   monitorUi.rotation.set(-0.06, 0, 0);
-  // Abstract { / } — block glyphs
-  addMesh(monitorUi, new BoxGeometry(0.035, 0.14, 0.008), mats.accent, "braceL", [
-    -0.12, 0.02, 0.05,
-  ]);
-  addMesh(monitorUi, new BoxGeometry(0.08, 0.035, 0.008), mats.accent, "slash", [0.0, 0.02, 0.05], [
-    0, 0, -0.6,
-  ]);
-  addMesh(monitorUi, new BoxGeometry(0.035, 0.14, 0.008), mats.accent, "braceR", [
-    0.12, 0.02, 0.05,
-  ]);
-  addDigitalBars(monitorUi, mats, [-0.26, 0.05, 0.05], 4, true);
-  addDigitalBars(monitorUi, mats, [0.18, 0.05, 0.05], 4, false);
+  addDnaCurve(monitorUi, mats, screenZ);
+  addWaveform(monitorUi, mats, screenZ);
+  addConnectedNodes(monitorUi, mats, screenZ);
   group.add(monitorUi);
 
   const laptopUi = part("laptopUi");
@@ -255,8 +369,8 @@ function createDigitalElements(mats: Mats) {
   const lidUi = part("lidUi");
   lidUi.position.set(0, 0.02, -0.15);
   lidUi.rotation.set((-70 * Math.PI) / 180, 0, 0);
-  addDigitalBars(lidUi, mats, [-0.14, 0.0, 0.03], 5, false);
-  addMesh(lidUi, new BoxGeometry(0.06, 0.06, 0.008), mats.accentCool, "node", [0.12, 0.06, 0.03]);
+  addMicrobiomeNetwork(lidUi, mats, 0.032);
+  addDataLines(lidUi, mats, 0.032);
   laptopUi.add(lidUi);
   group.add(laptopUi);
 
