@@ -4,7 +4,8 @@ import type { LabObjectId } from "../types/laboratory";
 export type LabReviewAsset =
   | Extract<LabObjectId, "microscope" | "computer" | "researcher">
   | "bioreactor"
-  | "glassware-station";
+  | "glassware-station"
+  | "analytical-balance";
 export type LabReviewView = "ref" | "side" | "back";
 
 export type LabReviewState = {
@@ -25,7 +26,8 @@ export function readLabReviewState(): LabReviewState {
     raw === "computer" ||
     raw === "bioreactor" ||
     raw === "researcher" ||
-    raw === "glassware-station"
+    raw === "glassware-station" ||
+    raw === "analytical-balance"
       ? raw
       : null;
   const viewParam = params.get("view");
