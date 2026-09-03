@@ -15,15 +15,19 @@ import {
 } from "three";
 
 /** Bump when factory geometry changes so the R3F wrapper remounts. */
-export const COMPUTER_REVISION = 4;
+export const COMPUTER_REVISION = 5;
 
 export const COMPUTER_COLORS = {
   wood: "#E2C9A8",
+  /** External monitor / dark props */
   device: "#3A3E44",
+  /** Laptop shell — lighter gray for hierarchy */
+  laptopShell: "#5C6168",
   screen: "#2A2E33",
+  /** Laptop accents */
   accent: "#E8A06A",
-  accentCool: "#7EB8C4",
-  propDark: "#2C3034",
+  /** Monitor biological viz */
+  accentCool: "#6FB5A8",
 } as const;
 
 export type ComputerModelOptions = {
@@ -50,6 +54,9 @@ export type ComputerBuild = {
 };
 
 type Mats = ReturnType<typeof makeMaterials>;
+
+/** Interior angle between keyboard deck and screen (degrees). */
+const LAPTOP_OPEN_DEG = 115;
 
 function roundedRect(width: number, height: number, radius: number): Shape {
   const hw = width * 0.5;
@@ -109,6 +116,7 @@ function part(name: string): Group {
 function makeMaterials() {
   const wood = new MeshToonMaterial({ color: COMPUTER_COLORS.wood });
   const device = new MeshToonMaterial({ color: COMPUTER_COLORS.device });
+  const laptopShell = new MeshToonMaterial({ color: COMPUTER_COLORS.laptopShell });
   const screen = new MeshStandardMaterial({
     color: COMPUTER_COLORS.screen,
     roughness: 0.55,
@@ -118,14 +126,13 @@ function makeMaterials() {
   });
   const accent = new MeshToonMaterial({ color: COMPUTER_COLORS.accent });
   const accentCool = new MeshToonMaterial({ color: COMPUTER_COLORS.accentCool });
-  const propDark = new MeshToonMaterial({ color: COMPUTER_COLORS.propDark });
   wood.name = "wood";
   device.name = "device";
+  laptopShell.name = "laptopShell";
   screen.name = "screen";
   accent.name = "accent";
   accentCool.name = "accentCool";
-  propDark.name = "propDark";
-  return { wood, device, screen, accent, accentCool, propDark };
+  return { wood, device, laptopShell, screen, accent, accentCool };
 }
 
 export function measureGroup(root: Group): ComputerStats {
@@ -165,15 +172,13 @@ function createDeskPlatform(mats: Mats) {
   return group;
 }
 
-/** Thin cylinder between two points (screen-space edges / DNA rungs). */
 function addLink(
   parent: Group,
-  mats: Mats,
+  material: Material,
   name: string,
   a: [number, number, number],
   b: [number, number, number],
   radius: number,
-  cool: boolean,
 ) {
   const from = new Vector3(...a);
   const to = new Vector3(...b);
@@ -182,133 +187,59 @@ function addLink(
   const mesh = addMesh(
     parent,
     new CylinderGeometry(radius, radius, len, 6),
-    cool ? mats.accentCool : mats.accent,
+    material,
     name,
     [(a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5, (a[2] + b[2]) * 0.5],
   );
   mesh.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), dir.normalize());
 }
 
-function addDnaCurve(parent: Group, mats: Mats, z: number) {
-  const turns = 5;
-  const amp = 0.055;
-  const x0 = -0.2;
-  const x1 = 0.2;
-  const yMid = 0.04;
-  for (let i = 0; i < turns; i += 1) {
-    const t0 = i / (turns - 1);
-    const t1 = (i + 0.5) / (turns - 1);
-    const xA = x0 + (x1 - x0) * t0;
-    const xB = x0 + (x1 - x0) * Math.min(1, t1);
-    const phase = t0 * Math.PI * 2.2;
-    const yA = yMid + Math.sin(phase) * amp;
-    const yB = yMid + Math.sin(phase + Math.PI) * amp;
-    const yA2 = yMid + Math.sin(phase + 0.55) * amp;
-    const yB2 = yMid + Math.sin(phase + Math.PI + 0.55) * amp;
-    const pA: [number, number, number] = [xA, yA, z];
-    const pB: [number, number, number] = [xA, yB, z];
-    const pA2: [number, number, number] = [xB, yA2, z];
-    const pB2: [number, number, number] = [xB, yB2, z];
-    addMesh(parent, new SphereGeometry(0.012, 6, 6), mats.accent, `dnaA${i}`, pA);
-    addMesh(parent, new SphereGeometry(0.012, 6, 6), mats.accentCool, `dnaB${i}`, pB);
-    addLink(parent, mats, `dnaRung${i}`, pA, pB, 0.004, i % 2 === 0);
-    if (i < turns - 1) {
-      addLink(parent, mats, `dnaStrandA${i}`, pA, pA2, 0.005, false);
-      addLink(parent, mats, `dnaStrandB${i}`, pB, pB2, 0.005, true);
-    }
-  }
-}
-
-function addWaveform(parent: Group, mats: Mats, z: number) {
-  const samples = 10;
-  const x0 = -0.22;
-  const x1 = 0.22;
-  const yBase = -0.1;
-  let prev: [number, number, number] | null = null;
-  for (let i = 0; i < samples; i += 1) {
-    const t = i / (samples - 1);
-    const x = x0 + (x1 - x0) * t;
-    const y = yBase + Math.sin(t * Math.PI * 3.2) * 0.045 + Math.sin(t * Math.PI * 7) * 0.012;
-    const p: [number, number, number] = [x, y, z];
-    addMesh(parent, new SphereGeometry(0.007, 5, 5), mats.accentCool, `waveDot${i}`, p);
-    if (prev) addLink(parent, mats, `waveSeg${i}`, prev, p, 0.0035, true);
-    prev = p;
-  }
-}
-
-function addConnectedNodes(parent: Group, mats: Mats, z: number) {
+/** Single teal biological curve/network for the external monitor. */
+function addMonitorBioNetwork(parent: Group, mats: Mats, z: number) {
   const nodes: [number, number, number][] = [
-    [-0.18, 0.12, z],
-    [-0.05, 0.16, z],
-    [0.08, 0.13, z],
-    [0.18, 0.09, z],
+    [-0.18, -0.02, z],
+    [-0.06, 0.08, z],
+    [0.04, -0.04, z],
+    [0.14, 0.06, z],
+    [0.0, 0.14, z],
+    [-0.12, -0.12, z],
   ];
   nodes.forEach((p, i) => {
     addMesh(
       parent,
-      new SphereGeometry(i === 1 ? 0.018 : 0.014, 6, 6),
-      i % 2 === 0 ? mats.accent : mats.accentCool,
-      `node${i}`,
-      p,
-    );
-  });
-  addLink(parent, mats, "nodeEdge0", nodes[0], nodes[1], 0.0035, true);
-  addLink(parent, mats, "nodeEdge1", nodes[1], nodes[2], 0.0035, false);
-  addLink(parent, mats, "nodeEdge2", nodes[2], nodes[3], 0.0035, true);
-  addLink(parent, mats, "nodeEdge3", nodes[1], nodes[3], 0.003, false);
-}
-
-function addMicrobiomeNetwork(parent: Group, mats: Mats, z: number) {
-  const hubs: [number, number, number][] = [
-    [0.0, 0.05, z],
-    [-0.1, 0.0, z],
-    [0.1, 0.02, z],
-    [-0.06, 0.1, z],
-    [0.08, 0.1, z],
-    [-0.14, 0.06, z],
-    [0.14, -0.02, z],
-  ];
-  hubs.forEach((p, i) => {
-    addMesh(
-      parent,
-      new SphereGeometry(i === 0 ? 0.016 : 0.01, 6, 6),
-      i === 0 ? mats.accent : mats.accentCool,
-      `micro${i}`,
+      new SphereGeometry(i === 1 || i === 4 ? 0.016 : 0.011, 6, 6),
+      mats.accentCool,
+      `bioNode${i}`,
       p,
     );
   });
   const edges: [number, number][] = [
     [0, 1],
-    [0, 2],
-    [0, 3],
-    [0, 4],
-    [1, 5],
-    [2, 6],
-    [3, 5],
-    [4, 6],
+    [1, 2],
+    [2, 3],
+    [1, 4],
+    [2, 4],
+    [0, 5],
+    [2, 5],
   ];
   edges.forEach(([i, j], e) => {
-    addLink(parent, mats, `microEdge${e}`, hubs[i], hubs[j], 0.0028, e % 2 === 0);
+    addLink(parent, mats.accentCool, `bioEdge${e}`, nodes[i], nodes[j], 0.0035);
   });
 }
 
-function addDataLines(parent: Group, mats: Mats, z: number) {
-  const lengths = [0.22, 0.16, 0.28, 0.12];
-  lengths.forEach((w, i) => {
-    addMesh(
-      parent,
-      new BoxGeometry(w, 0.006, 0.004),
-      i % 2 === 0 ? mats.accentCool : mats.accent,
-      `dataLine${i}`,
-      [-0.14 + w * 0.15, -0.08 + i * 0.028, z],
-    );
-  });
+/** Minimal coral marks — secondary laptop display only. */
+function addLaptopMarks(parent: Group, mats: Mats) {
+  // Local space: screen lies in XZ, facing -Y (toward keyboard when open).
+  const y = -0.004;
+  addMesh(parent, new BoxGeometry(0.12, 0.005, 0.04), mats.accent, "markA", [-0.08, y, 0.04]);
+  addMesh(parent, new BoxGeometry(0.08, 0.005, 0.04), mats.accent, "markB", [0.06, y, 0.02]);
+  addMesh(parent, new BoxGeometry(0.05, 0.005, 0.05), mats.accent, "markC", [0.0, y, -0.06]);
+  addMesh(parent, new SphereGeometry(0.012, 6, 6), mats.accent, "markDot", [0.1, y, -0.05]);
 }
 
 function createMonitor(mats: Mats) {
   const group = part("monitor");
   const deskY = 0.09;
-  // T-stand
   addMesh(group, extrudeY(roundedRect(0.28, 0.12, 0.03), 0.03, 0.004), mats.device, "standBase", [
     0.28, deskY, -0.12,
   ]);
@@ -326,54 +257,87 @@ function createMonitor(mats: Mats) {
   return group;
 }
 
+/**
+ * Laptop as a separate station object.
+ * Lid local (closed, rotation.x = 0): panel in XZ, extends +Z over the keyboard.
+ * Open ~115°: rotation.x = -115° so screen faces the deck with a readable hinge.
+ *
+ * Hierarchy: laptopLid → bezel → screenContent
+ */
 function createLaptop(mats: Mats) {
   const group = part("laptop");
   const deskY = 0.09;
+  const baseW = 0.48;
+  const baseD = 0.32;
+  const baseT = 0.028;
+  const lidW = 0.48;
+  const lidH = 0.3;
+  const lidT = 0.02;
+
   const base = part("laptopBase");
   base.position.set(-0.28, deskY, 0.06);
   base.rotation.set(0, 0.35, 0);
-  addMesh(base, extrudeY(roundedRect(0.48, 0.32, 0.035), 0.028, 0.006), mats.device, "baseShell");
-  addMesh(base, new BoxGeometry(0.36, 0.008, 0.18), mats.propDark, "keyDeck", [0, 0.018, -0.02]);
-  addMesh(base, new BoxGeometry(0.12, 0.006, 0.08), mats.propDark, "trackpad", [0, 0.017, 0.08]);
+  addMesh(
+    base,
+    extrudeY(roundedRect(baseW, baseD, 0.035), baseT, 0.006),
+    mats.laptopShell,
+    "baseShell",
+  );
+  addMesh(base, new BoxGeometry(0.36, 0.008, 0.18), mats.device, "keyDeck", [0, baseT + 0.002, -0.02]);
+  addMesh(base, new BoxGeometry(0.12, 0.006, 0.08), mats.device, "trackpad", [
+    0,
+    baseT + 0.001,
+    0.08,
+  ]);
+
+  const hingeZ = -baseD * 0.5 + 0.012;
+  addMesh(
+    base,
+    new CylinderGeometry(0.011, 0.011, lidW * 0.92, 10),
+    mats.device,
+    "hinge",
+    [0, baseT * 0.55, hingeZ],
+    [0, 0, Math.PI / 2],
+  );
 
   const lid = part("laptopLid");
-  lid.position.set(0, 0.02, -0.15);
-  // ~110° open: lid tilts back from base plane
-  lid.rotation.set((-70 * Math.PI) / 180, 0, 0);
-  addMesh(lid, extrudeY(roundedRect(0.48, 0.04, 0.035), 0.3, 0.006), mats.device, "lidShell", [
-    0, 0.0, 0.0,
+  lid.position.set(0, baseT * 0.55, hingeZ);
+  lid.rotation.x = -((LAPTOP_OPEN_DEG * Math.PI) / 180);
+
+  const bezel = part("bezel");
+  addMesh(bezel, new BoxGeometry(lidW, lidT, lidH), mats.laptopShell, "bezelFrame", [
+    0,
+    0,
+    lidH * 0.5,
   ]);
-  addMesh(lid, new BoxGeometry(0.42, 0.24, 0.01), mats.screen, "lidDisplay", [0, 0.02, 0.022]);
+
+  const screenContent = part("screenContent");
+  // Centered inside bezel; sits on the underside (−Y) which faces the keyboard when open.
+  screenContent.position.set(0, -lidT * 0.5 - 0.001, lidH * 0.5);
+  addMesh(
+    screenContent,
+    new BoxGeometry(lidW * 0.86, 0.006, lidH * 0.82),
+    mats.screen,
+    "screenPlane",
+  );
+  addLaptopMarks(screenContent, mats);
+
+  bezel.add(screenContent);
+  lid.add(bezel);
   base.add(lid);
   group.add(base);
   return group;
 }
 
-/** Procedural biological computation glyphs — no PNG, text, logos, or UI panels. */
+/** Monitor-only glyphs (laptop marks live under lid → bezel → screenContent). */
 function createDigitalElements(mats: Mats) {
   const group = part("digitalElements");
   const deskY = 0.09;
-  const screenZ = 0.052;
-
   const monitorUi = part("monitorUi");
   monitorUi.position.set(0.28, deskY + 0.38, -0.14);
   monitorUi.rotation.set(-0.06, 0, 0);
-  addDnaCurve(monitorUi, mats, screenZ);
-  addWaveform(monitorUi, mats, screenZ);
-  addConnectedNodes(monitorUi, mats, screenZ);
+  addMonitorBioNetwork(monitorUi, mats, 0.052);
   group.add(monitorUi);
-
-  const laptopUi = part("laptopUi");
-  laptopUi.position.set(-0.28, deskY, 0.06);
-  laptopUi.rotation.set(0, 0.35, 0);
-  const lidUi = part("lidUi");
-  lidUi.position.set(0, 0.02, -0.15);
-  lidUi.rotation.set((-70 * Math.PI) / 180, 0, 0);
-  addMicrobiomeNetwork(lidUi, mats, 0.032);
-  addDataLines(lidUi, mats, 0.032);
-  laptopUi.add(lidUi);
-  group.add(laptopUi);
-
   return group;
 }
 
@@ -382,17 +346,27 @@ function createHeadphones(mats: Mats) {
   const deskY = 0.09;
   group.position.set(-0.15, deskY, 0.28);
   group.rotation.set(0, 0.4, 0);
-  addMesh(group, new TorusGeometry(0.1, 0.018, 8, 16, Math.PI), mats.propDark, "headband", [
+  addMesh(group, new TorusGeometry(0.1, 0.018, 8, 16, Math.PI), mats.device, "headband", [
     0, 0.12, 0,
-  ], [0, 0, 0]);
-  addMesh(group, new SphereGeometry(0.055, 10, 8), mats.propDark, "cupL", [-0.1, 0.05, 0]);
-  addMesh(group, new SphereGeometry(0.055, 10, 8), mats.propDark, "cupR", [0.1, 0.05, 0]);
-  addMesh(group, new CylinderGeometry(0.04, 0.04, 0.02, 10), mats.device, "padL", [-0.1, 0.05, 0.02], [
-    Math.PI / 2, 0, 0,
   ]);
-  addMesh(group, new CylinderGeometry(0.04, 0.04, 0.02, 10), mats.device, "padR", [0.1, 0.05, 0.02], [
-    Math.PI / 2, 0, 0,
-  ]);
+  addMesh(group, new SphereGeometry(0.055, 10, 8), mats.device, "cupL", [-0.1, 0.05, 0]);
+  addMesh(group, new SphereGeometry(0.055, 10, 8), mats.device, "cupR", [0.1, 0.05, 0]);
+  addMesh(
+    group,
+    new CylinderGeometry(0.04, 0.04, 0.02, 10),
+    mats.laptopShell,
+    "padL",
+    [-0.1, 0.05, 0.02],
+    [Math.PI / 2, 0, 0],
+  );
+  addMesh(
+    group,
+    new CylinderGeometry(0.04, 0.04, 0.02, 10),
+    mats.laptopShell,
+    "padR",
+    [0.1, 0.05, 0.02],
+    [Math.PI / 2, 0, 0],
+  );
   return group;
 }
 
