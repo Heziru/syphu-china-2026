@@ -1,5 +1,6 @@
 import {
   BoxGeometry,
+  CanvasTexture,
   CylinderGeometry,
   DoubleSide,
   ExtrudeGeometry,
@@ -8,13 +9,15 @@ import {
   MeshPhysicalMaterial,
   MeshStandardMaterial,
   MeshToonMaterial,
+  PlaneGeometry,
   Shape,
+  SRGBColorSpace,
   type BufferGeometry,
   type Material,
 } from "three";
 
 /** Bump when factory geometry changes so the R3F wrapper remounts. */
-export const ANALYTICAL_BALANCE_REVISION = 4;
+export const ANALYTICAL_BALANCE_REVISION = 5;
 
 export const ANALYTICAL_BALANCE_COLORS = {
   body: "#C4C9CE",
@@ -102,17 +105,61 @@ function extrudeY(shape: Shape, height: number, bevel = 0.008): BufferGeometry {
   return geo;
 }
 
+function makeDisplayMaterial(): MeshStandardMaterial {
+  if (typeof document === "undefined") {
+    const fallback = new MeshStandardMaterial({
+      color: ANALYTICAL_BALANCE_COLORS.screen,
+      emissive: ANALYTICAL_BALANCE_COLORS.screenGlow,
+      emissiveIntensity: 0.45,
+      roughness: 0.22,
+      metalness: 0.05,
+    });
+    fallback.name = "screen";
+    return fallback;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 320;
+  canvas.height = 112;
+  const ctx = canvas.getContext("2d");
+  if (ctx) {
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, "#7CB4CC");
+    gradient.addColorStop(1, "#4E8FA8");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "rgba(10, 20, 30, 0.35)";
+    ctx.lineWidth = 5;
+    ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
+
+    ctx.fillStyle = "#0B1520";
+    ctx.font = "700 58px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("0.000", canvas.width * 0.52, canvas.height * 0.54);
+  }
+
+  const texture = new CanvasTexture(canvas);
+  texture.colorSpace = SRGBColorSpace;
+  texture.needsUpdate = true;
+
+  const screen = new MeshStandardMaterial({
+    map: texture,
+    emissiveMap: texture,
+    emissive: "#4A8098",
+    emissiveIntensity: 0.42,
+    roughness: 0.28,
+    metalness: 0.04,
+  });
+  screen.name = "screen";
+  return screen;
+}
+
 function makeMaterials() {
   const body = new MeshToonMaterial({ color: ANALYTICAL_BALANCE_COLORS.body });
   const bodyDark = new MeshToonMaterial({ color: ANALYTICAL_BALANCE_COLORS.bodyDark });
   const panel = new MeshToonMaterial({ color: ANALYTICAL_BALANCE_COLORS.panel });
-  const screen = new MeshStandardMaterial({
-    color: ANALYTICAL_BALANCE_COLORS.screen,
-    emissive: ANALYTICAL_BALANCE_COLORS.screenGlow,
-    emissiveIntensity: 0.45,
-    roughness: 0.22,
-    metalness: 0.05,
-  });
+  const screen = makeDisplayMaterial();
   const button = new MeshToonMaterial({ color: ANALYTICAL_BALANCE_COLORS.button });
   const buttonFace = new MeshToonMaterial({ color: ANALYTICAL_BALANCE_COLORS.buttonFace });
   const metal = new MeshStandardMaterial({
@@ -172,7 +219,7 @@ function buildSlopePanel(parent: Group, mats: Mats, deckTop: number, depth: numb
   const face = part("panelFace");
   const faceZ = 0.038;
   addMesh(face, new BoxGeometry(0.44, 0.13, 0.012), mats.panel, "panelPlate", [0, 0.02, faceZ]);
-  addMesh(face, new BoxGeometry(0.19, 0.075, 0.006), mats.screen, "display", [0.04, 0.045, faceZ + 0.012]);
+  addMesh(face, new PlaneGeometry(0.19, 0.075), mats.screen, "display", [0.04, 0.045, faceZ + 0.013]);
   addMesh(face, new BoxGeometry(0.034, 0.026, 0.004), mats.accent, "brandMark", [-0.13, 0.06, faceZ + 0.022]);
   addMesh(face, new BoxGeometry(0.07, 0.022, 0.003), mats.bodyDark, "brandBar", [-0.075, 0.065, faceZ + 0.013]);
   addMesh(face, new BoxGeometry(0.045, 0.018, 0.003), mats.bodyDark, "modelTag", [-0.16, 0.04, faceZ + 0.013]);

@@ -72,7 +72,10 @@ export function AnalyticalBalanceModel({ studio = false }: Props) {
         scene.environmentIntensity = prevIntensity;
       }
       materials.forEach((mat) => {
-        if (mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial) mat.envMap = null;
+        if (mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial) {
+          if (mat.map) mat.map.dispose();
+          mat.envMap = null;
+        }
       });
       env.dispose();
     };
