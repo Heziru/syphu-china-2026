@@ -1,6 +1,6 @@
 import { useLayoutEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
-import { CubeTexture, MeshStandardMaterial, SRGBColorSpace } from "three";
+import { CubeTexture, MeshPhysicalMaterial, MeshStandardMaterial, SRGBColorSpace } from "three";
 import {
   ANALYTICAL_BALANCE_REVISION,
   createAnalyticalBalanceModel,
@@ -54,10 +54,11 @@ export function AnalyticalBalanceModel({ studio = false }: Props) {
     const prevEnv = scene.environment;
     const prevIntensity = scene.environmentIntensity;
     materials.forEach((mat) => {
-      if (!(mat instanceof MeshStandardMaterial)) return;
-      if (mat.name !== "metal" && mat.name !== "glass" && mat.name !== "screen") return;
+      if (!(mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial)) return;
+      if (mat.name !== "metal" && mat.name !== "platform" && mat.name !== "glass" && mat.name !== "screen") return;
       mat.envMap = env;
-      mat.envMapIntensity = mat.name === "metal" ? 0.95 : mat.name === "glass" ? 0.6 : 0.4;
+      mat.envMapIntensity =
+        mat.name === "metal" ? 1.05 : mat.name === "platform" ? 0.7 : mat.name === "glass" ? 0.75 : 0.4;
       mat.needsUpdate = true;
     });
     if (studio) {
@@ -71,7 +72,7 @@ export function AnalyticalBalanceModel({ studio = false }: Props) {
         scene.environmentIntensity = prevIntensity;
       }
       materials.forEach((mat) => {
-        if (mat instanceof MeshStandardMaterial) mat.envMap = null;
+        if (mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial) mat.envMap = null;
       });
       env.dispose();
     };

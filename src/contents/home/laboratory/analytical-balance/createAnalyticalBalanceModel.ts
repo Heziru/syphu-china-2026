@@ -5,6 +5,7 @@ import {
   ExtrudeGeometry,
   Group,
   Mesh,
+  MeshPhysicalMaterial,
   MeshStandardMaterial,
   MeshToonMaterial,
   Shape,
@@ -13,7 +14,7 @@ import {
 } from "three";
 
 /** Bump when factory geometry changes so the R3F wrapper remounts. */
-export const ANALYTICAL_BALANCE_REVISION = 2;
+export const ANALYTICAL_BALANCE_REVISION = 4;
 
 export const ANALYTICAL_BALANCE_COLORS = {
   body: "#C4C9CE",
@@ -23,7 +24,8 @@ export const ANALYTICAL_BALANCE_COLORS = {
   screenGlow: "#5A8FA8",
   button: "#5C6369",
   buttonFace: "#E8ECF0",
-  metal: "#D4DCE2",
+  metal: "#E2EAF0",
+  platform: "#B0B8C0",
   glass: "#E8F4F8",
   accent: "#C0392B",
 } as const;
@@ -56,6 +58,7 @@ function addMesh(
   name: string,
   position?: [number, number, number],
   rotation?: [number, number, number],
+  renderOrder?: number,
 ) {
   const mesh = new Mesh(geometry, material);
   mesh.name = name;
@@ -63,6 +66,7 @@ function addMesh(
   mesh.receiveShadow = true;
   if (position) mesh.position.set(...position);
   if (rotation) mesh.rotation.set(...rotation);
+  if (renderOrder !== undefined) mesh.renderOrder = renderOrder;
   parent.add(mesh);
   return mesh;
 }
@@ -113,19 +117,34 @@ function makeMaterials() {
   const buttonFace = new MeshToonMaterial({ color: ANALYTICAL_BALANCE_COLORS.buttonFace });
   const metal = new MeshStandardMaterial({
     color: ANALYTICAL_BALANCE_COLORS.metal,
-    roughness: 0.18,
-    metalness: 0.72,
+    roughness: 0.12,
+    metalness: 0.88,
+    emissive: "#A8B4BE",
+    emissiveIntensity: 0.08,
   });
-  const glass = new MeshStandardMaterial({
+  const platform = new MeshStandardMaterial({
+    color: ANALYTICAL_BALANCE_COLORS.platform,
+    roughness: 0.35,
+    metalness: 0.55,
+  });
+  const glass = new MeshPhysicalMaterial({
     color: ANALYTICAL_BALANCE_COLORS.glass,
-    roughness: 0.05,
-    metalness: 0.06,
+    roughness: 0.04,
+    metalness: 0,
+    transmission: 0.82,
     transparent: true,
-    opacity: 0.38,
+    opacity: 0.92,
+    thickness: 0.012,
+    ior: 1.45,
     side: DoubleSide,
-    depthWrite: false,
+    depthWrite: true,
   });
-  const accent = new MeshToonMaterial({ color: ANALYTICAL_BALANCE_COLORS.accent });
+  const accent = new MeshToonMaterial({
+    color: ANALYTICAL_BALANCE_COLORS.accent,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
+  });
 
   body.name = "body";
   bodyDark.name = "bodyDark";
@@ -134,10 +153,11 @@ function makeMaterials() {
   button.name = "button";
   buttonFace.name = "buttonFace";
   metal.name = "metal";
+  platform.name = "platform";
   glass.name = "glass";
   accent.name = "accent";
 
-  return { body, bodyDark, panel, screen, button, buttonFace, metal, glass, accent };
+  return { body, bodyDark, panel, screen, button, buttonFace, metal, platform, glass, accent };
 }
 
 function buildSlopePanel(parent: Group, mats: Mats, deckTop: number, depth: number) {
@@ -150,16 +170,16 @@ function buildSlopePanel(parent: Group, mats: Mats, deckTop: number, depth: numb
   parent.add(slope);
 
   const face = part("panelFace");
-  const faceZ = 0.036;
+  const faceZ = 0.038;
   addMesh(face, new BoxGeometry(0.44, 0.13, 0.012), mats.panel, "panelPlate", [0, 0.02, faceZ]);
-  addMesh(face, new BoxGeometry(0.19, 0.075, 0.008), mats.screen, "display", [0.04, 0.045, faceZ + 0.01]);
-  addMesh(face, new BoxGeometry(0.035, 0.028, 0.008), mats.accent, "brandMark", [-0.13, 0.06, faceZ + 0.01]);
-  addMesh(face, new BoxGeometry(0.07, 0.022, 0.006), mats.bodyDark, "brandBar", [-0.08, 0.065, faceZ + 0.011]);
-  addMesh(face, new BoxGeometry(0.045, 0.018, 0.006), mats.bodyDark, "modelTag", [-0.16, 0.04, faceZ + 0.011]);
+  addMesh(face, new BoxGeometry(0.19, 0.075, 0.006), mats.screen, "display", [0.04, 0.045, faceZ + 0.012]);
+  addMesh(face, new BoxGeometry(0.034, 0.026, 0.004), mats.accent, "brandMark", [-0.13, 0.06, faceZ + 0.022]);
+  addMesh(face, new BoxGeometry(0.07, 0.022, 0.003), mats.bodyDark, "brandBar", [-0.075, 0.065, faceZ + 0.013]);
+  addMesh(face, new BoxGeometry(0.045, 0.018, 0.003), mats.bodyDark, "modelTag", [-0.16, 0.04, faceZ + 0.013]);
 
   const buttonXs = [-0.17, -0.12, -0.07, -0.02, 0.03, 0.08, 0.13];
   buttonXs.forEach((x, i) => {
-    addMesh(face, new CylinderGeometry(0.014, 0.014, 0.012, 12), mats.button, `btn-${i}`, [x, -0.02, faceZ + 0.008], [
+    addMesh(face, new CylinderGeometry(0.014, 0.014, 0.012, 12), mats.button, `btn-${i}`, [x, -0.02, faceZ + 0.01], [
       Math.PI / 2,
       0,
       0,
@@ -167,7 +187,7 @@ function buildSlopePanel(parent: Group, mats: Mats, deckTop: number, depth: numb
     addMesh(face, new CylinderGeometry(0.009, 0.009, 0.003, 10), mats.buttonFace, `btn-cap-${i}`, [
       x,
       -0.014,
-      faceZ + 0.014,
+      faceZ + 0.016,
     ]);
   });
 
@@ -198,105 +218,170 @@ function buildBase(parent: Group, mats: Mats) {
   return deckTop;
 }
 
+/** Open corner-post frame; glass sits in each bay without solid side walls. */
 function buildDraftShield(parent: Group, mats: Mats) {
-  const w = 0.33;
-  const d = 0.33;
-  const h = 0.38;
-  const frameT = 0.016;
-  const inset = 0.006;
-  const glassT = 0.005;
-
-  const frame = part("frame");
+  const w = 0.34;
+  const d = 0.34;
+  const h = 0.55;
+  const frameT = 0.012;
+  const glassT = 0.008;
   const halfW = w * 0.5;
   const halfD = d * 0.5;
-  const postPositions: Array<[number, number, number]> = [
+  const openingW = w - frameT * 2;
+  const openingD = d - frameT * 2;
+  const openingH = h - frameT * 2;
+  const glassY = frameT + openingH * 0.5;
+
+  const frame = part("frame");
+  const corners: Array<[number, number, number]> = [
     [-halfW + frameT * 0.5, h * 0.5, -halfD + frameT * 0.5],
     [halfW - frameT * 0.5, h * 0.5, -halfD + frameT * 0.5],
     [-halfW + frameT * 0.5, h * 0.5, halfD - frameT * 0.5],
     [halfW - frameT * 0.5, h * 0.5, halfD - frameT * 0.5],
   ];
-  postPositions.forEach(([x, y, z], i) => {
+  corners.forEach(([x, y, z], i) => {
     addMesh(frame, new BoxGeometry(frameT, h, frameT), mats.body, `post-${i}`, [x, y, z]);
   });
 
-  addMesh(frame, new BoxGeometry(w, frameT, d), mats.body, "railTop", [0, h - frameT * 0.5, 0]);
-  addMesh(frame, new BoxGeometry(w, frameT, d), mats.body, "railBottom", [0, frameT * 0.5, 0]);
-  addMesh(frame, new BoxGeometry(frameT, h, d), mats.body, "railLeft", [-halfW + frameT * 0.5, h * 0.5, 0]);
-  addMesh(frame, new BoxGeometry(frameT, h, d), mats.body, "railRight", [halfW - frameT * 0.5, h * 0.5, 0]);
+  const edgeY = (y: number) => y;
+  [
+    [0, edgeY(frameT * 0.5), halfD - frameT * 0.5, openingW, frameT, frameT],
+    [0, edgeY(frameT * 0.5), -halfD + frameT * 0.5, openingW, frameT, frameT],
+    [-halfW + frameT * 0.5, edgeY(frameT * 0.5), 0, frameT, frameT, openingD],
+    [halfW - frameT * 0.5, edgeY(frameT * 0.5), 0, frameT, frameT, openingD],
+    [0, edgeY(h - frameT * 0.5), halfD - frameT * 0.5, openingW, frameT, frameT],
+    [0, edgeY(h - frameT * 0.5), -halfD + frameT * 0.5, openingW, frameT, frameT],
+    [-halfW + frameT * 0.5, edgeY(h - frameT * 0.5), 0, frameT, frameT, openingD],
+    [halfW - frameT * 0.5, edgeY(h - frameT * 0.5), 0, frameT, frameT, openingD],
+  ].forEach(([x, y, z, gw, gh, gd], i) => {
+    addMesh(frame, new BoxGeometry(gw, gh, gd), mats.body, `edge-${i}`, [x, y, z]);
+  });
+
+  [0.42, 0.58].forEach((t, i) => {
+    const y = frameT + openingH * t;
+    addMesh(frame, new BoxGeometry(openingW, frameT * 0.6, frameT * 0.6), mats.bodyDark, `trackFront-${i}`, [
+      0,
+      y,
+      halfD - frameT * 0.5,
+    ]);
+    addMesh(frame, new BoxGeometry(frameT * 0.6, frameT * 0.6, openingD), mats.bodyDark, `trackLeft-${i}`, [
+      -halfW + frameT * 0.5,
+      y,
+      0,
+    ]);
+    addMesh(frame, new BoxGeometry(frameT * 0.6, frameT * 0.6, openingD), mats.bodyDark, `trackRight-${i}`, [
+      halfW - frameT * 0.5,
+      y,
+      0,
+    ]);
+  });
+
   parent.add(frame);
 
   const glass = part("glassPanels");
-  const innerW = w - frameT * 2 - inset * 2;
-  const innerD = d - frameT * 2 - inset * 2;
-  const innerH = h - frameT * 2 - inset * 2;
-  const glassY = frameT + inset + innerH * 0.5;
+  const glassOffset = frameT * 0.5 + glassT * 0.5;
 
   addMesh(
     glass,
-    new BoxGeometry(innerW, innerH, glassT),
+    new BoxGeometry(openingW, openingH, glassT),
     mats.glass,
     "front",
-    [0, glassY, halfD - frameT - inset - glassT * 0.5],
+    [0, glassY, halfD - glassOffset],
+    undefined,
+    3,
   );
   addMesh(
     glass,
-    new BoxGeometry(innerW, innerH, glassT),
+    new BoxGeometry(openingW, openingH, glassT),
     mats.glass,
     "back",
-    [0, glassY, -halfD + frameT + inset + glassT * 0.5],
+    [0, glassY, -halfD + glassOffset],
+    undefined,
+    3,
   );
   addMesh(
     glass,
-    new BoxGeometry(glassT, innerH, innerD),
+    new BoxGeometry(glassT, openingH, openingD),
     mats.glass,
     "left",
-    [-halfW + frameT + inset + glassT * 0.5, glassY, 0],
+    [-halfW + glassOffset, glassY, 0],
+    undefined,
+    3,
   );
   addMesh(
     glass,
-    new BoxGeometry(glassT, innerH, innerD),
+    new BoxGeometry(glassT, openingH, openingD),
     mats.glass,
     "right",
-    [halfW - frameT - inset - glassT * 0.5, glassY, 0],
+    [halfW - glassOffset, glassY, 0],
+    undefined,
+    3,
   );
   addMesh(
     glass,
-    new BoxGeometry(innerW, glassT, innerD),
+    new BoxGeometry(openingW, glassT, openingD),
     mats.glass,
     "top",
-    [0, h - frameT - inset - glassT * 0.5, 0],
+    [0, h - glassOffset, 0],
+    undefined,
+    3,
   );
 
-  addMesh(glass, new BoxGeometry(0.02, 0.06, 0.01), mats.body, "handleLeft", [
-    -halfW + frameT * 0.6,
-    h * 0.55,
-    0.05,
+  addMesh(glass, new BoxGeometry(0.018, 0.055, 0.008), mats.body, "handleLeft", [
+    -halfW + frameT,
+    h * 0.52,
+    0.04,
   ]);
-  addMesh(glass, new BoxGeometry(0.02, 0.06, 0.01), mats.body, "handleRight", [
-    halfW - frameT * 0.6,
-    h * 0.55,
-    -0.05,
+  addMesh(glass, new BoxGeometry(0.018, 0.055, 0.008), mats.body, "handleRight", [
+    halfW - frameT,
+    h * 0.52,
+    -0.04,
   ]);
-  addMesh(glass, new BoxGeometry(0.06, 0.01, 0.02), mats.body, "handleTop", [0.05, h - frameT, halfD - frameT]);
-
-  glass.children.forEach((child, index) => {
-    if (child instanceof Mesh && child.name.startsWith("handle") === false) {
-      child.renderOrder = 2 + index;
-    }
-  });
+  addMesh(glass, new BoxGeometry(0.055, 0.008, 0.018), mats.body, "handleTop", [0.05, h - frameT, halfD - frameT]);
   parent.add(glass);
 
   const pan = part("weighingPan");
-  const floorY = frameT + 0.004;
-  const stemH = 0.006;
-  const panH = 0.008;
-  addMesh(pan, new CylinderGeometry(0.062, 0.062, 0.004, 16), mats.metal, "platform", [0, floorY + 0.002, 0]);
-  addMesh(pan, new CylinderGeometry(0.014, 0.016, stemH, 10), mats.metal, "stem", [0, floorY + stemH * 0.5 + 0.004, 0]);
-  addMesh(pan, new CylinderGeometry(0.05, 0.048, panH, 20), mats.metal, "pan", [
-    0,
-    floorY + stemH + panH * 0.5 + 0.004,
-    0,
-  ]);
+  const floorY = frameT + 0.018;
+  const platformH = 0.006;
+  const stemH = 0.016;
+  const panH = 0.018;
+
+  addMesh(
+    pan,
+    new CylinderGeometry(0.078, 0.078, platformH, 18),
+    mats.platform,
+    "platform",
+    [0, floorY + platformH * 0.5, 0],
+    undefined,
+    12,
+  );
+  addMesh(
+    pan,
+    new CylinderGeometry(0.018, 0.02, stemH, 12),
+    mats.metal,
+    "stem",
+    [0, floorY + platformH + stemH * 0.5, 0],
+    undefined,
+    13,
+  );
+  addMesh(
+    pan,
+    new CylinderGeometry(0.062, 0.056, panH, 24),
+    mats.metal,
+    "pan",
+    [0, floorY + platformH + stemH + panH * 0.5, 0],
+    undefined,
+    14,
+  );
+  addMesh(
+    pan,
+    new CylinderGeometry(0.064, 0.064, 0.003, 24),
+    mats.metal,
+    "panRim",
+    [0, floorY + platformH + stemH + panH - 0.001, 0],
+    undefined,
+    14,
+  );
   parent.add(pan);
 }
 
