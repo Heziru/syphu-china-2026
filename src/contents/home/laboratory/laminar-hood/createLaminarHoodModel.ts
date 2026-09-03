@@ -17,7 +17,7 @@ import {
   type Material,
 } from "three";
 
-export const LAMINAR_HOOD_REVISION = 6;
+export const LAMINAR_HOOD_REVISION = 7;
 
 export const LAMINAR_HOOD_COLORS = {
   shell: "#F2F4F6",
@@ -59,6 +59,8 @@ const CONTROL_TOP = 0.62;
 const LOGO_TOP = H;
 const FRAME = 0.016;
 const FRAME_DEPTH = 0.013;
+const TOP_TH = 0.042;
+const GLASS_TILT = 0.26;
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
@@ -68,14 +70,44 @@ function depthAt(y: number) {
   return lerp(DB, DT, y / H);
 }
 
-function glassOpening() {
+type Point3 = [number, number, number];
+
+type SashLayout = {
+  openW: number;
+  openH: number;
+  openY0: number;
+  openY1: number;
+  halfW: number;
+  zBottom: number;
+  zTop: number;
+  inner: { bl: Point3; br: Point3; tl: Point3; tr: Point3 };
+};
+
+function sashLayout(): SashLayout {
   const openW = WB * 2 - FRAME * 4 - 0.032;
-  const openH = GLASS_TOP - FLOOR_Y - FRAME * 2;
   const openY0 = FLOOR_Y + FRAME;
   const openY1 = GLASS_TOP - FRAME;
-  const openMidY = (openY0 + openY1) * 0.5;
-  const frameZ = depthAt(FLOOR_Y) + 0.005;
-  return { openW, openH, openY0, openY1, openMidY, frameZ };
+  const openH = openY1 - openY0;
+  const halfW = openW * 0.5;
+  const zBottom = depthAt(FLOOR_Y) + 0.008;
+  const zTop = zBottom - openH * Math.tan(GLASS_TILT);
+  const inner = {
+    bl: [-halfW, openY0, zBottom] as Point3,
+    br: [halfW, openY0, zBottom] as Point3,
+    tl: [-halfW, openY1, zTop] as Point3,
+    tr: [halfW, openY1, zTop] as Point3,
+  };
+  return { openW, openH, openY0, openY1, halfW, zBottom, zTop, inner };
+}
+
+function insetCorners(corners: SashLayout["inner"], inset: number): SashLayout["inner"] {
+  const { bl, br, tl, tr } = corners;
+  return {
+    bl: [bl[0] + inset, bl[1] + inset, bl[2] + inset],
+    br: [br[0] - inset, br[1] + inset, br[2] + inset],
+    tl: [tl[0] + inset, tl[1] - inset, tl[2] - inset],
+    tr: [tr[0] - inset, tr[1] - inset, tr[2] - inset],
+  };
 }
 
 function part(name: string): Group {
@@ -271,12 +303,6 @@ function buildTrapezoidShell(parent: Group, mats: Mats) {
   );
   addMesh(
     shell,
-    quad([-WB, H, zb], [WB, H, zb], [WB, H, depthAt(H)], [-WB, H, depthAt(H)]),
-    mats.shell,
-    "topCap",
-  );
-  addMesh(
-    shell,
     quad([-WB, 0, zb], [WB, 0, zb], [WB, 0, zf0], [-WB, 0, zf0]),
     mats.shell,
     "bottomDeck",
@@ -299,6 +325,63 @@ function buildTrapezoidShell(parent: Group, mats: Mats) {
   );
 
   parent.add(shell);
+}
+
+function buildTopSection(parent: Group, mats: Mats) {
+  const top = part("topSection");
+  const y0 = H;
+  const y1 = H + TOP_TH;
+  const zb = -DB;
+  const zf = depthAt(H);
+
+  addMesh(
+    top,
+    quad([-WB, y1, zb], [WB, y1, zb], [WB, y1, zf], [-WB, y1, zf]),
+    mats.shell,
+    "topSurface",
+  );
+  addMesh(
+    top,
+    quad([-WB, y0, zb], [-WB, y1, zb], [-WB, y1, zf], [-WB, y0, zf]),
+    mats.shell,
+    "topSkirtLeft",
+  );
+  addMesh(
+    top,
+    quad([WB, y0, zf], [WB, y1, zf], [WB, y1, zb], [WB, y0, zb]),
+    mats.shell,
+    "topSkirtRight",
+  );
+  addMesh(
+    top,
+    quad([-WB, y0, zb], [WB, y0, zb], [WB, y1, zb], [-WB, y1, zb]),
+    mats.shell,
+    "topSkirtBack",
+  );
+  addMesh(
+    top,
+    quad([-WB, y0, zf], [WB, y0, zf], [WB, y1, zf], [-WB, y1, zf]),
+    mats.shell,
+    "topSkirtFront",
+  );
+
+  const plenumH = TOP_TH + 0.028;
+  addMesh(
+    top,
+    new BoxGeometry(WB * 1.72, plenumH, DB * 1.12),
+    mats.shell,
+    "plenumBox",
+    [0, y1 + plenumH * 0.5 - 0.004, -DB * 0.42],
+  );
+  addMesh(
+    top,
+    new CylinderGeometry(0.036, 0.036, 0.012, 12),
+    mats.duct,
+    "ductFlange",
+    [-0.2, y1 + 0.006, -0.1],
+  );
+
+  parent.add(top);
 }
 
 function buildBackPanel(parent: Group, mats: Mats) {
@@ -355,33 +438,19 @@ function buildControlBand(parent: Group, mats: Mats) {
 
 function buildFrontFrame(parent: Group, mats: Mats) {
   const frame = part("frontFrame");
-  const { openW, openH, openY0, openY1, openMidY, frameZ } = glassOpening();
+  const { openW, openY0, openY1, halfW, zBottom, zTop } = sashLayout();
   const outerW = openW + FRAME * 2;
+  const railLen = Math.hypot(openY1 - openY0, zTop - zBottom);
+  const railMidY = (openY0 + openY1) * 0.5;
+  const railMidZ = (zBottom + zTop) * 0.5;
+  const railTilt = Math.atan2(zTop - zBottom, openY1 - openY0);
 
-  addMesh(
-    frame,
-    new BoxGeometry(FRAME, openH, FRAME_DEPTH),
-    mats.shell,
-    "frameLeft",
-    [-outerW * 0.5 + FRAME * 0.5, openMidY, frameZ],
-    undefined,
-    7,
-  );
-  addMesh(
-    frame,
-    new BoxGeometry(FRAME, openH, FRAME_DEPTH),
-    mats.shell,
-    "frameRight",
-    [outerW * 0.5 - FRAME * 0.5, openMidY, frameZ],
-    undefined,
-    7,
-  );
   addMesh(
     frame,
     new BoxGeometry(outerW, FRAME, FRAME_DEPTH),
     mats.shell,
     "frameBottom",
-    [0, openY0 - FRAME * 0.5, frameZ],
+    [0, openY0 - FRAME * 0.5, zBottom],
     undefined,
     7,
   );
@@ -390,28 +459,47 @@ function buildFrontFrame(parent: Group, mats: Mats) {
     new BoxGeometry(outerW, FRAME, FRAME_DEPTH),
     mats.shell,
     "frameTop",
-    [0, openY1 + FRAME * 0.5, frameZ],
+    [0, openY1 + FRAME * 0.5, zTop],
     undefined,
+    7,
+  );
+  addMesh(
+    frame,
+    new BoxGeometry(FRAME, railLen, FRAME_DEPTH),
+    mats.shell,
+    "frameLeft",
+    [-halfW - FRAME * 0.5, railMidY, railMidZ],
+    [railTilt, 0, 0],
+    7,
+  );
+  addMesh(
+    frame,
+    new BoxGeometry(FRAME, railLen, FRAME_DEPTH),
+    mats.shell,
+    "frameRight",
+    [halfW + FRAME * 0.5, railMidY, railMidZ],
+    [railTilt, 0, 0],
     7,
   );
 
-  const sideFrameZ = -DB * 0.08;
+  const sideMidY = railMidY;
+  const sideFrameZ = (zBottom + zTop) * 0.5 - DB * 0.35;
   addMesh(
     frame,
-    new BoxGeometry(FRAME, openH, FRAME_DEPTH),
+    new BoxGeometry(FRAME, railLen, FRAME_DEPTH),
     mats.shell,
     "sideFrameLeft",
-    [-WB + FRAME * 0.5, openMidY, sideFrameZ],
-    undefined,
+    [-WB + FRAME * 0.5, sideMidY, sideFrameZ],
+    [railTilt, 0, 0],
     7,
   );
   addMesh(
     frame,
-    new BoxGeometry(FRAME, openH, FRAME_DEPTH),
+    new BoxGeometry(FRAME, railLen, FRAME_DEPTH),
     mats.shell,
     "sideFrameRight",
-    [WB - FRAME * 0.5, openMidY, sideFrameZ],
-    undefined,
+    [WB - FRAME * 0.5, sideMidY, sideFrameZ],
+    [railTilt, 0, 0],
     7,
   );
 
@@ -420,19 +508,18 @@ function buildFrontFrame(parent: Group, mats: Mats) {
 
 function buildDuct(parent: Group, mats: Mats) {
   const duct = part("exhaustDuct");
+  const y1 = H + TOP_TH;
   addMesh(duct, new CylinderGeometry(0.048, 0.052, 0.15, 12, 3, true), mats.duct, "hose", [
-    -0.22,
-    H + 0.075,
-    -0.06,
+    -0.2,
+    y1 + 0.09,
+    -0.1,
   ]);
   addMesh(
     duct,
     new TorusGeometry(0.054, 0.013, 8, 16, Math.PI * 0.55),
     mats.duct,
     "bend",
-    [-0.19,
-    H + 0.15,
-    -0.03],
+    [-0.18, y1 + 0.165, -0.07],
     [0, 0, -0.42],
   );
   parent.add(duct);
@@ -532,41 +619,31 @@ function buildWorkChamber(parent: Group, mats: Mats) {
 
 function buildGlassSash(parent: Group, mats: Mats) {
   const sash = part("sash");
-  const { openW, openH, openMidY, frameZ } = glassOpening();
-  const tilt = -0.3;
-  const glassW = openW - 0.012;
-  const glassH = (openH - 0.012) * Math.cos(Math.abs(tilt));
-  const glassY = openMidY - openH * Math.sin(Math.abs(tilt)) * 0.1;
-  const glassZ = frameZ + FRAME_DEPTH * 0.5 + 0.001;
+  const { openY0, openY1, inner } = sashLayout();
+  const glass = insetCorners(inner, 0.002);
 
-  addMesh(
-    sash,
-    new PlaneGeometry(glassW, glassH),
-    mats.glass,
-    "frontGlass",
-    [0, glassY, glassZ],
-    [tilt, 0, 0],
-    10,
-  );
+  addMesh(sash, quad(glass.bl, glass.br, glass.tr, glass.tl), mats.glass, "frontGlass", undefined, undefined, 10);
 
   const sideGlassX = WB - FRAME - 0.004;
   const sideGlassD = DB * 2 - 0.12;
   const sideGlassZ = -DB + sideGlassD * 0.5 + 0.03;
+  const sideGlassH = openY1 - openY0 - 0.004;
+  const sideMidY = (openY0 + openY1) * 0.5;
   addMesh(
     sash,
-    new PlaneGeometry(sideGlassD, glassH),
+    new PlaneGeometry(sideGlassD, sideGlassH),
     mats.glass,
     "leftGlass",
-    [-sideGlassX, openMidY, sideGlassZ],
+    [-sideGlassX, sideMidY, sideGlassZ],
     [0, Math.PI / 2, 0],
     10,
   );
   addMesh(
     sash,
-    new PlaneGeometry(sideGlassD, glassH),
+    new PlaneGeometry(sideGlassD, sideGlassH),
     mats.glass,
     "rightGlass",
-    [sideGlassX, openMidY, sideGlassZ],
+    [sideGlassX, sideMidY, sideGlassZ],
     [0, Math.PI / 2, 0],
     10,
   );
@@ -608,6 +685,7 @@ function buildStand(parent: Group, mats: Mats, cabinetBottom: number) {
 function buildCabinet(parent: Group, mats: Mats) {
   buildWorkChamber(parent, mats);
   buildTrapezoidShell(parent, mats);
+  buildTopSection(parent, mats);
   buildBackPanel(parent, mats);
   buildLogoBand(parent, mats);
   buildControlBand(parent, mats);
