@@ -9,12 +9,15 @@ import {
   MICROSCOPE_REVIEW_SHOTS,
   type MicroscopeReviewView,
 } from "./microscope/reviewShots";
+import { COMPUTER_REVIEW_SHOTS } from "./computer/reviewShots";
+import type { LabReviewAsset } from "./labReview";
 
 type Props = {
   mobile: boolean;
   reduced: boolean;
   onNavigate: (path: string) => void;
   review?: boolean;
+  reviewAsset?: LabReviewAsset | null;
   reviewView?: MicroscopeReviewView;
 };
 
@@ -29,6 +32,7 @@ export function CameraController({
   reduced,
   onNavigate,
   review = false,
+  reviewAsset = null,
   reviewView = "ref",
 }: Props) {
   const controls = useRef<OrbitHandle | null>(null);
@@ -41,7 +45,9 @@ export function CameraController({
 
   useEffect(() => {
     if (review) {
-      const shot = MICROSCOPE_REVIEW_SHOTS[reviewView];
+      const shotTable =
+        reviewAsset === "computer" ? COMPUTER_REVIEW_SHOTS : MICROSCOPE_REVIEW_SHOTS;
+      const shot = shotTable[reviewView];
       camera.position.set(shot.position[0], shot.position[1], shot.position[2]);
       camera.lookAt(shot.target[0], shot.target[1], shot.target[2]);
       controls.current?.target.set(shot.target[0], shot.target[1], shot.target[2]);
@@ -82,7 +88,7 @@ export function CameraController({
     return () => {
       tween.kill();
     };
-  }, [camera, overview, reduced, review, reviewView, setPhase]);
+  }, [camera, overview, reduced, review, reviewAsset, reviewView, setPhase]);
 
   useEffect(() => {
     if (review || phase !== "focusing" || !selectedId) return;

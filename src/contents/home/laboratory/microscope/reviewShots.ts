@@ -1,4 +1,5 @@
 import type { CameraShot } from "../../types/laboratory";
+import { readLabReviewState } from "../labReview";
 
 export type MicroscopeReviewView = "ref" | "side" | "back";
 
@@ -15,14 +16,11 @@ export const MICROSCOPE_REVIEW_SHOTS: Record<MicroscopeReviewView, CameraShot> =
   back: { position: [0.0, 0.68, -2.15], target: [0, 0.46, 0.02] },
 };
 
+/** Backward-compatible reader: active only when labReview=microscope. */
 export function readLabReview() {
-  if (typeof window === "undefined") {
-    return { active: false, view: "ref" as MicroscopeReviewView };
-  }
-  const params = new URLSearchParams(window.location.search);
-  const view = params.get("view");
+  const state = readLabReviewState();
   return {
-    active: params.get("labReview") === "microscope",
-    view: view === "side" || view === "back" ? view : ("ref" as MicroscopeReviewView),
+    active: state.asset === "microscope",
+    view: state.view as MicroscopeReviewView,
   };
 }

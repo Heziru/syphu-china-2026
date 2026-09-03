@@ -2,12 +2,17 @@ import { ContactShadows } from "@react-three/drei";
 import { LAB_ASSET_MANIFEST } from "../data/assetManifest";
 import { LAB_OBJECTS } from "../data/labObjects";
 import { CameraController } from "./CameraController";
+import { ComputerModel } from "./computer/ComputerModel";
+import type { ComputerReviewView } from "./computer/reviewShots";
 import { InteractiveObject } from "./InteractiveObject";
+import type { LabReviewAsset } from "./labReview";
 import { Lighting } from "./Lighting";
 import { MicroscopeModel } from "./microscope/MicroscopeModel";
 import type { MicroscopeReviewView } from "./microscope/reviewShots";
 import { RoomShell } from "./RoomShell";
 import { SceneLifecycle } from "./SceneLifecycle";
+
+type ReviewView = MicroscopeReviewView | ComputerReviewView;
 
 type Props = {
   mobile: boolean;
@@ -16,7 +21,8 @@ type Props = {
   paused: boolean;
   onNavigate: (path: string) => void;
   review?: boolean;
-  reviewView?: MicroscopeReviewView;
+  reviewAsset?: LabReviewAsset | null;
+  reviewView?: ReviewView;
 };
 
 export function LaboratoryScene({
@@ -26,11 +32,12 @@ export function LaboratoryScene({
   paused,
   onNavigate,
   review = false,
+  reviewAsset = null,
   reviewView = "ref",
 }: Props) {
   const placeholders = LAB_ASSET_MANIFEST.room.kind === "placeholder";
 
-  if (review) {
+  if (review && reviewAsset) {
     return (
       <>
         <SceneLifecycle paused={paused} />
@@ -39,12 +46,13 @@ export function LaboratoryScene({
           <planeGeometry args={[6.5, 6.5]} />
           <meshStandardMaterial color="#F3F4EF" roughness={0.92} />
         </mesh>
-        <MicroscopeModel studio />
+        {reviewAsset === "computer" ? <ComputerModel studio /> : <MicroscopeModel studio />}
         <CameraController
           mobile={mobile}
           reduced={reduced}
           onNavigate={onNavigate}
           review
+          reviewAsset={reviewAsset}
           reviewView={reviewView}
         />
       </>

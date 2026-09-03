@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { isWebGLAvailable } from "./laboratory/labPalette";
 import {
-  readLabReview,
-  type MicroscopeReviewView,
-} from "./laboratory/microscope/reviewShots";
+  readLabReviewState,
+  type LabReviewAsset,
+  type LabReviewView,
+} from "./laboratory/labReview";
 import { useLaboratoryStore } from "./store/laboratoryStore";
 import { ChapterDirectory } from "./ui/ChapterDirectory";
 import { LaboratoryFallback } from "./ui/LaboratoryFallback";
@@ -20,6 +21,11 @@ const MicroscopeReviewHud = lazy(() =>
     default: mod.MicroscopeReviewHud,
   })),
 );
+const ComputerReviewHud = lazy(() =>
+  import("./laboratory/computer/ComputerReviewHud").then((mod) => ({
+    default: mod.ComputerReviewHud,
+  })),
+);
 
 export function LaboratoryHome() {
   const navigate = useNavigate();
@@ -32,8 +38,10 @@ export function LaboratoryHome() {
   const setLocked = useLaboratoryStore((s) => s.setLocked);
   const [paused, setPaused] = useState(false);
   const [webgl] = useState(() => isWebGLAvailable());
-  const [review] = useState(() => readLabReview().active);
-  const [reviewView, setReviewView] = useState<MicroscopeReviewView>(() => readLabReview().view);
+  const [reviewState] = useState(() => readLabReviewState());
+  const review = reviewState.active;
+  const reviewAsset = reviewState.asset as LabReviewAsset | null;
+  const [reviewView, setReviewView] = useState<LabReviewView>(() => reviewState.view);
 
   useEffect(() => {
     resetSession();
@@ -83,6 +91,7 @@ export function LaboratoryHome() {
               onNavigate={onNavigate}
               onContextLost={goFallback}
               review={review}
+              reviewAsset={reviewAsset}
               reviewView={reviewView}
             />
           </Suspense>
@@ -99,9 +108,13 @@ export function LaboratoryHome() {
 
       <LoadingOverlay visible={show3d && !review && phase === "loading"} />
 
-      {review ? (
+      {review && reviewAsset === "microscope" ? (
         <Suspense fallback={null}>
           <MicroscopeReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "computer" ? (
+        <Suspense fallback={null}>
+          <ComputerReviewHud view={reviewView} onView={setReviewView} />
         </Suspense>
       ) : (
         <div className="lab-hud">

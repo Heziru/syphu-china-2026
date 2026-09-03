@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
 import { useQualityProfile } from "../hooks/useQualityProfile";
 import { useLaboratoryStore } from "../store/laboratoryStore";
+import type { LabReviewAsset } from "./labReview";
 import { LaboratoryScene } from "./LaboratoryScene";
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
   onNavigate: (path: string) => void;
   onContextLost: () => void;
   review?: boolean;
+  reviewAsset?: LabReviewAsset | null;
   reviewView?: "ref" | "side" | "back";
 };
 
@@ -20,6 +22,7 @@ export default function LaboratoryCanvas({
   onNavigate,
   onContextLost,
   review = false,
+  reviewAsset = null,
   reviewView = "ref",
 }: Props) {
   const { dpr, shadows, mobile } = useQualityProfile();
@@ -57,6 +60,7 @@ export default function LaboratoryCanvas({
         paused={paused}
         onNavigate={onNavigate}
         review={review}
+        reviewAsset={reviewAsset}
         reviewView={reviewView}
       />
     </Canvas>

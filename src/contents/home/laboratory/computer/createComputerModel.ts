@@ -7,31 +7,32 @@ import {
   MeshStandardMaterial,
   MeshToonMaterial,
   Shape,
+  SphereGeometry,
+  TorusGeometry,
   type BufferGeometry,
   type Material,
 } from "three";
 
 /** Bump when factory geometry changes so the R3F wrapper remounts. */
-export const COMPUTER_REVISION = 1;
+export const COMPUTER_REVISION = 3;
 
 export const COMPUTER_COLORS = {
-  mint: "#A8C5BE",
-  darkTop: "#2F3338",
-  bezel: "#D5D9DC",
-  screen: "#3D6B72",
-  chart: "#7EC8C0",
-  peripheral: "#3A4246",
+  wood: "#E2C9A8",
+  device: "#3A3E44",
+  screen: "#2A2E33",
+  accent: "#E8A06A",
+  accentCool: "#7EB8C4",
+  propDark: "#2C3034",
 } as const;
 
 export type ComputerModelOptions = {
   style?: "concept";
-  /** Reserved for future GLB path; procedural is the only implemented source. */
-  source?: "procedural" | "gltf";
+  includeHeadphones?: boolean;
 };
 
 export const DEFAULT_COMPUTER_OPTIONS: Required<ComputerModelOptions> = {
   style: "concept",
-  source: "procedural",
+  includeHeadphones: true,
 };
 
 export type ComputerStats = {
@@ -52,7 +53,7 @@ type Mats = ReturnType<typeof makeMaterials>;
 function roundedRect(width: number, height: number, radius: number): Shape {
   const hw = width * 0.5;
   const hh = height * 0.5;
-  const r = Math.min(radius, hw, hh);
+  const r = Math.min(radius, hw * 0.49, hh * 0.49);
   const shape = new Shape();
   shape.moveTo(-hw + r, -hh);
   shape.lineTo(hw - r, -hh);
@@ -66,7 +67,7 @@ function roundedRect(width: number, height: number, radius: number): Shape {
   return shape;
 }
 
-function extrudeY(shape: Shape, height: number, bevel = 0.008): BufferGeometry {
+function extrudeY(shape: Shape, height: number, bevel = 0.01): BufferGeometry {
   const geo = new ExtrudeGeometry(shape, {
     depth: height,
     bevelEnabled: bevel > 0,
@@ -105,25 +106,25 @@ function part(name: string): Group {
 }
 
 function makeMaterials() {
-  const mint = new MeshToonMaterial({ color: COMPUTER_COLORS.mint });
-  const darkTop = new MeshToonMaterial({ color: COMPUTER_COLORS.darkTop });
-  const bezel = new MeshToonMaterial({ color: COMPUTER_COLORS.bezel });
+  const wood = new MeshToonMaterial({ color: COMPUTER_COLORS.wood });
+  const device = new MeshToonMaterial({ color: COMPUTER_COLORS.device });
   const screen = new MeshStandardMaterial({
     color: COMPUTER_COLORS.screen,
-    emissive: COMPUTER_COLORS.chart,
-    emissiveIntensity: 0.35,
     roughness: 0.55,
     metalness: 0.02,
+    emissive: "#1a2226",
+    emissiveIntensity: 0.25,
   });
-  const peripheral = new MeshToonMaterial({ color: COMPUTER_COLORS.peripheral });
-  const accent = new MeshToonMaterial({ color: "#8FAEA7" });
-  mint.name = "mint";
-  darkTop.name = "darkTop";
-  bezel.name = "bezel";
+  const accent = new MeshToonMaterial({ color: COMPUTER_COLORS.accent });
+  const accentCool = new MeshToonMaterial({ color: COMPUTER_COLORS.accentCool });
+  const propDark = new MeshToonMaterial({ color: COMPUTER_COLORS.propDark });
+  wood.name = "wood";
+  device.name = "device";
   screen.name = "screen";
-  peripheral.name = "peripheral";
   accent.name = "accent";
-  return { mint, darkTop, bezel, screen, peripheral, accent };
+  accentCool.name = "accentCool";
+  propDark.name = "propDark";
+  return { wood, device, screen, accent, accentCool, propDark };
 }
 
 export function measureGroup(root: Group): ComputerStats {
@@ -155,106 +156,167 @@ export function measureGroup(root: Group): ComputerStats {
   };
 }
 
-function createDesk(mats: Mats) {
-  const group = part("desk");
-  // Mint cabinet body (open knee space on the right).
-  addMesh(group, extrudeY(roundedRect(1.15, 0.52, 0.04), 0.7, 0.01), mats.mint, "cabinet", [
-    0, 0.02, 0,
+function createDeskPlatform(mats: Mats) {
+  const group = part("deskPlatform");
+  addMesh(group, extrudeY(roundedRect(1.35, 0.72, 0.08), 0.09, 0.016), mats.wood, "deskSlab", [
+    0, 0.0, 0,
   ]);
-  // Black countertop
-  addMesh(group, extrudeY(roundedRect(1.2, 0.56, 0.035), 0.045, 0.008), mats.darkTop, "countertop", [
-    0, 0.72, 0,
-  ]);
-  // Left drawer stack (3)
-  const drawerW = 0.34;
-  const drawerD = 0.48;
-  const drawerH = 0.16;
-  const drawerX = -0.36;
-  for (let i = 0; i < 3; i += 1) {
-    const y = 0.12 + i * (drawerH + 0.04);
+  return group;
+}
+
+function addDigitalBars(
+  parent: Group,
+  mats: Mats,
+  origin: [number, number, number],
+  count: number,
+  cool: boolean,
+) {
+  for (let i = 0; i < count; i += 1) {
+    const h = 0.04 + (i % 3) * 0.025;
     addMesh(
-      group,
-      extrudeY(roundedRect(drawerW, drawerD, 0.02), drawerH, 0.004),
-      mats.accent,
-      `drawer${i}`,
-      [drawerX, y, 0.02],
-    );
-    addMesh(
-      group,
-      new BoxGeometry(0.12, 0.012, 0.02),
-      mats.darkTop,
-      `drawerHandle${i}`,
-      [drawerX, y + drawerH * 0.55, drawerD * 0.5 - 0.01],
+      parent,
+      new BoxGeometry(0.035, h, 0.006),
+      cool || i % 2 === 0 ? mats.accentCool : mats.accent,
+      `bar${i}`,
+      [origin[0] + i * 0.048, origin[1] + h * 0.5 - 0.08, origin[2]],
     );
   }
-  return group;
 }
 
 function createMonitor(mats: Mats) {
   const group = part("monitor");
-  const deskTopY = 0.765;
-  // Pedestal
-  addMesh(group, new CylinderGeometry(0.07, 0.1, 0.04, 12), mats.bezel, "pedestal", [
-    0.08, deskTopY + 0.02, -0.08,
+  const deskY = 0.09;
+  // T-stand
+  addMesh(group, extrudeY(roundedRect(0.28, 0.12, 0.03), 0.03, 0.004), mats.device, "standBase", [
+    0.28, deskY, -0.12,
   ]);
-  addMesh(group, new CylinderGeometry(0.028, 0.032, 0.22, 10), mats.bezel, "neck", [
-    0.08, deskTopY + 0.14, -0.08,
+  addMesh(group, new BoxGeometry(0.05, 0.18, 0.04), mats.device, "standNeck", [
+    0.28, deskY + 0.12, -0.12,
   ]);
-  // Bezel + screen (slightly tilted back)
-  const panel = part("panel");
-  panel.position.set(0.08, deskTopY + 0.38, -0.1);
-  panel.rotation.set(-0.08, 0, 0);
-  addMesh(panel, extrudeY(roundedRect(0.62, 0.06, 0.02), 0.4, 0.006), mats.bezel, "bezelFrame", [
-    0, -0.2, 0,
+  const panel = part("monitorPanel");
+  panel.position.set(0.28, deskY + 0.38, -0.14);
+  panel.rotation.set(-0.06, 0, 0);
+  addMesh(panel, extrudeY(roundedRect(0.7, 0.08, 0.045), 0.44, 0.012), mats.device, "bezel", [
+    0, -0.22, 0,
   ]);
-  addMesh(panel, new BoxGeometry(0.54, 0.34, 0.012), mats.screen, "display", [0, 0.0, 0.028]);
-  // Abstract chart stubs (no real UI chrome)
-  addMesh(panel, new BoxGeometry(0.32, 0.012, 0.006), mats.bezel, "chartBase", [0, -0.08, 0.036]);
-  addMesh(panel, new BoxGeometry(0.08, 0.12, 0.006), mats.bezel, "chartBar0", [-0.1, -0.02, 0.036]);
-  addMesh(panel, new BoxGeometry(0.08, 0.18, 0.006), mats.bezel, "chartBar1", [0.0, 0.01, 0.036]);
-  addMesh(panel, new BoxGeometry(0.08, 0.1, 0.006), mats.bezel, "chartBar2", [0.1, -0.03, 0.036]);
+  addMesh(panel, new BoxGeometry(0.6, 0.36, 0.012), mats.screen, "display", [0, 0.0, 0.04]);
   group.add(panel);
   return group;
 }
 
-function createPeripherals(mats: Mats) {
-  const group = part("peripherals");
-  const deskTopY = 0.765;
+function createLaptop(mats: Mats) {
+  const group = part("laptop");
+  const deskY = 0.09;
+  const base = part("laptopBase");
+  base.position.set(-0.28, deskY, 0.06);
+  base.rotation.set(0, 0.35, 0);
+  addMesh(base, extrudeY(roundedRect(0.48, 0.32, 0.035), 0.028, 0.006), mats.device, "baseShell");
+  addMesh(base, new BoxGeometry(0.36, 0.008, 0.18), mats.propDark, "keyDeck", [0, 0.018, -0.02]);
+  addMesh(base, new BoxGeometry(0.12, 0.006, 0.08), mats.propDark, "trackpad", [0, 0.017, 0.08]);
+
+  const lid = part("laptopLid");
+  lid.position.set(0, 0.02, -0.15);
+  // ~110° open: lid tilts back from base plane
+  lid.rotation.set((-70 * Math.PI) / 180, 0, 0);
+  addMesh(lid, extrudeY(roundedRect(0.48, 0.04, 0.035), 0.3, 0.006), mats.device, "lidShell", [
+    0, 0.0, 0.0,
+  ]);
+  addMesh(lid, new BoxGeometry(0.42, 0.24, 0.01), mats.screen, "lidDisplay", [0, 0.02, 0.022]);
+  base.add(lid);
+  group.add(base);
+  return group;
+}
+
+/** Procedural abstract UI glyphs — no PNG, no readable text, no logos. */
+function createDigitalElements(mats: Mats) {
+  const group = part("digitalElements");
+  const deskY = 0.09;
+
+  const monitorUi = part("monitorUi");
+  monitorUi.position.set(0.28, deskY + 0.38, -0.14);
+  monitorUi.rotation.set(-0.06, 0, 0);
+  // Abstract { / } — block glyphs
+  addMesh(monitorUi, new BoxGeometry(0.035, 0.14, 0.008), mats.accent, "braceL", [
+    -0.12, 0.02, 0.05,
+  ]);
+  addMesh(monitorUi, new BoxGeometry(0.08, 0.035, 0.008), mats.accent, "slash", [0.0, 0.02, 0.05], [
+    0, 0, -0.6,
+  ]);
+  addMesh(monitorUi, new BoxGeometry(0.035, 0.14, 0.008), mats.accent, "braceR", [
+    0.12, 0.02, 0.05,
+  ]);
+  addDigitalBars(monitorUi, mats, [-0.26, 0.05, 0.05], 4, true);
+  addDigitalBars(monitorUi, mats, [0.18, 0.05, 0.05], 4, false);
+  group.add(monitorUi);
+
+  const laptopUi = part("laptopUi");
+  laptopUi.position.set(-0.28, deskY, 0.06);
+  laptopUi.rotation.set(0, 0.35, 0);
+  const lidUi = part("lidUi");
+  lidUi.position.set(0, 0.02, -0.15);
+  lidUi.rotation.set((-70 * Math.PI) / 180, 0, 0);
+  addDigitalBars(lidUi, mats, [-0.14, 0.0, 0.03], 5, false);
+  addMesh(lidUi, new BoxGeometry(0.06, 0.06, 0.008), mats.accentCool, "node", [0.12, 0.06, 0.03]);
+  laptopUi.add(lidUi);
+  group.add(laptopUi);
+
+  return group;
+}
+
+function createHeadphones(mats: Mats) {
+  const group = part("headphones");
+  const deskY = 0.09;
+  group.position.set(-0.15, deskY, 0.28);
+  group.rotation.set(0, 0.4, 0);
+  addMesh(group, new TorusGeometry(0.1, 0.018, 8, 16, Math.PI), mats.propDark, "headband", [
+    0, 0.12, 0,
+  ], [0, 0, 0]);
+  addMesh(group, new SphereGeometry(0.055, 10, 8), mats.propDark, "cupL", [-0.1, 0.05, 0]);
+  addMesh(group, new SphereGeometry(0.055, 10, 8), mats.propDark, "cupR", [0.1, 0.05, 0]);
+  addMesh(group, new CylinderGeometry(0.04, 0.04, 0.02, 10), mats.device, "padL", [-0.1, 0.05, 0.02], [
+    Math.PI / 2, 0, 0,
+  ]);
+  addMesh(group, new CylinderGeometry(0.04, 0.04, 0.02, 10), mats.device, "padR", [0.1, 0.05, 0.02], [
+    Math.PI / 2, 0, 0,
+  ]);
+  return group;
+}
+
+function createMouse(mats: Mats) {
+  const group = part("mouse");
   addMesh(
     group,
-    extrudeY(roundedRect(0.42, 0.16, 0.02), 0.022, 0.003),
-    mats.peripheral,
-    "keyboard",
-    [-0.05, deskTopY, 0.12],
-  );
-  addMesh(
-    group,
-    extrudeY(roundedRect(0.07, 0.11, 0.025), 0.028, 0.004),
-    mats.peripheral,
-    "mouse",
-    [0.28, deskTopY, 0.14],
+    extrudeY(roundedRect(0.06, 0.1, 0.025), 0.028, 0.005),
+    mats.device,
+    "mouseBody",
+    [0.45, 0.09, 0.18],
   );
   return group;
 }
 
 /**
- * Procedural Dry Lab workstation (desk + monitor + peripherals).
- * Chair is intentionally omitted — environment prop later.
+ * Dry Lab digital workstation: desk platform + monitor + laptop (+ headphones).
+ * No readable text / logos / texture UI.
  */
 export function createComputerModel(options?: ComputerModelOptions): ComputerBuild {
-  const { style, source } = { ...DEFAULT_COMPUTER_OPTIONS, ...options };
+  const { style, includeHeadphones } = {
+    ...DEFAULT_COMPUTER_OPTIONS,
+    ...options,
+  };
   void style;
-  void source;
 
   const materials = makeMaterials();
   const group = part("computer");
-  group.add(createDesk(materials));
+  group.add(createDeskPlatform(materials));
   group.add(createMonitor(materials));
-  group.add(createPeripherals(materials));
+  group.add(createLaptop(materials));
+  group.add(createMouse(materials));
+  if (includeHeadphones) group.add(createHeadphones(materials));
+  group.add(createDigitalElements(materials));
 
   const stats = measureGroup(group);
   group.userData.stats = stats;
-  group.userData.options = { style, source };
+  group.userData.options = { style, includeHeadphones };
   return {
     group,
     stats,

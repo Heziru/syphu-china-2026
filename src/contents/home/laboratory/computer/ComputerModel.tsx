@@ -7,17 +7,31 @@ import {
 } from "./createComputerModel";
 
 type Props = {
-  /** Studio origin for future ?labReview=computer. */
   studio?: boolean;
+  source?: "procedural" | "gltf";
+  gltfUrl?: string;
   options?: ComputerModelOptions;
 };
 
 /**
  * R3F entry for the Dry Lab workstation.
- * Swap internals to GLB later via options.source without changing InteractiveObject.
+ * gltf path is reserved; missing assets fall back to procedural.
  */
-export function ComputerModel({ studio = false, options }: Props) {
-  const { group, stats } = useMemo(() => createComputerModel(options), [COMPUTER_REVISION]);
+export function ComputerModel({
+  studio = false,
+  source = "procedural",
+  gltfUrl,
+  options,
+}: Props) {
+  const resolvedSource = source === "gltf" && gltfUrl ? "gltf" : "procedural";
+
+  const { group, stats } = useMemo(() => {
+    if (resolvedSource === "gltf") {
+      // No GLB in repo yet — keep InteractiveObject stable.
+      return createComputerModel(options);
+    }
+    return createComputerModel(options);
+  }, [COMPUTER_REVISION, resolvedSource, options?.includeHeadphones, options?.style]);
 
   useLayoutEffect(() => {
     const host = window as Window & { __COMPUTER_STATS?: ComputerStats };
@@ -27,7 +41,6 @@ export function ComputerModel({ studio = false, options }: Props) {
     };
   }, [stats]);
 
-  // Floor-standing desk under InteractiveObject transform (unlike bench-top microscope).
   void studio;
   return <primitive object={group} position={[0, 0, 0]} />;
 }

@@ -7,7 +7,7 @@ export const LAB_ASSET_MANIFEST = {
   objects: {
     computer: {
       kind: "procedural" as const,
-      note: "Concept Dry Lab workstation: mint desk, black top, monitor, keyboard/mouse (no chair).",
+      note: "Dry Lab digital workstation: wood desk platform, monitor + laptop, abstract screen glyphs, headphones.",
     },
     microscope: {
       kind: "procedural" as const,
