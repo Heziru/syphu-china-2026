@@ -1,5 +1,6 @@
 import { CHAPTERS } from "./chapters";
 import type { LabObjectDef } from "../types/laboratory";
+import { assertMetadataRoute } from "../types/labStation";
 
 export const LAB_OBJECTS: LabObjectDef[] = [
   {
@@ -20,6 +21,15 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     hoverAnim: "highlight",
     clickAnim: "pulse",
     placeholder: "geometry",
+    modelSource: "placeholder",
+    category: "workstation",
+    metadata: {
+      id: "computer",
+      name: "Dry Lab",
+      route: "/model",
+      category: "workstation",
+      description: "Dry lab workstation",
+    },
   },
   {
     id: "microscope",
@@ -39,6 +49,15 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     hoverAnim: "highlight",
     clickAnim: "pulse",
     placeholder: "geometry",
+    modelSource: "procedural",
+    category: "equipment",
+    metadata: {
+      id: "microscope",
+      name: "Wet Lab",
+      route: "/experiments",
+      category: "equipment",
+      description: "Laboratory microscope",
+    },
   },
   {
     id: "researcher",
@@ -58,6 +77,15 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     hoverAnim: "scale",
     clickAnim: "pulse",
     placeholder: "geometry",
+    modelSource: "placeholder",
+    category: "character",
+    metadata: {
+      id: "researcher",
+      name: "Team",
+      route: "/team",
+      category: "character",
+      description: "Laboratory researcher",
+    },
   },
   {
     id: "bookshelf",
@@ -77,6 +105,15 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     hoverAnim: "highlight",
     clickAnim: "pulse",
     placeholder: "geometry",
+    modelSource: "placeholder",
+    category: "archive",
+    metadata: {
+      id: "bookshelf",
+      name: "Human Practices",
+      route: "/human-practices",
+      category: "archive",
+      description: "Archive shelf and interview files",
+    },
   },
   {
     id: "device",
@@ -96,8 +133,21 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     hoverAnim: "highlight",
     clickAnim: "pulse",
     placeholder: "geometry",
+    modelSource: "placeholder",
+    category: "device",
+    metadata: {
+      id: "device",
+      name: "Project",
+      route: "/description",
+      category: "device",
+      description: "Laboratory prototype / bioreactor station",
+    },
   },
 ];
+
+for (const def of LAB_OBJECTS) {
+  assertMetadataRoute(def, CHAPTERS[def.chapterId]);
+}
 
 export function labObjectById(id: string) {
   return LAB_OBJECTS.find((item) => item.id === id);

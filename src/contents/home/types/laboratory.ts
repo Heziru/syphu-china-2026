@@ -30,6 +30,25 @@ export type LabObjectId =
   | "bookshelf"
   | "device";
 
+/** How the station mesh is produced at runtime. */
+export type ModelSource = "procedural" | "gltf" | "placeholder";
+
+export type LabObjectCategory =
+  | "equipment"
+  | "workstation"
+  | "character"
+  | "archive"
+  | "device";
+
+/** Wiki-facing entry metadata (stable id + route); keep route aligned with CHAPTERS. */
+export type LabObjectMetadata = {
+  id: LabObjectId;
+  name: string;
+  route: string;
+  category: LabObjectCategory;
+  description: string;
+};
+
 export type ChapterDef = {
   id: ChapterId;
   path: string;
@@ -53,6 +72,10 @@ export type LabObjectDef = {
   hoverAnim: HoverAnim;
   clickAnim: ClickAnim;
   placeholder: "geometry";
+  /** Scene/data mirror of model registry; InteractiveObject ignores this. */
+  modelSource: ModelSource;
+  category: LabObjectCategory;
+  metadata: LabObjectMetadata;
 };
 
 export type EvidenceStatus =
