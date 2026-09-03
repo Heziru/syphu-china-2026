@@ -14,13 +14,14 @@ import {
 } from "three";
 
 /** Bump when factory geometry changes so the R3F wrapper remounts. */
-export const BIOREACTOR_REVISION = 1;
+export const BIOREACTOR_REVISION = 2;
 
 export const BIOREACTOR_COLORS = {
   shell: "#F0EBE3",
   structure: "#3D4A52",
   glass: "#C8D8DE",
-  culture: "#7EBA8A",
+  /** Coral culture medium — matches benchtop reference. */
+  culture: "#D45A5A",
   darkMotor: "#2C3034",
   accent: "#6FB5A8",
 } as const;
@@ -28,13 +29,16 @@ export const BIOREACTOR_COLORS = {
 export type BioreactorModelOptions = {
   style?: "concept";
   includeTubing?: boolean;
+  /** @deprecated Phase 4.1 — pumps folded into mainBody; ignored. */
   includePumpModules?: boolean;
 };
 
-export const DEFAULT_BIOREACTOR_OPTIONS: Required<BioreactorModelOptions> = {
+export const DEFAULT_BIOREACTOR_OPTIONS: Required<
+  Omit<BioreactorModelOptions, "includePumpModules">
+> & { includePumpModules: boolean } = {
   style: "concept",
   includeTubing: true,
-  includePumpModules: true,
+  includePumpModules: false,
 };
 
 export type BioreactorStats = {
@@ -51,6 +55,13 @@ export type BioreactorBuild = {
 };
 
 type Mats = ReturnType<typeof makeMaterials>;
+
+/** Outer vessel diameter — hero scale. */
+const D = 0.58;
+const VESSEL_H = D * 1.8;
+const VESSEL_X = 0.0;
+const VESSEL_Z = 0.12;
+const STAND_Y = 0.0;
 
 function roundedRect(width: number, height: number, radius: number): Shape {
   const hw = width * 0.5;
@@ -112,10 +123,10 @@ function makeMaterials() {
   const structure = new MeshToonMaterial({ color: BIOREACTOR_COLORS.structure });
   const glass = new MeshStandardMaterial({
     color: BIOREACTOR_COLORS.glass,
-    roughness: 0.25,
+    roughness: 0.28,
     metalness: 0.02,
     transparent: true,
-    opacity: 0.42,
+    opacity: 0.4,
     depthWrite: false,
   });
   const culture = new MeshToonMaterial({ color: BIOREACTOR_COLORS.culture });
@@ -159,241 +170,298 @@ export function measureGroup(root: Group): BioreactorStats {
   };
 }
 
-/** Shared layout: chamber forward, control body aft. */
-const D = 0.42;
-const CHAMBER_H = 0.78;
-const CHAMBER_X = -0.12;
-const CHAMBER_Z = 0.08;
-const BASE_Y = 0;
+function createVesselStand(mats: Mats) {
+  const group = part("vesselStand");
+  const r = D * 0.55;
 
-function createBase(mats: Mats) {
-  const group = part("base");
   addMesh(
     group,
-    extrudeY(roundedRect(0.95, 0.62, 0.1), 0.07, 0.014),
+    new CylinderGeometry(r, r * 1.05, 0.04, 20),
     mats.structure,
-    "baseSlab",
-    [0.02, BASE_Y, 0.02],
+    "roundBase",
+    [VESSEL_X, STAND_Y + 0.02, VESSEL_Z],
   );
-  // Neck ring around chamber
+
+  const colH = VESSEL_H * 0.55;
+  const colY = STAND_Y + 0.04 + colH * 0.5;
+  const colX = D * 0.42;
   addMesh(
     group,
-    new TorusGeometry(D * 0.52, 0.022, 8, 20),
+    new CylinderGeometry(0.018, 0.018, colH, 8),
     mats.structure,
-    "neckRing",
-    [CHAMBER_X, BASE_Y + 0.62, CHAMBER_Z],
+    "supportColumnL",
+    [VESSEL_X - colX, colY, VESSEL_Z],
+  );
+  addMesh(
+    group,
+    new CylinderGeometry(0.018, 0.018, colH, 8),
+    mats.structure,
+    "supportColumnR",
+    [VESSEL_X + colX, colY, VESSEL_Z],
+  );
+
+  const ringY = STAND_Y + 0.04 + VESSEL_H * 0.48;
+  addMesh(
+    group,
+    new TorusGeometry(D * 0.52, 0.02, 8, 24),
+    mats.structure,
+    "clampRing",
+    [VESSEL_X, ringY, VESSEL_Z],
     [Math.PI / 2, 0, 0],
-  );
-  addMesh(
-    group,
-    new CylinderGeometry(0.02, 0.02, 0.55, 8),
-    mats.structure,
-    "supportRod",
-    [CHAMBER_X + D * 0.55, BASE_Y + 0.34, CHAMBER_Z],
   );
   return group;
 }
 
-function createCultureChamber(mats: Mats) {
-  const group = part("cultureChamber");
+function createCultureVessel(mats: Mats) {
+  const group = part("cultureVessel");
   const wallR = D * 0.5;
-  const liquidH = CHAMBER_H * 0.4;
-  const y0 = BASE_Y + 0.07;
+  const y0 = STAND_Y + 0.04;
+  const liquidH = VESSEL_H * 0.34;
 
+  // Thick-wall feel: outer open cylinder + slightly smaller opaque floor
   addMesh(
     group,
-    new CylinderGeometry(wallR, wallR, CHAMBER_H, 16, 1, true),
+    new CylinderGeometry(wallR, wallR, VESSEL_H, 18, 1, true),
     mats.glass,
-    "chamberWall",
-    [CHAMBER_X, y0 + CHAMBER_H * 0.5, CHAMBER_Z],
+    "glassShell",
+    [VESSEL_X, y0 + VESSEL_H * 0.5, VESSEL_Z],
   );
-  // Closed bottom disk (slightly opaque glass)
   addMesh(
     group,
-    new CylinderGeometry(wallR * 0.98, wallR * 0.98, 0.03, 16),
+    new CylinderGeometry(wallR * 0.96, wallR * 0.96, 0.035, 16),
     mats.structure,
-    "chamberFloor",
-    [CHAMBER_X, y0 + 0.02, CHAMBER_Z],
+    "vesselFloor",
+    [VESSEL_X, y0 + 0.02, VESSEL_Z],
   );
-  // Opaque culture liquid — primary biological identity
   addMesh(
     group,
-    new CylinderGeometry(wallR * 0.9, wallR * 0.9, liquidH, 14),
+    new CylinderGeometry(wallR * 0.88, wallR * 0.88, liquidH, 16),
     mats.culture,
     "cultureLiquid",
-    [CHAMBER_X, y0 + liquidH * 0.5 + 0.03, CHAMBER_Z],
+    [VESSEL_X, y0 + liquidH * 0.5 + 0.04, VESSEL_Z],
   );
-  // Stirrer shaft + paddle (static)
+
+  const impeller = part("impeller");
+  const shaftH = VESSEL_H * 0.88;
   addMesh(
-    group,
-    new CylinderGeometry(0.018, 0.018, CHAMBER_H * 0.85, 8),
+    impeller,
+    new CylinderGeometry(0.022, 0.022, shaftH, 8),
     mats.shell,
-    "stirrerShaft",
-    [CHAMBER_X, y0 + CHAMBER_H * 0.42, CHAMBER_Z],
+    "shaft",
+    [VESSEL_X, y0 + shaftH * 0.5 + 0.02, VESSEL_Z],
   );
   addMesh(
-    group,
-    new BoxGeometry(0.14, 0.02, 0.04),
+    impeller,
+    new BoxGeometry(0.2, 0.025, 0.05),
     mats.shell,
-    "paddle",
-    [CHAMBER_X, y0 + 0.12, CHAMBER_Z],
+    "bladeA",
+    [VESSEL_X, y0 + 0.11, VESSEL_Z],
   );
+  addMesh(
+    impeller,
+    new BoxGeometry(0.05, 0.025, 0.18),
+    mats.shell,
+    "bladeB",
+    [VESSEL_X, y0 + 0.11, VESSEL_Z],
+  );
+  group.add(impeller);
   return group;
 }
 
 function createHeadplate(mats: Mats) {
   const group = part("headplate");
-  const y = BASE_Y + 0.07 + CHAMBER_H;
+  const y = STAND_Y + 0.04 + VESSEL_H;
   addMesh(
     group,
-    new CylinderGeometry(D * 0.56, D * 0.56, 0.1, 16),
+    new CylinderGeometry(D * 0.58, D * 0.58, 0.11, 18),
     mats.shell,
     "cap",
-    [CHAMBER_X, y + 0.05, CHAMBER_Z],
+    [VESSEL_X, y + 0.055, VESSEL_Z],
   );
-  // Port stubs (no logos / text)
   addMesh(
     group,
-    new CylinderGeometry(0.028, 0.028, 0.08, 8),
+    new CylinderGeometry(0.03, 0.03, 0.09, 8),
     mats.structure,
     "portA",
-    [CHAMBER_X - 0.1, y + 0.14, CHAMBER_Z + 0.06],
+    [VESSEL_X - 0.14, y + 0.14, VESSEL_Z + 0.08],
   );
   addMesh(
     group,
-    new CylinderGeometry(0.022, 0.022, 0.1, 8),
+    new CylinderGeometry(0.026, 0.026, 0.11, 8),
     mats.structure,
     "portB",
-    [CHAMBER_X + 0.08, y + 0.15, CHAMBER_Z - 0.05],
+    [VESSEL_X + 0.12, y + 0.15, VESSEL_Z - 0.06],
+  );
+  addMesh(
+    group,
+    new CylinderGeometry(0.022, 0.022, 0.08, 8),
+    mats.structure,
+    "portC",
+    [VESSEL_X + 0.05, y + 0.13, VESSEL_Z + 0.12],
   );
   return group;
 }
 
-function createDriveMotor(mats: Mats) {
-  const group = part("driveMotor");
-  const y = BASE_Y + 0.07 + CHAMBER_H + 0.1;
+function createControlHead(mats: Mats) {
+  const group = part("controlHead");
+  const yCap = STAND_Y + 0.04 + VESSEL_H + 0.11;
   addMesh(
     group,
-    extrudeY(roundedRect(0.16, 0.14, 0.03), 0.22, 0.01),
+    new CylinderGeometry(0.07, 0.08, 0.08, 12),
+    mats.shell,
+    "whiteNeck",
+    [VESSEL_X, yCap + 0.04, VESSEL_Z],
+  );
+  const motorH = D * 0.58;
+  addMesh(
+    group,
+    extrudeY(roundedRect(0.2, 0.17, 0.035), motorH, 0.012),
     mats.darkMotor,
-    "motorBlock",
-    [CHAMBER_X, y, CHAMBER_Z],
+    "darkMotor",
+    [VESSEL_X, yCap + 0.08, VESSEL_Z],
   );
   addMesh(
     group,
-    new CylinderGeometry(0.04, 0.045, 0.04, 10),
+    new CylinderGeometry(0.045, 0.05, 0.045, 10),
     mats.darkMotor,
-    "motorHub",
-    [CHAMBER_X, y + 0.24, CHAMBER_Z],
+    "motorCap",
+    [VESSEL_X, yCap + 0.08 + motorH + 0.02, VESSEL_Z],
   );
   return group;
 }
 
+/** Inlet + outlet only — connect vessel headplate toward mainBody. */
 function createTubing(mats: Mats) {
   const group = part("tubing");
-  const yCap = BASE_Y + 0.07 + CHAMBER_H + 0.12;
-  // Thick short arcs — few tubes only
-  addMesh(
-    group,
-    new TorusGeometry(0.16, 0.022, 6, 12, Math.PI * 0.85),
-    mats.accent,
-    "tubeA",
-    [CHAMBER_X + 0.12, yCap + 0.08, CHAMBER_Z + 0.1],
-    [0.4, 0.6, 0.2],
-  );
-  addMesh(
-    group,
-    new TorusGeometry(0.14, 0.02, 6, 12, Math.PI * 0.7),
-    mats.glass,
-    "tubeB",
-    [CHAMBER_X - 0.05, yCap + 0.06, CHAMBER_Z + 0.14],
-    [-0.3, -0.5, 0.1],
-  );
-  addMesh(
-    group,
-    new CylinderGeometry(0.02, 0.02, 0.28, 8),
-    mats.accent,
-    "tubeDrop",
-    [0.22, 0.55, 0.12],
-    [0.5, 0, 0.3],
-  );
-  return group;
-}
+  const yPort = STAND_Y + 0.04 + VESSEL_H + 0.18;
 
-function createPumpModules(mats: Mats) {
-  const group = part("pumpModules");
+  // Inlet: rises from headplate, arcs aft toward control cabinet
   addMesh(
     group,
-    extrudeY(roundedRect(0.16, 0.14, 0.03), 0.12, 0.008),
-    mats.shell,
-    "pumpA",
-    [0.28, BASE_Y + 0.07, 0.18],
-  );
-  addMesh(
-    group,
-    extrudeY(roundedRect(0.12, 0.1, 0.025), 0.1, 0.006),
-    mats.shell,
-    "pumpB",
-    [0.34, BASE_Y + 0.07, -0.02],
-  );
-  addMesh(
-    group,
-    new SphereGeometry(0.025, 8, 8),
+    new TorusGeometry(0.18, 0.028, 6, 14, Math.PI * 0.9),
     mats.accent,
-    "pumpAccent",
-    [0.28, BASE_Y + 0.2, 0.18],
+    "inletTube",
+    [VESSEL_X + 0.16, yPort + 0.1, VESSEL_Z - 0.02],
+    [0.15, 1.1, 0.35],
+  );
+  addMesh(
+    group,
+    new BoxGeometry(0.06, 0.05, 0.06),
+    mats.shell,
+    "inletFitting",
+    [VESSEL_X + 0.22, yPort + 0.02, VESSEL_Z + 0.05],
+  );
+
+  // Outlet: shorter path from port toward mainBody front-top
+  addMesh(
+    group,
+    new TorusGeometry(0.15, 0.026, 6, 12, Math.PI * 0.75),
+    mats.glass,
+    "outletTube",
+    [VESSEL_X - 0.08, yPort + 0.06, VESSEL_Z - 0.08],
+    [-0.2, -0.9, 0.4],
+  );
+  addMesh(
+    group,
+    new CylinderGeometry(0.024, 0.024, 0.22, 8),
+    mats.accent,
+    "outletDrop",
+    [0.2, 0.72, -0.08],
+    [0.85, 0.1, 0.2],
   );
   return group;
 }
 
 function createMainBody(mats: Mats) {
   const group = part("mainBody");
+  // Large cabinet behind the vessel
+  const bodyX = 0.08;
+  const bodyZ = -0.28;
   addMesh(
     group,
-    extrudeY(roundedRect(0.48, 0.36, 0.06), 0.42, 0.016),
+    extrudeY(roundedRect(D * 1.35, D * 0.7, 0.08), D * 1.05, 0.02),
     mats.shell,
-    "controlBox",
-    [0.28, BASE_Y + 0.07, -0.12],
+    "cabinet",
+    [bodyX, STAND_Y + 0.04, bodyZ],
   );
-  // Blank screen slab — no text / UI glyphs
+
+  // Front panel recess + blank screen + button dots (no text)
   addMesh(
     group,
-    new BoxGeometry(0.22, 0.12, 0.02),
+    new BoxGeometry(D * 0.7, D * 0.55, 0.03),
+    mats.structure,
+    "frontPanel",
+    [bodyX, STAND_Y + 0.04 + D * 0.55, bodyZ + D * 0.34],
+  );
+  addMesh(
+    group,
+    new BoxGeometry(D * 0.38, D * 0.22, 0.025),
     mats.darkMotor,
     "screenBezel",
-    [0.28, BASE_Y + 0.42, 0.05],
+    [bodyX - 0.05, STAND_Y + 0.04 + D * 0.72, bodyZ + D * 0.36],
   );
   addMesh(
     group,
-    new BoxGeometry(0.18, 0.09, 0.012),
+    new BoxGeometry(D * 0.32, D * 0.17, 0.016),
     mats.accent,
     "screenFace",
-    [0.28, BASE_Y + 0.42, 0.06],
+    [bodyX - 0.05, STAND_Y + 0.04 + D * 0.72, bodyZ + D * 0.375],
+  );
+
+  const btnY = STAND_Y + 0.04 + D * 0.42;
+  const btnZ = bodyZ + D * 0.37;
+  addMesh(group, new SphereGeometry(0.028, 8, 8), mats.accent, "btn0", [
+    bodyX + 0.18,
+    btnY + 0.08,
+    btnZ,
+  ]);
+  addMesh(group, new SphereGeometry(0.028, 8, 8), mats.darkMotor, "btn1", [
+    bodyX + 0.18,
+    btnY,
+    btnZ,
+  ]);
+  addMesh(group, new SphereGeometry(0.028, 8, 8), mats.accent, "btn2", [
+    bodyX + 0.18,
+    btnY - 0.08,
+    btnZ,
+  ]);
+
+  // Side pump strip hint (replaces separate pumpModules)
+  addMesh(
+    group,
+    extrudeY(roundedRect(0.1, 0.14, 0.025), 0.35, 0.008),
+    mats.darkMotor,
+    "sideStrip",
+    [bodyX + D * 0.62, STAND_Y + 0.2, bodyZ + 0.05],
   );
   return group;
 }
 
 /**
- * Desktop bioreactor / prototype station (runtime id: device).
- * Transparent chamber + opaque culture liquid; no logos / text / particles.
+ * Desktop bioreactor (runtime id: device).
+ * Phase 4.1: benchtop silhouette — vessel stand + tall control head + aft cabinet.
  */
 export function createBioreactorModel(options?: BioreactorModelOptions): BioreactorBuild {
   const opts = { ...DEFAULT_BIOREACTOR_OPTIONS, ...options };
   void opts.style;
+  void opts.includePumpModules;
 
   const materials = makeMaterials();
   const group = part("bioreactor");
-  group.add(createBase(materials));
-  group.add(createCultureChamber(materials));
+  group.add(createVesselStand(materials));
+  group.add(createCultureVessel(materials));
   group.add(createHeadplate(materials));
-  group.add(createDriveMotor(materials));
+  group.add(createControlHead(materials));
   if (opts.includeTubing) group.add(createTubing(materials));
-  if (opts.includePumpModules) group.add(createPumpModules(materials));
   group.add(createMainBody(materials));
 
   const stats = measureGroup(group);
   group.userData.stats = stats;
-  group.userData.options = opts;
+  group.userData.options = {
+    style: opts.style,
+    includeTubing: opts.includeTubing,
+    includePumpModules: false,
+  };
   return {
     group,
     stats,
