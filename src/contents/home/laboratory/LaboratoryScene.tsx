@@ -11,6 +11,8 @@ import type { LabReviewAsset } from "./labReview";
 import { Lighting } from "./Lighting";
 import { MicroscopeModel } from "./microscope/MicroscopeModel";
 import type { MicroscopeReviewView } from "./microscope/reviewShots";
+import { LaminarHoodModel } from "./laminar-hood/LaminarHoodModel";
+import type { LaminarHoodReviewView } from "./laminar-hood/reviewShots";
 import { AnalyticalBalanceModel } from "./analytical-balance/AnalyticalBalanceModel";
 import type { AnalyticalBalanceReviewView } from "./analytical-balance/reviewShots";
 import { GlasswareStationModel } from "./glassware-station/GlasswareStationModel";
@@ -26,7 +28,8 @@ type ReviewView =
   | BioreactorReviewView
   | ResearcherReviewView
   | GlasswareStationReviewView
-  | AnalyticalBalanceReviewView;
+  | AnalyticalBalanceReviewView
+  | LaminarHoodReviewView;
 
 type Props = {
   mobile: boolean;
@@ -70,6 +73,8 @@ export function LaboratoryScene({
           <GlasswareStationModel studio />
         ) : reviewAsset === "analytical-balance" ? (
           <AnalyticalBalanceModel studio />
+        ) : reviewAsset === "laminar-hood" ? (
+          <LaminarHoodModel studio />
         ) : (
           <MicroscopeModel studio />
         )}

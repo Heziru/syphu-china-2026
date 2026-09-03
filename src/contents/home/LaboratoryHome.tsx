@@ -46,6 +46,11 @@ const AnalyticalBalanceReviewHud = lazy(() =>
     default: mod.AnalyticalBalanceReviewHud,
   })),
 );
+const LaminarHoodReviewHud = lazy(() =>
+  import("./laboratory/laminar-hood/LaminarHoodReviewHud").then((mod) => ({
+    default: mod.LaminarHoodReviewHud,
+  })),
+);
 
 export function LaboratoryHome() {
   const navigate = useNavigate();
@@ -151,6 +156,10 @@ export function LaboratoryHome() {
       ) : review && reviewAsset === "analytical-balance" ? (
         <Suspense fallback={null}>
           <AnalyticalBalanceReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "laminar-hood" ? (
+        <Suspense fallback={null}>
+          <LaminarHoodReviewHud view={reviewView} onView={setReviewView} />
         </Suspense>
       ) : (
         <div className="lab-hud">
