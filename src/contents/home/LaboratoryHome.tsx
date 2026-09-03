@@ -31,6 +31,11 @@ const BioreactorReviewHud = lazy(() =>
     default: mod.BioreactorReviewHud,
   })),
 );
+const ResearcherReviewHud = lazy(() =>
+  import("./laboratory/researcher/ResearcherReviewHud").then((mod) => ({
+    default: mod.ResearcherReviewHud,
+  })),
+);
 
 export function LaboratoryHome() {
   const navigate = useNavigate();
@@ -124,6 +129,10 @@ export function LaboratoryHome() {
       ) : review && reviewAsset === "bioreactor" ? (
         <Suspense fallback={null}>
           <BioreactorReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "researcher" ? (
+        <Suspense fallback={null}>
+          <ResearcherReviewHud view={reviewView} onView={setReviewView} />
         </Suspense>
       ) : (
         <div className="lab-hud">

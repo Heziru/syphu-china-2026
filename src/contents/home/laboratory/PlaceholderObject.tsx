@@ -3,6 +3,7 @@ import { LAB_COLORS } from "./labPalette";
 import { BioreactorModel } from "./bioreactor/BioreactorModel";
 import { ComputerModel } from "./computer/ComputerModel";
 import { MicroscopeModel } from "./microscope/MicroscopeModel";
+import { ResearcherModel } from "./researcher/ResearcherModel";
 
 type Props = { id: LabObjectId };
 
@@ -13,7 +14,7 @@ export function PlaceholderObject({ id }: Props) {
     case "microscope":
       return <MicroscopeModel />;
     case "researcher":
-      return <ResearcherMesh />;
+      return <ResearcherModel />;
     case "bookshelf":
       return <BookshelfMesh />;
     case "device":
@@ -21,25 +22,6 @@ export function PlaceholderObject({ id }: Props) {
     default:
       return null;
   }
-}
-
-function ResearcherMesh() {
-  return (
-    <group>
-      <mesh position={[0, 1.38, 0]} castShadow>
-        <sphereGeometry args={[0.22, 16, 16]} />
-        <meshStandardMaterial color="#E7D3C4" roughness={0.7} />
-      </mesh>
-      <mesh position={[0, 0.82, 0]} castShadow>
-        <cylinderGeometry args={[0.24, 0.28, 0.72, 12]} />
-        <meshStandardMaterial color={LAB_COLORS.teal} roughness={0.55} />
-      </mesh>
-      <mesh position={[0, 0.22, 0]} castShadow>
-        <boxGeometry args={[0.42, 0.4, 0.28]} />
-        <meshStandardMaterial color={LAB_COLORS.dark} />
-      </mesh>
-    </group>
-  );
 }
 
 function BookshelfMesh() {

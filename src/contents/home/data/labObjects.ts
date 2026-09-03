@@ -77,7 +77,7 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     hoverAnim: "scale",
     clickAnim: "pulse",
     placeholder: "geometry",
-    modelSource: "placeholder",
+    modelSource: "procedural",
     category: "character",
     metadata: {
       id: "researcher",

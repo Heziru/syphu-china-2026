@@ -1,7 +1,8 @@
 import type { LabObjectId } from "../types/laboratory";
 
 /** Review keys may use design asset names (e.g. bioreactor) while runtime id stays device. */
-export type LabReviewAsset = Extract<LabObjectId, "microscope" | "computer"> | "bioreactor";
+export type LabReviewAsset =
+  Extract<LabObjectId, "microscope" | "computer" | "researcher"> | "bioreactor";
 export type LabReviewView = "ref" | "side" | "back";
 
 export type LabReviewState = {
@@ -18,7 +19,12 @@ export function readLabReviewState(): LabReviewState {
   const params = new URLSearchParams(window.location.search);
   const raw = params.get("labReview");
   const asset =
-    raw === "microscope" || raw === "computer" || raw === "bioreactor" ? raw : null;
+    raw === "microscope" ||
+    raw === "computer" ||
+    raw === "bioreactor" ||
+    raw === "researcher"
+      ? raw
+      : null;
   const viewParam = params.get("view");
   const view: LabReviewView =
     viewParam === "side" || viewParam === "back" ? viewParam : "ref";

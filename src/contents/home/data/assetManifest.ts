@@ -13,7 +13,10 @@ export const LAB_ASSET_MANIFEST = {
       kind: "procedural" as const,
       note: "Reference-matched procedural compound microscope: horseshoe base, C-arm, monocular tube, turret, stage, coaxial knobs.",
     },
-    researcher: { kind: "placeholder" as const, note: "基础几何体占位，不是角色资产。" },
+    researcher: {
+      kind: "procedural" as const,
+      note: "Stylized lab researcher: open warm-white coat, bun hair, clipboard; Team station.",
+    },
     bookshelf: { kind: "placeholder" as const, note: "灰模对照，尚未精修。" },
     device: {
       kind: "procedural" as const,

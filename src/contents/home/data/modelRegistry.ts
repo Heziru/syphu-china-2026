@@ -1,11 +1,14 @@
 import { createBioreactorModel, type BioreactorBuild } from "../laboratory/bioreactor/createBioreactorModel";
 import { createComputerModel, type ComputerBuild } from "../laboratory/computer/createComputerModel";
 import { createMicroscopeModel, type MicroscopeBuild } from "../laboratory/microscope/createMicroscopeModel";
+import { createResearcherModel, type ResearcherBuild } from "../laboratory/researcher/createResearcherModel";
 import type { LabObjectId, ModelSource } from "../types/laboratory";
 import type { LabStationContract, ProceduralModelBuild } from "../types/labStation";
 
 export type LabModelRegistryEntry = Pick<
-  LabStationContract<ProceduralModelBuild | MicroscopeBuild | ComputerBuild | BioreactorBuild>,
+  LabStationContract<
+    ProceduralModelBuild | MicroscopeBuild | ComputerBuild | BioreactorBuild | ResearcherBuild
+  >,
   "modelSource" | "createModel" | "gltfUrl"
 > & {
   id: LabObjectId;
@@ -28,7 +31,8 @@ export const MODEL_REGISTRY: Record<LabObjectId, LabModelRegistryEntry> = {
   },
   researcher: {
     id: "researcher",
-    modelSource: "placeholder",
+    modelSource: "procedural",
+    createModel: () => createResearcherModel(),
   },
   bookshelf: {
     id: "bookshelf",
