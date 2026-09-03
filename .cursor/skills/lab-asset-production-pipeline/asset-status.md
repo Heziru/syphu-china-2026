@@ -7,6 +7,7 @@ Update this file after Phase 6 Acceptance for each asset.
 
 - microscope
 - computer
+- bioreactor
 
 ### computer (approved)
 
@@ -31,14 +32,44 @@ Accepted design decisions (Phase 6):
 Production wiring: `PlaceholderObject` → `ComputerModel` → `InteractiveObject` → `/model`.
 Review remains available at `?labReview=computer` (does not block production).
 
+### bioreactor (approved)
+
+| field | value |
+| --- | --- |
+| id | bioreactor |
+| runtime | device |
+| route | /description |
+| category | device |
+| revision | 6 |
+| status | approved |
+| tris | 1140 |
+| materials | 6 |
+| meshes | 30 |
+| FPS | 61 |
+| draw calls | 60 |
+
+Accepted design decisions (Phase 6):
+
+- BioFlo 类 benchtop controller silhouette
+- white rounded industrial shell
+- top screen + vertical three blue pumps
+- side ports retained
+- low-poly warm cartoon style
+- no branding / no readable text
+- procedural model preferred over external GLB
+
+Phase 5.3 review evidence: 3/4 + side + back; Silhouette 8/10, Functional identity 8/10, Industrial feel 8/10.
+
+Production wiring: `device` → `InteractiveObject` → `PlaceholderObject` → `BioreactorModel` → `/description`.
+Review remains available at `?labReview=bioreactor` (does not block production).
+
 ## pending
 
-- bioreactor (Phase 4 Implementation done — awaiting Phase 5 Review)
 - researcher
 - bookshelf
 
 ## notes
 
-- Scene id for bioreactor / prototype station is currently `device` in `LAB_OBJECTS` (design asset: bioreactor).
+- Scene id for bioreactor / prototype station is `device` in `LAB_OBJECTS` (design asset: bioreactor).
 - Microscope: procedural `concept` style shipped; visual polish may continue under the same id.
 - Never mark complete without review evidence (tris/materials + 3/4/side/back).
