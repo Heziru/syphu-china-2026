@@ -1,8 +1,10 @@
 import {
   BoxGeometry,
+  BufferGeometry,
   CanvasTexture,
   CylinderGeometry,
   DoubleSide,
+  Float32BufferAttribute,
   Group,
   Mesh,
   MeshPhysicalMaterial,
@@ -11,24 +13,24 @@ import {
   PlaneGeometry,
   SRGBColorSpace,
   TorusGeometry,
-  type BufferGeometry,
+  type BufferGeometry as BufferGeometryType,
   type Material,
 } from "three";
 
-export const LAMINAR_HOOD_REVISION = 1;
+export const LAMINAR_HOOD_REVISION = 4;
 
 export const LAMINAR_HOOD_COLORS = {
-  shell: "#F0F2F4",
+  shell: "#F2F4F6",
   blue: "#2F6FB8",
-  steel: "#B4BCC4",
-  worktop: "#6E757D",
-  glass: "#E8F2F8",
+  steel: "#8E9DAA",
+  worktop: "#6A737A",
+  glass: "#C8DCE8",
   duct: "#9AA5AE",
-  dark: "#3C4248",
+  dark: "#2E3338",
   outlet: "#3E84C8",
   warning: "#F1C40F",
   wheel: "#2E2E2E",
-  pedal: "#C0392B",
+  logo: "#1A6B8C",
 } as const;
 
 export type LaminarHoodStats = {
@@ -46,6 +48,29 @@ export type LaminarHoodBuild = {
 
 type Mats = ReturnType<typeof makeMaterials>;
 
+const H = 0.88;
+const WB = 0.44;
+const WT = 0.26;
+const DB = 0.36;
+const DT = 0.2;
+const FLOOR_Y = 0.14;
+const GLASS_TOP = 0.5;
+const CONTROL_BOTTOM = 0.5;
+const CONTROL_TOP = 0.62;
+const LOGO_TOP = H;
+
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
+
+function widthAt(y: number) {
+  return lerp(WB, WT, y / H);
+}
+
+function depthAt(y: number) {
+  return lerp(DB, DT, y / H);
+}
+
 function part(name: string): Group {
   const g = new Group();
   g.name = name;
@@ -54,7 +79,7 @@ function part(name: string): Group {
 
 function addMesh(
   parent: Group,
-  geometry: BufferGeometry,
+  geometry: BufferGeometryType,
   material: Material,
   name: string,
   position?: [number, number, number],
@@ -72,71 +97,136 @@ function addMesh(
   return mesh;
 }
 
-function makeDisplayMaterial(): MeshStandardMaterial {
+function quad(
+  a: [number, number, number],
+  b: [number, number, number],
+  c: [number, number, number],
+  d: [number, number, number],
+): BufferGeometry {
+  const geo = new BufferGeometry();
+  const verts = new Float32Array([...a, ...b, ...c, ...d]);
+  geo.setAttribute("position", new Float32BufferAttribute(verts, 3));
+  geo.setIndex([0, 1, 2, 0, 2, 3]);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+function makeLogoPanelMaterial(): MeshStandardMaterial {
   if (typeof document === "undefined") {
-    const m = new MeshStandardMaterial({ color: "#8AAFC8", emissive: "#4A7898", emissiveIntensity: 0.3 });
-    m.name = "screen";
+    const m = new MeshStandardMaterial({ color: LAMINAR_HOOD_COLORS.shell });
+    m.name = "logoPanel";
     return m;
   }
   const canvas = document.createElement("canvas");
-  canvas.width = 128;
-  canvas.height = 96;
+  canvas.width = 480;
+  canvas.height = 120;
   const ctx = canvas.getContext("2d");
   if (ctx) {
-    ctx.fillStyle = "#8CB4CC";
+    ctx.fillStyle = LAMINAR_HOOD_COLORS.shell;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#102030";
-    ctx.font = "600 22px monospace";
-    ctx.textAlign = "center";
+    ctx.fillStyle = LAMINAR_HOOD_COLORS.logo;
+    ctx.font = "700 34px Arial, sans-serif";
+    ctx.textAlign = "left";
     ctx.textBaseline = "middle";
-    ctx.fillText("ON", canvas.width * 0.5, canvas.height * 0.45);
+    ctx.fillText("LABTRON", 18, canvas.height * 0.5);
+    ctx.beginPath();
+    ctx.arc(190, canvas.height * 0.5, 10, 0, Math.PI * 2);
+    ctx.fill();
   }
   const tex = new CanvasTexture(canvas);
   tex.colorSpace = SRGBColorSpace;
-  const screen = new MeshStandardMaterial({
+  const mat = new MeshStandardMaterial({ map: tex, roughness: 0.55, metalness: 0.02 });
+  mat.name = "logoPanel";
+  return mat;
+}
+
+function makeControlPanelMaterial(): MeshStandardMaterial {
+  if (typeof document === "undefined") {
+    const m = new MeshStandardMaterial({ color: LAMINAR_HOOD_COLORS.blue });
+    m.name = "controlPanel";
+    return m;
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = 720;
+  canvas.height = 140;
+  const ctx = canvas.getContext("2d");
+  if (ctx) {
+    ctx.fillStyle = LAMINAR_HOOD_COLORS.blue;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "rgba(0,0,0,0.18)";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(3, 3, canvas.width - 6, canvas.height - 6);
+
+    const lcdW = 168;
+    const lcdH = 52;
+    const lcdX = canvas.width * 0.5 - lcdW * 0.5;
+    ctx.fillStyle = "#1A2838";
+    ctx.fillRect(lcdX - 4, 18, lcdW + 8, lcdH + 8);
+    ctx.fillStyle = "#9CB8CC";
+    ctx.fillRect(lcdX, 22, lcdW, lcdH);
+    ctx.fillStyle = "#0B1520";
+    ctx.font = "700 28px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("ON", canvas.width * 0.5, 48);
+
+    const btnXs = [0.18, 0.28, 0.38, 0.62, 0.72, 0.82];
+    btnXs.forEach((t) => {
+      const cx = canvas.width * t;
+      ctx.beginPath();
+      ctx.arc(cx, 102, 13, 0, Math.PI * 2);
+      ctx.fillStyle = "#2A3038";
+      ctx.fill();
+      ctx.strokeStyle = "#E8ECF0";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+  }
+  const tex = new CanvasTexture(canvas);
+  tex.colorSpace = SRGBColorSpace;
+  const mat = new MeshStandardMaterial({
     map: tex,
-    emissiveMap: tex,
-    emissive: "#5088A8",
-    emissiveIntensity: 0.35,
-    roughness: 0.3,
+    roughness: 0.42,
+    metalness: 0.06,
   });
-  screen.name = "screen";
-  return screen;
+  mat.name = "controlPanel";
+  return mat;
 }
 
 function makeMaterials() {
   const shell = new MeshToonMaterial({ color: LAMINAR_HOOD_COLORS.shell });
-  const blue = new MeshToonMaterial({ color: LAMINAR_HOOD_COLORS.blue });
+  const logoPanel = makeLogoPanelMaterial();
   const steel = new MeshStandardMaterial({
     color: LAMINAR_HOOD_COLORS.steel,
-    roughness: 0.38,
-    metalness: 0.62,
+    roughness: 0.22,
+    metalness: 0.78,
   });
   const worktop = new MeshStandardMaterial({
     color: LAMINAR_HOOD_COLORS.worktop,
-    roughness: 0.55,
-    metalness: 0.25,
+    roughness: 0.38,
+    metalness: 0.42,
   });
   const glass = new MeshPhysicalMaterial({
     color: LAMINAR_HOOD_COLORS.glass,
     transmission: 0.78,
     transparent: true,
     opacity: 0.88,
-    roughness: 0.06,
-    thickness: 0.01,
+    roughness: 0.03,
+    metalness: 0,
+    thickness: 0.016,
+    ior: 1.48,
     side: DoubleSide,
-    depthWrite: true,
+    depthWrite: false,
   });
   const duct = new MeshToonMaterial({ color: LAMINAR_HOOD_COLORS.duct });
   const dark = new MeshToonMaterial({ color: LAMINAR_HOOD_COLORS.dark });
   const outlet = new MeshToonMaterial({ color: LAMINAR_HOOD_COLORS.outlet });
   const warning = new MeshToonMaterial({ color: LAMINAR_HOOD_COLORS.warning });
   const wheel = new MeshToonMaterial({ color: LAMINAR_HOOD_COLORS.wheel });
-  const pedal = new MeshToonMaterial({ color: LAMINAR_HOOD_COLORS.pedal });
-  const screen = makeDisplayMaterial();
+  const controlPanel = makeControlPanelMaterial();
 
   shell.name = "shell";
-  blue.name = "blue";
+  logoPanel.name = "logoPanel";
   steel.name = "steel";
   worktop.name = "worktop";
   glass.name = "glass";
@@ -145,14 +235,310 @@ function makeMaterials() {
   outlet.name = "outlet";
   warning.name = "warning";
   wheel.name = "wheel";
-  pedal.name = "pedal";
-  return { shell, blue, steel, worktop, glass, duct, dark, outlet, warning, wheel, pedal, screen };
+  controlPanel.name = "controlPanel";
+  return { shell, logoPanel, steel, worktop, glass, duct, dark, outlet, warning, wheel, controlPanel };
+}
+
+function buildTrapezoidShell(parent: Group, mats: Mats) {
+  const shell = part("cabinetShell");
+  const zf = DB;
+  const zb = -DB;
+  const zfT = DT;
+  const zbT = -DT;
+
+  addMesh(
+    shell,
+    quad([-WB, 0, zb], [-WB, 0, zf], [-WT, H, zfT], [-WT, H, zbT]),
+    mats.shell,
+    "leftWall",
+  );
+  addMesh(
+    shell,
+    quad([WB, 0, zf], [WB, 0, zb], [WT, H, zbT], [WT, H, zfT]),
+    mats.shell,
+    "rightWall",
+  );
+  addMesh(
+    shell,
+    quad([-WB, 0, zb], [WB, 0, zb], [WT, H, zbT], [-WT, H, zbT]),
+    mats.shell,
+    "backWall",
+  );
+  addMesh(
+    shell,
+    quad([-WT, H, zfT], [WT, H, zfT], [WT, H, zbT], [-WT, H, zbT]),
+    mats.shell,
+    "topCap",
+  );
+  addMesh(
+    shell,
+    quad([-WB, 0, zb], [WB, 0, zb], [WB, 0, zf], [-WB, 0, zf]),
+    mats.shell,
+    "bottomDeck",
+  );
+
+  const wGlass = widthAt(GLASS_TOP);
+  const dGlass = depthAt(GLASS_TOP);
+  const wTop = widthAt(CONTROL_TOP);
+  const dTop = depthAt(CONTROL_TOP);
+
+  addMesh(
+    shell,
+    quad([-wTop, CONTROL_TOP, dTop], [wTop, CONTROL_TOP, dTop], [WT, H, zfT], [-WT, H, zfT]),
+    mats.shell,
+    "frontTopFace",
+  );
+
+  const sillH = FLOOR_Y;
+  addMesh(
+    shell,
+    quad([-WB, 0, zf], [WB, 0, zf], [wGlass, sillH, dGlass], [-wGlass, sillH, dGlass]),
+    mats.shell,
+    "frontSill",
+  );
+
+  parent.add(shell);
+}
+
+function buildLogoBand(parent: Group, mats: Mats) {
+  const midY = (CONTROL_TOP + LOGO_TOP) * 0.5;
+  const bandH = LOGO_TOP - CONTROL_TOP - 0.02;
+  const bandW = widthAt(midY) * 1.88;
+  const bandZ = depthAt(midY) + 0.006;
+  addMesh(
+    parent,
+    new PlaneGeometry(bandW, bandH),
+    mats.logoPanel,
+    "logoPanel",
+    [0, midY, bandZ],
+    undefined,
+    5,
+  );
+}
+
+function buildControlBand(parent: Group, mats: Mats) {
+  const midY = (CONTROL_BOTTOM + CONTROL_TOP) * 0.5;
+  const bandH = CONTROL_TOP - CONTROL_BOTTOM;
+  const bandW = widthAt(midY) * 1.94;
+  const bandZ = depthAt(midY) + 0.028;
+  addMesh(
+    parent,
+    new PlaneGeometry(bandW, bandH),
+    mats.controlPanel,
+    "controlPanel",
+    [0, midY, bandZ],
+    undefined,
+    6,
+  );
+}
+
+function buildFrontFrame(parent: Group, mats: Mats) {
+  const frame = part("frontFrame");
+  const frameW = 0.018;
+  const openingW = widthAt(FLOOR_Y) * 1.72;
+  const openingH = GLASS_TOP - FLOOR_Y;
+  const midY = FLOOR_Y + openingH * 0.5;
+  const frontZ = depthAt(FLOOR_Y) + 0.004;
+
+  addMesh(
+    frame,
+    new BoxGeometry(frameW, openingH + 0.02, 0.012),
+    mats.shell,
+    "frameLeft",
+    [-openingW * 0.5 - frameW * 0.5, midY, frontZ],
+    undefined,
+    7,
+  );
+  addMesh(
+    frame,
+    new BoxGeometry(frameW, openingH + 0.02, 0.012),
+    mats.shell,
+    "frameRight",
+    [openingW * 0.5 + frameW * 0.5, midY, frontZ],
+    undefined,
+    7,
+  );
+  addMesh(
+    frame,
+    new BoxGeometry(openingW + frameW * 2, frameW, 0.012),
+    mats.shell,
+    "frameBottom",
+    [0, FLOOR_Y + frameW * 0.5, frontZ],
+    undefined,
+    7,
+  );
+  addMesh(
+    frame,
+    new BoxGeometry(openingW + frameW * 2, frameW, 0.012),
+    mats.shell,
+    "frameTop",
+    [0, GLASS_TOP - frameW * 0.5, frontZ],
+    undefined,
+    7,
+  );
+
+  parent.add(frame);
+}
+
+function buildDuct(parent: Group, mats: Mats) {
+  const duct = part("exhaustDuct");
+  addMesh(duct, new CylinderGeometry(0.048, 0.052, 0.15, 12, 3, true), mats.duct, "hose", [
+    -0.22,
+    H + 0.075,
+    -0.06,
+  ]);
+  addMesh(
+    duct,
+    new TorusGeometry(0.054, 0.013, 8, 16, Math.PI * 0.55),
+    mats.duct,
+    "bend",
+    [-0.19,
+    H + 0.15,
+    -0.03],
+    [0, 0, -0.42],
+  );
+  parent.add(duct);
+}
+
+function buildWorkChamber(parent: Group, mats: Mats) {
+  const chamber = part("workChamber");
+  const chamberH = GLASS_TOP - FLOOR_Y - 0.04;
+  const midY = FLOOR_Y + chamberH * 0.5 + 0.02;
+  const backZ = -DB + 0.05;
+  const innerW = WB * 1.68;
+  const innerD = DB * 1.48;
+
+  addMesh(
+    chamber,
+    new PlaneGeometry(innerW, chamberH),
+    mats.steel,
+    "backWall",
+    [0, midY, backZ],
+    undefined,
+    1,
+  );
+  addMesh(
+    chamber,
+    new PlaneGeometry(innerD, chamberH),
+    mats.steel,
+    "leftWall",
+    [-WB + 0.038, midY, -0.02],
+    [0, Math.PI / 2, 0],
+    1,
+  );
+  addMesh(
+    chamber,
+    new PlaneGeometry(innerD, chamberH),
+    mats.steel,
+    "rightWall",
+    [WB - 0.038, midY, -0.02],
+    [0, Math.PI / 2, 0],
+    1,
+  );
+  addMesh(
+    chamber,
+    new PlaneGeometry(innerW * 0.94, innerD * 0.9),
+    mats.worktop,
+    "workSurface",
+    [0, FLOOR_Y + 0.012, -0.02],
+    [-Math.PI / 2, 0, 0],
+    1,
+  );
+
+  const ventY = FLOOR_Y + 0.028;
+  const ventZ = backZ + 0.006;
+  for (let i = 0; i < 14; i += 1) {
+    const t = i / 13;
+    const x = lerp(-innerW * 0.42, innerW * 0.42, t);
+    addMesh(
+      chamber,
+      new BoxGeometry(0.022, 0.004, 0.008),
+      mats.dark,
+      `vent-${i}`,
+      [x, ventY, ventZ],
+      undefined,
+      2,
+    );
+  }
+
+  addMesh(
+    chamber,
+    new PlaneGeometry(0.032, 0.05),
+    mats.outlet,
+    "outletA",
+    [WB - 0.075, FLOOR_Y + 0.26, backZ + 0.004],
+    undefined,
+    2,
+  );
+  addMesh(
+    chamber,
+    new PlaneGeometry(0.032, 0.05),
+    mats.outlet,
+    "outletB",
+    [WB - 0.075, FLOOR_Y + 0.18, backZ + 0.004],
+    undefined,
+    2,
+  );
+  addMesh(
+    chamber,
+    new PlaneGeometry(0.038, 0.038),
+    mats.warning,
+    "sticker",
+    [WB - 0.085, FLOOR_Y + 0.36, backZ + 0.004],
+    undefined,
+    2,
+  );
+
+  parent.add(chamber);
+}
+
+function buildGlassSash(parent: Group, mats: Mats) {
+  const sash = part("sash");
+  const sashH = GLASS_TOP - FLOOR_Y - 0.06;
+  const sashY = FLOOR_Y + sashH * 0.5 + 0.03;
+  const frontZ = depthAt(FLOOR_Y) + 0.022;
+  const sashW = widthAt(FLOOR_Y) * 1.68;
+  const tilt = -0.32;
+
+  addMesh(
+    sash,
+    new PlaneGeometry(sashW, sashH),
+    mats.glass,
+    "frontGlass",
+    [0, sashY, frontZ],
+    [tilt, 0, 0],
+    10,
+  );
+
+  const sideH = sashH * 0.98;
+  const sideY = sashY - 0.01;
+  const sideDepth = depthAt(FLOOR_Y) * 1.52;
+  addMesh(
+    sash,
+    new PlaneGeometry(sideDepth, sideH),
+    mats.glass,
+    "leftGlass",
+    [-WB + 0.028, sideY, -0.015],
+    [0, Math.PI / 2, 0],
+    10,
+  );
+  addMesh(
+    sash,
+    new PlaneGeometry(sideDepth, sideH),
+    mats.glass,
+    "rightGlass",
+    [WB - 0.028, sideY, -0.015],
+    [0, Math.PI / 2, 0],
+    10,
+  );
+
+  parent.add(sash);
 }
 
 function buildStand(parent: Group, mats: Mats, cabinetBottom: number) {
   const legH = 0.52;
-  const spreadX = 0.3;
-  const spreadZ = 0.22;
+  const spreadX = 0.32;
+  const spreadZ = 0.24;
   const legPositions: Array<[number, number, number]> = [
     [-spreadX, cabinetBottom - legH * 0.5, spreadZ],
     [spreadX, cabinetBottom - legH * 0.5, spreadZ],
@@ -160,164 +546,46 @@ function buildStand(parent: Group, mats: Mats, cabinetBottom: number) {
     [spreadX, cabinetBottom - legH * 0.5, -spreadZ],
   ];
   legPositions.forEach(([x, y, z], i) => {
-    addMesh(parent, new BoxGeometry(0.04, legH, 0.04), mats.shell, `leg-${i}`, [x, y, z]);
+    addMesh(parent, new CylinderGeometry(0.024, 0.026, legH, 8), mats.shell, `leg-${i}`, [x, y, z]);
     addMesh(parent, new CylinderGeometry(0.028, 0.028, 0.018, 10), mats.wheel, `caster-${i}`, [
       x,
       cabinetBottom - legH - 0.008,
       z,
     ]);
   });
-
   const braceY = cabinetBottom - legH + 0.12;
-  addMesh(parent, new BoxGeometry(spreadX * 2 + 0.04, 0.03, 0.03), mats.shell, "braceFront", [
+  addMesh(parent, new BoxGeometry(spreadX * 2 + 0.04, 0.032, 0.032), mats.shell, "braceFront", [
     0,
     braceY,
     spreadZ,
   ]);
-  addMesh(parent, new BoxGeometry(spreadX * 2 + 0.04, 0.03, 0.03), mats.shell, "braceBack", [
+  addMesh(parent, new BoxGeometry(spreadX * 2 + 0.04, 0.032, 0.032), mats.shell, "braceBack", [
     0,
     braceY,
     -spreadZ,
   ]);
-  addMesh(parent, new BoxGeometry(0.03, 0.03, spreadZ * 2), mats.shell, "braceLeft", [-spreadX, braceY, 0]);
-  addMesh(parent, new BoxGeometry(0.03, 0.03, spreadZ * 2), mats.shell, "braceRight", [spreadX, braceY, 0]);
-}
-
-function buildDuct(parent: Group, mats: Mats, topY: number) {
-  const duct = part("exhaustDuct");
-  addMesh(duct, new CylinderGeometry(0.045, 0.048, 0.14, 12, 3, true), mats.duct, "hose", [
-    -0.2,
-    topY + 0.07,
-    -0.08,
-  ]);
-  addMesh(duct, new TorusGeometry(0.05, 0.012, 8, 16, Math.PI * 0.55), mats.duct, "bend", [
-    -0.17,
-    topY + 0.14,
-    -0.05,
-  ], [0, 0, -0.4]);
-  parent.add(duct);
 }
 
 function buildCabinet(parent: Group, mats: Mats) {
-  const w = 0.68;
-  const d = 0.56;
-  const h = 0.82;
-  const halfW = w * 0.5;
-  const halfD = d * 0.5;
+  buildWorkChamber(parent, mats);
+  buildTrapezoidShell(parent, mats);
+  buildLogoBand(parent, mats);
+  buildControlBand(parent, mats);
+  buildFrontFrame(parent, mats);
+  buildGlassSash(parent, mats);
+  buildDuct(parent, mats);
 
-  const shell = part("cabinetShell");
-  addMesh(shell, new BoxGeometry(w, h, d), mats.shell, "body", [0, h * 0.5, 0]);
-  addMesh(shell, new BoxGeometry(w * 0.98, 0.025, d * 0.98), mats.shell, "topCap", [0, h - 0.012, 0]);
-  parent.add(shell);
-
-  buildDuct(parent, mats, h);
-
-  const front = part("frontPanel");
-  addMesh(front, new BoxGeometry(0.16, 0.028, 0.008), mats.dark, "logoBar", [-0.2, h * 0.88, halfD + 0.002]);
-  addMesh(front, new BoxGeometry(w * 0.96, 0.11, 0.012), mats.blue, "controlBand", [0, h * 0.62, halfD + 0.004]);
-  addMesh(front, new PlaneGeometry(0.09, 0.07), mats.screen, "lcd", [0.02, h * 0.62, halfD + 0.012]);
-  [-0.12, -0.06, 0.06, 0.12].forEach((x, i) => {
-    addMesh(front, new CylinderGeometry(0.008, 0.008, 0.006, 8), mats.dark, `ctrl-${i}`, [
-      x,
-      h * 0.58,
-      halfD + 0.011,
-    ], [Math.PI / 2, 0, 0]);
+  const portY = H * 0.36;
+  [-0.15, 0.15].forEach((x, i) => {
+    addMesh(
+      parent,
+      new CylinderGeometry(0.009, 0.009, 0.007, 8),
+      mats.dark,
+      `sidePort-${i}`,
+      [x, portY, depthAt(portY) + 0.004],
+      [Math.PI / 2, 0, 0],
+    );
   });
-  parent.add(front);
-
-  const chamber = part("workChamber");
-  const chamberH = 0.38;
-  const chamberD = 0.42;
-  const floorY = 0.14;
-  const backZ = -halfD + 0.08;
-
-  addMesh(chamber, new BoxGeometry(w * 0.86, chamberH, 0.012), mats.steel, "backWall", [
-    0,
-    floorY + chamberH * 0.5,
-    backZ,
-  ]);
-  addMesh(chamber, new BoxGeometry(0.012, chamberH, chamberD), mats.steel, "leftWall", [
-    -halfW + 0.07,
-    floorY + chamberH * 0.5,
-    -0.02,
-  ]);
-  addMesh(chamber, new BoxGeometry(0.012, chamberH, chamberD * 0.92), mats.steel, "rightWall", [
-    halfW - 0.07,
-    floorY + chamberH * 0.5,
-    -0.02,
-  ]);
-  addMesh(chamber, new BoxGeometry(w * 0.84, 0.018, chamberD * 0.9), mats.worktop, "workSurface", [
-    0,
-    floorY + 0.008,
-    -0.02,
-  ]);
-
-  for (let i = -8; i <= 8; i += 1) {
-    addMesh(chamber, new BoxGeometry(0.004, 0.04, 0.008), mats.dark, `vent-${i}`, [
-      i * 0.018,
-      floorY + 0.04,
-      backZ + 0.008,
-    ]);
-  }
-
-  addMesh(chamber, new BoxGeometry(0.028, 0.04, 0.012), mats.outlet, "outletA", [
-    halfW - 0.09,
-    floorY + 0.22,
-    -0.01,
-  ]);
-  addMesh(chamber, new BoxGeometry(0.028, 0.04, 0.012), mats.outlet, "outletB", [
-    halfW - 0.09,
-    floorY + 0.14,
-    -0.01,
-  ]);
-  addMesh(chamber, new BoxGeometry(0.035, 0.035, 0.004), mats.warning, "sticker", [
-    halfW - 0.1,
-    floorY + 0.3,
-    -0.005,
-  ]);
-
-  const sash = part("sash");
-  const sashH = 0.34;
-  addMesh(
-    sash,
-    new BoxGeometry(w * 0.84, sashH, 0.006),
-    mats.glass,
-    "frontGlass",
-    [0, floorY + chamberH * 0.52, halfD - 0.06],
-    [-0.22, 0, 0],
-    4,
-  );
-  addMesh(
-    sash,
-    new BoxGeometry(0.006, sashH * 0.92, chamberD * 0.75),
-    mats.glass,
-    "sideGlass",
-    [-halfW + 0.065, floorY + chamberH * 0.5, 0.04],
-    undefined,
-    4,
-  );
-  chamber.add(sash);
-  parent.add(chamber);
-
-  [-0.14, 0.14].forEach((x, i) => {
-    addMesh(parent, new CylinderGeometry(0.008, 0.008, 0.006, 8), mats.dark, `sidePort-${i}`, [
-      x,
-      h * 0.35,
-      halfD + 0.002,
-    ]);
-  });
-}
-
-function buildFootPedal(parent: Group, mats: Mats) {
-  const pedal = part("footPedal");
-  addMesh(pedal, new BoxGeometry(0.12, 0.025, 0.18), mats.dark, "base", [0.22, 0.012, 0.28]);
-  addMesh(pedal, new BoxGeometry(0.1, 0.018, 0.14), mats.pedal, "pad", [0.22, 0.028, 0.28]);
-  addMesh(pedal, new CylinderGeometry(0.003, 0.003, 0.35, 6), mats.dark, "wire", [0.12, 0.2, 0.15], [
-    0.5,
-    0,
-    0.3,
-  ]);
-  parent.add(pedal);
 }
 
 export function measureGroup(root: Group): LaminarHoodStats {
@@ -353,8 +621,6 @@ export function createLaminarHoodModel(): LaminarHoodBuild {
   cabinet.position.y = cabinetBottom;
   buildCabinet(cabinet, mats);
   group.add(cabinet);
-
-  buildFootPedal(group, mats);
 
   group.position.y = -0.02;
   return { group, stats: measureGroup(group), materials };

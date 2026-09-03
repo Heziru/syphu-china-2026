@@ -53,10 +53,25 @@ export function LaminarHoodModel({ studio = false }: Props) {
     const prevIntensity = scene.environmentIntensity;
     materials.forEach((mat) => {
       if (!(mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial)) return;
-      if (mat.name !== "steel" && mat.name !== "worktop" && mat.name !== "glass" && mat.name !== "screen") return;
+      if (
+        mat.name !== "steel" &&
+        mat.name !== "worktop" &&
+        mat.name !== "glass" &&
+        mat.name !== "controlPanel" &&
+        mat.name !== "logoPanel"
+      )
+        return;
       mat.envMap = env;
       mat.envMapIntensity =
-        mat.name === "glass" ? 0.7 : mat.name === "steel" ? 0.85 : mat.name === "screen" ? 0.35 : 0.55;
+        mat.name === "glass"
+          ? 1.05
+          : mat.name === "steel"
+            ? 1.1
+            : mat.name === "controlPanel"
+              ? 0.35
+              : mat.name === "logoPanel"
+                ? 0.2
+                : 0.55;
       mat.needsUpdate = true;
     });
     if (studio) {
