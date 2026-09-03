@@ -1,0 +1,27 @@
+{
+  "targetName": "BioFlo Bioreactor Controller",
+  "runtimeId": "device",
+  "revisionTarget": 4,
+  "componentTree": {
+    "bioreactor": [
+      "mainBody.roundedShell",
+      "mainBody.controlPanel",
+      "mainBody.screen",
+      "pumpModules.pump01",
+      "pumpModules.pump02",
+      "pumpModules.pump03",
+      "sidePorts",
+      "bottomBase",
+      "indicators"
+    ]
+  },
+  "proportions": {
+    "W": 0.58,
+    "H_over_W": 2.45,
+    "D_over_W": 1.05
+  },
+  "materials": ["shell", "base", "pumpBlue", "dark", "metal", "accent"],
+  "forbid": ["cultureVessel", "glassTank", "liquid", "tubingJungle", "logo", "text"],
+  "passLog": ".img2threejs/bioreactor/sculpt-pass-log.md",
+  "imageAnalysis": ".img2threejs/bioreactor/image-analysis.md"
+}

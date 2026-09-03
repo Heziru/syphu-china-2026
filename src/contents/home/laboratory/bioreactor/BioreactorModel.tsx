@@ -33,8 +33,8 @@ export function BioreactorModel({
   }, [
     BIOREACTOR_REVISION,
     resolvedSource,
-    options?.includeTubing,
     options?.includePumpModules,
+    options?.includeSidePorts,
     options?.style,
   ]);
 
