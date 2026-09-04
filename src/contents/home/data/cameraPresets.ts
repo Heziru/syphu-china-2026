@@ -1,13 +1,14 @@
 import type { CameraShot } from "../types/laboratory";
 
+/** Phase 3.7 — tuned after deeper footprint + wall-anchored layout. */
 export const OVERVIEW_CAMERA = {
   desktop: {
-    position: [7.25, 5.15, 7.85],
-    target: [-0.15, 0.72, -0.35],
+    position: [8.85, 6.35, 9.65],
+    target: [-0.05, 0.62, 0.45],
   },
   mobile: {
-    position: [5.1, 5.35, 7.25],
-    target: [-0.08, 0.76, -0.2],
+    position: [6.4, 6.55, 8.85],
+    target: [0, 0.66, 0.55],
   },
 } as const satisfies { desktop: CameraShot; mobile: CameraShot };
 

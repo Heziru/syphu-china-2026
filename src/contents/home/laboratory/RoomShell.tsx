@@ -2,16 +2,7 @@ import { useMemo } from "react";
 import { CentralBench } from "./CentralBench";
 import { LAB_COLORS } from "./labPalette";
 import { SoftBox } from "./SoftBox";
-import {
-  BackWallZones,
-  DryLabWorkbench,
-  DRY_LAB_CHAIR_POSITION,
-  DRY_LAB_CHAIR_ROTATION_Y,
-  EngineeringWorkbench,
-  WET_LAB_HOOD_POSITION,
-  WET_LAB_HOOD_ROTATION_Y,
-} from "./roomComposition";
-import { LaminarHoodModel } from "./laminar-hood/LaminarHoodModel";
+import { DRY_LAB_CHAIR, WallFurnitureBlockouts } from "./roomComposition";
 import { LabChairModel } from "./lab-chair/LabChairModel";
 import {
   createDioramaBaseGeometry,
@@ -113,19 +104,10 @@ export function RoomShell() {
 
       <LeftWallWindow />
 
-      <BackWallZones />
-      <DryLabWorkbench />
-      <EngineeringWorkbench />
+      <WallFurnitureBlockouts />
       <CentralBench />
 
-      <group
-        position={WET_LAB_HOOD_POSITION}
-        rotation={[0, WET_LAB_HOOD_ROTATION_Y, 0]}
-      >
-        <LaminarHoodModel />
-      </group>
-
-      <group position={DRY_LAB_CHAIR_POSITION} rotation={[0, DRY_LAB_CHAIR_ROTATION_Y, 0]}>
+      <group position={DRY_LAB_CHAIR.position} rotation={[0, DRY_LAB_CHAIR.rotationY, 0]}>
         <LabChairModel />
       </group>
     </group>

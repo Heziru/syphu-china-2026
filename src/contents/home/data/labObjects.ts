@@ -1,6 +1,7 @@
 import { CHAPTERS } from "./chapters";
 import type { LabObjectDef } from "../types/laboratory";
 import { assertMetadataRoute } from "../types/labStation";
+import { HERO_PLACEMENTS } from "../laboratory/roomPlacement";
 
 export const LAB_OBJECTS: LabObjectDef[] = [
   {
@@ -9,8 +10,8 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     nameZh: "电脑",
     description: "进入 Dry Lab / Model：模型框架与模拟解释。",
     chapterId: "model",
-    position: [-4.25, 0, 0.08],
-    rotation: [0, 0.68, 0],
+    position: HERO_PLACEMENTS.computer.position,
+    rotation: HERO_PLACEMENTS.computer.rotation,
     scale: 1,
     hitSize: [1.6, 1.5, 1.2],
     hitOffset: [0, 1.05, 0],
@@ -37,8 +38,8 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     nameZh: "显微镜",
     description: "进入 Wet Lab / Experiments：实验设计与验证进展。",
     chapterId: "experiments",
-    position: [0, 0, 0.55],
-    rotation: [0, -0.12, 0],
+    position: HERO_PLACEMENTS.microscope.position,
+    rotation: HERO_PLACEMENTS.microscope.rotation,
     scale: 1,
     hitSize: [1.5, 1.7, 1.3],
     hitOffset: [0, 1.15, 0],
@@ -65,8 +66,8 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     nameZh: "研究员",
     description: "进入 Team：成员与分工。",
     chapterId: "team",
-    position: [-2.05, 0, 2.75],
-    rotation: [0, -1.72, 0],
+    position: HERO_PLACEMENTS.researcher.position,
+    rotation: HERO_PLACEMENTS.researcher.rotation,
     scale: 1,
     hitSize: [0.9, 1.85, 0.8],
     hitOffset: [0, 0.95, 0],
@@ -93,8 +94,8 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     nameZh: "书架与访谈文件",
     description: "进入 Human Practices：调研与设计影响。",
     chapterId: "human-practices",
-    position: [0.45, 0, -2.92],
-    rotation: [0, 0.02, 0],
+    position: HERO_PLACEMENTS.bookshelf.position,
+    rotation: HERO_PLACEMENTS.bookshelf.rotation,
     scale: 1,
     hitSize: [1.7, 2.2, 0.7],
     hitOffset: [0, 1.15, 0],
@@ -121,8 +122,8 @@ export const LAB_OBJECTS: LabObjectDef[] = [
     nameZh: "实验装置",
     description: "进入 Project：总览并链接 Design、Engineering、Results 与 Safety。",
     chapterId: "description",
-    position: [4.05, 0, -2.02],
-    rotation: [0, -0.78, 0],
+    position: HERO_PLACEMENTS.device.position,
+    rotation: HERO_PLACEMENTS.device.rotation,
     scale: 1,
     hitSize: [1.4, 1.8, 1.2],
     hitOffset: [0, 1.1, 0],

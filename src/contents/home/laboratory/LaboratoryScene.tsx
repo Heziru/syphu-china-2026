@@ -23,6 +23,7 @@ import { ResearcherModel } from "./researcher/ResearcherModel";
 import type { ResearcherReviewView } from "./researcher/reviewShots";
 import { RoomShell } from "./RoomShell";
 import { SceneLifecycle } from "./SceneLifecycle";
+import { readLabLayoutDebugState, LabLayoutDebug } from "./LabLayoutDebug";
 
 type ReviewView =
   | MicroscopeReviewView
@@ -56,6 +57,7 @@ export function LaboratoryScene({
   reviewView = "ref",
 }: Props) {
   const placeholders = LAB_ASSET_MANIFEST.room.kind === "placeholder";
+  const layoutDebug = readLabLayoutDebugState();
 
   if (review && reviewAsset) {
     return (
@@ -100,12 +102,13 @@ export function LaboratoryScene({
       <SceneLifecycle paused={paused} />
       <Lighting shadows={placeholders ? shadows : shadows} />
       <RoomShell />
+      {layoutDebug ? <LabLayoutDebug /> : null}
       <ContactShadows
-        position={[0, 0.003, 0.48]}
-        opacity={0.26}
-        scale={8.5}
-        blur={2.2}
-        far={3.4}
+        position={[0, 0.003, 0.55]}
+        opacity={0.24}
+        scale={11.5}
+        blur={2.4}
+        far={4.2}
         frames={30}
       />
       {LAB_OBJECTS.map((def) => (
