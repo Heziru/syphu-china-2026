@@ -6,9 +6,9 @@ export const CENTRAL_BENCH_POSITION = CENTRAL_BENCH.position;
 export const CENTRAL_BENCH_WIDTH = CENTRAL_BENCH.width;
 export const CENTRAL_BENCH_DEPTH = CENTRAL_BENCH.depth;
 
-const COUNTERTOP = "#3A474A";
 const W = CENTRAL_BENCH.width;
 const D = CENTRAL_BENCH.depth;
+const COUNTERTOP = "#3A474A";
 
 /** Central island — sole free-standing workstation. */
 export function CentralBench() {

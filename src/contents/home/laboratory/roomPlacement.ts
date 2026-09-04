@@ -1,15 +1,18 @@
 import {
+  backFaceCenter,
+  dotXZ,
   FLOOR_FOOTPRINT,
-  furnitureFootprintCorners,
   footprintInsideRoom,
+  furnitureFootprintCorners,
+  localToWorldPosition,
   type FootprintXZ,
   type WallAnchor,
   wallAnchorFromSegment,
+  worldAxisFromLocal,
 } from "./roomLayout";
 
-export const PLACEMENT_REVISION = 7;
+export const PLACEMENT_REVISION = 8;
 
-/** Wall-anchored furniture specs (segment index + t along wall). */
 const BACK = 0;
 const LEFT_BACK = 4;
 
@@ -32,20 +35,13 @@ export type FreeStandingPlacement = {
   rotationY: number;
 };
 
-export type HeroPlacement = {
-  id: string;
-  category: "hero";
-  position: [number, number, number];
-  rotation: [number, number, number];
-};
-
-/** Central island — only free-standing workstation. */
+/** Central island — sole free-standing piece; long edge ≈ world X. */
 export const CENTRAL_BENCH: FreeStandingPlacement & { height: number } = {
   id: "central-bench",
   category: "free-standing",
-  position: [0, 0, 0.52],
-  width: 2.72,
-  depth: 1.48,
+  position: [0, 0, 0.6],
+  width: 2.65,
+  depth: 1.45,
   height: 0.89,
   rotationY: 0,
 };
@@ -68,40 +64,35 @@ function wallFurniture(
   };
 }
 
-/** Wet Lab lower cabinet — back-left. */
-export const WET_LAB_BENCH = wallFurniture("wet-lab-bench", BACK, 0.14, 1.45, 0.56);
+/** Back-left Wet Lab strip — lower bench segment. */
+export const WET_LAB_BENCH = wallFurniture("wet-lab-bench", BACK, 0.135, 1.12, 0.58);
 
-/** Laminar hood blockout envelope — back-left, horizontal clean bench. */
+/** Laminar hood — continues Wet Lab strip along same back wall. */
 export const LAMINAR_HOOD_BLOCKOUT = {
-  ...wallFurniture("laminar-hood", BACK, 0.3, 1.38, 0.72),
-  displayWidth: 1.38,
-  displayDepth: 0.72,
-  displayHeight: 1.48,
+  ...wallFurniture("laminar-hood", BACK, 0.305, 1.45, 0.74),
+  displayWidth: 1.45,
+  displayDepth: 0.74,
+  displayHeight: 1.42,
 };
 
-/** Storage / bookshelf — back center. */
-export const STORAGE_SHELF = wallFurniture("storage-shelf", BACK, 0.52, 1.05, 0.42);
+/** Back-center built-in storage. */
+export const STORAGE_SHELF = wallFurniture("storage-shelf", BACK, 0.52, 1.02, 0.4);
 
-/** Engineering bench — back-right (trimmed width for right circulation). */
-export const ENGINEERING_BENCH = wallFurniture("engineering-bench", BACK, 0.77, 1.48, 0.62);
+/** Back-right Engineering strip. */
+export const ENGINEERING_BENCH = wallFurniture("engineering-bench", BACK, 0.795, 1.52, 0.6);
 
-/** Dry Lab desk — left angled wall. */
-export const DRY_LAB_BENCH = wallFurniture("dry-lab-bench", LEFT_BACK, 0.5, 2.28, 0.78);
+/** Left-wall Dry Lab strip. */
+export const DRY_LAB_BENCH = wallFurniture("dry-lab-bench", LEFT_BACK, 0.5, 2.32, 0.72);
 
-function offsetFromAnchor(
-  anchor: WallAnchor,
-  alongTangent: number,
-  alongInward: number,
-): [number, number, number] {
-  const [cx, , cz] = anchor.position;
-  return [
-    cx + anchor.tangentX * alongTangent + anchor.inwardX * alongInward,
-    0,
-    cz + anchor.tangentZ * alongTangent + anchor.inwardZ * alongInward,
-  ];
-}
+export const WALL_FURNITURE: WallFurniturePlacement[] = [
+  WET_LAB_BENCH,
+  LAMINAR_HOOD_BLOCKOUT,
+  STORAGE_SHELF,
+  ENGINEERING_BENCH,
+  DRY_LAB_BENCH,
+];
 
-/** Hero positions derived from architectural anchors. */
+/** Hero positions derived from wall-local coordinates on workstation surfaces. */
 export const HERO_PLACEMENTS = {
   microscope: {
     id: "microscope",
@@ -116,23 +107,23 @@ export const HERO_PLACEMENTS = {
   computer: {
     id: "computer",
     category: "hero" as const,
-    position: offsetFromAnchor(DRY_LAB_BENCH.anchor, 0.15, DRY_LAB_BENCH.depth * 0.22),
-    rotation: [0, DRY_LAB_BENCH.anchor.rotationY + 0.22, 0] as [number, number, number],
+    position: localToWorldPosition(DRY_LAB_BENCH.anchor, 0.08, DRY_LAB_BENCH.depth * 0.38),
+    rotation: [0, DRY_LAB_BENCH.anchor.rotationY + 0.12, 0] as [number, number, number],
   },
   device: {
     id: "device",
     category: "hero" as const,
-    position: offsetFromAnchor(ENGINEERING_BENCH.anchor, 0, ENGINEERING_BENCH.depth * 0.32),
-    rotation: [0, ENGINEERING_BENCH.anchor.rotationY + 0.05, 0] as [number, number, number],
+    position: localToWorldPosition(
+      ENGINEERING_BENCH.anchor,
+      ENGINEERING_BENCH.width * 0.06,
+      ENGINEERING_BENCH.depth * 0.38,
+    ),
+    rotation: [0, ENGINEERING_BENCH.anchor.rotationY, 0] as [number, number, number],
   },
   bookshelf: {
     id: "bookshelf",
     category: "hero" as const,
-    position: [
-      STORAGE_SHELF.anchor.position[0],
-      0,
-      STORAGE_SHELF.anchor.position[2] + STORAGE_SHELF.depth * 0.08,
-    ] as [number, number, number],
+    position: localToWorldPosition(STORAGE_SHELF.anchor, 0, STORAGE_SHELF.depth * 0.12),
     rotation: [0, STORAGE_SHELF.anchor.rotationY, 0] as [number, number, number],
   },
   researcher: {
@@ -144,17 +135,28 @@ export const HERO_PLACEMENTS = {
 };
 
 export const DRY_LAB_CHAIR = {
-  position: offsetFromAnchor(DRY_LAB_BENCH.anchor, -0.35, DRY_LAB_BENCH.depth * 0.72),
-  rotationY: DRY_LAB_BENCH.anchor.rotationY + 0.95,
+  position: localToWorldPosition(DRY_LAB_BENCH.anchor, -0.28, DRY_LAB_BENCH.depth * 0.78),
+  rotationY: DRY_LAB_BENCH.anchor.rotationY + 0.82,
 };
 
-export const WALL_FURNITURE: WallFurniturePlacement[] = [
-  WET_LAB_BENCH,
-  LAMINAR_HOOD_BLOCKOUT,
-  STORAGE_SHELF,
-  ENGINEERING_BENCH,
-  DRY_LAB_BENCH,
-];
+export type WallAlignmentValidation = {
+  id: string;
+  insidePolygon: boolean;
+  backFaceDistanceToWall: number;
+  tangentAlignment: number;
+  inwardAlignment: number;
+  valid: boolean;
+  corners: FootprintXZ[];
+  backFace: FootprintXZ;
+  frontFace: FootprintXZ;
+};
+
+export type CirculationReport = {
+  backAisle: number;
+  leftAisle: number;
+  rightAisle: number;
+  frontClearance: number;
+};
 
 function centralBenchCorners(): FootprintXZ[] {
   const [cx, , cz] = CENTRAL_BENCH.position;
@@ -168,34 +170,59 @@ function centralBenchCorners(): FootprintXZ[] {
   ];
 }
 
-export type PlacementValidation = {
-  id: string;
-  insideRoom: boolean;
-  corners: FootprintXZ[];
-};
+export function validateWallAlignment(item: WallFurniturePlacement): WallAlignmentValidation {
+  const { anchor, width, depth } = item;
+  const corners = furnitureFootprintCorners(anchor, width, depth);
+  const insidePolygon = footprintInsideRoom(corners);
 
-export type CirculationReport = {
-  backAisle: number;
-  leftAisle: number;
-  rightAisle: number;
-  frontClearance: number;
-};
+  const worldLocalX = worldAxisFromLocal(anchor.rotationY, 1, 0);
+  const worldLocalZ = worldAxisFromLocal(anchor.rotationY, 0, 1);
+  const tangent: FootprintXZ = [anchor.tangentX, anchor.tangentZ];
+  const inward: FootprintXZ = [anchor.inwardX, anchor.inwardZ];
+
+  const tangentAlignment = Math.abs(dotXZ(worldLocalX, tangent));
+  const inwardAlignment = dotXZ(worldLocalZ, inward);
+
+  const back = backFaceCenter(anchor, depth);
+  const backFaceDistanceToWall = Math.hypot(
+    back[0] - anchor.wallPoint[0],
+    back[1] - anchor.wallPoint[1],
+  );
+
+  const valid =
+    insidePolygon &&
+    backFaceDistanceToWall <= 0.05 &&
+    tangentAlignment >= 0.99 &&
+    inwardAlignment >= 0.99;
+
+  return {
+    id: item.id,
+    insidePolygon,
+    backFaceDistanceToWall,
+    tangentAlignment,
+    inwardAlignment,
+    valid,
+    corners,
+    backFace: back,
+    frontFace: [
+      anchor.position[0] + anchor.inwardX * (depth * 0.5),
+      anchor.position[2] + anchor.inwardZ * (depth * 0.5),
+    ],
+  };
+}
 
 export function validatePlacements(): {
-  furniture: PlacementValidation[];
-  centralBench: PlacementValidation;
-  allInside: boolean;
+  furniture: WallAlignmentValidation[];
+  centralBench: { id: string; insidePolygon: boolean; corners: FootprintXZ[] };
+  allValid: boolean;
   circulation: CirculationReport;
 } {
-  const furniture = WALL_FURNITURE.map((item) => {
-    const corners = furnitureFootprintCorners(item.anchor, item.width, item.depth);
-    return { id: item.id, insideRoom: footprintInsideRoom(corners), corners };
-  });
+  const furniture = WALL_FURNITURE.map(validateWallAlignment);
 
   const centralCorners = centralBenchCorners();
   const centralBench = {
     id: "central-bench",
-    insideRoom: footprintInsideRoom(centralCorners),
+    insidePolygon: footprintInsideRoom(centralCorners),
     corners: centralCorners,
   };
 
@@ -211,9 +238,6 @@ export function validatePlacements(): {
     ),
   );
 
-  const sampleZ = benchBackZ;
-  const rightBoundaryX = maxPolygonXAtZ(sampleZ);
-
   const dryCorners = furnitureFootprintCorners(
     DRY_LAB_BENCH.anchor,
     DRY_LAB_BENCH.width,
@@ -224,18 +248,18 @@ export function validatePlacements(): {
   const circulation: CirculationReport = {
     backAisle: benchBackZ - backFrontZ,
     leftAisle: benchLeftX - dryRightX,
-    rightAisle: rightBoundaryX - benchRightX,
+    rightAisle: maxPolygonXAtZ(benchBackZ) - benchRightX,
     frontClearance: FLOOR_FOOTPRINT[4][1] - benchFrontZ,
   };
 
-  const allInside =
-    furniture.every((f) => f.insideRoom) &&
-    centralBench.insideRoom &&
+  const allValid =
+    furniture.every((f) => f.valid) &&
+    centralBench.insidePolygon &&
     circulation.backAisle >= 0.95 &&
     circulation.leftAisle >= 0.85 &&
     circulation.rightAisle >= 0.85;
 
-  return { furniture, centralBench, allInside, circulation };
+  return { furniture, centralBench, allValid, circulation };
 }
 
 function maxPolygonXAtZ(z: number): number {
@@ -251,37 +275,65 @@ function maxPolygonXAtZ(z: number): number {
   return maxX;
 }
 
-/** Coordinate table for top-down inspection (no production camera change). */
-export const PLACEMENT_COORDINATE_TABLE = [
-  ...WALL_FURNITURE.map((f) => ({
-    id: f.id,
-    type: "wall-anchored" as const,
-    position: f.anchor.position,
-    rotationY: f.anchor.rotationY,
-    width: f.width,
-    depth: f.depth,
-  })),
-  {
-    id: "central-bench",
-    type: "free-standing" as const,
-    position: CENTRAL_BENCH.position,
-    rotationY: 0,
-    width: CENTRAL_BENCH.width,
-    depth: CENTRAL_BENCH.depth,
+/** Local-axis audit for Phase 3.8 documentation. */
+export const FURNITURE_AXIS_AUDIT = {
+  "dry-lab-bench": {
+    localPlusX: "width along left wall tangent",
+    localPlusZ: "depth into room (front)",
+    back: "-Z flush to wall",
+    front: "+Z faces room",
+    boxSize: "[width, height, depth]",
   },
-  ...Object.values(HERO_PLACEMENTS).map((h) => ({
-    id: h.id,
-    type: "hero" as const,
-    position: h.position,
-    rotationY: h.rotation[1],
-    width: 0,
-    depth: 0,
-  })),
-];
+  "wet-lab-bench": {
+    localPlusX: "width along back wall tangent",
+    localPlusZ: "depth into room (front)",
+    back: "-Z flush to back wall",
+    front: "+Z countertop faces room",
+    boxSize: "[width, height, depth]",
+  },
+  "laminar-hood": {
+    localPlusX: "hood width along back wall",
+    localPlusZ: "depth; opening at +Z faces room",
+    back: "-Z on wet-lab strip back plane",
+    front: "+Z hood opening",
+    boxSize: "[width, height, depth]",
+  },
+  "storage-shelf": {
+    localPlusX: "width along back wall",
+    localPlusZ: "depth into room",
+    back: "-Z flush to back wall",
+    front: "+Z faces room",
+    boxSize: "[width, height, depth]",
+  },
+  "engineering-bench": {
+    localPlusX: "width along back wall",
+    localPlusZ: "depth into room",
+    back: "-Z flush to back wall",
+    front: "+Z bench surface; bioreactor sits on +Z",
+    boxSize: "[width, height, depth]",
+  },
+  "central-bench": {
+    localPlusX: "width (left-right, 2.65 m)",
+    localPlusZ: "depth (front-back, 1.45 m)",
+    back: "-Z toward back wall",
+    front: "+Z toward open front",
+    boxSize: "[width, height, depth]",
+  },
+  computer: {
+    parent: "dry-lab-bench surface",
+    placement: "local (+0.08, depth×0.38) on desk",
+    rotation: "inherits desk rotationY + 0.12",
+  },
+  bioreactor: {
+    parent: "engineering-bench surface",
+    placement: "local (width×0.06, depth×0.38) on bench",
+    rotation: "inherits engineering rotationY",
+  },
+} as const;
 
 if (import.meta.env?.DEV) {
   const report = validatePlacements();
-  if (!report.allInside) {
-    console.warn("[roomPlacement] layout validation failed:", report);
+  if (!report.allValid) {
+    console.warn("[roomPlacement] wall alignment validation failed:", report);
   }
 }
