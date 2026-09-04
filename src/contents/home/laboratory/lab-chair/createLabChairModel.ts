@@ -16,7 +16,7 @@ import {
   type Material,
 } from "three";
 
-export const LAB_CHAIR_REVISION = 4;
+export const LAB_CHAIR_REVISION = 5;
 
 export const LAB_CHAIR_COLORS = {
   plastic: "#18181A",
@@ -53,8 +53,8 @@ const BACK_Z = -0.1;
 const TUBE_R = 0.011;
 const PILLAR_R = 0.023;
 const BASE_HUB: Point3 = [0, 0.095, 0.012];
-const LEG_REACH = 0.26;
-const FOOT_Y = 0.016;
+const LEG_REACH = 0.25;
+const FOOT_Y = 0.014;
 
 const Y_AXIS = new Vector3(0, 1, 0);
 
@@ -200,10 +200,10 @@ function buildSeat(parent: Group, mats: Mats) {
   );
   addMesh(
     seat,
-    new TorusGeometry(SEAT_W * 0.44, 0.014, 10, 20, Math.PI * 0.92),
+    new TorusGeometry(SEAT_W * 0.2, 0.01, 8, 14, Math.PI * 0.52),
     mats.plastic,
     "waterfallLip",
-    [0, SEAT_Y - SEAT_T * 0.42, SEAT_D * 0.36],
+    [0, SEAT_Y - SEAT_T * 0.52, SEAT_D * 0.43],
     [Math.PI * 0.5, 0, 0],
   );
   parent.add(seat);
@@ -225,10 +225,10 @@ function buildBackrest(parent: Group, mats: Mats) {
 
 function buildBackFrame(parent: Group, mats: Mats) {
   const frame = part("backFrame");
-  const halfW = BACK_W * 0.47;
-  const zFrame = BACK_Z - BACK_T * 0.55 - 0.012;
-  const yBottom = SEAT_Y - SEAT_T * 0.35;
-  const yTop = BACK_Y + BACK_H * 0.34;
+  const halfW = BACK_W * 0.44;
+  const zFrame = -SEAT_D * 0.5 + 0.02;
+  const yBottom = SEAT_Y - SEAT_T * 0.55;
+  const yTop = BACK_Y + BACK_H * 0.28;
 
   const bl: Point3 = [-halfW, yBottom, zFrame];
   const br: Point3 = [halfW, yBottom, zFrame];
@@ -238,23 +238,6 @@ function buildBackFrame(parent: Group, mats: Mats) {
   tubeBetween(frame, bl, tl, TUBE_R, mats.metal, "uprightLeft");
   tubeBetween(frame, br, tr, TUBE_R, mats.metal, "uprightRight");
   tubeBetween(frame, bl, br, TUBE_R, mats.metal, "underRail");
-
-  addMesh(
-    frame,
-    new TorusGeometry(TUBE_R * 1.1, TUBE_R * 0.82, 6, 10, Math.PI * 0.5),
-    mats.metal,
-    "cornerLeft",
-    [tl[0], tl[1], tl[2]],
-    [0, Math.PI / 2, 0],
-  );
-  addMesh(
-    frame,
-    new TorusGeometry(TUBE_R * 1.1, TUBE_R * 0.82, 6, 10, Math.PI * 0.5),
-    mats.metal,
-    "cornerRight",
-    [tr[0], tr[1], tr[2]],
-    [0, 0, 0],
-  );
 
   parent.add(frame);
 }
@@ -284,16 +267,20 @@ function buildBase(parent: Group, mats: Mats) {
   );
 
   angles.forEach((a, i) => {
-    const foot: Point3 = [Math.cos(a) * LEG_REACH, FOOT_Y, Math.sin(a) * LEG_REACH + BASE_HUB[2]];
+    const foot: Point3 = [
+      Math.cos(a) * LEG_REACH,
+      FOOT_Y,
+      Math.sin(a) * LEG_REACH + BASE_HUB[2],
+    ];
     tubeBetween(base, BASE_HUB, foot, TUBE_R, mats.metal, `leg-${i}`);
     addMesh(
       base,
-      new SphereGeometry(0.015, 12, 10),
+      new SphereGeometry(0.014, 10, 8),
       mats.glide,
       `glide-${i}`,
-      foot,
+      [foot[0], FOOT_Y - 0.002, foot[2]],
       undefined,
-      [1, 0.55, 1],
+      [1, 0.45, 1],
     );
   });
 
