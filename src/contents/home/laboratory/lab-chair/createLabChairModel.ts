@@ -15,7 +15,7 @@ import {
   type Material,
 } from "three";
 
-export const LAB_CHAIR_REVISION = 6;
+export const LAB_CHAIR_REVISION = 7;
 
 export const LAB_CHAIR_COLORS = {
   plastic: "#18181A",
@@ -47,9 +47,34 @@ const SEAT_T = 0.048;
 const BACK_W = 0.36;
 const BACK_H = 0.3;
 const BACK_T = 0.034;
-const BACK_Y = 0.67;
-const BACK_Z = -0.1;
 const TUBE_R = 0.011;
+const BACK_TILT = -0.04;
+
+type BackLayout = {
+  centerY: number;
+  centerZ: number;
+  halfW: number;
+  halfH: number;
+  zFrame: number;
+  yBottom: number;
+  yTop: number;
+  zBottom: number;
+  zTop: number;
+};
+
+function backLayout(): BackLayout {
+  const centerY = 0.662;
+  const centerZ = -0.108;
+  const halfW = BACK_W * 0.46;
+  const halfH = BACK_H * 0.5;
+  const zLean = halfH * (-BACK_TILT);
+  const yBottom = centerY - halfH;
+  const yTop = centerY + halfH;
+  const zBottom = centerZ + zLean;
+  const zTop = centerZ - zLean;
+  const zFrame = Math.min(zBottom, zTop) - BACK_T * 0.45 - TUBE_R;
+  return { centerY, centerZ, halfW, halfH, zFrame, yBottom, yTop, zBottom, zTop };
+}
 const PILLAR_R = 0.023;
 const BASE_HUB: Point3 = [0, 0.095, 0.012];
 const LEG_REACH = 0.25;
@@ -199,29 +224,27 @@ function buildSeat(parent: Group, mats: Mats) {
 
 function buildBackrest(parent: Group, mats: Mats) {
   const back = part("backrest");
+  const layout = backLayout();
   const shape = roundedRect(BACK_W, BACK_H, 0.07);
   addMesh(
     back,
     extrudePanel(shape, BACK_T, 0.014),
     mats.plastic,
     "panel",
-    [0, BACK_Y, BACK_Z],
-    [-0.1, 0, 0],
+    [0, layout.centerY, layout.centerZ],
+    [BACK_TILT, 0, 0],
   );
   parent.add(back);
 }
 
 function buildBackFrame(parent: Group, mats: Mats) {
   const frame = part("backFrame");
-  const halfW = BACK_W * 0.42;
-  const zFrame = -0.21;
-  const yBottom = SEAT_Y - SEAT_T * 0.65;
-  const yTop = BACK_Y + BACK_H * 0.22;
+  const { halfW, yBottom, yTop, zBottom, zTop } = backLayout();
 
-  const bl: Point3 = [-halfW, yBottom, zFrame];
-  const br: Point3 = [halfW, yBottom, zFrame];
-  const tl: Point3 = [-halfW, yTop, zFrame];
-  const tr: Point3 = [halfW, yTop, zFrame];
+  const bl: Point3 = [-halfW, yBottom, zBottom];
+  const br: Point3 = [halfW, yBottom, zBottom];
+  const tl: Point3 = [-halfW, yTop, zTop];
+  const tr: Point3 = [halfW, yTop, zTop];
 
   tubeBetween(frame, bl, tl, TUBE_R, mats.metal, "uprightLeft");
   tubeBetween(frame, br, tr, TUBE_R, mats.metal, "uprightRight");
