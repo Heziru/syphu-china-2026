@@ -15,7 +15,7 @@ import {
   type Material,
 } from "three";
 
-export const LAB_CHAIR_REVISION = 10;
+export const LAB_CHAIR_REVISION = 11;
 
 export const LAB_CHAIR_COLORS = {
   plastic: "#18181A",
@@ -51,8 +51,9 @@ const TUBE_R = 0.013;
 const BACK_TILT = -0.11;
 const SEAT_Z = 0.012;
 const SEAT_REAR_Z = SEAT_Z - SEAT_D * 0.48;
-const SEAT_TOP_Y = SEAT_Y + SEAT_T * 0.32;
-const BACK_GAP = 0.045;
+const SEAT_BEVEL = 0.016;
+const SEAT_TOP_Y = SEAT_Y + SEAT_T + SEAT_BEVEL * 0.45;
+const BACK_GAP = 0.088;
 
 type BackLayout = {
   centerY: number;
@@ -246,7 +247,7 @@ function buildSeat(parent: Group, mats: Mats) {
   const shape = roundedRect(SEAT_W, SEAT_D, 0.085);
   addMesh(
     seat,
-    extrudeSeatPanel(shape, SEAT_T, 0.016),
+    extrudeSeatPanel(shape, SEAT_T, SEAT_BEVEL),
     mats.plastic,
     "cushion",
     [0, SEAT_Y, 0.012],
