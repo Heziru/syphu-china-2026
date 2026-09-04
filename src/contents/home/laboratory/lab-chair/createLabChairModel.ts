@@ -10,13 +10,12 @@ import {
   Shape,
   SphereGeometry,
   SRGBColorSpace,
-  TorusGeometry,
   Vector3,
   type BufferGeometry,
   type Material,
 } from "three";
 
-export const LAB_CHAIR_REVISION = 5;
+export const LAB_CHAIR_REVISION = 6;
 
 export const LAB_CHAIR_COLORS = {
   plastic: "#18181A",
@@ -101,7 +100,7 @@ function roundedRect(width: number, height: number, radius: number): Shape {
   return shape;
 }
 
-function extrudePanel(shape: Shape, depth: number, bevel = 0.01): BufferGeometry {
+function extrudePanel(shape: Shape, depth: number, bevel = 0.016): BufferGeometry {
   const geo = new ExtrudeGeometry(shape, {
     depth,
     bevelEnabled: bevel > 0,
@@ -149,13 +148,10 @@ function makeGridPlasticMaterial(): MeshStandardMaterial {
   if (ctx) {
     ctx.fillStyle = LAB_CHAIR_COLORS.plastic;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const step = 14;
+    const step = 16;
     for (let y = 0; y < canvas.height; y += step) {
       for (let x = 0; x < canvas.width; x += step) {
-        const g = ctx.createLinearGradient(x, y, x + step, y + step);
-        g.addColorStop(0, LAB_CHAIR_COLORS.plasticHi);
-        g.addColorStop(1, LAB_CHAIR_COLORS.plastic);
-        ctx.fillStyle = g;
+        ctx.fillStyle = y % (step * 2) === 0 ? "rgba(255,255,255,0.035)" : "rgba(255,255,255,0.018)";
         ctx.fillRect(x + 1, y + 1, step - 2, step - 2);
       }
     }
@@ -193,18 +189,10 @@ function buildSeat(parent: Group, mats: Mats) {
   const shape = roundedRect(SEAT_W, SEAT_D, 0.085);
   addMesh(
     seat,
-    extrudePanel(shape, SEAT_T, 0.012),
+    extrudePanel(shape, SEAT_T, 0.016),
     mats.plastic,
     "cushion",
     [0, SEAT_Y, 0.012],
-  );
-  addMesh(
-    seat,
-    new TorusGeometry(SEAT_W * 0.2, 0.01, 8, 14, Math.PI * 0.52),
-    mats.plastic,
-    "waterfallLip",
-    [0, SEAT_Y - SEAT_T * 0.52, SEAT_D * 0.43],
-    [Math.PI * 0.5, 0, 0],
   );
   parent.add(seat);
 }
@@ -214,7 +202,7 @@ function buildBackrest(parent: Group, mats: Mats) {
   const shape = roundedRect(BACK_W, BACK_H, 0.07);
   addMesh(
     back,
-    extrudePanel(shape, BACK_T, 0.009),
+    extrudePanel(shape, BACK_T, 0.014),
     mats.plastic,
     "panel",
     [0, BACK_Y, BACK_Z],
@@ -225,10 +213,10 @@ function buildBackrest(parent: Group, mats: Mats) {
 
 function buildBackFrame(parent: Group, mats: Mats) {
   const frame = part("backFrame");
-  const halfW = BACK_W * 0.44;
-  const zFrame = -SEAT_D * 0.5 + 0.02;
-  const yBottom = SEAT_Y - SEAT_T * 0.55;
-  const yTop = BACK_Y + BACK_H * 0.28;
+  const halfW = BACK_W * 0.42;
+  const zFrame = -0.21;
+  const yBottom = SEAT_Y - SEAT_T * 0.65;
+  const yTop = BACK_Y + BACK_H * 0.22;
 
   const bl: Point3 = [-halfW, yBottom, zFrame];
   const br: Point3 = [halfW, yBottom, zFrame];
@@ -272,7 +260,7 @@ function buildBase(parent: Group, mats: Mats) {
       FOOT_Y,
       Math.sin(a) * LEG_REACH + BASE_HUB[2],
     ];
-    tubeBetween(base, BASE_HUB, foot, TUBE_R, mats.metal, `leg-${i}`);
+    tubeBetween(base, BASE_HUB, foot, TUBE_R * 1.18, mats.metal, `leg-${i}`);
     addMesh(
       base,
       new SphereGeometry(0.014, 10, 8),
