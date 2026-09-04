@@ -101,11 +101,11 @@ export function LaboratoryScene({
       <Lighting shadows={placeholders ? shadows : shadows} />
       <RoomShell />
       <ContactShadows
-        position={[0.08, 0.003, 0.28]}
+        position={[0, 0.003, 0.12]}
         opacity={0.28}
-        scale={7.5}
+        scale={9.5}
         blur={2.1}
-        far={3.2}
+        far={3.6}
         frames={30}
       />
       {LAB_OBJECTS.map((def) => (

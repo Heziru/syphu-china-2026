@@ -2,6 +2,9 @@ import { useMemo } from "react";
 import { CentralBench } from "./CentralBench";
 import { LAB_COLORS } from "./labPalette";
 import { SoftBox } from "./SoftBox";
+import { BackStorageRun, DryLabWorkbench, EngineeringWorkbench } from "./roomComposition";
+import { LaminarHoodModel } from "./laminar-hood/LaminarHoodModel";
+import { LabChairModel } from "./lab-chair/LabChairModel";
 import {
   createDioramaBaseGeometry,
   FLOOR_FOOTPRINT,
@@ -102,15 +105,18 @@ export function RoomShell() {
 
       <LeftWallWindow />
 
-      <mesh position={[-3.35, 0.42, -0.2]} castShadow receiveShadow>
-        <boxGeometry args={[2.4, 0.84, 1.35]} />
-        <meshStandardMaterial color={LAB_COLORS.bench} roughness={0.55} />
-      </mesh>
+      <BackStorageRun />
+      <DryLabWorkbench />
+      <EngineeringWorkbench />
       <CentralBench />
-      <mesh position={[3.25, 0.42, 0.45]} castShadow receiveShadow>
-        <boxGeometry args={[2.1, 0.84, 1.4]} />
-        <meshStandardMaterial color={LAB_COLORS.bench} roughness={0.55} />
-      </mesh>
+
+      <group position={[-2.15, 0, -2.35]} rotation={[0, 0.22, 0]}>
+        <LaminarHoodModel />
+      </group>
+
+      <group position={[-3.95, 0, 0.05]} rotation={[0, 0.75, 0]}>
+        <LabChairModel />
+      </group>
     </group>
   );
 }
