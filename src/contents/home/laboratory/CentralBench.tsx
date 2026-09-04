@@ -1,4 +1,5 @@
 import { LAB_COLORS } from "./labPalette";
+import { FURNITURE_MAT } from "./labFurnitureSystem";
 import { SoftBox } from "./SoftBox";
 import { CENTRAL_BENCH } from "./roomPlacement";
 
@@ -8,7 +9,6 @@ export const CENTRAL_BENCH_DEPTH = CENTRAL_BENCH.depth;
 
 const W = CENTRAL_BENCH.width;
 const D = CENTRAL_BENCH.depth;
-const COUNTERTOP = "#3A474A";
 
 /** Central island — sole free-standing workstation. */
 export function CentralBench() {
@@ -18,7 +18,7 @@ export function CentralBench() {
         position={[0, 0.82, 0.04]}
         size={[W, 0.065, D]}
         radius={0.028}
-        color={COUNTERTOP}
+        color={FURNITURE_MAT.darkCountertop}
         roughness={0.44}
         metalness={0.06}
       />
@@ -26,7 +26,7 @@ export function CentralBench() {
         position={[0, 0.395, -0.02]}
         size={[W - 0.24, 0.74, D - 0.24]}
         radius={0.038}
-        color={LAB_COLORS.cabinet}
+        color={FURNITURE_MAT.sageCabinet}
         roughness={0.82}
         metalness={0.02}
       />
