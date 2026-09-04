@@ -37,14 +37,18 @@ const ResearcherReviewHud = lazy(() =>
   })),
 );
 const GlasswareStationReviewHud = lazy(() =>
-  import("./laboratory/glassware-station/GlasswareStationReviewHud").then((mod) => ({
-    default: mod.GlasswareStationReviewHud,
-  })),
+  import("./laboratory/glassware-station/GlasswareStationReviewHud").then(
+    (mod) => ({
+      default: mod.GlasswareStationReviewHud,
+    }),
+  ),
 );
 const AnalyticalBalanceReviewHud = lazy(() =>
-  import("./laboratory/analytical-balance/AnalyticalBalanceReviewHud").then((mod) => ({
-    default: mod.AnalyticalBalanceReviewHud,
-  })),
+  import("./laboratory/analytical-balance/AnalyticalBalanceReviewHud").then(
+    (mod) => ({
+      default: mod.AnalyticalBalanceReviewHud,
+    }),
+  ),
 );
 const LaminarHoodReviewHud = lazy(() =>
   import("./laboratory/laminar-hood/LaminarHoodReviewHud").then((mod) => ({
@@ -71,7 +75,9 @@ export function LaboratoryHome() {
   const [reviewState] = useState(() => readLabReviewState());
   const review = reviewState.active;
   const reviewAsset = reviewState.asset as LabReviewAsset | null;
-  const [reviewView, setReviewView] = useState<LabReviewView>(() => reviewState.view);
+  const [reviewView, setReviewView] = useState<LabReviewView>(
+    () => reviewState.view,
+  );
 
   useEffect(() => {
     resetSession();
@@ -96,10 +102,13 @@ export function LaboratoryHome() {
   const onNavigate = useCallback(
     (path: string) => {
       setPhase("transitioning");
-      window.setTimeout(() => {
-        navigate(path);
-        setLocked(false);
-      }, reduced ? 0 : 180);
+      window.setTimeout(
+        () => {
+          navigate(path);
+          setLocked(false);
+        },
+        reduced ? 0 : 180,
+      );
     },
     [navigate, reduced, setLocked, setPhase],
   );
@@ -160,7 +169,10 @@ export function LaboratoryHome() {
         </Suspense>
       ) : review && reviewAsset === "analytical-balance" ? (
         <Suspense fallback={null}>
-          <AnalyticalBalanceReviewHud view={reviewView} onView={setReviewView} />
+          <AnalyticalBalanceReviewHud
+            view={reviewView}
+            onView={setReviewView}
+          />
         </Suspense>
       ) : review && reviewAsset === "laminar-hood" ? (
         <Suspense fallback={null}>
@@ -174,8 +186,9 @@ export function LaboratoryHome() {
         <div className="lab-hud">
           <div className="lab-brand">
             <p className="lab-brand__mark">LBP-Mototype</p>
-            <p className="lab-brand__hint">Click a station in the lab, or use the chapter list.</p>
-            <p className="lab-brand__asset">Microscope rebuilt as a procedural station model from the reference drawing.</p>
+            <p className="lab-brand__hint">
+              Click a station in the lab, or use the chapter list.
+            </p>
           </div>
           <ChapterDirectory />
           <ObjectTooltip />

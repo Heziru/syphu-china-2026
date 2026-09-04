@@ -100,7 +100,10 @@ function sashLayout(): SashLayout {
   return { openW, openH, openY0, openY1, halfW, zBottom, zTop, inner };
 }
 
-function insetCorners(corners: SashLayout["inner"], inset: number): SashLayout["inner"] {
+function insetCorners(
+  corners: SashLayout["inner"],
+  inset: number,
+): SashLayout["inner"] {
   const { bl, br, tl, tr } = corners;
   return {
     bl: [bl[0] + inset, bl[1] + inset, bl[2] + inset],
@@ -174,7 +177,11 @@ function makeLogoPanelMaterial(): MeshStandardMaterial {
   }
   const tex = new CanvasTexture(canvas);
   tex.colorSpace = SRGBColorSpace;
-  const mat = new MeshStandardMaterial({ map: tex, roughness: 0.55, metalness: 0.02 });
+  const mat = new MeshStandardMaterial({
+    map: tex,
+    roughness: 0.55,
+    metalness: 0.02,
+  });
   mat.name = "logoPanel";
   return mat;
 }
@@ -275,7 +282,19 @@ function makeMaterials() {
   warning.name = "warning";
   wheel.name = "wheel";
   controlPanel.name = "controlPanel";
-  return { shell, logoPanel, steel, worktop, glass, duct, dark, outlet, warning, wheel, controlPanel };
+  return {
+    shell,
+    logoPanel,
+    steel,
+    worktop,
+    glass,
+    duct,
+    dark,
+    outlet,
+    warning,
+    wheel,
+    controlPanel,
+  };
 }
 
 function buildTrapezoidShell(parent: Group, mats: Mats) {
@@ -311,7 +330,12 @@ function buildTrapezoidShell(parent: Group, mats: Mats) {
   const dTop = depthAt(CONTROL_TOP);
   addMesh(
     shell,
-    quad([-WB, CONTROL_TOP, dTop], [WB, CONTROL_TOP, dTop], [WB, H, depthAt(H)], [-WB, H, depthAt(H)]),
+    quad(
+      [-WB, CONTROL_TOP, dTop],
+      [WB, CONTROL_TOP, dTop],
+      [WB, H, depthAt(H)],
+      [-WB, H, depthAt(H)],
+    ),
     mats.shell,
     "frontTopFace",
   );
@@ -319,7 +343,12 @@ function buildTrapezoidShell(parent: Group, mats: Mats) {
   const dGlass = depthAt(GLASS_TOP);
   addMesh(
     shell,
-    quad([-WB, 0, zf0], [WB, 0, zf0], [WB, FLOOR_Y, dGlass], [-WB, FLOOR_Y, dGlass]),
+    quad(
+      [-WB, 0, zf0],
+      [WB, 0, zf0],
+      [WB, FLOOR_Y, dGlass],
+      [-WB, FLOOR_Y, dGlass],
+    ),
     mats.shell,
     "frontSill",
   );
@@ -509,11 +538,13 @@ function buildFrontFrame(parent: Group, mats: Mats) {
 function buildDuct(parent: Group, mats: Mats) {
   const duct = part("exhaustDuct");
   const y1 = H + TOP_TH;
-  addMesh(duct, new CylinderGeometry(0.048, 0.052, 0.15, 12, 3, true), mats.duct, "hose", [
-    -0.2,
-    y1 + 0.09,
-    -0.1,
-  ]);
+  addMesh(
+    duct,
+    new CylinderGeometry(0.048, 0.052, 0.15, 12, 3, true),
+    mats.duct,
+    "hose",
+    [-0.2, y1 + 0.09, -0.1],
+  );
   addMesh(
     duct,
     new TorusGeometry(0.054, 0.013, 8, 16, Math.PI * 0.55),
@@ -622,7 +653,15 @@ function buildGlassSash(parent: Group, mats: Mats) {
   const { openY0, openY1, inner } = sashLayout();
   const glass = insetCorners(inner, 0.002);
 
-  addMesh(sash, quad(glass.bl, glass.br, glass.tr, glass.tl), mats.glass, "frontGlass", undefined, undefined, 10);
+  addMesh(
+    sash,
+    quad(glass.bl, glass.br, glass.tr, glass.tl),
+    mats.glass,
+    "frontGlass",
+    undefined,
+    undefined,
+    10,
+  );
 
   const sideGlassX = WB - FRAME - 0.004;
   const sideGlassD = DB * 2 - 0.12;
@@ -662,24 +701,36 @@ function buildStand(parent: Group, mats: Mats, cabinetBottom: number) {
     [spreadX, cabinetBottom - legH * 0.5, -spreadZ],
   ];
   legPositions.forEach(([x, y, z], i) => {
-    addMesh(parent, new CylinderGeometry(0.024, 0.026, legH, 8), mats.shell, `leg-${i}`, [x, y, z]);
-    addMesh(parent, new CylinderGeometry(0.028, 0.028, 0.018, 10), mats.wheel, `caster-${i}`, [
-      x,
-      cabinetBottom - legH - 0.008,
-      z,
-    ]);
+    addMesh(
+      parent,
+      new CylinderGeometry(0.024, 0.026, legH, 8),
+      mats.shell,
+      `leg-${i}`,
+      [x, y, z],
+    );
+    addMesh(
+      parent,
+      new CylinderGeometry(0.028, 0.028, 0.018, 10),
+      mats.wheel,
+      `caster-${i}`,
+      [x, cabinetBottom - legH - 0.008, z],
+    );
   });
   const braceY = cabinetBottom - legH + 0.12;
-  addMesh(parent, new BoxGeometry(spreadX * 2 + 0.04, 0.032, 0.032), mats.shell, "braceFront", [
-    0,
-    braceY,
-    spreadZ,
-  ]);
-  addMesh(parent, new BoxGeometry(spreadX * 2 + 0.04, 0.032, 0.032), mats.shell, "braceBack", [
-    0,
-    braceY,
-    -spreadZ,
-  ]);
+  addMesh(
+    parent,
+    new BoxGeometry(spreadX * 2 + 0.04, 0.032, 0.032),
+    mats.shell,
+    "braceFront",
+    [0, braceY, spreadZ],
+  );
+  addMesh(
+    parent,
+    new BoxGeometry(spreadX * 2 + 0.04, 0.032, 0.032),
+    mats.shell,
+    "braceBack",
+    [0, braceY, -spreadZ],
+  );
 }
 
 function buildCabinet(parent: Group, mats: Mats) {
@@ -712,19 +763,31 @@ export function measureGroup(root: Group): LaminarHoodStats {
   const materialSet = new Set<Material>();
   const parts: string[] = [];
   root.traverse((obj) => {
-    if (obj instanceof Group && obj !== root && obj.children.length > 0 && obj.name) parts.push(obj.name);
+    if (
+      obj instanceof Group &&
+      obj !== root &&
+      obj.children.length > 0 &&
+      obj.name
+    )
+      parts.push(obj.name);
     if (!(obj instanceof Mesh)) return;
     meshes += 1;
     materialSet.add(obj.material as Material);
     const geo = obj.geometry;
     const index = geo.index;
     if (index) triangles += index.count / 3;
-    else if (geo.attributes.position) triangles += geo.attributes.position.count / 3;
+    else if (geo.attributes.position)
+      triangles += geo.attributes.position.count / 3;
   });
-  return { triangles: Math.round(triangles), meshes, materials: materialSet.size, parts };
+  return {
+    triangles: Math.round(triangles),
+    meshes,
+    materials: materialSet.size,
+    parts,
+  };
 }
 
-export function createLaminarHoodModel(): LaminarHoodBuild {
+export function createLaminarHoodModel(includeStand = true): LaminarHoodBuild {
   const group = new Group();
   group.name = "LaminarHood";
   const mats = makeMaterials();
@@ -732,11 +795,13 @@ export function createLaminarHoodModel(): LaminarHoodBuild {
   const cabinetBottom = 0.58;
 
   const stand = part("stand");
-  buildStand(stand, mats, cabinetBottom);
-  group.add(stand);
+  if (includeStand) {
+    buildStand(stand, mats, cabinetBottom);
+    group.add(stand);
+  }
 
   const cabinet = part("cabinet");
-  cabinet.position.y = cabinetBottom;
+  cabinet.position.y = includeStand ? cabinetBottom : 0;
   buildCabinet(cabinet, mats);
   group.add(cabinet);
 

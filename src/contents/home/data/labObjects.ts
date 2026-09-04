@@ -1,159 +1,67 @@
 import { CHAPTERS } from "./chapters";
-import type { LabObjectDef } from "../types/laboratory";
+import type {
+  LabObjectDef,
+  LabObjectId,
+  ChapterId,
+  LabObjectCategory,
+  CameraShot,
+} from "../types/laboratory";
 import { assertMetadataRoute } from "../types/labStation";
-import { HERO_PLACEMENTS } from "../laboratory/roomPlacement";
-
+import { INTERACTIVE_FURNITURE } from "../laboratory/roomPlacement";
+import { transformPoint } from "../laboratory/layoutMath";
+function station(
+  id: LabObjectId,
+  chapterId: ChapterId,
+  category: LabObjectCategory,
+): LabObjectDef {
+  const spec = INTERACTIVE_FURNITURE[id],
+    chapter = CHAPTERS[chapterId];
+  const focus = spec.size[1] * 0.55;
+  const shot = (mobile: boolean): CameraShot => ({
+    position: transformPoint(spec, [
+      mobile ? 0.4 : 0.55,
+      focus + (mobile ? 0.85 : 0.65),
+      mobile ? 3.4 : 2.8,
+    ]),
+    target: transformPoint(spec, [0, focus, 0]),
+  });
+  return {
+    id,
+    name: chapter.name,
+    nameZh: chapter.nameZh,
+    description: chapter.summary,
+    chapterId,
+    position: spec.position,
+    rotation: [0, spec.rotationY, 0],
+    scale: 1,
+    hitSize: spec.size,
+    hitOffset: [0, spec.size[1] / 2, 0],
+    camera: { desktop: shot(false), mobile: shot(true) },
+    hoverAnim: "highlight",
+    clickAnim: "pulse",
+    placeholder: "geometry",
+    modelSource: "procedural",
+    category,
+    metadata: {
+      id,
+      name: chapter.name,
+      route: chapter.path,
+      category,
+      description: chapter.summary,
+    },
+  };
+}
 export const LAB_OBJECTS: LabObjectDef[] = [
-  {
-    id: "computer",
-    name: "Workstation",
-    nameZh: "电脑",
-    description: "进入 Dry Lab / Model：模型框架与模拟解释。",
-    chapterId: "model",
-    position: HERO_PLACEMENTS.computer.position,
-    rotation: HERO_PLACEMENTS.computer.rotation,
-    scale: 1,
-    hitSize: [1.6, 1.5, 1.2],
-    hitOffset: [0, 1.05, 0],
-    camera: {
-      desktop: { position: [-1.1, 2.4, 2.6], target: [-3.35, 1.15, -0.15] },
-      mobile: { position: [-0.4, 2.7, 3.4], target: [-3.35, 1.2, -0.15] },
-    },
-    hoverAnim: "highlight",
-    clickAnim: "pulse",
-    placeholder: "geometry",
-    modelSource: "procedural",
-    category: "workstation",
-    metadata: {
-      id: "computer",
-      name: "Dry Lab",
-      route: "/model",
-      category: "workstation",
-      description: "Dry lab workstation",
-    },
-  },
-  {
-    id: "microscope",
-    name: "Microscope",
-    nameZh: "显微镜",
-    description: "进入 Wet Lab / Experiments：实验设计与验证进展。",
-    chapterId: "experiments",
-    position: HERO_PLACEMENTS.microscope.position,
-    rotation: HERO_PLACEMENTS.microscope.rotation,
-    scale: 1,
-    hitSize: [1.5, 1.7, 1.3],
-    hitOffset: [0, 1.15, 0],
-    camera: {
-      desktop: { position: [1.05, 1.68, 1.82], target: [0.05, 1.22, 0.38] },
-      mobile: { position: [0.85, 1.95, 2.25], target: [0.05, 1.24, 0.38] },
-    },
-    hoverAnim: "highlight",
-    clickAnim: "pulse",
-    placeholder: "geometry",
-    modelSource: "procedural",
-    category: "equipment",
-    metadata: {
-      id: "microscope",
-      name: "Wet Lab",
-      route: "/experiments",
-      category: "equipment",
-      description: "Laboratory microscope",
-    },
-  },
-  {
-    id: "researcher",
-    name: "Researcher",
-    nameZh: "研究员",
-    description: "进入 Team：成员与分工。",
-    chapterId: "team",
-    position: HERO_PLACEMENTS.researcher.position,
-    rotation: HERO_PLACEMENTS.researcher.rotation,
-    scale: 1,
-    hitSize: [0.9, 1.85, 0.8],
-    hitOffset: [0, 0.95, 0],
-    camera: {
-      desktop: { position: [-1.9, 2.1, 3.6], target: [-4.25, 1.1, 1.55] },
-      mobile: { position: [-1.4, 2.4, 4.3], target: [-4.25, 1.15, 1.55] },
-    },
-    hoverAnim: "scale",
-    clickAnim: "pulse",
-    placeholder: "geometry",
-    modelSource: "procedural",
-    category: "character",
-    metadata: {
-      id: "researcher",
-      name: "Team",
-      route: "/team",
-      category: "character",
-      description: "Laboratory researcher",
-    },
-  },
-  {
-    id: "bookshelf",
-    name: "Archive",
-    nameZh: "书架与访谈文件",
-    description: "进入 Human Practices：调研与设计影响。",
-    chapterId: "human-practices",
-    position: HERO_PLACEMENTS.bookshelf.position,
-    rotation: HERO_PLACEMENTS.bookshelf.rotation,
-    scale: 1,
-    hitSize: [1.7, 2.2, 0.7],
-    hitOffset: [0, 1.15, 0],
-    camera: {
-      desktop: { position: [2.55, 2.4, 1.6], target: [2.55, 1.3, -2.55] },
-      mobile: { position: [2.55, 2.8, 2.4], target: [2.55, 1.35, -2.55] },
-    },
-    hoverAnim: "highlight",
-    clickAnim: "pulse",
-    placeholder: "geometry",
-    modelSource: "placeholder",
-    category: "archive",
-    metadata: {
-      id: "bookshelf",
-      name: "Human Practices",
-      route: "/human-practices",
-      category: "archive",
-      description: "Archive shelf and interview files",
-    },
-  },
-  {
-    id: "device",
-    name: "Prototype",
-    nameZh: "实验装置",
-    description: "进入 Project：总览并链接 Design、Engineering、Results 与 Safety。",
-    chapterId: "description",
-    position: HERO_PLACEMENTS.device.position,
-    rotation: HERO_PLACEMENTS.device.rotation,
-    scale: 1,
-    hitSize: [1.4, 1.8, 1.2],
-    hitOffset: [0, 1.1, 0],
-    camera: {
-      desktop: { position: [1.2, 2.5, 3.3], target: [3.25, 1.15, 0.55] },
-      mobile: { position: [0.6, 2.8, 4.0], target: [3.25, 1.2, 0.55] },
-    },
-    hoverAnim: "highlight",
-    clickAnim: "pulse",
-    placeholder: "geometry",
-    modelSource: "procedural",
-    category: "device",
-    metadata: {
-      id: "device",
-      name: "Project",
-      route: "/description",
-      category: "device",
-      description: "Desktop bioreactor / engineering production station",
-    },
-  },
+  station("computer", "model", "workstation"),
+  station("microscope", "experiments", "equipment"),
+  station("researcher", "team", "character"),
+  station("bookshelf", "human-practices", "archive"),
+  station("device", "description", "device"),
 ];
-
-for (const def of LAB_OBJECTS) {
+for (const def of LAB_OBJECTS)
   assertMetadataRoute(def, CHAPTERS[def.chapterId]);
-}
-
-export function labObjectById(id: string) {
-  return LAB_OBJECTS.find((item) => item.id === id);
-}
-
+export const labObjectById = (id: string) =>
+  LAB_OBJECTS.find((o) => o.id === id);
 export function chapterForObject(id: string) {
   const obj = labObjectById(id);
   return obj ? CHAPTERS[obj.chapterId] : undefined;

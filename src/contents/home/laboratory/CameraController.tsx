@@ -1,8 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { OrbitControls } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
-import { ENTER_CAMERA_OFFSET, OVERVIEW_CAMERA } from "../data/cameraPresets";
+import { PerspectiveCamera } from "three";
+import {
+  ENTER_CAMERA_OFFSET,
+  OVERVIEW_CAMERA,
+  fitOverviewShot,
+} from "../data/cameraPresets";
 import { chapterForObject, labObjectById } from "../data/labObjects";
 import { useLaboratoryStore } from "../store/laboratoryStore";
 import {
@@ -29,7 +34,12 @@ type Props = {
 
 type OrbitHandle = {
   enabled: boolean;
-  target: { set: (x: number, y: number, z: number) => void; x: number; y: number; z: number };
+  target: {
+    set: (x: number, y: number, z: number) => void;
+    x: number;
+    y: number;
+    z: number;
+  };
   update: () => void;
 };
 
@@ -42,14 +52,26 @@ export function CameraController({
   reviewView = "ref",
 }: Props) {
   const controls = useRef<OrbitHandle | null>(null);
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const phase = useLaboratoryStore((s) => s.phase);
   const selectedId = useLaboratoryStore((s) => s.selectedId);
   const setPhase = useLaboratoryStore((s) => s.setPhase);
   const setLocked = useLaboratoryStore((s) => s.setLocked);
-  const overview = mobile ? OVERVIEW_CAMERA.mobile : OVERVIEW_CAMERA.desktop;
+  const overview = useMemo(
+    () =>
+      fitOverviewShot(
+        mobile ? OVERVIEW_CAMERA.mobile : OVERVIEW_CAMERA.desktop,
+        size.width / size.height,
+        mobile ? 42 : 34,
+      ),
+    [mobile, size.width, size.height],
+  );
 
   useEffect(() => {
+    if (camera instanceof PerspectiveCamera) {
+      camera.fov = review ? 28 : mobile ? 42 : 34;
+      camera.updateProjectionMatrix();
+    }
     if (review) {
       const shotTable =
         reviewAsset === "computer"
@@ -70,7 +92,11 @@ export function CameraController({
       const shot = shotTable[reviewView];
       camera.position.set(shot.position[0], shot.position[1], shot.position[2]);
       camera.lookAt(shot.target[0], shot.target[1], shot.target[2]);
-      controls.current?.target.set(shot.target[0], shot.target[1], shot.target[2]);
+      controls.current?.target.set(
+        shot.target[0],
+        shot.target[1],
+        shot.target[2],
+      );
       controls.current?.update();
       setPhase("idle");
       return;
@@ -92,7 +118,11 @@ export function CameraController({
     }
 
     setPhase("entering");
-    const look = { x: overview.target[0], y: overview.target[1], z: overview.target[2] };
+    const look = {
+      x: overview.target[0],
+      y: overview.target[1],
+      z: overview.target[2],
+    };
     const tween = gsap.to(camera.position, {
       x: overview.position[0],
       y: overview.position[1],
@@ -108,7 +138,16 @@ export function CameraController({
     return () => {
       tween.kill();
     };
-  }, [camera, overview, reduced, review, reviewAsset, reviewView, setPhase]);
+  }, [
+    camera,
+    mobile,
+    overview,
+    reduced,
+    review,
+    reviewAsset,
+    reviewView,
+    setPhase,
+  ]);
 
   useEffect(() => {
     if (review || phase !== "focusing" || !selectedId) return;
@@ -143,7 +182,6 @@ export function CameraController({
       onUpdate: () => {
         camera.lookAt(look.x, look.y, look.z);
         controls.current?.target.set(look.x, look.y, look.z);
-        controls.current?.update();
       },
       onComplete: () => {
         setPhase("transitioning");
@@ -156,7 +194,17 @@ export function CameraController({
       lookTween.kill();
       if (orbit) orbit.enabled = true;
     };
-  }, [camera, mobile, onNavigate, overview.target, phase, review, selectedId, setLocked, setPhase]);
+  }, [
+    camera,
+    mobile,
+    onNavigate,
+    overview.target,
+    phase,
+    review,
+    selectedId,
+    setLocked,
+    setPhase,
+  ]);
 
   return (
     <OrbitControls
@@ -165,8 +213,8 @@ export function CameraController({
       enablePan={false}
       enableDamping
       dampingFactor={0.08}
-      minDistance={review ? 1.2 : 1.55}
-      maxDistance={review ? 4.2 : 12}
+      minDistance={review ? 1.2 : 8}
+      maxDistance={review ? 4.2 : 45}
       minPolarAngle={review ? 0.18 : 0.48}
       maxPolarAngle={review ? 1.45 : 1.18}
       minAzimuthAngle={review ? -Math.PI : -0.48}

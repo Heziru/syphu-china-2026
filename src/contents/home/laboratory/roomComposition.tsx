@@ -1,141 +1,142 @@
-import { LAB_COLORS } from "./labPalette";
+import { Fragment } from "react";
+import { StaticBatch } from "./StaticBatch";
+import { LAB_OBJECTS } from "../data/labObjects";
+import { ComputerModel } from "./computer/ComputerModel";
+import { MicroscopeModel } from "./microscope/MicroscopeModel";
+import { LaminarHoodModel } from "./laminar-hood/LaminarHoodModel";
+import { LabChairModel } from "./lab-chair/LabChairModel";
+import { ResearcherModel } from "./researcher/ResearcherModel";
+import { InteractiveObject } from "./InteractiveObject";
+import { ModelAsset } from "./ModelAsset";
+import { LabDesk, LabBench, Cabinet } from "./labFurnitureSystem";
+import { CentralBench } from "./CentralBench";
+import { FloorBioreactor } from "./FloorBioreactor";
+import { Plant, LabStool, TubeRack } from "./RoomAccents";
 import {
-  CountertopModule,
-  FURNITURE_DIMS,
-  LabDeskModule,
-  LaminarHoodShell,
-  LowerCabinetModule,
-  TallStorageModule,
-  UpperCabinetModule,
-  WallAnchoredFurniture,
-} from "./labFurnitureSystem";
-import { SoftBox } from "./SoftBox";
-import {
-  DRY_LAB_DESK,
-  ENGINEERING_BENCH,
-  ENGINEERING_TALL,
-  TALL_STORAGE_A,
-  TALL_STORAGE_B,
-  WET_LAB_UPPER,
-  WET_LAB_WORKSTATION,
+  GROUP_FRAMES,
+  ROOM_FURNITURE,
+  type FurnitureSpec,
+  type GroupId,
 } from "./roomPlacement";
-
-/**
- * Phase 3.10 — modular laboratory furniture groups.
- * Each group has clear semantic role; no arbitrary filler blockouts.
- */
-
-/** Dry Lab — wall desk + lower cabinets; computer sits on deskTopY. */
-export function DryLabFurnitureGroup() {
-  const p = DRY_LAB_DESK;
-  const [x, y, z] = p.anchor.position;
-  return (
-    <WallAnchoredFurniture position={[x, y, z]} rotationY={p.anchor.rotationY}>
-      <LabDeskModule
-        width={p.width}
-        depth={p.depth}
-        leftCabinetW={0.58}
-        rightCabinetW={0.58}
-      />
-    </WallAnchoredFurniture>
-  );
+function Furniture({ spec }: { spec: FurnitureSpec }) {
+  const [width, height, depth] = spec.size;
+  switch (spec.role) {
+    case "desk":
+      return <LabDesk {...{ width, height, depth }} />;
+    case "bench":
+      return spec.id === "central-bench" ? (
+        <CentralBench spec={spec} />
+      ) : (
+        <LabBench {...{ width, height, depth }} />
+      );
+    case "cabinet":
+      return height > 1 ? (
+        <Cabinet {...{ width, height, depth }} glass />
+      ) : (
+        <LabBench {...{ width, height, depth }} />
+      );
+    case "computer":
+      return (
+        <ModelAsset id={spec.id} size={spec.size}>
+          <ComputerModel tabletop />
+        </ModelAsset>
+      );
+    case "hood":
+      return (
+        <ModelAsset id={spec.id} size={spec.size}>
+          <LaminarHoodModel tabletop />
+        </ModelAsset>
+      );
+    case "microscope":
+      return (
+        <ModelAsset id={spec.id} size={spec.size}>
+          <MicroscopeModel />
+        </ModelAsset>
+      );
+    case "bioreactor":
+      return (
+        <ModelAsset id={spec.id} size={spec.size}>
+          <FloorBioreactor />
+        </ModelAsset>
+      );
+    case "researcher":
+      return (
+        <ModelAsset id={spec.id} size={spec.size}>
+          <ResearcherModel />
+        </ModelAsset>
+      );
+    case "chair":
+      return (
+        <ModelAsset id={spec.id} size={spec.size}>
+          <LabChairModel />
+        </ModelAsset>
+      );
+    case "stool":
+      return <LabStool />;
+  }
 }
-
-/** Wet Lab — lower cabinets + countertop + integrated laminar hood. */
-export function WetLabFurnitureGroup() {
-  const p = WET_LAB_WORKSTATION;
-  const [x, y, z] = p.anchor.position;
-  const cabW = 0.72;
-  const gap = 0.08;
-  const leftX = -p.width * 0.5 + cabW * 0.5;
-  const rightX = p.width * 0.5 - cabW * 0.5;
-
-  return (
-    <WallAnchoredFurniture position={[x, y, z]} rotationY={p.anchor.rotationY}>
-      <LowerCabinetModule width={cabW} depth={p.depth} x={leftX} />
-      <LowerCabinetModule width={cabW} depth={p.depth} x={rightX} withDrawer={false} />
-      <CountertopModule width={p.width - gap} depth={p.depth} />
-      <LaminarHoodShell width={p.width * 0.88} depth={p.depth} />
-    </WallAnchoredFurniture>
-  );
-}
-
-/** Wet Lab upper wall cabinet (optional side storage). */
-export function WetLabUpperCabinet() {
-  const p = WET_LAB_UPPER;
-  const [x, y, z] = p.anchor.position;
-  return (
-    <WallAnchoredFurniture position={[x, y, z]} rotationY={p.anchor.rotationY}>
-      <UpperCabinetModule width={p.width} depth={p.depth} />
-    </WallAnchoredFurniture>
-  );
-}
-
-/** Back-center tall storage rhythm — two modules with gap. */
-export function StorageFurnitureGroup() {
-  return (
-    <>
-      <TallStorageBlockout placement={TALL_STORAGE_A} />
-      <TallStorageBlockout placement={TALL_STORAGE_B} />
-    </>
-  );
-}
-
-function TallStorageBlockout({
-  placement,
+export function LaboratoryFurniture({
+  reduced,
+  onNavigate,
 }: {
-  placement: typeof TALL_STORAGE_A;
+  reduced: boolean;
+  onNavigate: (path: string) => void;
 }) {
-  const [x, y, z] = placement.anchor.position;
-  return (
-    <WallAnchoredFurniture position={[x, y, z]} rotationY={placement.anchor.rotationY}>
-      <TallStorageModule width={placement.width} depth={placement.depth} />
-    </WallAnchoredFurniture>
-  );
-}
-
-/** Engineering — side bench + tall storage; bioreactor stays floor-standing. */
-export function EngineeringFurnitureGroup() {
-  const bench = ENGINEERING_BENCH;
-  const tall = ENGINEERING_TALL;
-  const [bx, by, bz] = bench.anchor.position;
-  const [tx, ty, tz] = tall.anchor.position;
-
   return (
     <>
-      <WallAnchoredFurniture position={[bx, by, bz]} rotationY={bench.anchor.rotationY}>
-        <LowerCabinetModule width={bench.width * 0.55} depth={bench.depth} x={-bench.width * 0.22} />
-        <LowerCabinetModule
-          width={bench.width * 0.38}
-          depth={bench.depth}
-          x={bench.width * 0.28}
-          withDrawer={false}
-        />
-        <CountertopModule width={bench.width} depth={bench.depth} />
-        {/* controller pedestal — clear semantic role */}
-        <SoftBox
-          position={[bench.width * 0.18, FURNITURE_DIMS.deskTopY + 0.28, bench.depth * 0.12]}
-          size={[0.42, 0.56, 0.38]}
-          radius={0.018}
-          color={LAB_COLORS.structure}
-          roughness={0.72}
-        />
-      </WallAnchoredFurniture>
-      <WallAnchoredFurniture position={[tx, ty, tz]} rotationY={tall.anchor.rotationY}>
-        <TallStorageModule width={tall.width} depth={tall.depth} />
-      </WallAnchoredFurniture>
-    </>
-  );
-}
-
-export function WallFurnitureBlockouts() {
-  return (
-    <>
-      <DryLabFurnitureGroup />
-      <WetLabFurnitureGroup />
-      <WetLabUpperCabinet />
-      <StorageFurnitureGroup />
-      <EngineeringFurnitureGroup />
+      {(Object.keys(GROUP_FRAMES) as GroupId[]).map((id) => {
+        const frame = GROUP_FRAMES[id];
+        return (
+          <group
+            key={id}
+            name={"zone:" + id}
+            position={frame.position}
+            rotation={[0, frame.rotationY, 0]}
+          >
+            {ROOM_FURNITURE.filter((spec) => spec.group === id).map((spec) => {
+              const interactiveId =
+                spec.id === "storage-a" ? "bookshelf" : spec.id;
+              const def = LAB_OBJECTS.find((o) => o.id === interactiveId);
+              return (
+                <Fragment key={spec.id}>
+                  {def ? (
+                    <InteractiveObject
+                      def={def}
+                      placement={spec}
+                      reduced={reduced}
+                      onNavigate={onNavigate}
+                    >
+                      <StaticBatch>
+                        <Furniture spec={spec} />
+                      </StaticBatch>
+                    </InteractiveObject>
+                  ) : (
+                    <group
+                      name={spec.id}
+                      position={spec.position}
+                      rotation={[0, spec.rotationY, 0]}
+                    >
+                      <StaticBatch>
+                        <Furniture spec={spec} />
+                      </StaticBatch>
+                    </group>
+                  )}
+                  {spec.id === "storage-b" && (
+                    <group position={[spec.position[0], spec.size[1], 0]}>
+                      <Plant scale={0.8} />
+                    </group>
+                  )}
+                  {spec.id === "engineering-bench" && (
+                    <group position={[spec.position[0], spec.size[1], 0]}>
+                      <TubeRack />
+                    </group>
+                  )}
+                </Fragment>
+              );
+            })}
+          </group>
+        );
+      })}
     </>
   );
 }

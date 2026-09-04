@@ -1,6 +1,5 @@
 import { useLayoutEffect, useMemo } from "react";
 import {
-  COMPUTER_REVISION,
   createComputerModel,
   type ComputerModelOptions,
   type ComputerStats,
@@ -11,6 +10,7 @@ type Props = {
   source?: "procedural" | "gltf";
   gltfUrl?: string;
   options?: ComputerModelOptions;
+  tabletop?: boolean;
 };
 
 /**
@@ -22,16 +22,17 @@ export function ComputerModel({
   source = "procedural",
   gltfUrl,
   options,
+  tabletop = false,
 }: Props) {
   const resolvedSource = source === "gltf" && gltfUrl ? "gltf" : "procedural";
 
   const { group, stats } = useMemo(() => {
     if (resolvedSource === "gltf") {
       // No GLB in repo yet — keep InteractiveObject stable.
-      return createComputerModel(options);
+      return createComputerModel(options, !tabletop);
     }
-    return createComputerModel(options);
-  }, [COMPUTER_REVISION, resolvedSource, options?.includeHeadphones, options?.style]);
+    return createComputerModel(options, !tabletop);
+  }, [resolvedSource, options, tabletop]);
 
   useLayoutEffect(() => {
     const host = window as Window & { __COMPUTER_STATS?: ComputerStats };

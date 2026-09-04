@@ -1,11 +1,7 @@
 import { useLayoutEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
 import { CubeTexture, MeshStandardMaterial, SRGBColorSpace } from "three";
-import {
-  createLabChairModel,
-  LAB_CHAIR_REVISION,
-  type LabChairStats,
-} from "./createLabChairModel";
+import { createLabChairModel, type LabChairStats } from "./createLabChairModel";
 
 type Props = { studio?: boolean };
 
@@ -40,7 +36,7 @@ function makeStudioCube() {
 
 export function LabChairModel({ studio = false }: Props) {
   const { scene } = useThree();
-  const { group, stats, materials } = useMemo(() => createLabChairModel(), [LAB_CHAIR_REVISION]);
+  const { group, stats, materials } = useMemo(() => createLabChairModel(), []);
 
   useLayoutEffect(() => {
     const host = window as Window & { __LAB_CHAIR_STATS?: LabChairStats };

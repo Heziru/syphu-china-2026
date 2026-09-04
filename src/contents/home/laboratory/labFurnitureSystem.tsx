@@ -1,268 +1,238 @@
-import type { ReactNode } from "react";
-import { LAB_COLORS } from "./labPalette";
+import { LAB_COLORS as C } from "./labPalette";
 import { SoftBox } from "./SoftBox";
+import { SpecimenBottles } from "./RoomAccents";
 
-/** Shared laboratory furniture palette — sage / charcoal / wood / warm white. */
-export const FURNITURE_MAT = {
-  sageCabinet: LAB_COLORS.cabinet,
-  darkCountertop: LAB_COLORS.dark,
-  warmWood: "#C4A882",
-  warmWhite: "#ECEFF2",
-  darkHandle: LAB_COLORS.metal,
-} as const;
-
-export const FURNITURE_DIMS = {
-  lowerHeight: 0.76,
-  lowerDepth: 0.6,
-  tallHeight: 2.05,
-  tallDepth: 0.52,
-  upperHeight: 0.52,
-  upperDepth: 0.32,
-  countertopThickness: 0.05,
-  deskTopY: 0.79,
-} as const;
-
-function boxSize(width: number, depth: number, height: number): [number, number, number] {
-  return [width, height, depth];
+export function Countertop({
+  width,
+  depth,
+  topY,
+}: {
+  width: number;
+  depth: number;
+  topY: number;
+}) {
+  return (
+    <SoftBox
+      position={[0, topY - 0.025, 0]}
+      size={[width, 0.05, depth]}
+      radius={0.017}
+      color={C.dark}
+      roughness={0.56}
+    />
+  );
 }
-
-function CabinetHandle({ x, y, z }: { x: number; y: number; z: number }) {
+export function Cabinet({
+  width,
+  depth,
+  height,
+  drawers = false,
+  glass = false,
+}: {
+  width: number;
+  depth: number;
+  height: number;
+  drawers?: boolean;
+  glass?: boolean;
+}) {
+  const panel = 0.035,
+    front = depth / 2 - 0.06;
+  return (
+    <group>
+      <SoftBox
+        position={[0, 0.045, 0]}
+        size={[width - 0.09, 0.09, depth - 0.08]}
+        radius={0.008}
+        color={C.structure}
+      />
+      {[-1, 1].map((s) => (
+        <SoftBox
+          key={s}
+          position={[s * (width / 2 - panel / 2), height / 2, 0]}
+          size={[panel, height, depth]}
+          radius={0.008}
+          color={C.cabinet}
+        />
+      ))}
+      <SoftBox
+        position={[0, height / 2, -depth / 2 + panel / 2]}
+        size={[width - 0.05, height, panel]}
+        radius={0.004}
+        color={C.cabinet}
+      />
+      {[0.1, height - 0.02].map((y) => (
+        <SoftBox
+          key={y}
+          position={[0, y, 0]}
+          size={[width - 0.04, 0.035, depth - 0.04]}
+          color={C.cabinet}
+          radius={0.005}
+        />
+      ))}
+      {glass ? (
+        <>
+          {[0.42, 0.86, 1.3, 1.72]
+            .filter((y) => y < height - 0.12)
+            .map((y, i) => (
+              <group key={y}>
+                <SoftBox
+                  position={[0, y, 0]}
+                  size={[width - 0.07, 0.024, depth - 0.07]}
+                  color={C.wood}
+                  radius={0.004}
+                />
+                <group position={[-width * 0.22, y + 0.014, 0]}>
+                  <SpecimenBottles count={3} scale={0.62 + i * 0.05} />
+                </group>
+              </group>
+            ))}
+          <mesh position={[0, height * 0.52, front]}>
+            <boxGeometry args={[width - 0.12, height - 0.17, 0.008]} />
+            <meshPhysicalMaterial
+              color="#DCE4D9"
+              transparent
+              opacity={0.17}
+              roughness={0.2}
+              metalness={0.1}
+              depthWrite={false}
+            />
+          </mesh>
+          {[-1, 1].map((s) => (
+            <SoftBox
+              key={s}
+              position={[s * (width / 2 - 0.06), height * 0.52, front]}
+              size={[0.045, height - 0.13, 0.028]}
+              color={C.cabinet}
+              radius={0.004}
+            />
+          ))}
+          <SoftBox
+            position={[0, height * 0.52, front]}
+            size={[0.028, height - 0.13, 0.028]}
+            color={C.cabinet}
+            radius={0.004}
+          />
+          {[0.12, height - 0.02].map((y) => (
+            <SoftBox
+              key={y}
+              position={[0, y, front]}
+              size={[width - 0.04, 0.045, 0.028]}
+              color={C.cabinet}
+              radius={0.004}
+            />
+          ))}
+          <Handle
+            x={width * 0.13}
+            y={height * 0.49}
+            z={depth / 2 - 0.026}
+            vertical
+          />
+        </>
+      ) : (
+        (drawers ? [0.23, 0.5, 0.77] : [0.5]).map((fraction, i) => {
+          const h = drawers ? (height - 0.12) / 3 - 0.015 : height - 0.12;
+          return (
+            <group key={fraction}>
+              <SoftBox
+                position={[0, 0.08 + (height - 0.08) * fraction, front]}
+                size={[width - 0.085, h, 0.032]}
+                radius={0.008}
+                color={i === 1 ? C.cabinetLight : C.cabinet}
+              />
+              <Handle
+                x={drawers ? 0 : width * 0.23}
+                y={0.08 + (height - 0.08) * fraction + h * 0.3}
+                z={depth / 2 - 0.026}
+              />
+            </group>
+          );
+        })
+      )}
+    </group>
+  );
+}
+function Handle({
+  x,
+  y,
+  z,
+  vertical = false,
+}: {
+  x: number;
+  y: number;
+  z: number;
+  vertical?: boolean;
+}) {
   return (
     <SoftBox
       position={[x, y, z]}
-      size={[0.16, 0.022, 0.028]}
-      radius={0.005}
-      color={FURNITURE_MAT.darkHandle}
-      roughness={0.32}
-      metalness={0.45}
-      cast={false}
+      size={vertical ? [0.018, 0.14, 0.036] : [0.14, 0.018, 0.036]}
+      radius={0.008}
+      color={C.metal}
+      metalness={0.65}
+      roughness={0.3}
     />
   );
 }
-
-/** Lower base cabinet module — sage green, semi-matte. */
-export function LowerCabinetModule({
+export function LabDesk({
   width,
-  depth = FURNITURE_DIMS.lowerDepth,
-  x = 0,
-  z = 0,
-  withDrawer = true,
+  depth,
+  height,
 }: {
   width: number;
-  depth?: number;
-  x?: number;
-  z?: number;
-  withDrawer?: boolean;
+  depth: number;
+  height: number;
 }) {
-  const h = FURNITURE_DIMS.lowerHeight;
+  const cabW = 0.5,
+    x = width / 2 - 0.02 - cabW / 2;
   return (
-    <group position={[x, 0, z]}>
-      <SoftBox
-        position={[0, h * 0.5, 0]}
-        size={boxSize(width, depth, h)}
-        radius={0.028}
-        color={FURNITURE_MAT.sageCabinet}
-        roughness={0.82}
-      />
-      <SoftBox
-        position={[0, 0.042, depth * 0.38]}
-        size={boxSize(width - 0.08, 0.075, 0.038)}
-        radius={0.014}
-        color={LAB_COLORS.structure}
-        roughness={0.7}
-        cast={false}
-      />
-      {withDrawer && (
-        <>
-          <SoftBox
-            position={[0, h * 0.62, depth * 0.38]}
-            size={boxSize(width - 0.14, h * 0.22, 0.034)}
-            radius={0.01}
-            color="#A8C6BF"
-            roughness={0.78}
-            cast={false}
+    <group>
+      {[-1, 1].map((s) => (
+        <group key={s} position={[s * x, 0, 0]}>
+          <Cabinet
+            width={cabW}
+            depth={depth - 0.06}
+            height={height - 0.05}
+            drawers={s === -1}
           />
-          <CabinetHandle x={0} y={h * 0.62} z={depth * 0.4} />
-        </>
-      )}
-      {!withDrawer && <CabinetHandle x={width * 0.28} y={h * 0.52} z={depth * 0.4} />}
-    </group>
-  );
-}
-
-/** Dark charcoal countertop slab. */
-export function CountertopModule({
-  width,
-  depth,
-  y = FURNITURE_DIMS.deskTopY - FURNITURE_DIMS.countertopThickness * 0.5,
-  x = 0,
-  z = 0,
-}: {
-  width: number;
-  depth: number;
-  y?: number;
-  x?: number;
-  z?: number;
-}) {
-  return (
-    <SoftBox
-      position={[x, y, z + depth * 0.02]}
-      size={boxSize(width - 0.06, depth - 0.04, FURNITURE_DIMS.countertopThickness)}
-      radius={0.016}
-      color={FURNITURE_MAT.darkCountertop}
-      roughness={0.46}
-      metalness={0.05}
-    />
-  );
-}
-
-/** Floor-to-ceiling tall storage cabinet. */
-export function TallStorageModule({
-  width,
-  depth = FURNITURE_DIMS.tallDepth,
-  x = 0,
-  z = 0,
-}: {
-  width: number;
-  depth?: number;
-  x?: number;
-  z?: number;
-}) {
-  const h = FURNITURE_DIMS.tallHeight;
-  return (
-    <group position={[x, 0, z]}>
-      <SoftBox
-        position={[0, h * 0.5, 0]}
-        size={boxSize(width, depth, h)}
-        radius={0.03}
-        color={FURNITURE_MAT.sageCabinet}
-        roughness={0.82}
-      />
-      {[0.35, 0.55, 0.75].map((t) => (
-        <SoftBox
-          key={t}
-          position={[0, h * t, depth * 0.4]}
-          size={boxSize(width - 0.12, 0.012, 0.012)}
-          radius={0.003}
-          color={LAB_COLORS.structure}
-          roughness={0.55}
-          cast={false}
-        />
+        </group>
       ))}
-      <CabinetHandle x={width * 0.3} y={h * 0.45} z={depth * 0.42} />
-      <CabinetHandle x={-width * 0.3} y={h * 0.45} z={depth * 0.42} />
-    </group>
-  );
-}
-
-/** Wall-mounted upper cabinet — warm white. */
-export function UpperCabinetModule({
-  width,
-  depth = FURNITURE_DIMS.upperDepth,
-  y = 1.58,
-  x = 0,
-  z = 0,
-}: {
-  width: number;
-  depth?: number;
-  y?: number;
-  x?: number;
-  z?: number;
-}) {
-  const h = FURNITURE_DIMS.upperHeight;
-  return (
-    <group position={[x, 0, z]}>
       <SoftBox
-        position={[0, y, 0]}
-        size={boxSize(width, depth, h)}
-        radius={0.022}
-        color={FURNITURE_MAT.warmWhite}
-        roughness={0.74}
+        position={[0, height * 0.55, -depth / 2 + 0.06]}
+        size={[width - 1, 0.14, 0.035]}
+        radius={0.005}
+        color={C.wood}
       />
-      <CabinetHandle x={0} y={y - h * 0.12} z={depth * 0.42} />
+      <Countertop width={width} depth={depth} topY={height} />
     </group>
   );
 }
-
-/** Laboratory desk — lower cabinets + dark countertop (no devices). */
-export function LabDeskModule({
+export function LabBench({
   width,
   depth,
-  leftCabinetW,
-  rightCabinetW,
+  height,
 }: {
   width: number;
   depth: number;
-  leftCabinetW: number;
-  rightCabinetW: number;
+  height: number;
 }) {
-  const midW = width - leftCabinetW - rightCabinetW;
-  const leftX = -width * 0.5 + leftCabinetW * 0.5;
-  const rightX = width * 0.5 - rightCabinetW * 0.5;
-
+  const n = width > 1.5 ? 2 : 1,
+    gap = 0.025,
+    w = (width - 0.04 - (n - 1) * gap) / n;
   return (
     <group>
-      <LowerCabinetModule width={leftCabinetW} depth={depth} x={leftX} withDrawer />
-      <LowerCabinetModule width={rightCabinetW} depth={depth} x={rightX} withDrawer={false} />
-      {midW > 0.2 && (
-        <SoftBox
-          position={[0, FURNITURE_DIMS.lowerHeight * 0.5, 0]}
-          size={boxSize(midW - 0.04, depth, FURNITURE_DIMS.lowerHeight)}
-          radius={0.02}
-          color={FURNITURE_MAT.warmWood}
-          roughness={0.78}
-        />
-      )}
-      <CountertopModule width={width} depth={depth} />
-    </group>
-  );
-}
-
-/** Integrated laminar hood shell sitting on a bench countertop. */
-export function LaminarHoodShell({
-  width,
-  depth,
-  benchTopY = FURNITURE_DIMS.deskTopY,
-}: {
-  width: number;
-  depth: number;
-  benchTopY?: number;
-}) {
-  const hoodH = 0.68;
-  const baseY = benchTopY + hoodH * 0.5;
-  return (
-    <group>
-      <SoftBox
-        position={[0, baseY, depth * 0.06]}
-        size={boxSize(width * 0.96, depth * 0.88, hoodH)}
-        radius={0.024}
-        color={FURNITURE_MAT.warmWhite}
-        roughness={0.72}
-      />
-      <SoftBox
-        position={[0, benchTopY + hoodH * 0.38, depth * 0.32]}
-        size={boxSize(width * 0.58, depth * 0.14, hoodH * 0.42)}
-        radius={0.012}
-        color="#D8DEE4"
-        roughness={0.68}
-        cast={false}
-      />
-    </group>
-  );
-}
-
-export function WallAnchoredFurniture({
-  position,
-  rotationY,
-  children,
-}: {
-  position: [number, number, number];
-  rotationY: number;
-  children: ReactNode;
-}) {
-  return (
-    <group position={position} rotation={[0, rotationY, 0]}>
-      {children}
+      {Array.from({ length: n }, (_, i) => (
+        <group
+          key={i}
+          position={[-width / 2 + 0.02 + w / 2 + i * (w + gap), 0, 0]}
+        >
+          <Cabinet
+            width={w}
+            depth={depth - 0.06}
+            height={height - 0.05}
+            drawers={i === 0}
+          />
+        </group>
+      ))}
+      <Countertop width={width} depth={depth} topY={height} />
     </group>
   );
 }

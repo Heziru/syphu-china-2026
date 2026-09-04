@@ -1,8 +1,12 @@
 import { useLayoutEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
-import { CubeTexture, MeshPhysicalMaterial, MeshStandardMaterial, SRGBColorSpace } from "three";
 import {
-  ANALYTICAL_BALANCE_REVISION,
+  CubeTexture,
+  MeshPhysicalMaterial,
+  MeshStandardMaterial,
+  SRGBColorSpace,
+} from "three";
+import {
   createAnalyticalBalanceModel,
   type AnalyticalBalanceStats,
 } from "./createAnalyticalBalanceModel";
@@ -44,21 +48,41 @@ export function AnalyticalBalanceModel({ studio = false }: Props) {
   const { scene } = useThree();
   const { group, stats, materials } = useMemo(
     () => createAnalyticalBalanceModel(),
-    [ANALYTICAL_BALANCE_REVISION],
+    [],
   );
 
   useLayoutEffect(() => {
-    const host = window as Window & { __ANALYTICAL_BALANCE_STATS?: AnalyticalBalanceStats };
+    const host = window as Window & {
+      __ANALYTICAL_BALANCE_STATS?: AnalyticalBalanceStats;
+    };
     host.__ANALYTICAL_BALANCE_STATS = stats;
     const env = makeStudioCube();
     const prevEnv = scene.environment;
     const prevIntensity = scene.environmentIntensity;
     materials.forEach((mat) => {
-      if (!(mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial)) return;
-      if (mat.name !== "metal" && mat.name !== "platform" && mat.name !== "glass" && mat.name !== "screen") return;
+      if (
+        !(
+          mat instanceof MeshStandardMaterial ||
+          mat instanceof MeshPhysicalMaterial
+        )
+      )
+        return;
+      if (
+        mat.name !== "metal" &&
+        mat.name !== "platform" &&
+        mat.name !== "glass" &&
+        mat.name !== "screen"
+      )
+        return;
       mat.envMap = env;
       mat.envMapIntensity =
-        mat.name === "metal" ? 1.05 : mat.name === "platform" ? 0.7 : mat.name === "glass" ? 0.75 : 0.4;
+        mat.name === "metal"
+          ? 1.05
+          : mat.name === "platform"
+            ? 0.7
+            : mat.name === "glass"
+              ? 0.75
+              : 0.4;
       mat.needsUpdate = true;
     });
     if (studio) {
@@ -72,7 +96,10 @@ export function AnalyticalBalanceModel({ studio = false }: Props) {
         scene.environmentIntensity = prevIntensity;
       }
       materials.forEach((mat) => {
-        if (mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial) {
+        if (
+          mat instanceof MeshStandardMaterial ||
+          mat instanceof MeshPhysicalMaterial
+        ) {
           if (mat.map) mat.map.dispose();
           mat.envMap = null;
         }

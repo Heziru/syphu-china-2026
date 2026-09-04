@@ -1,9 +1,10 @@
 import { useLayoutEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
 import { CubeTexture, MeshStandardMaterial, SRGBColorSpace } from "three";
-import { createMicroscopeModel, MICROSCOPE_REVISION, type MicroscopeStats } from "./createMicroscopeModel";
-
-const BENCH_TOP = 0.892;
+import {
+  createMicroscopeModel,
+  type MicroscopeStats,
+} from "./createMicroscopeModel";
 
 type Props = {
   /** Studio mode sits at the origin for reference-angle review. */
@@ -43,7 +44,10 @@ function makeStudioCube() {
 
 export function MicroscopeModel({ studio = false }: Props) {
   const { scene } = useThree();
-  const { group, stats, materials } = useMemo(() => createMicroscopeModel(), [MICROSCOPE_REVISION]);
+  const { group, stats, materials } = useMemo(
+    () => createMicroscopeModel(),
+    [],
+  );
 
   useLayoutEffect(() => {
     const host = window as Window & { __MICROSCOPE_STATS?: MicroscopeStats };
@@ -75,5 +79,5 @@ export function MicroscopeModel({ studio = false }: Props) {
     };
   }, [group, materials, scene, stats, studio]);
 
-  return <primitive object={group} position={studio ? [0, 0, 0] : [0.02, BENCH_TOP, 0.04]} />;
+  return <primitive object={group} />;
 }

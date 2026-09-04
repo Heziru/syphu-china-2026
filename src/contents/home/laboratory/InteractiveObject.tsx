@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import type { ThreeEvent } from "@react-three/fiber";
 import type { Group } from "three";
@@ -6,14 +6,23 @@ import type { LabObjectDef } from "../types/laboratory";
 import { CHAPTERS } from "../data/chapters";
 import { useLaboratoryStore } from "../store/laboratoryStore";
 import { PlaceholderObject } from "./PlaceholderObject";
+import type { FurnitureSpec } from "./roomPlacement";
 
 type Props = {
   def: LabObjectDef;
+  placement?: FurnitureSpec;
+  children?: ReactNode;
   reduced: boolean;
   onNavigate: (path: string) => void;
 };
 
-export function InteractiveObject({ def, reduced, onNavigate }: Props) {
+export function InteractiveObject({
+  def,
+  placement,
+  children,
+  reduced,
+  onNavigate,
+}: Props) {
   const group = useRef<Group>(null);
   const pointer = useRef({ x: 0, y: 0, moved: false });
   const hoveredId = useLaboratoryStore((s) => s.hoveredId);
@@ -31,7 +40,7 @@ export function InteractiveObject({ def, reduced, onNavigate }: Props) {
     event.stopPropagation();
     if (busy) return;
     setHovered(def.id);
-    if (!group.current || reduced) return;
+    if (!group.current || reduced || placement) return;
     gsap.to(group.current.scale, {
       x: def.hoverAnim === "scale" ? 1.06 : 1.02,
       y: def.hoverAnim === "scale" ? 1.06 : 1.02,
@@ -45,7 +54,13 @@ export function InteractiveObject({ def, reduced, onNavigate }: Props) {
     event.stopPropagation();
     if (hoveredId === def.id) setHovered(null);
     if (!group.current) return;
-    gsap.to(group.current.scale, { x: 1, y: 1, z: 1, duration: 0.16, overwrite: true });
+    gsap.to(group.current.scale, {
+      x: 1,
+      y: 1,
+      z: 1,
+      duration: 0.16,
+      overwrite: true,
+    });
   };
 
   const onPointerDown = (event: ThreeEvent<PointerEvent>) => {
@@ -68,7 +83,7 @@ export function InteractiveObject({ def, reduced, onNavigate }: Props) {
     event.stopPropagation();
     if (busy || pointer.current.moved) return;
     setSelected(def.id);
-    if (group.current && !reduced) {
+    if (group.current && !reduced && !placement) {
       gsap.fromTo(
         group.current.scale,
         { x: 1.04, y: 1.04, z: 1.04 },
@@ -85,11 +100,12 @@ export function InteractiveObject({ def, reduced, onNavigate }: Props) {
   return (
     <group
       ref={group}
-      position={def.position}
-      rotation={def.rotation}
+      name={placement?.id ?? def.id}
+      position={placement?.position ?? def.position}
+      rotation={placement ? [0, placement.rotationY, 0] : def.rotation}
       scale={def.scale}
     >
-      <PlaceholderObject id={def.id} />
+      {children ?? <PlaceholderObject id={def.id} />}
       <mesh
         position={def.hitOffset}
         onPointerOver={onPointerOver}

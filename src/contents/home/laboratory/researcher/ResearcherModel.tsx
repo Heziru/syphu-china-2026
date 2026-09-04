@@ -1,6 +1,5 @@
 import { useLayoutEffect, useMemo } from "react";
 import {
-  RESEARCHER_REVISION,
   createResearcherModel,
   type ResearcherModelOptions,
   type ResearcherStats,
@@ -30,7 +29,7 @@ export function ResearcherModel({
       return createResearcherModel(options);
     }
     return createResearcherModel(options);
-  }, [RESEARCHER_REVISION, resolvedSource, options?.style]);
+  }, [resolvedSource, options]);
 
   useLayoutEffect(() => {
     const host = window as Window & { __RESEARCHER_STATS?: ResearcherStats };

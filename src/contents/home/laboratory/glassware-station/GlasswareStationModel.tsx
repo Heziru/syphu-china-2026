@@ -3,7 +3,6 @@ import { useThree } from "@react-three/fiber";
 import { CubeTexture, MeshStandardMaterial, SRGBColorSpace } from "three";
 import {
   createGlasswareStationModel,
-  GLASSWARE_STATION_REVISION,
   type GlasswareStationStats,
 } from "./createGlasswareStationModel";
 
@@ -44,18 +43,21 @@ export function GlasswareStationModel({ studio = false }: Props) {
   const { scene } = useThree();
   const { group, stats, materials } = useMemo(
     () => createGlasswareStationModel(),
-    [GLASSWARE_STATION_REVISION],
+    [],
   );
 
   useLayoutEffect(() => {
-    const host = window as Window & { __GLASSWARE_STATION_STATS?: GlasswareStationStats };
+    const host = window as Window & {
+      __GLASSWARE_STATION_STATS?: GlasswareStationStats;
+    };
     host.__GLASSWARE_STATION_STATS = stats;
     const env = makeStudioCube();
     const prevEnv = scene.environment;
     const prevIntensity = scene.environmentIntensity;
     materials.forEach((mat) => {
       if (!(mat instanceof MeshStandardMaterial)) return;
-      if (mat.name !== "metal" && mat.name !== "glass" && mat.name !== "cap") return;
+      if (mat.name !== "metal" && mat.name !== "glass" && mat.name !== "cap")
+        return;
       mat.envMap = env;
       mat.envMapIntensity = mat.name === "glass" ? 0.65 : 0.85;
       mat.needsUpdate = true;

@@ -1,6 +1,5 @@
 import { useLayoutEffect, useMemo } from "react";
 import {
-  BIOREACTOR_REVISION,
   createBioreactorModel,
   type BioreactorModelOptions,
   type BioreactorStats,
@@ -30,13 +29,7 @@ export function BioreactorModel({
       return createBioreactorModel(options);
     }
     return createBioreactorModel(options);
-  }, [
-    BIOREACTOR_REVISION,
-    resolvedSource,
-    options?.includePumpModules,
-    options?.includeSidePorts,
-    options?.style,
-  ]);
+  }, [resolvedSource, options]);
 
   useLayoutEffect(() => {
     const host = window as Window & { __BIOREACTOR_STATS?: BioreactorStats };

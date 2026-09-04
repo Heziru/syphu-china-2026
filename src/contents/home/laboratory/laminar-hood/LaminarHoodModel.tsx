@@ -1,13 +1,17 @@
 import { useLayoutEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
-import { CubeTexture, MeshPhysicalMaterial, MeshStandardMaterial, SRGBColorSpace } from "three";
+import {
+  CubeTexture,
+  MeshPhysicalMaterial,
+  MeshStandardMaterial,
+  SRGBColorSpace,
+} from "three";
 import {
   createLaminarHoodModel,
-  LAMINAR_HOOD_REVISION,
   type LaminarHoodStats,
 } from "./createLaminarHoodModel";
 
-type Props = { studio?: boolean };
+type Props = { studio?: boolean; tabletop?: boolean };
 
 function makeStudioCube() {
   const size = 64;
@@ -38,11 +42,11 @@ function makeStudioCube() {
   return texture;
 }
 
-export function LaminarHoodModel({ studio = false }: Props) {
+export function LaminarHoodModel({ studio = false, tabletop = false }: Props) {
   const { scene } = useThree();
   const { group, stats, materials } = useMemo(
-    () => createLaminarHoodModel(),
-    [LAMINAR_HOOD_REVISION],
+    () => createLaminarHoodModel(!tabletop),
+    [tabletop],
   );
 
   useLayoutEffect(() => {
@@ -52,7 +56,13 @@ export function LaminarHoodModel({ studio = false }: Props) {
     const prevEnv = scene.environment;
     const prevIntensity = scene.environmentIntensity;
     materials.forEach((mat) => {
-      if (!(mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial)) return;
+      if (
+        !(
+          mat instanceof MeshStandardMaterial ||
+          mat instanceof MeshPhysicalMaterial
+        )
+      )
+        return;
       if (
         mat.name !== "steel" &&
         mat.name !== "worktop" &&
@@ -85,7 +95,10 @@ export function LaminarHoodModel({ studio = false }: Props) {
         scene.environmentIntensity = prevIntensity;
       }
       materials.forEach((mat) => {
-        if (mat instanceof MeshStandardMaterial || mat instanceof MeshPhysicalMaterial) {
+        if (
+          mat instanceof MeshStandardMaterial ||
+          mat instanceof MeshPhysicalMaterial
+        ) {
           if (mat.map) mat.map.dispose();
           mat.envMap = null;
         }

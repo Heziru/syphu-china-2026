@@ -1,12 +1,11 @@
-import { ContactShadows } from "@react-three/drei";
-import { LAB_ASSET_MANIFEST } from "../data/assetManifest";
-import { LAB_OBJECTS } from "../data/labObjects";
+import { BakeShadows, ContactShadows } from "@react-three/drei";
+
 import { CameraController } from "./CameraController";
 import { BioreactorModel } from "./bioreactor/BioreactorModel";
 import type { BioreactorReviewView } from "./bioreactor/reviewShots";
 import { ComputerModel } from "./computer/ComputerModel";
 import type { ComputerReviewView } from "./computer/reviewShots";
-import { InteractiveObject } from "./InteractiveObject";
+import { LaboratoryFurniture } from "./roomComposition";
 import type { LabReviewAsset } from "./labReview";
 import { Lighting } from "./Lighting";
 import { MicroscopeModel } from "./microscope/MicroscopeModel";
@@ -21,9 +20,11 @@ import { GlasswareStationModel } from "./glassware-station/GlasswareStationModel
 import type { GlasswareStationReviewView } from "./glassware-station/reviewShots";
 import { ResearcherModel } from "./researcher/ResearcherModel";
 import type { ResearcherReviewView } from "./researcher/reviewShots";
+import { StaticBatch } from "./StaticBatch";
 import { RoomShell } from "./RoomShell";
+import { SceneEnvironment } from "./SceneEnvironment";
 import { SceneLifecycle } from "./SceneLifecycle";
-import { readLabLayoutDebugState, LabLayoutDebug } from "./LabLayoutDebug";
+import { LabLayoutDebug, LayoutAudit } from "./LabLayoutDebug";
 
 type ReviewView =
   | MicroscopeReviewView
@@ -56,15 +57,20 @@ export function LaboratoryScene({
   reviewAsset = null,
   reviewView = "ref",
 }: Props) {
-  const placeholders = LAB_ASSET_MANIFEST.room.kind === "placeholder";
-  const layoutDebug = readLabLayoutDebugState();
+  const layoutDebug =
+    import.meta.env.DEV &&
+    new URLSearchParams(window.location.search).get("labLayoutDebug") === "1";
 
   if (review && reviewAsset) {
     return (
       <>
         <SceneLifecycle paused={paused} />
         <Lighting shadows={shadows} studio />
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.001, 0]} receiveShadow>
+        <mesh
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, -0.001, 0]}
+          receiveShadow
+        >
           <planeGeometry args={[6.5, 6.5]} />
           <meshStandardMaterial color="#F3F4EF" roughness={0.92} />
         </mesh>
@@ -100,8 +106,12 @@ export function LaboratoryScene({
   return (
     <>
       <SceneLifecycle paused={paused} />
-      <Lighting shadows={placeholders ? shadows : shadows} />
-      <RoomShell />
+      <Lighting shadows={shadows} />
+      <SceneEnvironment />
+      <StaticBatch>
+        <RoomShell />
+      </StaticBatch>
+      <BakeShadows key={shadows ? "shadowed" : "unshadowed"} />
       {layoutDebug ? <LabLayoutDebug /> : null}
       <ContactShadows
         position={[0, 0.003, 0.55]}
@@ -109,17 +119,15 @@ export function LaboratoryScene({
         scale={11.5}
         blur={2.4}
         far={4.2}
-        frames={30}
+        frames={1}
       />
-      {LAB_OBJECTS.map((def) => (
-        <InteractiveObject
-          key={def.id}
-          def={def}
-          reduced={reduced}
-          onNavigate={onNavigate}
-        />
-      ))}
-      <CameraController mobile={mobile} reduced={reduced} onNavigate={onNavigate} />
+      <LaboratoryFurniture reduced={reduced} onNavigate={onNavigate} />
+      <LayoutAudit />
+      <CameraController
+        mobile={mobile}
+        reduced={reduced}
+        onNavigate={onNavigate}
+      />
     </>
   );
 }
