@@ -8,7 +8,7 @@ import {
   OVERVIEW_CAMERA,
   fitOverviewShot,
 } from "../data/cameraPresets";
-import { chapterForObject, labObjectById } from "../data/labObjects";
+import { equipmentShot } from "../data/equipmentDetails";
 import { useLaboratoryStore } from "../store/laboratoryStore";
 import {
   MICROSCOPE_REVIEW_SHOTS,
@@ -46,7 +46,6 @@ type OrbitHandle = {
 export function CameraController({
   mobile,
   reduced,
-  onNavigate,
   review = false,
   reviewAsset = null,
   reviewView = "ref",
@@ -54,7 +53,7 @@ export function CameraController({
   const controls = useRef<OrbitHandle | null>(null);
   const { camera, size } = useThree();
   const phase = useLaboratoryStore((s) => s.phase);
-  const selectedId = useLaboratoryStore((s) => s.selectedId);
+  const inspectId = useLaboratoryStore((s) => s.inspectId);
   const setPhase = useLaboratoryStore((s) => s.setPhase);
   const setLocked = useLaboratoryStore((s) => s.setLocked);
   const overview = useMemo(
@@ -150,12 +149,10 @@ export function CameraController({
   ]);
 
   useEffect(() => {
-    if (review || phase !== "focusing" || !selectedId) return;
-    const def = labObjectById(selectedId);
-    const chapter = chapterForObject(selectedId);
-    if (!def || !chapter) return;
-
-    const shot = mobile ? def.camera.mobile : def.camera.desktop;
+    if (review || (phase !== "focusing" && phase !== "returning")) return;
+    if (phase === "focusing" && !inspectId) return;
+    const returning = phase === "returning";
+    const shot = returning ? overview : equipmentShot(inspectId!, mobile);
     const look = {
       x: controls.current?.target.x ?? overview.target[0],
       y: controls.current?.target.y ?? overview.target[1],
@@ -163,45 +160,43 @@ export function CameraController({
     };
 
     if (controls.current) controls.current.enabled = false;
-    const orbit = controls.current;
     setLocked(true);
 
     const posTween = gsap.to(camera.position, {
       x: shot.position[0],
       y: shot.position[1],
       z: shot.position[2],
-      duration: 0.75,
+      duration: reduced ? 0 : 0.85,
       ease: "power2.inOut",
     });
     const lookTween = gsap.to(look, {
       x: shot.target[0],
       y: shot.target[1],
       z: shot.target[2],
-      duration: 0.75,
+      duration: reduced ? 0 : 0.85,
       ease: "power2.inOut",
       onUpdate: () => {
         camera.lookAt(look.x, look.y, look.z);
         controls.current?.target.set(look.x, look.y, look.z);
       },
       onComplete: () => {
-        setPhase("transitioning");
-        onNavigate(chapter.path);
+        setPhase(returning ? "idle" : "inspecting");
+        setLocked(!returning);
       },
     });
 
     return () => {
       posTween.kill();
       lookTween.kill();
-      if (orbit) orbit.enabled = true;
     };
   }, [
     camera,
     mobile,
-    onNavigate,
-    overview.target,
+    overview,
+    reduced,
     phase,
     review,
-    selectedId,
+    inspectId,
     setLocked,
     setPhase,
   ]);
@@ -213,7 +208,7 @@ export function CameraController({
       enablePan={false}
       enableDamping
       dampingFactor={0.08}
-      minDistance={review ? 1.2 : 8}
+      minDistance={review ? 1.2 : phase === "idle" ? 8 : 1}
       maxDistance={review ? 4.2 : 45}
       minPolarAngle={review ? 0.18 : 0.48}
       maxPolarAngle={review ? 1.45 : 1.18}

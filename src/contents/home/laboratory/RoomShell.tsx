@@ -1,3 +1,5 @@
+import { LabDecor } from "./LabDecor";
+import { WINDOW_OPENING } from "./roomPlacement";
 import { useEffect, useMemo } from "react";
 import { Float32BufferAttribute } from "three";
 import { ROOM_POLYGON } from "./layoutMath";
@@ -67,7 +69,7 @@ function Wall({
     yaw = Math.atan2(m.inwardX, m.inwardZ);
   const height = low ? 0.24 : WALL_HEIGHT,
     wallY = height / 2;
-  const opening = { x: -0.35, w: 2.45, bottom: 1.22, top: 2.5 };
+  const opening = WINDOW_OPENING;
   const slab = (x: number, y: number, w: number, h: number) => (
     <SoftBox
       position={[x, y, 0]}
@@ -149,8 +151,12 @@ function Wall({
             ))}
           </group>
           <SoftBox
-            position={[opening.x, opening.bottom - 0.04, 0.15]}
-            size={[opening.w + 0.18, 0.08, 0.38]}
+            position={[
+              opening.x,
+              opening.bottom - opening.sillThickness / 2,
+              opening.sillOffset,
+            ]}
+            size={[opening.w + 0.18, opening.sillThickness, opening.sillDepth]}
             color={C.wood}
             radius={0.008}
           />
@@ -233,11 +239,12 @@ export function RoomShell() {
         <Wall key={i} a={a} b={b} window={i === 4} low={i === 2 || i === 3} />
       ))}
       <FloorJoints />
+      <LabDecor />
       <WallShelf x={2.42} />
-      <group position={[-4.55, 0, 1.85]}>
-        <Plant scale={2.1} />
+      <group position={[-4.8, 0, 2.15]}>
+        <Plant scale={1.6} />
       </group>
-      <group position={[4.65, 0, 1.75]}>
+      <group position={[3.7, 0, 3.8]}>
         <Plant scale={1.9} />
       </group>
       <mesh

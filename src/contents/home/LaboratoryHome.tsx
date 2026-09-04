@@ -8,6 +8,7 @@ import {
   type LabReviewView,
 } from "./laboratory/labReview";
 import { useLaboratoryStore } from "./store/laboratoryStore";
+import { EquipmentInspector } from "./ui/EquipmentInspector";
 import { ChapterDirectory } from "./ui/ChapterDirectory";
 import { LaboratoryFallback } from "./ui/LaboratoryFallback";
 import { LoadingOverlay } from "./ui/LoadingOverlay";
@@ -102,15 +103,10 @@ export function LaboratoryHome() {
   const onNavigate = useCallback(
     (path: string) => {
       setPhase("transitioning");
-      window.setTimeout(
-        () => {
-          navigate(path);
-          setLocked(false);
-        },
-        reduced ? 0 : 180,
-      );
+      setLocked(false);
+      navigate(path);
     },
-    [navigate, reduced, setLocked, setPhase],
+    [navigate, setLocked, setPhase],
   );
 
   const show3d = webgl && !simpleMode && phase !== "fallback";
@@ -187,10 +183,11 @@ export function LaboratoryHome() {
           <div className="lab-brand">
             <p className="lab-brand__mark">LBP-Mototype</p>
             <p className="lab-brand__hint">
-              Click a station in the lab, or use the chapter list.
+              Click an instrument to look closer.
             </p>
           </div>
           <ChapterDirectory />
+          {show3d && <EquipmentInspector onNavigate={onNavigate} />}
           <ObjectTooltip />
           <button
             type="button"

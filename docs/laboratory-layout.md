@@ -5,12 +5,12 @@
 ## 单一布局来源
 
 - `src/contents/home/laboratory/layoutMath.ts`：房间六边形边界、墙面锚点、局部到世界坐标、带高度的碰撞校验、实际边缘距离、通道校验。尺寸始终为 `[width, height, depth]`，原点位于对象底部。
-- `roomPlacement.ts`：六个分组坐标系、16 个主要家具/仪器的尺寸和局部坐标、安装高度、座椅间距、交互映射。修改布置首先改这里。
+- `roomPlacement.ts`：六个分组坐标系、25 个主要家具/仪器的尺寸和局部坐标、安装高度、座椅间距、交互映射。修改布置首先改这里。
 - `roomComposition.tsx`：按分组渲染布局数据，不另算世界坐标。
 - `data/labObjects.ts`：交互区域和特写相机由同一布局派生，保留原对象 ID 与章节目标。
 - `ModelAsset.tsx`：将已有模型按比例装入预留空间，统一底部接触面。独立模型审阅模式仍可使用。
 
-墙面锚点包含半墙厚和内侧间隙；两只储物柜使用连续排布而不是互相独立的百分比定位。台面设备的底部直接引用支撑台面高度。电脑不再额外带一层桌板，通风柜台上模式移除自带底架，反应器仍为落地设备。
+墙面锚点包含半墙厚和内侧间隙；两只储物柜使用连续排布而不是互相独立的百分比定位。台面设备的底部直接引用支撑台面高度。电脑不再额外带一层桌板，超净台已移到右侧，使用完整自带底架独立落地，反应器仍为落地设备。
 
 ## 继续细化模型
 
@@ -40,3 +40,24 @@ npm run lint
 ```
 
 布局测试覆盖墙端点反转、台面支撑接触、旋转包围盒、柜体重叠、边界、最小间距、四张座椅与通道占用。另检查桌面/375px 画面、场景点击、章节入口、离开后返回 Home，避免只验证 TypeScript。
+
+## 设备扩充与穿模回归
+
+窗台的开口尺寸和伸出深度统一由 `roomPlacement.ts` 的 `WINDOW_OPENING` 定义，`WINDOW_SILL` 参与碰撞检查；Dry Lab 整组保持相同局部坐标关系，电脑在桌内向前留出间距。测试同时复现旧电脑碰窗台并确认当前布置无碰撞。
+
+`LabEquipment.tsx` 提供离心机、超声破碎仪、摇床、冰箱、液氮罐、衣架、悬挂白大褂、烧杯和量筒。新增独立设备经 `ModelAsset` 统一归一化底部与预留包围盒。前方通道不摆设备，右侧服务区设备略转向室内，保持正面可读。
+
+
+## Lived-in lab and close-up inspection
+
+Right-wall equipment faces its working aisle (-X), not the overview camera. The new left preparation bench, analytical balance, supply trolley, duplicate tip boxes, pipettes, stacked reagent kits, bottles and racks enrich each workstation without expanding the room or occupying the main circulation lanes.
+
+Visual inventory sources, not operating protocols:
+- https://www.addgene.org/protocols/pipetting/
+- https://www.thermofisher.com/uk/en/home/life-science/lab-plasticware-supplies/lab-organization-cleaning-safety/lab-organization-supplies.html
+
+An entrance low wall carries the iGEM Lab sign, with plants and supplies behind it. The original logo is copied byte-for-byte to public/assets/laboratory/project-logo.png, displayed at its native 971:874 ratio on a rear-wall plaque; no cropping, tinting or artwork editing.
+
+Equipment metadata lives in data/equipmentDetails.ts. Close-up cameras derive from the same furniture transform. The interaction is idle -> focusing -> inspecting -> returning -> idle. A compact translucent native dialog contains keyboard focus and supports Escape. Chapter navigation requires an explicit button. A small equipment selector supplies keyboard access. Reduced motion skips the camera tween. Closing restores the overview; effect cleanup kills camera tweens.
+
+Collision validation covers major furniture, devices and the window sill. Small decorative vessels are visually checked, not individually certified by the layout validator. See researcher-rebuild.md for character fidelity limitations.

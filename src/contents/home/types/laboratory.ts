@@ -3,6 +3,8 @@ export type LabPhase =
   | "entering"
   | "idle"
   | "focusing"
+  | "inspecting"
+  | "returning"
   | "transitioning"
   | "fallback";
 

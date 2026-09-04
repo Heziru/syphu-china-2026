@@ -40,6 +40,30 @@ const device = {
   rotationY: 0,
   size: [0.6, 0.5, 0.5],
 };
+// Regression: the old computer intersected the inward-projecting window sill.
+const oldDryFrame = math.wallAnchorFromSegment(a, b, 0.64, 1.9, 0.78);
+const oldComputer = {
+  id: "old-computer",
+  size: [1.35, 0.7, 0.66],
+  position: math.transformPoint(oldDryFrame, [0, 0.8, -0.03]),
+  rotationY: oldDryFrame.rotationY,
+};
+assert.equal(
+  math.validateAABBNoOverlap([oldComputer, layout.WINDOW_SILL]).length,
+  1,
+);
+assert.equal(
+  math.validateAABBNoOverlap([
+    layout.furnitureById("computer"),
+    layout.WINDOW_SILL,
+  ]).length,
+  0,
+);
+const hood = layout.furnitureById("laminar-hood");
+assert.equal(hood.mount, "floor");
+assert.equal(hood.position[1], 0);
+assert.ok(hood.position[0] > 3, "Hood belongs in the right service area");
+assert.equal(hood.supportedBy, undefined);
 assert.equal(
   math.validateAABBNoOverlap([table, device]).length,
   0,

@@ -1,6 +1,11 @@
+import { EQUIPMENT_DETAILS } from "../data/equipmentDetails";
+import { useLaboratoryStore } from "../store/laboratoryStore";
+import { Supplies, SupplyCart } from "./LabSupplies";
+import { LabEquipment, GlassVessel } from "./LabEquipment";
 import { Fragment } from "react";
 import { StaticBatch } from "./StaticBatch";
 import { LAB_OBJECTS } from "../data/labObjects";
+import { AnalyticalBalanceModel } from "./analytical-balance/AnalyticalBalanceModel";
 import { ComputerModel } from "./computer/ComputerModel";
 import { MicroscopeModel } from "./microscope/MicroscopeModel";
 import { LaminarHoodModel } from "./laminar-hood/LaminarHoodModel";
@@ -35,6 +40,12 @@ function Furniture({ spec }: { spec: FurnitureSpec }) {
       ) : (
         <LabBench {...{ width, height, depth }} />
       );
+    case "balance":
+      return (
+        <ModelAsset id={spec.id} size={spec.size}>
+          <AnalyticalBalanceModel />
+        </ModelAsset>
+      );
     case "computer":
       return (
         <ModelAsset id={spec.id} size={spec.size}>
@@ -44,7 +55,7 @@ function Furniture({ spec }: { spec: FurnitureSpec }) {
     case "hood":
       return (
         <ModelAsset id={spec.id} size={spec.size}>
-          <LaminarHoodModel tabletop />
+          <LaminarHoodModel />
         </ModelAsset>
       );
     case "microscope":
@@ -71,6 +82,19 @@ function Furniture({ spec }: { spec: FurnitureSpec }) {
           <LabChairModel />
         </ModelAsset>
       );
+    case "centrifuge":
+    case "ultrasonic":
+    case "shaker":
+    case "fridge":
+    case "nitrogen":
+    case "coat-rack":
+      return (
+        <ModelAsset id={spec.id} size={spec.size}>
+          <LabEquipment kind={spec.role} />
+        </ModelAsset>
+      );
+    case "supply-cart":
+      return <SupplyCart />;
     case "stool":
       return <LabStool />;
   }
@@ -115,10 +139,32 @@ export function LaboratoryFurniture({
                       name={spec.id}
                       position={spec.position}
                       rotation={[0, spec.rotationY, 0]}
+                      onClick={(event) => {
+                        if (!EQUIPMENT_DETAILS[spec.id] || event.delta > 6)
+                          return;
+                        event.stopPropagation();
+                        const state = useLaboratoryStore.getState();
+                        if (state.phase === "idle") state.inspect(spec.id);
+                      }}
                     >
                       <StaticBatch>
                         <Furniture spec={spec} />
                       </StaticBatch>
+                    </group>
+                  )}
+                  {spec.id === "preparation-bench" && (
+                    <group
+                      position={spec.position}
+                      rotation={[0, spec.rotationY, 0]}
+                    >
+                      <group position={[0.35, 0.82, 0]}>
+                        <Supplies variant="kits" />
+                      </group>
+                    </group>
+                  )}
+                  {spec.id === "engineering-cabinet" && (
+                    <group position={[spec.position[0], spec.size[1], 0]}>
+                      <Supplies variant="kits" />
                     </group>
                   )}
                   {spec.id === "storage-b" && (
@@ -129,6 +175,12 @@ export function LaboratoryFurniture({
                   {spec.id === "engineering-bench" && (
                     <group position={[spec.position[0], spec.size[1], 0]}>
                       <TubeRack />
+                      <group position={[0.34, 0, 0]}>
+                        <GlassVessel kind="cylinder" />
+                      </group>
+                      <group position={[-0.35, 0, 0.05]}>
+                        <GlassVessel />
+                      </group>
                     </group>
                   )}
                 </Fragment>

@@ -33,7 +33,15 @@ export type Role =
   | "stool"
   | "bioreactor"
   | "microscope"
-  | "researcher";
+  | "researcher"
+  | "centrifuge"
+  | "ultrasonic"
+  | "shaker"
+  | "fridge"
+  | "nitrogen"
+  | "coat-rack"
+  | "supply-cart"
+  | "balance";
 export type FurnitureSpec = Body & {
   group: GroupId;
   parent: GroupId;
@@ -43,7 +51,7 @@ export type FurnitureSpec = Body & {
   supportedBy?: string;
   workstationId?: string;
 };
-export const PLACEMENT_REVISION = 11;
+export const PLACEMENT_REVISION = 12;
 export const GROUP_LABELS: Record<GroupId, string> = {
   dry: "Dry Lab",
   wet: "Wet Lab",
@@ -117,7 +125,14 @@ function back(x: number, w: number, d: number) {
   );
 }
 export const GROUP_FRAMES: Record<GroupId, Transform> = {
-  dry: wallAnchorFromSegment(ROOM_POLYGON[0], ROOM_POLYGON[5], 0.64, 1.9, 0.78),
+  dry: wallAnchorFromSegment(
+    ROOM_POLYGON[0],
+    ROOM_POLYGON[5],
+    0.64,
+    1.9,
+    0.78,
+    0.14,
+  ),
   wet: back(rearCenter + rear.centers[0], 2.3, 0.8),
   storage: back(rearCenter + rear.centers[1], 1.8, 0.62),
   engineering: back(rearCenter + rear.centers[2], 1.9, 0.76),
@@ -174,12 +189,29 @@ const reactorSize: Size = [1, 1.65, 1.2];
 const reactorX =
   engBench.position[0] + engBench.size[0] / 2 + 0.3 + reactorSize[0] / 2;
 const reactorZ = engCab.size[2] / 2 + 0.42 + reactorSize[2] / 2;
+const prepBench = {
+  ...table(
+    "preparation-bench",
+    "team",
+    "bench",
+    [1.5, 0.82, 0.65],
+    [-4.65, 0, 1.05],
+  ),
+  rotationY: Math.PI / 2,
+};
 export const ROOM_FURNITURE: FurnitureSpec[] = [
+  prepBench,
+  placeOnTabletop(
+    item("balance", "team", "balance", [0.48, 0.56, 0.46]),
+    prepBench,
+    [-0.38, 0],
+  ),
+  item("supply-cart", "team", "supply-cart", [0.8, 1.08, 0.5], [-3.65, 0, 2.6]),
   dry,
   placeOnTabletop(
-    item("computer", "dry", "computer", [1.35, 0.7, 0.66]),
+    item("computer", "dry", "computer", [1.35, 0.7, 0.58]),
     dry,
-    [0, -0.03],
+    [0, 0.05],
   ),
   chairFromWorkstation(
     item("dry-chair", "dry", "chair", [0.7, 1.03, 0.7]),
@@ -189,7 +221,34 @@ export const ROOM_FURNITURE: FurnitureSpec[] = [
     0.36,
   ),
   wet,
-  placeOnTabletop(item("laminar-hood", "wet", "hood", [1.8, 1, 0.7]), wet),
+  {
+    ...item("laminar-hood", "team", "hood", [1.25, 1.95, 1], [4.15, 0, 0.25]),
+    rotationY: -Math.PI / 2,
+  },
+  {
+    ...item("fridge", "team", "fridge", [0.85, 1.9, 0.7], [3.98, 0, -1.55]),
+    rotationY: -Math.PI / 2,
+  },
+  item("nitrogen", "team", "nitrogen", [0.65, 0.85, 0.65], [4.3, 0, 1.55]),
+  {
+    ...item("coat-rack", "team", "coat-rack", [1, 1.8, 0.5], [4.25, 0, 2.65]),
+    rotationY: -Math.PI / 2,
+  },
+  placeOnTabletop(
+    item("centrifuge", "wet", "centrifuge", [0.62, 0.4, 0.55]),
+    wet,
+    [-0.75, 0],
+  ),
+  placeOnTabletop(
+    item("ultrasonic", "wet", "ultrasonic", [0.6, 0.65, 0.55]),
+    wet,
+    [0, 0],
+  ),
+  placeOnTabletop(
+    item("shaker", "wet", "shaker", [0.62, 0.48, 0.55]),
+    wet,
+    [0.75, 0],
+  ),
   chairFromWorkstation(
     item("wet-stool", "wet", "stool", [0.64, 0.6, 0.64]),
     wet,
@@ -260,8 +319,39 @@ export const CLEARANCE_RULES: ClearanceRule[] = [
   { a: "storage-a", b: "storage-b", min: 0.04 },
   { a: "engineering-bench", b: "engineering-cabinet", min: 0.04 },
 ];
+export const WINDOW_OPENING = {
+  x: -0.35,
+  w: 2.45,
+  bottom: 1.22,
+  top: 2.5,
+  sillDepth: 0.38,
+  sillOffset: 0.15,
+  sillThickness: 0.08,
+};
+export const WINDOW_SILL: Body = {
+  id: "window-sill",
+  ...wallAnchorFromSegment(
+    ROOM_POLYGON[0],
+    ROOM_POLYGON[5],
+    0.5,
+    WINDOW_OPENING.w + 0.18,
+    WINDOW_OPENING.sillOffset * 2,
+    0,
+    0,
+  ),
+  size: [
+    WINDOW_OPENING.w + 0.18,
+    WINDOW_OPENING.sillThickness,
+    WINDOW_OPENING.sillDepth,
+  ],
+};
+WINDOW_SILL.position = transformPoint(WINDOW_SILL, [
+  WINDOW_OPENING.x,
+  WINDOW_OPENING.bottom - WINDOW_OPENING.sillThickness,
+  0,
+]);
 export function validateLayout() {
-  const collisions = validateAABBNoOverlap(WORLD_FURNITURE),
+  const collisions = validateAABBNoOverlap([...WORLD_FURNITURE, WINDOW_SILL]),
     containment = validateRoomContainment(WORLD_FURNITURE);
   const clearance = validateClearance(WORLD_FURNITURE, CLEARANCE_RULES),
     circulation = validateCirculation(WORLD_FURNITURE);

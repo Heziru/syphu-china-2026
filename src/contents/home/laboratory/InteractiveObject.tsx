@@ -3,7 +3,6 @@ import gsap from "gsap";
 import type { ThreeEvent } from "@react-three/fiber";
 import type { Group } from "three";
 import type { LabObjectDef } from "../types/laboratory";
-import { CHAPTERS } from "../data/chapters";
 import { useLaboratoryStore } from "../store/laboratoryStore";
 import { PlaceholderObject } from "./PlaceholderObject";
 import type { FurnitureSpec } from "./roomPlacement";
@@ -21,18 +20,16 @@ export function InteractiveObject({
   placement,
   children,
   reduced,
-  onNavigate,
 }: Props) {
   const group = useRef<Group>(null);
   const pointer = useRef({ x: 0, y: 0, moved: false });
   const hoveredId = useLaboratoryStore((s) => s.hoveredId);
   const setHovered = useLaboratoryStore((s) => s.setHovered);
   const setSelected = useLaboratoryStore((s) => s.setSelected);
-  const setPhase = useLaboratoryStore((s) => s.setPhase);
   const locked = useLaboratoryStore((s) => s.locked);
   const phase = useLaboratoryStore((s) => s.phase);
   const hovered = hoveredId === def.id;
-  const chapter = CHAPTERS[def.chapterId];
+  const inspect = useLaboratoryStore((s) => s.inspect);
 
   const busy = locked || phase === "focusing" || phase === "transitioning";
 
@@ -90,11 +87,7 @@ export function InteractiveObject({
         { x: 1, y: 1, z: 1, duration: 0.18, overwrite: true },
       );
     }
-    if (reduced) {
-      onNavigate(chapter.path);
-      return;
-    }
-    setPhase("focusing");
+    inspect(placement?.id ?? def.id);
   };
 
   return (

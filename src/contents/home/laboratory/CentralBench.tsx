@@ -1,3 +1,5 @@
+import { Supplies } from "./LabSupplies";
+import { GlassVessel } from "./LabEquipment";
 import { LAB_COLORS as C } from "./labPalette";
 import { SoftBox } from "./SoftBox";
 import { Cabinet, Countertop } from "./labFurnitureSystem";
@@ -51,6 +53,12 @@ export function CentralBench({ spec }: { spec: FurnitureSpec }) {
           />
         </group>
       ))}
+      <group position={[0.76, h, -0.25]} scale={0.82}>
+        <Supplies />
+      </group>
+      <group position={[-1.05, h, 0.4]}>
+        <GlassVessel kind="cylinder" />
+      </group>
       <group position={[-0.91, h, -0.18]}>
         <TubeRack />
       </group>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { ResearcherStats } from "./createResearcherModel";
-import referenceUrl from "./reference.png";
+import referenceUrl from "../../../../../docs/references/people.png";
 import { type ResearcherReviewView } from "./reviewShots";
 
 type Perf = {
@@ -35,7 +35,11 @@ export function ResearcherReviewHud({ view, onView }: Props) {
   return (
     <aside className="lab-review">
       <p className="lab-review__label">Reference</p>
-      <img className="lab-review__image" src={referenceUrl} alt="Researcher reference" />
+      <img
+        className="lab-review__image"
+        src={referenceUrl}
+        alt="Researcher reference"
+      />
       <div className="lab-review__views">
         {(["ref", "side", "back"] as const).map((id) => (
           <button

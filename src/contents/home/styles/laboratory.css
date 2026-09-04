@@ -387,3 +387,104 @@
     bottom: 11.5rem;
   }
 }
+
+/* The camera remains visible behind a compact native, keyboard-accessible dialog. */
+.lab-inspect-picker {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  pointer-events: auto;
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+}
+.lab-inspect-picker select {
+  max-width: 240px;
+  padding: 10px 14px;
+  border: 1px solid #ffffff90;
+  border-radius: 14px;
+  background: #f2eee6e6;
+  color: #314840;
+}
+.lab-detail {
+  position: fixed;
+  inset: auto 28px 30px auto;
+  width: min(360px, calc(100vw - 32px));
+  margin: 0;
+  padding: 25px;
+  border: 1px solid #ffffffba;
+  border-radius: 24px;
+  background: rgba(245, 247, 239, 0.78);
+  color: #263d36;
+  backdrop-filter: blur(24px) saturate(125%);
+  box-shadow:
+    0 18px 70px #1429222b,
+    inset 0 1px #fff;
+}
+.lab-detail::backdrop {
+  background: rgba(24, 35, 29, 0.035);
+}
+.lab-detail h2 {
+  font-size: 23px;
+  margin: 10px 0;
+  padding-right: 15px;
+}
+.lab-detail p {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.lab-detail .lab-detail__eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin: 0;
+}
+.lab-detail__close {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff90;
+  width: 30px;
+  height: 30px;
+  font-size: 24px;
+  color: inherit;
+}
+.lab-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.lab-detail__actions button {
+  border: 1px solid #47685722;
+  border-radius: 12px;
+  padding: 10px 13px;
+  background: #ffffffaa;
+  color: inherit;
+  font-size: 12px;
+}
+.lab-detail button:focus-visible,
+.lab-inspect-picker select:focus-visible {
+  outline: 3px solid #48897c;
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .lab-detail {
+    bottom: 16px;
+    right: 16px;
+    padding: 20px;
+  }
+  .lab-inspect-picker {
+    left: 12px;
+    bottom: 65px;
+  }
+  .lab-inspect-picker select {
+    max-width: 195px;
+  }
+}
+
+.lab-home-active footer {
+  display: none;
+}
