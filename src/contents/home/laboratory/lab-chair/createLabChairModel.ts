@@ -14,7 +14,7 @@ import {
   type Material,
 } from "three";
 
-export const LAB_CHAIR_REVISION = 2;
+export const LAB_CHAIR_REVISION = 3;
 
 export const LAB_CHAIR_COLORS = {
   plastic: "#1A1A1C",
@@ -239,7 +239,7 @@ function buildBase(parent: Group, mats: Mats) {
       mats.metal,
       `leg-${i}`,
       [midX, hubY - legDrop * 0.5, midZ + 0.01],
-      [Math.PI / 2 + tilt, a, 0],
+      [Math.PI / 2 - tilt, a, 0],
     );
     const footX = Math.cos(a) * legLen;
     const footZ = Math.sin(a) * legLen;
