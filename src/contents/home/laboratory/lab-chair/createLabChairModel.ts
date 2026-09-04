@@ -14,7 +14,7 @@ import {
   type Material,
 } from "three";
 
-export const LAB_CHAIR_REVISION = 1;
+export const LAB_CHAIR_REVISION = 2;
 
 export const LAB_CHAIR_COLORS = {
   plastic: "#1A1A1C",
@@ -230,6 +230,7 @@ function buildBase(parent: Group, mats: Mats) {
   const angles = [Math.PI * 0.25, Math.PI * 0.75, Math.PI * 1.25, Math.PI * 1.75];
 
   angles.forEach((a, i) => {
+    const tilt = Math.atan2(legDrop, legLen);
     const midX = Math.cos(a) * legLen * 0.5;
     const midZ = Math.sin(a) * legLen * 0.5;
     addMesh(
@@ -238,7 +239,7 @@ function buildBase(parent: Group, mats: Mats) {
       mats.metal,
       `leg-${i}`,
       [midX, hubY - legDrop * 0.5, midZ + 0.01],
-      [legDrop / legLen, a, 0],
+      [Math.PI / 2 + tilt, a, 0],
     );
     const footX = Math.cos(a) * legLen;
     const footZ = Math.sin(a) * legLen;
