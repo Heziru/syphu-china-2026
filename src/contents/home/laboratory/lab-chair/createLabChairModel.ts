@@ -15,12 +15,12 @@ import {
   type Material,
 } from "three";
 
-export const LAB_CHAIR_REVISION = 9;
+export const LAB_CHAIR_REVISION = 10;
 
 export const LAB_CHAIR_COLORS = {
   plastic: "#18181A",
   plasticHi: "#2A2A2E",
-  metal: "#232327",
+  metal: "#3A3A42",
   glide: "#101012",
 } as const;
 
@@ -40,14 +40,14 @@ export type LabChairBuild = {
 type Mats = ReturnType<typeof makeMaterials>;
 type Point3 = [number, number, number];
 
-const SEAT_Y = 0.48;
+const SEAT_Y = 0.545;
 const SEAT_W = 0.4;
 const SEAT_D = 0.38;
 const SEAT_T = 0.048;
 const BACK_W = 0.36;
 const BACK_H = 0.3;
 const BACK_T = 0.034;
-const TUBE_R = 0.011;
+const TUBE_R = 0.013;
 const BACK_TILT = -0.11;
 const SEAT_Z = 0.012;
 const SEAT_REAR_Z = SEAT_Z - SEAT_D * 0.48;
@@ -73,9 +73,9 @@ function backLayout(): BackLayout {
   const yBottom = SEAT_TOP_Y + BACK_GAP;
   const yTop = yBottom + BACK_H * Math.cos(-BACK_TILT);
   const centerY = (yBottom + yTop) * 0.5;
-  const seatAttachY = SEAT_Y - SEAT_T * 0.12;
-  const seatAttachZ = SEAT_REAR_Z + 0.008;
-  const centerZ = seatAttachZ + BACK_T * 0.62 + TUBE_R;
+  const seatAttachY = SEAT_Y - SEAT_T * 0.55;
+  const seatAttachZ = SEAT_REAR_Z + 0.018;
+  const centerZ = seatAttachZ + BACK_T * 0.55 + TUBE_R * 2.2;
   const zLean = halfH * Math.sin(-BACK_TILT);
   const zBottom = centerZ + zLean;
   const zTop = centerZ - zLean;
@@ -186,6 +186,7 @@ function tubeBetween(
   mesh.name = name;
   mesh.castShadow = true;
   mesh.receiveShadow = true;
+  mesh.renderOrder = 2;
   mesh.position.set((a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5, (a[2] + b[2]) * 0.5);
   mesh.quaternion.setFromUnitVectors(Y_AXIS, dir);
   parent.add(mesh);
@@ -270,19 +271,17 @@ function buildBackrest(parent: Group, mats: Mats) {
 
 function buildBackFrame(parent: Group, mats: Mats) {
   const frame = part("backFrame");
-  const { halfW, yBottom, yTop, zBottom, zTop, seatAttachY, seatAttachZ } = backLayout();
+  const { halfW, yTop, zTop, seatAttachY, seatAttachZ } = backLayout();
+  const frameX = halfW + TUBE_R * 1.1;
+  const topZ = zTop + TUBE_R * 1.2;
 
-  const bl: Point3 = [-halfW, seatAttachY, seatAttachZ];
-  const br: Point3 = [halfW, seatAttachY, seatAttachZ];
-  const ml: Point3 = [-halfW, yBottom, zBottom];
-  const mr: Point3 = [halfW, yBottom, zBottom];
-  const tl: Point3 = [-halfW, yTop, zTop];
-  const tr: Point3 = [halfW, yTop, zTop];
+  const bl: Point3 = [-frameX, seatAttachY, seatAttachZ];
+  const br: Point3 = [frameX, seatAttachY, seatAttachZ];
+  const tl: Point3 = [-frameX, yTop, topZ];
+  const tr: Point3 = [frameX, yTop, topZ];
 
-  tubeBetween(frame, bl, ml, TUBE_R, mats.metal, "uprightLeftLower");
-  tubeBetween(frame, ml, tl, TUBE_R, mats.metal, "uprightLeftUpper");
-  tubeBetween(frame, br, mr, TUBE_R, mats.metal, "uprightRightLower");
-  tubeBetween(frame, mr, tr, TUBE_R, mats.metal, "uprightRightUpper");
+  tubeBetween(frame, bl, tl, TUBE_R, mats.metal, "uprightLeft");
+  tubeBetween(frame, br, tr, TUBE_R, mats.metal, "uprightRight");
   tubeBetween(frame, bl, br, TUBE_R, mats.metal, "underRail");
   tubeBetween(frame, tl, tr, TUBE_R, mats.metal, "topRail");
 
@@ -360,8 +359,8 @@ export function createLabChairModel(): LabChairBuild {
 
   buildBase(group, mats);
   buildPillar(group, mats);
-  buildBackFrame(group, mats);
   buildSeat(group, mats);
+  buildBackFrame(group, mats);
   buildBackrest(group, mats);
 
   group.position.y = 0.02;
