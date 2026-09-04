@@ -3,7 +3,6 @@ import { LAB_COLORS } from "./labPalette";
 import { SoftBox } from "./SoftBox";
 import type { WallFurniturePlacement } from "./roomPlacement";
 import {
-  DRY_LAB_BENCH,
   ENGINEERING_BENCH,
   LAMINAR_HOOD_BLOCKOUT,
   STORAGE_SHELF,
@@ -11,7 +10,6 @@ import {
 } from "./roomPlacement";
 
 const COUNTERTOP = "#3A474A";
-const WOOD = "#C4A882";
 const HOOD_SHELL = "#ECEFF2";
 
 /** Standard: local X=width, local Z=depth, +Z=front. */
@@ -156,28 +154,7 @@ export function EngineeringBenchBlockout() {
   );
 }
 
-/** Left-wall Dry Lab strip — desk long edge follows angled wall. */
-export function DryLabBenchBlockout() {
-  const p = DRY_LAB_BENCH;
-  return (
-    <WallAnchoredGroup placement={p}>
-      <SoftBox
-        position={[0, 0.41, 0]}
-        size={boxSize(p.width, p.depth, 0.84)}
-        radius={0.03}
-        color={LAB_COLORS.cabinet}
-        roughness={0.82}
-      />
-      <SoftBox
-        position={[0, 0.88, p.depth * 0.02]}
-        size={boxSize(p.width - 0.06, p.depth - 0.04, 0.06)}
-        radius={0.018}
-        color={WOOD}
-        roughness={0.72}
-      />
-    </WallAnchoredGroup>
-  );
-}
+/** Dry Lab uses production computer model (built-in desk) — no blockout. */
 
 export function WallFurnitureBlockouts() {
   return (
@@ -186,9 +163,6 @@ export function WallFurnitureBlockouts() {
       <LaminarHoodBlockout />
       <StorageShelfBlockout />
       <EngineeringBenchBlockout />
-      <DryLabBenchBlockout />
     </>
   );
 }
-
-export { DRY_LAB_CHAIR } from "./roomPlacement";

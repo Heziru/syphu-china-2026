@@ -10,15 +10,21 @@ import {
   wallAnchorFromSegment,
   worldAxisFromLocal,
 } from "./roomLayout";
+import {
+  aabbGapXZ,
+  aabbOverlap,
+  MODEL_BOUNDS,
+  worldAABBFromPlacement,
+  type WorldAABB,
+} from "./modelBounds";
 
-export const PLACEMENT_REVISION = 8;
+export const PLACEMENT_REVISION = 9;
 
 const BACK = 0;
 const LEFT_BACK = 4;
 
 export type WallFurniturePlacement = {
   id: string;
-  category: "wall-anchored";
   segmentIndex: number;
   t: number;
   width: number;
@@ -26,24 +32,29 @@ export type WallFurniturePlacement = {
   anchor: WallAnchor;
 };
 
-export type FreeStandingPlacement = {
+export type ChairPlacement = {
   id: string;
-  category: "free-standing";
+  group: string;
   position: [number, number, number];
-  width: number;
-  depth: number;
   rotationY: number;
+  facesWorkstation: string;
 };
 
-/** Central island — sole free-standing piece; long edge ≈ world X. */
-export const CENTRAL_BENCH: FreeStandingPlacement & { height: number } = {
+export type FreeStandingHero = {
+  id: string;
+  position: [number, number, number];
+  rotation: [number, number, number];
+};
+
+/** Central island — primary shared experiment surface. */
+export const CENTRAL_BENCH = {
   id: "central-bench",
-  category: "free-standing",
-  position: [0, 0, 0.6],
+  position: [0, 0, 0.6] as [number, number, number],
   width: 2.65,
   depth: 1.45,
   height: 0.89,
   rotationY: 0,
+  countertopY: 0.82,
 };
 
 function wallFurniture(
@@ -55,7 +66,6 @@ function wallFurniture(
 ): WallFurniturePlacement {
   return {
     id,
-    category: "wall-anchored",
     segmentIndex,
     t,
     width,
@@ -64,10 +74,16 @@ function wallFurniture(
   };
 }
 
-/** Back-left Wet Lab strip — lower bench segment. */
+/** Computer model includes desk platform — no separate blockout desk. */
+export const DRY_LAB_COMPUTER_ANCHOR = wallAnchorFromSegment(
+  LEFT_BACK,
+  0.5,
+  MODEL_BOUNDS.computer.depth,
+);
+
+/** Wet Lab — unified back-left strip (bench + hood share back plane). */
 export const WET_LAB_BENCH = wallFurniture("wet-lab-bench", BACK, 0.135, 1.12, 0.58);
 
-/** Laminar hood — continues Wet Lab strip along same back wall. */
 export const LAMINAR_HOOD_BLOCKOUT = {
   ...wallFurniture("laminar-hood", BACK, 0.305, 1.45, 0.74),
   displayWidth: 1.45,
@@ -75,24 +91,130 @@ export const LAMINAR_HOOD_BLOCKOUT = {
   displayHeight: 1.42,
 };
 
-/** Back-center built-in storage. */
 export const STORAGE_SHELF = wallFurniture("storage-shelf", BACK, 0.52, 1.02, 0.4);
 
-/** Back-right Engineering strip. */
-export const ENGINEERING_BENCH = wallFurniture("engineering-bench", BACK, 0.795, 1.52, 0.6);
-
-/** Left-wall Dry Lab strip. */
-export const DRY_LAB_BENCH = wallFurniture("dry-lab-bench", LEFT_BACK, 0.5, 2.32, 0.72);
+/** Engineering bench beside (not under) the floor-standing bioreactor. */
+export const ENGINEERING_BENCH = wallFurniture("engineering-bench", BACK, 0.66, 1.22, 0.58);
 
 export const WALL_FURNITURE: WallFurniturePlacement[] = [
   WET_LAB_BENCH,
   LAMINAR_HOOD_BLOCKOUT,
   STORAGE_SHELF,
   ENGINEERING_BENCH,
-  DRY_LAB_BENCH,
 ];
 
-/** Hero positions derived from wall-local coordinates on workstation surfaces. */
+/** Free-standing bioreactor — floor hero in Engineering zone. */
+export const BIOREACTOR_FLOOR: FreeStandingHero = {
+  id: "device",
+  position: [3.05, 0, -3.05],
+  rotation: [0, 0, 0],
+};
+
+function chairFacingDesk(anchor: WallAnchor): number {
+  return anchor.rotationY + Math.PI;
+}
+
+/** Functional furniture groups (semantic only — LAB_OBJECTS unchanged). */
+export const DRY_LAB_GROUP = {
+  id: "dry-lab",
+  /** Production computer asset = desk + monitor + laptop (no blockout desk). */
+  usesBuiltInDesk: true as const,
+  anchor: DRY_LAB_COMPUTER_ANCHOR,
+  computer: {
+    position: [
+      DRY_LAB_COMPUTER_ANCHOR.position[0],
+      0,
+      DRY_LAB_COMPUTER_ANCHOR.position[2],
+    ] as [number, number, number],
+    rotation: [0, DRY_LAB_COMPUTER_ANCHOR.rotationY, 0] as [number, number, number],
+  },
+  chair: {
+    id: "dry-lab-chair",
+    position: localToWorldPosition(
+      DRY_LAB_COMPUTER_ANCHOR,
+      0.05,
+      MODEL_BOUNDS.computer.depth * 0.5 + 0.62,
+    ),
+    rotationY: chairFacingDesk(DRY_LAB_COMPUTER_ANCHOR),
+  },
+};
+
+export const WET_LAB_GROUP = {
+  id: "wet-lab",
+  bench: WET_LAB_BENCH,
+  hood: LAMINAR_HOOD_BLOCKOUT,
+  chair: {
+    id: "wet-lab-stool",
+    position: localToWorldPosition(LAMINAR_HOOD_BLOCKOUT.anchor, 0, 0.74 * 0.5 + 0.58),
+    rotationY: chairFacingDesk(LAMINAR_HOOD_BLOCKOUT.anchor),
+  },
+};
+
+export const CENTRAL_LAB_GROUP = {
+  id: "central-lab",
+  bench: CENTRAL_BENCH,
+  chairs: [
+    {
+      id: "central-stool-front-right",
+      position: [1.72, 0, 1.68] as [number, number, number],
+      rotationY: -0.65,
+    },
+    {
+      id: "central-stool-rear-left",
+      position: [-1.72, 0, -0.4] as [number, number, number],
+      rotationY: 0.35,
+    },
+  ] satisfies Omit<ChairPlacement, "group" | "facesWorkstation">[],
+};
+
+export const ENGINEERING_GROUP = {
+  id: "engineering",
+  bench: ENGINEERING_BENCH,
+  bioreactor: BIOREACTOR_FLOOR,
+  chair: {
+    id: "engineering-stool",
+    position: localToWorldPosition(ENGINEERING_BENCH.anchor, -0.15, 0.58 * 0.5 + 0.56),
+    rotationY: chairFacingDesk(ENGINEERING_BENCH.anchor),
+  },
+};
+
+export const STORAGE_GROUP = {
+  id: "storage",
+  shelf: STORAGE_SHELF,
+};
+
+export const CHAIR_PLACEMENTS: ChairPlacement[] = [
+  {
+    id: DRY_LAB_GROUP.chair.id,
+    group: "dry-lab",
+    position: DRY_LAB_GROUP.chair.position,
+    rotationY: DRY_LAB_GROUP.chair.rotationY,
+    facesWorkstation: "computer",
+  },
+  {
+    id: WET_LAB_GROUP.chair.id,
+    group: "wet-lab",
+    position: WET_LAB_GROUP.chair.position,
+    rotationY: WET_LAB_GROUP.chair.rotationY,
+    facesWorkstation: "laminar-hood",
+  },
+  ...CENTRAL_LAB_GROUP.chairs.map((c) => ({
+    id: c.id,
+    group: "central-lab",
+    position: c.position,
+    rotationY: c.rotationY,
+    facesWorkstation: "central-bench",
+  })),
+  {
+    id: ENGINEERING_GROUP.chair.id,
+    group: "engineering",
+    position: ENGINEERING_GROUP.chair.position,
+    rotationY: ENGINEERING_GROUP.chair.rotationY,
+    facesWorkstation: "engineering-bench",
+  },
+];
+
+/** Hero placements for LAB_OBJECTS import. */
 export const HERO_PLACEMENTS = {
   microscope: {
     id: "microscope",
@@ -107,18 +229,14 @@ export const HERO_PLACEMENTS = {
   computer: {
     id: "computer",
     category: "hero" as const,
-    position: localToWorldPosition(DRY_LAB_BENCH.anchor, 0.08, DRY_LAB_BENCH.depth * 0.38),
-    rotation: [0, DRY_LAB_BENCH.anchor.rotationY + 0.12, 0] as [number, number, number],
+    position: DRY_LAB_GROUP.computer.position,
+    rotation: DRY_LAB_GROUP.computer.rotation,
   },
   device: {
     id: "device",
-    category: "hero" as const,
-    position: localToWorldPosition(
-      ENGINEERING_BENCH.anchor,
-      ENGINEERING_BENCH.width * 0.06,
-      ENGINEERING_BENCH.depth * 0.38,
-    ),
-    rotation: [0, ENGINEERING_BENCH.anchor.rotationY, 0] as [number, number, number],
+    category: "free-standing-hero" as const,
+    position: BIOREACTOR_FLOOR.position,
+    rotation: BIOREACTOR_FLOOR.rotation,
   },
   bookshelf: {
     id: "bookshelf",
@@ -129,14 +247,9 @@ export const HERO_PLACEMENTS = {
   researcher: {
     id: "researcher",
     category: "hero" as const,
-    position: [-1.35, 0, 2.35] as [number, number, number],
-    rotation: [0, -1.58, 0] as [number, number, number],
+    position: [-0.95, 0, 2.45] as [number, number, number],
+    rotation: [0, -1.52, 0] as [number, number, number],
   },
-};
-
-export const DRY_LAB_CHAIR = {
-  position: localToWorldPosition(DRY_LAB_BENCH.anchor, -0.28, DRY_LAB_BENCH.depth * 0.78),
-  rotationY: DRY_LAB_BENCH.anchor.rotationY + 0.82,
 };
 
 export type WallAlignmentValidation = {
@@ -146,16 +259,12 @@ export type WallAlignmentValidation = {
   tangentAlignment: number;
   inwardAlignment: number;
   valid: boolean;
-  corners: FootprintXZ[];
-  backFace: FootprintXZ;
-  frontFace: FootprintXZ;
 };
 
-export type CirculationReport = {
-  backAisle: number;
-  leftAisle: number;
-  rightAisle: number;
-  frontClearance: number;
+export type CollisionReport = {
+  pair: string;
+  overlaps: boolean;
+  gapM: number;
 };
 
 function centralBenchCorners(): FootprintXZ[] {
@@ -174,57 +283,149 @@ export function validateWallAlignment(item: WallFurniturePlacement): WallAlignme
   const { anchor, width, depth } = item;
   const corners = furnitureFootprintCorners(anchor, width, depth);
   const insidePolygon = footprintInsideRoom(corners);
-
   const worldLocalX = worldAxisFromLocal(anchor.rotationY, 1, 0);
   const worldLocalZ = worldAxisFromLocal(anchor.rotationY, 0, 1);
   const tangent: FootprintXZ = [anchor.tangentX, anchor.tangentZ];
   const inward: FootprintXZ = [anchor.inwardX, anchor.inwardZ];
-
-  const tangentAlignment = Math.abs(dotXZ(worldLocalX, tangent));
-  const inwardAlignment = dotXZ(worldLocalZ, inward);
-
   const back = backFaceCenter(anchor, depth);
   const backFaceDistanceToWall = Math.hypot(
     back[0] - anchor.wallPoint[0],
     back[1] - anchor.wallPoint[1],
   );
-
   const valid =
     insidePolygon &&
     backFaceDistanceToWall <= 0.05 &&
-    tangentAlignment >= 0.99 &&
-    inwardAlignment >= 0.99;
-
+    Math.abs(dotXZ(worldLocalX, tangent)) >= 0.99 &&
+    dotXZ(worldLocalZ, inward) >= 0.99;
   return {
     id: item.id,
     insidePolygon,
     backFaceDistanceToWall,
-    tangentAlignment,
-    inwardAlignment,
+    tangentAlignment: Math.abs(dotXZ(worldLocalX, tangent)),
+    inwardAlignment: dotXZ(worldLocalZ, inward),
     valid,
-    corners,
-    backFace: back,
-    frontFace: [
-      anchor.position[0] + anchor.inwardX * (depth * 0.5),
-      anchor.position[2] + anchor.inwardZ * (depth * 0.5),
-    ],
   };
 }
 
-export function validatePlacements(): {
-  furniture: WallAlignmentValidation[];
-  centralBench: { id: string; insidePolygon: boolean; corners: FootprintXZ[] };
-  allValid: boolean;
-  circulation: CirculationReport;
-} {
-  const furniture = WALL_FURNITURE.map(validateWallAlignment);
+export function buildCollisionAABBs(): WorldAABB[] {
+  const boxes: WorldAABB[] = [];
 
-  const centralCorners = centralBenchCorners();
-  const centralBench = {
-    id: "central-bench",
-    insidePolygon: footprintInsideRoom(centralCorners),
-    corners: centralCorners,
+  for (const item of WALL_FURNITURE) {
+    boxes.push(
+      worldAABBFromPlacement(
+        item.id,
+        item.anchor.position,
+        item.anchor.rotationY,
+        item.width,
+        item.depth,
+        0.88,
+      ),
+    );
+  }
+
+  boxes.push(
+    worldAABBFromPlacement(
+      "central-bench",
+      CENTRAL_BENCH.position,
+      CENTRAL_BENCH.rotationY,
+      CENTRAL_BENCH.width,
+      CENTRAL_BENCH.depth,
+      CENTRAL_BENCH.height,
+    ),
+  );
+
+  boxes.push(
+    worldAABBFromPlacement(
+      "computer-workstation",
+      DRY_LAB_GROUP.computer.position,
+      DRY_LAB_GROUP.computer.rotation[1],
+      MODEL_BOUNDS.computer.width,
+      MODEL_BOUNDS.computer.depth,
+      MODEL_BOUNDS.computer.height,
+    ),
+  );
+
+  boxes.push(
+    worldAABBFromPlacement(
+      "bioreactor",
+      BIOREACTOR_FLOOR.position,
+      BIOREACTOR_FLOOR.rotation[1],
+      MODEL_BOUNDS.bioreactor.width,
+      MODEL_BOUNDS.bioreactor.depth,
+      MODEL_BOUNDS.bioreactor.height,
+    ),
+  );
+
+  for (const chair of CHAIR_PLACEMENTS) {
+    boxes.push(
+      worldAABBFromPlacement(
+        chair.id,
+        chair.position,
+        chair.rotationY,
+        MODEL_BOUNDS.labChair.width,
+        MODEL_BOUNDS.labChair.depth,
+        MODEL_BOUNDS.labChair.height,
+      ),
+    );
+  }
+
+  boxes.push(
+    worldAABBFromPlacement(
+      "researcher",
+      HERO_PLACEMENTS.researcher.position,
+      HERO_PLACEMENTS.researcher.rotation[1],
+      0.55,
+      0.45,
+      1.75,
+    ),
+  );
+
+  return boxes;
+}
+
+export function validateCollisions(): CollisionReport[] {
+  const boxes = buildCollisionAABBs();
+  const criticalPairs: [string, string, number][] = [
+    ["bioreactor", "engineering-bench", 0.25],
+    ["bioreactor", "central-bench", 0.2],
+    ["dry-lab-chair", "central-bench", 0.15],
+    ["dry-lab-chair", "computer-workstation", 0.05],
+    ["computer-workstation", "engineering-bench", 0.1],
+    ["researcher", "central-bench", 0.2],
+    ["central-stool-front-right", "central-bench", 0.12],
+    ["central-stool-rear-left", "central-bench", 0.12],
+    ["wet-lab-stool", "central-bench", 0.15],
+    ["engineering-stool", "bioreactor", 0.2],
+  ];
+
+  const byId = new Map(boxes.map((b) => [b.id, b]));
+  return criticalPairs.map(([a, b, _minGap]) => {
+    const boxA = byId.get(a)!;
+    const boxB = byId.get(b)!;
+    const gap = aabbGapXZ(boxA, boxB);
+    return {
+      pair: `${a} ↔ ${b}`,
+      overlaps: aabbOverlap(boxA, boxB),
+      gapM: gap,
+    };
+  });
+}
+
+export function validateFunctionalPlacement(): {
+  wallAlignment: WallAlignmentValidation[];
+  collisions: CollisionReport[];
+  chairCount: number;
+  allValid: boolean;
+  circulation: {
+    backAisle: number;
+    leftAisle: number;
+    rightAisle: number;
+    frontClearance: number;
   };
+  computerUsesBuiltInDesk: boolean;
+} {
+  const wallAlignment = WALL_FURNITURE.map(validateWallAlignment);
+  const collisions = validateCollisions();
 
   const [cx, , cz] = CENTRAL_BENCH.position;
   const benchBackZ = cz - CENTRAL_BENCH.depth * 0.5;
@@ -238,28 +439,41 @@ export function validatePlacements(): {
     ),
   );
 
-  const dryCorners = furnitureFootprintCorners(
-    DRY_LAB_BENCH.anchor,
-    DRY_LAB_BENCH.width,
-    DRY_LAB_BENCH.depth,
+  const computerCorners = furnitureFootprintCorners(
+    {
+      position: DRY_LAB_GROUP.computer.position,
+      rotationY: DRY_LAB_GROUP.computer.rotation[1],
+    },
+    MODEL_BOUNDS.computer.width,
+    MODEL_BOUNDS.computer.depth,
   );
-  const dryRightX = Math.max(...dryCorners.map((c) => c[0]));
+  const dryRightX = Math.max(...computerCorners.map((c) => c[0]));
 
-  const circulation: CirculationReport = {
-    backAisle: benchBackZ - backFrontZ,
-    leftAisle: benchLeftX - dryRightX,
-    rightAisle: maxPolygonXAtZ(benchBackZ) - benchRightX,
-    frontClearance: FLOOR_FOOTPRINT[4][1] - benchFrontZ,
-  };
+  const bioreactorEng = collisions.find((c) => c.pair.includes("bioreactor") && c.pair.includes("engineering"));
+  const noCriticalOverlap = !collisions.some((c) => c.overlaps);
+  const bioreactorClear = bioreactorEng ? bioreactorEng.gapM >= 0.25 : true;
 
   const allValid =
-    furniture.every((f) => f.valid) &&
-    centralBench.insidePolygon &&
-    circulation.backAisle >= 0.95 &&
-    circulation.leftAisle >= 0.85 &&
-    circulation.rightAisle >= 0.85;
+    wallAlignment.every((w) => w.valid) &&
+    footprintInsideRoom(centralBenchCorners()) &&
+    noCriticalOverlap &&
+    bioreactorClear &&
+    benchBackZ - backFrontZ >= 0.95 &&
+    benchLeftX - dryRightX >= 0.85;
 
-  return { furniture, centralBench, allValid, circulation };
+  return {
+    wallAlignment,
+    collisions,
+    chairCount: CHAIR_PLACEMENTS.length,
+    allValid,
+    circulation: {
+      backAisle: benchBackZ - backFrontZ,
+      leftAisle: benchLeftX - dryRightX,
+      rightAisle: maxPolygonXAtZ(benchBackZ) - benchRightX,
+      frontClearance: FLOOR_FOOTPRINT[4][1] - benchFrontZ,
+    },
+    computerUsesBuiltInDesk: DRY_LAB_GROUP.usesBuiltInDesk,
+  };
 }
 
 function maxPolygonXAtZ(z: number): number {
@@ -275,65 +489,20 @@ function maxPolygonXAtZ(z: number): number {
   return maxX;
 }
 
-/** Local-axis audit for Phase 3.8 documentation. */
-export const FURNITURE_AXIS_AUDIT = {
-  "dry-lab-bench": {
-    localPlusX: "width along left wall tangent",
-    localPlusZ: "depth into room (front)",
-    back: "-Z flush to wall",
-    front: "+Z faces room",
-    boxSize: "[width, height, depth]",
-  },
-  "wet-lab-bench": {
-    localPlusX: "width along back wall tangent",
-    localPlusZ: "depth into room (front)",
-    back: "-Z flush to back wall",
-    front: "+Z countertop faces room",
-    boxSize: "[width, height, depth]",
-  },
-  "laminar-hood": {
-    localPlusX: "hood width along back wall",
-    localPlusZ: "depth; opening at +Z faces room",
-    back: "-Z on wet-lab strip back plane",
-    front: "+Z hood opening",
-    boxSize: "[width, height, depth]",
-  },
-  "storage-shelf": {
-    localPlusX: "width along back wall",
-    localPlusZ: "depth into room",
-    back: "-Z flush to back wall",
-    front: "+Z faces room",
-    boxSize: "[width, height, depth]",
-  },
-  "engineering-bench": {
-    localPlusX: "width along back wall",
-    localPlusZ: "depth into room",
-    back: "-Z flush to back wall",
-    front: "+Z bench surface; bioreactor sits on +Z",
-    boxSize: "[width, height, depth]",
-  },
-  "central-bench": {
-    localPlusX: "width (left-right, 2.65 m)",
-    localPlusZ: "depth (front-back, 1.45 m)",
-    back: "-Z toward back wall",
-    front: "+Z toward open front",
-    boxSize: "[width, height, depth]",
-  },
-  computer: {
-    parent: "dry-lab-bench surface",
-    placement: "local (+0.08, depth×0.38) on desk",
-    rotation: "inherits desk rotationY + 0.12",
-  },
-  bioreactor: {
-    parent: "engineering-bench surface",
-    placement: "local (width×0.06, depth×0.38) on bench",
-    rotation: "inherits engineering rotationY",
-  },
-} as const;
+/** @deprecated use validateFunctionalPlacement */
+export function validatePlacements() {
+  const r = validateFunctionalPlacement();
+  return {
+    furniture: r.wallAlignment,
+    centralBench: { id: "central-bench", insidePolygon: true, corners: centralBenchCorners() },
+    allValid: r.allValid,
+    circulation: r.circulation,
+  };
+}
 
 if (import.meta.env?.DEV) {
-  const report = validatePlacements();
+  const report = validateFunctionalPlacement();
   if (!report.allValid) {
-    console.warn("[roomPlacement] wall alignment validation failed:", report);
+    console.warn("[roomPlacement] functional placement validation failed:", report);
   }
 }

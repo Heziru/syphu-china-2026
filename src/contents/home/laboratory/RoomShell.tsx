@@ -2,8 +2,9 @@ import { useMemo } from "react";
 import { CentralBench } from "./CentralBench";
 import { LAB_COLORS } from "./labPalette";
 import { SoftBox } from "./SoftBox";
-import { DRY_LAB_CHAIR, WallFurnitureBlockouts } from "./roomComposition";
+import { WallFurnitureBlockouts } from "./roomComposition";
 import { LabChairModel } from "./lab-chair/LabChairModel";
+import { CHAIR_PLACEMENTS } from "./roomPlacement";
 import {
   createDioramaBaseGeometry,
   FLOOR_FOOTPRINT,
@@ -107,9 +108,15 @@ export function RoomShell() {
       <WallFurnitureBlockouts />
       <CentralBench />
 
-      <group position={DRY_LAB_CHAIR.position} rotation={[0, DRY_LAB_CHAIR.rotationY, 0]}>
-        <LabChairModel />
-      </group>
+      {CHAIR_PLACEMENTS.map((chair) => (
+        <group
+          key={chair.id}
+          position={chair.position}
+          rotation={[0, chair.rotationY, 0]}
+        >
+          <LabChairModel />
+        </group>
+      ))}
     </group>
   );
 }
