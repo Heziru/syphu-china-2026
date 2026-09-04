@@ -15,7 +15,7 @@ import {
   type Material,
 } from "three";
 
-export const LAB_CHAIR_REVISION = 7;
+export const LAB_CHAIR_REVISION = 9;
 
 export const LAB_CHAIR_COLORS = {
   plastic: "#18181A",
@@ -48,32 +48,49 @@ const BACK_W = 0.36;
 const BACK_H = 0.3;
 const BACK_T = 0.034;
 const TUBE_R = 0.011;
-const BACK_TILT = -0.04;
+const BACK_TILT = -0.11;
+const SEAT_Z = 0.012;
+const SEAT_REAR_Z = SEAT_Z - SEAT_D * 0.48;
+const SEAT_TOP_Y = SEAT_Y + SEAT_T * 0.32;
+const BACK_GAP = 0.045;
 
 type BackLayout = {
   centerY: number;
   centerZ: number;
   halfW: number;
   halfH: number;
-  zFrame: number;
   yBottom: number;
   yTop: number;
   zBottom: number;
   zTop: number;
+  seatAttachY: number;
+  seatAttachZ: number;
 };
 
 function backLayout(): BackLayout {
-  const centerY = 0.662;
-  const centerZ = -0.108;
   const halfW = BACK_W * 0.46;
   const halfH = BACK_H * 0.5;
-  const zLean = halfH * (-BACK_TILT);
-  const yBottom = centerY - halfH;
-  const yTop = centerY + halfH;
+  const yBottom = SEAT_TOP_Y + BACK_GAP;
+  const yTop = yBottom + BACK_H * Math.cos(-BACK_TILT);
+  const centerY = (yBottom + yTop) * 0.5;
+  const seatAttachY = SEAT_Y - SEAT_T * 0.12;
+  const seatAttachZ = SEAT_REAR_Z + 0.008;
+  const centerZ = seatAttachZ + BACK_T * 0.62 + TUBE_R;
+  const zLean = halfH * Math.sin(-BACK_TILT);
   const zBottom = centerZ + zLean;
   const zTop = centerZ - zLean;
-  const zFrame = Math.min(zBottom, zTop) - BACK_T * 0.45 - TUBE_R;
-  return { centerY, centerZ, halfW, halfH, zFrame, yBottom, yTop, zBottom, zTop };
+  return {
+    centerY,
+    centerZ,
+    halfW,
+    halfH,
+    yBottom,
+    yTop,
+    zBottom,
+    zTop,
+    seatAttachY,
+    seatAttachZ,
+  };
 }
 const PILLAR_R = 0.023;
 const BASE_HUB: Point3 = [0, 0.095, 0.012];
@@ -125,7 +142,7 @@ function roundedRect(width: number, height: number, radius: number): Shape {
   return shape;
 }
 
-function extrudePanel(shape: Shape, depth: number, bevel = 0.016): BufferGeometry {
+function extrudeSeatPanel(shape: Shape, depth: number, bevel = 0.016): BufferGeometry {
   const geo = new ExtrudeGeometry(shape, {
     depth,
     bevelEnabled: bevel > 0,
@@ -135,6 +152,20 @@ function extrudePanel(shape: Shape, depth: number, bevel = 0.016): BufferGeometr
     curveSegments: 8,
   });
   geo.rotateX(-Math.PI / 2);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+function extrudeBackPanel(shape: Shape, depth: number, bevel = 0.014): BufferGeometry {
+  const geo = new ExtrudeGeometry(shape, {
+    depth,
+    bevelEnabled: bevel > 0,
+    bevelThickness: bevel,
+    bevelSize: bevel,
+    bevelSegments: 2,
+    curveSegments: 8,
+  });
+  geo.translate(0, 0, -depth * 0.5);
   geo.computeVertexNormals();
   return geo;
 }
@@ -214,7 +245,7 @@ function buildSeat(parent: Group, mats: Mats) {
   const shape = roundedRect(SEAT_W, SEAT_D, 0.085);
   addMesh(
     seat,
-    extrudePanel(shape, SEAT_T, 0.016),
+    extrudeSeatPanel(shape, SEAT_T, 0.016),
     mats.plastic,
     "cushion",
     [0, SEAT_Y, 0.012],
@@ -228,7 +259,7 @@ function buildBackrest(parent: Group, mats: Mats) {
   const shape = roundedRect(BACK_W, BACK_H, 0.07);
   addMesh(
     back,
-    extrudePanel(shape, BACK_T, 0.014),
+    extrudeBackPanel(shape, BACK_T, 0.014),
     mats.plastic,
     "panel",
     [0, layout.centerY, layout.centerZ],
@@ -239,16 +270,21 @@ function buildBackrest(parent: Group, mats: Mats) {
 
 function buildBackFrame(parent: Group, mats: Mats) {
   const frame = part("backFrame");
-  const { halfW, yBottom, yTop, zBottom, zTop } = backLayout();
+  const { halfW, yBottom, yTop, zBottom, zTop, seatAttachY, seatAttachZ } = backLayout();
 
-  const bl: Point3 = [-halfW, yBottom, zBottom];
-  const br: Point3 = [halfW, yBottom, zBottom];
+  const bl: Point3 = [-halfW, seatAttachY, seatAttachZ];
+  const br: Point3 = [halfW, seatAttachY, seatAttachZ];
+  const ml: Point3 = [-halfW, yBottom, zBottom];
+  const mr: Point3 = [halfW, yBottom, zBottom];
   const tl: Point3 = [-halfW, yTop, zTop];
   const tr: Point3 = [halfW, yTop, zTop];
 
-  tubeBetween(frame, bl, tl, TUBE_R, mats.metal, "uprightLeft");
-  tubeBetween(frame, br, tr, TUBE_R, mats.metal, "uprightRight");
+  tubeBetween(frame, bl, ml, TUBE_R, mats.metal, "uprightLeftLower");
+  tubeBetween(frame, ml, tl, TUBE_R, mats.metal, "uprightLeftUpper");
+  tubeBetween(frame, br, mr, TUBE_R, mats.metal, "uprightRightLower");
+  tubeBetween(frame, mr, tr, TUBE_R, mats.metal, "uprightRightUpper");
   tubeBetween(frame, bl, br, TUBE_R, mats.metal, "underRail");
+  tubeBetween(frame, tl, tr, TUBE_R, mats.metal, "topRail");
 
   parent.add(frame);
 }
