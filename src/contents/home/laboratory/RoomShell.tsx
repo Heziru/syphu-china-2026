@@ -2,7 +2,15 @@ import { useMemo } from "react";
 import { CentralBench } from "./CentralBench";
 import { LAB_COLORS } from "./labPalette";
 import { SoftBox } from "./SoftBox";
-import { BackStorageRun, DryLabWorkbench, EngineeringWorkbench } from "./roomComposition";
+import {
+  BackWallZones,
+  DryLabWorkbench,
+  DRY_LAB_CHAIR_POSITION,
+  DRY_LAB_CHAIR_ROTATION_Y,
+  EngineeringWorkbench,
+  WET_LAB_HOOD_POSITION,
+  WET_LAB_HOOD_ROTATION_Y,
+} from "./roomComposition";
 import { LaminarHoodModel } from "./laminar-hood/LaminarHoodModel";
 import { LabChairModel } from "./lab-chair/LabChairModel";
 import {
@@ -105,16 +113,19 @@ export function RoomShell() {
 
       <LeftWallWindow />
 
-      <BackStorageRun />
+      <BackWallZones />
       <DryLabWorkbench />
       <EngineeringWorkbench />
       <CentralBench />
 
-      <group position={[-2.15, 0, -2.35]} rotation={[0, 0.22, 0]}>
+      <group
+        position={WET_LAB_HOOD_POSITION}
+        rotation={[0, WET_LAB_HOOD_ROTATION_Y, 0]}
+      >
         <LaminarHoodModel />
       </group>
 
-      <group position={[-3.95, 0, 0.05]} rotation={[0, 0.75, 0]}>
+      <group position={DRY_LAB_CHAIR_POSITION} rotation={[0, DRY_LAB_CHAIR_ROTATION_Y, 0]}>
         <LabChairModel />
       </group>
     </group>

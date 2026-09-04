@@ -3,7 +3,7 @@ import { ExtrudeGeometry, Shape, type BufferGeometry } from "three";
 /** Phase 2 approved open-front trapezoid footprint (world X, Z). */
 export type FootprintXZ = [number, number];
 
-export const ROOM_LAYOUT_REVISION = 2;
+export const ROOM_LAYOUT_REVISION = 3;
 
 export const FLOOR_FOOTPRINT: FootprintXZ[] = [
   [-3.6, -3.5], // back-left
