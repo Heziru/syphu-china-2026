@@ -15,6 +15,7 @@ import { LAMINAR_HOOD_REVIEW_SHOTS } from "./laminar-hood/reviewShots";
 import { ANALYTICAL_BALANCE_REVIEW_SHOTS } from "./analytical-balance/reviewShots";
 import { GLASSWARE_STATION_REVIEW_SHOTS } from "./glassware-station/reviewShots";
 import { RESEARCHER_REVIEW_SHOTS } from "./researcher/reviewShots";
+import { LAB_CHAIR_REVIEW_SHOTS } from "./lab-chair/reviewShots";
 import type { LabReviewAsset } from "./labReview";
 
 type Props = {
@@ -63,7 +64,9 @@ export function CameraController({
                   ? ANALYTICAL_BALANCE_REVIEW_SHOTS
                   : reviewAsset === "laminar-hood"
                     ? LAMINAR_HOOD_REVIEW_SHOTS
-                    : MICROSCOPE_REVIEW_SHOTS;
+                    : reviewAsset === "lab-chair"
+                      ? LAB_CHAIR_REVIEW_SHOTS
+                      : MICROSCOPE_REVIEW_SHOTS;
       const shot = shotTable[reviewView];
       camera.position.set(shot.position[0], shot.position[1], shot.position[2]);
       camera.lookAt(shot.target[0], shot.target[1], shot.target[2]);

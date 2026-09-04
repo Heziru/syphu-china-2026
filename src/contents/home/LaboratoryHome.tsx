@@ -51,6 +51,11 @@ const LaminarHoodReviewHud = lazy(() =>
     default: mod.LaminarHoodReviewHud,
   })),
 );
+const LabChairReviewHud = lazy(() =>
+  import("./laboratory/lab-chair/LabChairReviewHud").then((mod) => ({
+    default: mod.LabChairReviewHud,
+  })),
+);
 
 export function LaboratoryHome() {
   const navigate = useNavigate();
@@ -160,6 +165,10 @@ export function LaboratoryHome() {
       ) : review && reviewAsset === "laminar-hood" ? (
         <Suspense fallback={null}>
           <LaminarHoodReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "lab-chair" ? (
+        <Suspense fallback={null}>
+          <LabChairReviewHud view={reviewView} onView={setReviewView} />
         </Suspense>
       ) : (
         <div className="lab-hud">

@@ -6,7 +6,8 @@ export type LabReviewAsset =
   | "bioreactor"
   | "glassware-station"
   | "analytical-balance"
-  | "laminar-hood";
+  | "laminar-hood"
+  | "lab-chair";
 export type LabReviewView = "ref" | "side" | "back";
 
 export type LabReviewState = {
@@ -29,7 +30,8 @@ export function readLabReviewState(): LabReviewState {
     raw === "researcher" ||
     raw === "glassware-station" ||
     raw === "analytical-balance" ||
-    raw === "laminar-hood"
+    raw === "laminar-hood" ||
+    raw === "lab-chair"
       ? raw
       : null;
   const viewParam = params.get("view");
