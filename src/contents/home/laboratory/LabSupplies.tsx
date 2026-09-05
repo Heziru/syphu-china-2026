@@ -181,6 +181,12 @@ export function SupplyCart() {
         [-0.21, 0.21].map((z) => (
           <group key={x + ":" + z}>
             <Block p={[x, 0.51, z]} s={[0.025, 0.91, 0.025]} color="#667F75" />
+            {[0.17, 0.53, 0.89].map((y) => (
+              <mesh key={y} position={[x, y, z]}>
+                <cylinderGeometry args={[0.023, 0.023, 0.05, 10]} />
+                <meshStandardMaterial color="#789087" roughness={0.52} />
+              </mesh>
+            ))}
             <mesh
               position={[x, 0.055, z]}
               rotation={[0, 0, Math.PI / 2]}
@@ -188,6 +194,10 @@ export function SupplyCart() {
             >
               <cylinderGeometry args={[0.052, 0.052, 0.035, 12]} />
               <meshStandardMaterial color="#424D48" />
+            </mesh>
+            <mesh position={[x, 0.055, z + (z > 0 ? 0.022 : -0.022)]}>
+              <cylinderGeometry args={[0.02, 0.02, 0.042, 10]} />
+              <meshStandardMaterial color="#738078" metalness={0.35} />
             </mesh>
           </group>
         )),

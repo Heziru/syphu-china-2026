@@ -8,6 +8,7 @@ type LaboratoryStore = {
   inspectId: string | null;
   inspect: (id: string) => void;
   closeInspection: () => void;
+  finishInspectionMotion: (returning: boolean) => void;
   simpleMode: boolean;
   locked: boolean;
   setPhase: (phase: LabPhase) => void;
@@ -37,7 +38,23 @@ export const useLaboratoryStore = create<LaboratoryStore>((set) => ({
   locked: false,
   inspect: (inspectId) =>
     set({ inspectId, phase: "focusing", locked: true, hoveredId: null }),
-  closeInspection: () => set({ phase: "returning", locked: true }),
+  closeInspection: () =>
+    set((s) =>
+      s.phase === "inspecting" || s.phase === "focusing"
+        ? { phase: "returning", locked: true }
+        : {},
+    ),
+  finishInspectionMotion: (returning) =>
+    set((s) =>
+      s.phase === (returning ? "returning" : "focusing")
+        ? {
+            phase: returning ? "idle" : "inspecting",
+            locked: !returning,
+            inspectId: returning ? null : s.inspectId,
+            selectedId: null,
+          }
+        : {},
+    ),
   setPhase: (phase) => set({ phase }),
   setHovered: (hoveredId) => set({ hoveredId }),
   setSelected: (selectedId) => set({ selectedId }),

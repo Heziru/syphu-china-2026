@@ -47,12 +47,12 @@ npm run lint
 
 `LabEquipment.tsx` 提供离心机、超声破碎仪、摇床、冰箱、液氮罐、衣架、悬挂白大褂、烧杯和量筒。新增独立设备经 `ModelAsset` 统一归一化底部与预留包围盒。前方通道不摆设备，右侧服务区设备略转向室内，保持正面可读。
 
-
 ## Lived-in lab and close-up inspection
 
 Right-wall equipment faces its working aisle (-X), not the overview camera. The new left preparation bench, analytical balance, supply trolley, duplicate tip boxes, pipettes, stacked reagent kits, bottles and racks enrich each workstation without expanding the room or occupying the main circulation lanes.
 
 Visual inventory sources, not operating protocols:
+
 - https://www.addgene.org/protocols/pipetting/
 - https://www.thermofisher.com/uk/en/home/life-science/lab-plasticware-supplies/lab-organization-cleaning-safety/lab-organization-supplies.html
 
@@ -61,3 +61,13 @@ An entrance low wall carries the iGEM Lab sign, with plants and supplies behind 
 Equipment metadata lives in data/equipmentDetails.ts. Close-up cameras derive from the same furniture transform. The interaction is idle -> focusing -> inspecting -> returning -> idle. A compact translucent native dialog contains keyboard focus and supports Escape. Chapter navigation requires an explicit button. A small equipment selector supplies keyboard access. Reduced motion skips the camera tween. Closing restores the overview; effect cleanup kills camera tweens.
 
 Collision validation covers major furniture, devices and the window sill. Small decorative vessels are visually checked, not individually certified by the layout validator. See researcher-rebuild.md for character fidelity limitations.
+
+## Project literature wall
+
+Three portrait shadow-box frames on the right wall reproduce complete first pages from papers cited in the project proposal. Each frame participates in the same close-up camera flow as laboratory equipment; its detail panel carries an explicit DOI link rather than making the whole 3D surface an external navigation target.
+
+- Rubens, Selvaggio & Lu (2016), _Synthetic mixed-signal computation in living cells_, https://doi.org/10.1038/ncomms11658 — CC BY 4.0.
+- Wang et al. (2021), _Active maintenance of proton motive force mediates starvation-induced bacterial antibiotic tolerance in Escherichia coli_, https://doi.org/10.1038/s42003-021-02612-1 — CC BY 4.0.
+- Teng et al. (2022), _Probiotic Escherichia coli Nissle 1917 Expressing Elafin Protects Against Inflammation and Restores the Gut Microbiota_, https://doi.org/10.3389/fmicb.2022.819336 — CC BY 4.0.
+
+The displayed WebP files are reduced-resolution first-page reproductions for identification and citation. Their portrait aspect is preserved; no page content is cropped or rewritten.

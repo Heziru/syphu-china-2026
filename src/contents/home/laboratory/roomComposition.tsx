@@ -17,6 +17,7 @@ import { LabDesk, LabBench, Cabinet } from "./labFurnitureSystem";
 import { CentralBench } from "./CentralBench";
 import { FloorBioreactor } from "./FloorBioreactor";
 import { Plant, LabStool, TubeRack } from "./RoomAccents";
+import { LiteratureFrame } from "./LiteratureFrame";
 import {
   GROUP_FRAMES,
   ROOM_FURNITURE,
@@ -95,6 +96,8 @@ function Furniture({ spec }: { spec: FurnitureSpec }) {
       );
     case "supply-cart":
       return <SupplyCart />;
+    case "literature-frame":
+      return <LiteratureFrame id={spec.id} size={spec.size} />;
     case "stool":
       return <LabStool />;
   }

@@ -16,10 +16,29 @@ function ProcessTube({ x }: { x: number }) {
     [x],
   );
   return (
-    <mesh castShadow>
-      <tubeGeometry args={[curve, 22, 0.014, 7, false]} />
-      <meshStandardMaterial color="#B58A64" roughness={0.35} metalness={0.55} />
-    </mesh>
+    <group>
+      <mesh castShadow>
+        <tubeGeometry args={[curve, 22, 0.014, 7, false]} />
+        <meshStandardMaterial
+          color="#B58A64"
+          roughness={0.35}
+          metalness={0.55}
+        />
+      </mesh>
+      {[
+        [-0.18 + x, 1.18, -0.06],
+        [0.26 + x, 0.9, -0.12],
+      ].map((p, i) => (
+        <mesh key={i} position={p as [number, number, number]} castShadow>
+          <cylinderGeometry args={[0.025, 0.025, 0.045, 10]} />
+          <meshStandardMaterial
+            color={C.metal}
+            metalness={0.55}
+            roughness={0.3}
+          />
+        </mesh>
+      ))}
+    </group>
   );
 }
 export function FloorBioreactor() {
@@ -30,6 +49,12 @@ export function FloorBioreactor() {
         size={[0.94, 0.08, 0.85]}
         color={C.dark}
         radius={0.025}
+      />
+      <SoftBox
+        position={[0.3, 0.105, 0.15]}
+        size={[0.15, 0.055, 0.16]}
+        color={C.structure}
+        radius={0.018}
       />
       {[-0.37, 0.37].flatMap((x) =>
         [-0.3, 0.3].map((z) => (

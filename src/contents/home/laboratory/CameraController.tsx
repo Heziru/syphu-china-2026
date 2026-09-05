@@ -2,7 +2,7 @@ import { useEffect, useRef, useMemo } from "react";
 import { OrbitControls } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import gsap from "gsap";
-import { PerspectiveCamera } from "three";
+import { PerspectiveCamera, Vector3 } from "three";
 import {
   ENTER_CAMERA_OFFSET,
   OVERVIEW_CAMERA,
@@ -56,6 +56,12 @@ export function CameraController({
   const inspectId = useLaboratoryStore((s) => s.inspectId);
   const setPhase = useLaboratoryStore((s) => s.setPhase);
   const setLocked = useLaboratoryStore((s) => s.setLocked);
+  const finishMotion = useLaboratoryStore((s) => s.finishInspectionMotion);
+  const returnPose = useRef<{
+    position: [number, number, number];
+    target: [number, number, number];
+    aspect: number;
+  } | null>(null);
   const overview = useMemo(
     () =>
       fitOverviewShot(
@@ -101,6 +107,12 @@ export function CameraController({
       return;
     }
 
+    if (
+      ["focusing", "inspecting", "returning"].includes(
+        useLaboratoryStore.getState().phase,
+      )
+    )
+      return;
     camera.position.set(
       overview.position[0],
       overview.position[1] + (reduced ? 0 : ENTER_CAMERA_OFFSET),
@@ -152,7 +164,23 @@ export function CameraController({
     if (review || (phase !== "focusing" && phase !== "returning")) return;
     if (phase === "focusing" && !inspectId) return;
     const returning = phase === "returning";
-    const shot = returning ? overview : equipmentShot(inspectId!, mobile);
+    if (!returning && !returnPose.current) {
+      returnPose.current = {
+        position: camera.position.toArray() as [number, number, number],
+        target: [
+          controls.current?.target.x ?? overview.target[0],
+          controls.current?.target.y ?? overview.target[1],
+          controls.current?.target.z ?? overview.target[2],
+        ],
+        aspect: size.width / size.height,
+      };
+    }
+    const saved = returnPose.current;
+    const shot = returning
+      ? saved && Math.abs(saved.aspect - size.width / size.height) < 0.01
+        ? saved
+        : overview
+      : equipmentShot(inspectId!, mobile);
     const look = {
       x: controls.current?.target.x ?? overview.target[0],
       y: controls.current?.target.y ?? overview.target[1],
@@ -162,32 +190,29 @@ export function CameraController({
     if (controls.current) controls.current.enabled = false;
     setLocked(true);
 
-    const posTween = gsap.to(camera.position, {
-      x: shot.position[0],
-      y: shot.position[1],
-      z: shot.position[2],
-      duration: reduced ? 0 : 0.85,
-      ease: "power2.inOut",
-    });
-    const lookTween = gsap.to(look, {
-      x: shot.target[0],
-      y: shot.target[1],
-      z: shot.target[2],
-      duration: reduced ? 0 : 0.85,
+    const from = camera.position.clone();
+    const to = new Vector3(...shot.position);
+    const fromLook = new Vector3(look.x, look.y, look.z);
+    const toLook = new Vector3(...shot.target);
+    const target = new Vector3();
+    const clock = { t: 0 };
+    const tween = gsap.to(clock, {
+      t: 1,
+      duration: reduced ? 0 : returning ? 0.65 : 0.8,
       ease: "power2.inOut",
       onUpdate: () => {
-        camera.lookAt(look.x, look.y, look.z);
-        controls.current?.target.set(look.x, look.y, look.z);
+        camera.position.lerpVectors(from, to, clock.t);
+        target.lerpVectors(fromLook, toLook, clock.t);
+        camera.lookAt(target);
+        controls.current?.target.set(target.x, target.y, target.z);
       },
       onComplete: () => {
-        setPhase(returning ? "idle" : "inspecting");
-        setLocked(!returning);
+        if (returning) returnPose.current = null;
+        finishMotion(returning);
       },
     });
-
     return () => {
-      posTween.kill();
-      lookTween.kill();
+      tween.kill();
     };
   }, [
     camera,
@@ -197,6 +222,9 @@ export function CameraController({
     phase,
     review,
     inspectId,
+    size.width,
+    size.height,
+    finishMotion,
     setLocked,
     setPhase,
   ]);

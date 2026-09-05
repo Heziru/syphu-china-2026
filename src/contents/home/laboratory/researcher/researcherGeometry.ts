@@ -333,7 +333,8 @@ function coatShell() {
     [0.68, 0.182, 0.115],
     [0.9, 0.159, 0.11],
     [1.1, 0.166, 0.11],
-    [1.19, 0.17, 0.099],
+    [1.17, 0.163, 0.103],
+    [1.215, 0.15, 0.091],
     [1.245, 0.119, 0.075],
     [1.27, 0.067, 0.052],
   ];
@@ -345,7 +346,7 @@ function coatShell() {
   for (let inner = 0; inner < 2; inner++)
     for (let i = 0; i < rings.length; i++) {
       const [y, w, d] = rings[i],
-        gap = i < 4 ? 0.36 : 0.4 + (i - 4) * 0.045;
+        gap = i < 4 ? 0.36 : 0.4;
       for (let j = 0; j <= n; j++) {
         const a = gap + (j / n) * (Math.PI * 2 - 2 * gap),
           thickness = inner * 0.009,
@@ -420,40 +421,72 @@ function coat(root: Group, m: Mats) {
       m.seam,
     );
   }
-  const right = part(c, "sleeve-right", [-0.16, 1.2, 0]);
+  // Begin each sleeve inside the coat shell, then widen over the shoulder.
+  // The overlap hides the old ball-and-tube seam without adding a visible cap.
+  const right = part(c, "sleeve-right", [-0.145, 1.19, -0.002]);
   mesh(
     right,
     "continuous-sleeve",
     sweep(
       [
         [0, 0, 0],
-        [-0.05, -0.1, 0.002],
-        [-0.078, -0.29, 0.015],
-        [-0.09, -0.46, 0.035],
+        [-0.035, -0.085, 0.004],
+        [-0.072, -0.235, 0.017],
+        [-0.105, -0.45, 0.042],
       ],
-      [0.072, 0.07, 0.056, 0.051],
-      [0.067, 0.063, 0.056, 0.049],
-    ),
-    m.labCoat,
-  );
-  const left = part(c, "sleeve-left", [0.16, 1.2, 0]);
-  mesh(
-    left,
-    "bent-continuous-sleeve",
-    sweep(
-      [
-        [0, 0, 0],
-        [0.056, -0.13, 0.017],
-        [0.1, -0.24, 0.08],
-        [0.082, -0.27, 0.165],
-        [0.037, -0.2, 0.215],
-      ],
-      [0.07, 0.062, 0.047, 0.046, 0.052],
-      [0.063, 0.056, 0.044, 0.042, 0.047],
+      [0.068, 0.066, 0.058, 0.049],
+      [0.063, 0.061, 0.055, 0.047],
       28,
     ),
     m.labCoat,
   );
+  const left = part(c, "sleeve-left", [0.145, 1.19, -0.002]);
+  mesh(
+    left,
+    "upper-bent-sleeve",
+    sweep(
+      [
+        [0, 0, 0],
+        [0.045, -0.075, 0.018],
+        [0.085, -0.15, 0.06],
+        [0.11, -0.195, 0.105],
+      ],
+      [0.068, 0.064, 0.055, 0.048],
+      [0.063, 0.059, 0.052, 0.045],
+      28,
+    ),
+    m.labCoat,
+  );
+  const forearm = part(left, "forearm-sleeve", [0.108, -0.19, 0.102]);
+  mesh(
+    forearm,
+    "raised-forearm-sleeve",
+    sweep(
+      [
+        [0, 0, 0],
+        [-0.024, 0.012, 0.047],
+        [-0.049, 0.024, 0.095],
+        [-0.074, 0.036, 0.142],
+      ],
+      [0.043, 0.042, 0.04, 0.037],
+      [0.041, 0.04, 0.038, 0.035],
+      28,
+    ),
+    m.labCoat,
+  );
+  for (const sign of [-1, 1])
+    line(
+      c,
+      `shoulder-seam-${sign < 0 ? "right" : "left"}`,
+      [
+        [sign * 0.09, 1.19, 0.087],
+        [sign * 0.135, 1.18, 0.083],
+        [sign * 0.175, 1.15, 0.068],
+      ],
+      0.0015,
+      m.seam,
+      10,
+    );
   const handR = part(root, "hand-right", [-0.25, 0.697, 0.04]);
   ellipsoid(handR, "palm", m.skin, [0, 0, 0], [0.032, 0.058, 0.027]);
   ellipsoid(

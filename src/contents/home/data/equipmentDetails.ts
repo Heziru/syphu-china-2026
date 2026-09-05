@@ -4,7 +4,13 @@ import type { CameraShot } from "../types/laboratory";
 
 export const EQUIPMENT_DETAILS: Record<
   string,
-  { name: string; description: string; path?: string }
+  {
+    name: string;
+    description: string;
+    path?: string;
+    citation?: string;
+    doi?: string;
+  }
 > = {
   balance: {
     name: "Sample preparation",
@@ -75,6 +81,27 @@ export const EQUIPMENT_DETAILS: Record<
     name: "Laboratory supplies",
     description:
       "Reagent kits, tip boxes, tube racks and spare bottles are organised on a three-tier trolley.",
+  },
+  "paper-rubens": {
+    name: "Synthetic mixed-signal computation",
+    description:
+      "A project-library display on synthetic gene circuits that combine analogue sensing with digital decision-making in living cells.",
+    citation: "Rubens, Selvaggio & Lu · Nature Communications · 2016",
+    doi: "https://doi.org/10.1038/ncomms11658",
+  },
+  "paper-wang": {
+    name: "Proton motive force and antibiotic tolerance",
+    description:
+      "This study connects active maintenance of proton motive force with starvation-induced antibiotic tolerance in Escherichia coli.",
+    citation: "Wang et al. · Communications Biology · 2021",
+    doi: "https://doi.org/10.1038/s42003-021-02612-1",
+  },
+  "paper-teng": {
+    name: "Engineered E. coli Nissle 1917",
+    description:
+      "A probiotic engineering study in which E. coli Nissle 1917 expresses elafin to protect against inflammation and restore gut microbiota.",
+    citation: "Teng et al. · Frontiers in Microbiology · 2022",
+    doi: "https://doi.org/10.3389/fmicb.2022.819336",
   },
 };
 

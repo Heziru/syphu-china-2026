@@ -407,6 +407,9 @@
   color: #314840;
 }
 .lab-detail {
+  pointer-events: auto;
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
   position: fixed;
   inset: auto 28px 30px auto;
   width: min(360px, calc(100vw - 32px));
@@ -433,6 +436,13 @@
   font-size: 14px;
   line-height: 1.65;
 }
+.lab-detail .lab-detail__citation {
+  margin: 0.8rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(38, 61, 54, 0.12);
+  color: #527069;
+  font-size: 12px;
+}
 .lab-detail .lab-detail__eyebrow {
   font-size: 11px;
   text-transform: uppercase;
@@ -446,9 +456,13 @@
   border: 0;
   border-radius: 50%;
   background: #ffffff90;
-  width: 30px;
-  height: 30px;
-  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  cursor: pointer;
   color: inherit;
 }
 .lab-detail__actions {
@@ -457,15 +471,20 @@
   gap: 8px;
   margin-top: 20px;
 }
-.lab-detail__actions button {
+.lab-detail__actions button,
+.lab-detail__actions a {
   border: 1px solid #47685722;
   border-radius: 12px;
   padding: 10px 13px;
   background: #ffffffaa;
   color: inherit;
   font-size: 12px;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
 }
 .lab-detail button:focus-visible,
+.lab-detail a:focus-visible,
 .lab-inspect-picker select:focus-visible {
   outline: 3px solid #48897c;
   outline-offset: 3px;

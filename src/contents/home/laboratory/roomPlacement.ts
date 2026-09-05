@@ -41,12 +41,13 @@ export type Role =
   | "nitrogen"
   | "coat-rack"
   | "supply-cart"
-  | "balance";
+  | "balance"
+  | "literature-frame";
 export type FurnitureSpec = Body & {
   group: GroupId;
   parent: GroupId;
   role: Role;
-  mount: "floor" | "tabletop";
+  mount: "floor" | "tabletop" | "wall";
   topY?: number;
   supportedBy?: string;
   workstationId?: string;
@@ -199,7 +200,26 @@ const prepBench = {
   ),
   rotationY: Math.PI / 2,
 };
+function literatureFrame(id: string, t: number): FurnitureSpec {
+  const anchor = wallAnchorFromSegment(
+    ROOM_POLYGON[1],
+    ROOM_POLYGON[2],
+    t,
+    0.62,
+    0.08,
+    0.06,
+  );
+  return {
+    ...item(id, "team", "literature-frame", [0.62, 0.86, 0.08]),
+    ...anchor,
+    position: [anchor.position[0], 2.12, anchor.position[2]],
+    mount: "wall",
+  };
+}
 export const ROOM_FURNITURE: FurnitureSpec[] = [
+  literatureFrame("paper-rubens", 0.2),
+  literatureFrame("paper-wang", 0.5),
+  literatureFrame("paper-teng", 0.8),
   prepBench,
   placeOnTabletop(
     item("balance", "team", "balance", [0.48, 0.56, 0.46]),
