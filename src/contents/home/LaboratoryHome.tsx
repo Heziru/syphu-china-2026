@@ -85,6 +85,8 @@ export function LaboratoryHome() {
   const [reviewState] = useState(() => readLabReviewState());
   const review = reviewState.active;
   const [labVisible, setLabVisible] = useState(review);
+  const [journeyReady, setJourneyReady] = useState(review || reduced || !webgl);
+  const labActive = labVisible && journeyReady;
   const reviewAsset = reviewState.asset as LabReviewAsset | null;
   const [reviewView, setReviewView] = useState<LabReviewView>(
     () => reviewState.view,
@@ -133,108 +135,112 @@ export function LaboratoryHome() {
 
   const show3d = webgl && !simpleMode && phase !== "fallback";
 
+  const laboratory = (
+    <div
+      ref={labRef}
+      id="laboratory"
+      className={`lab-home${phase === "transitioning" ? " lab-home--leave" : ""}${
+        review ? " lab-home--review" : ""
+      }`}
+    >
+      {show3d ? (
+        <SceneErrorBoundary onError={goFallback}>
+          <Suspense fallback={<LoadingOverlay visible />}>
+            <LaboratoryCanvas
+              reduced={reduced}
+              paused={paused || !labActive}
+              onNavigate={onNavigate}
+              onContextLost={goFallback}
+              review={review}
+              reviewAsset={reviewAsset}
+              reviewView={reviewView}
+            />
+          </Suspense>
+        </SceneErrorBoundary>
+      ) : (
+        <LaboratoryFallback
+          message={
+            simpleMode
+              ? "A lightweight map of our laboratory and its research areas."
+              : "This browser cannot run the 3D laboratory. Explore the research map instead."
+          }
+        />
+      )}
+
+      <LoadingOverlay
+        visible={labActive && show3d && !review && phase === "loading"}
+      />
+
+      {!labActive && !review ? null : review && reviewAsset === "microscope" ? (
+        <Suspense fallback={null}>
+          <MicroscopeReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "computer" ? (
+        <Suspense fallback={null}>
+          <ComputerReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "bioreactor" ? (
+        <Suspense fallback={null}>
+          <BioreactorReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "researcher" ? (
+        <Suspense fallback={null}>
+          <ResearcherReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "glassware-station" ? (
+        <Suspense fallback={null}>
+          <GlasswareStationReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "analytical-balance" ? (
+        <Suspense fallback={null}>
+          <AnalyticalBalanceReviewHud
+            view={reviewView}
+            onView={setReviewView}
+          />
+        </Suspense>
+      ) : review && reviewAsset === "laminar-hood" ? (
+        <Suspense fallback={null}>
+          <LaminarHoodReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : review && reviewAsset === "lab-chair" ? (
+        <Suspense fallback={null}>
+          <LabChairReviewHud view={reviewView} onView={setReviewView} />
+        </Suspense>
+      ) : (
+        <div className="lab-hud">
+          {!simpleMode && (
+            <>
+              <div className="lab-brand">
+                <p className="lab-brand__mark">LBP-Mototype</p>
+                <p className="lab-brand__hint">
+                  Click an instrument to look closer.
+                </p>
+              </div>
+              <ChapterDirectory />
+            </>
+          )}
+          {show3d && <EquipmentInspector onNavigate={onNavigate} />}
+          <ObjectTooltip />
+          <button
+            type="button"
+            className="lab-simple"
+            onClick={() => setSimpleMode(!simpleMode)}
+          >
+            {simpleMode ? "Show 3D lab" : "Simple mode"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
   return (
     <main className="lab-experience">
-      {!review && <CosmicJourney reduced={reduced} />}
-      <div
-        ref={labRef}
-        id="laboratory"
-        className={`lab-home${phase === "transitioning" ? " lab-home--leave" : ""}${
-          review ? " lab-home--review" : ""
-        }`}
-      >
-        {show3d ? (
-          <SceneErrorBoundary onError={goFallback}>
-            <Suspense fallback={<LoadingOverlay visible />}>
-              <LaboratoryCanvas
-                reduced={reduced}
-                paused={paused}
-                onNavigate={onNavigate}
-                onContextLost={goFallback}
-                review={review}
-                reviewAsset={reviewAsset}
-                reviewView={reviewView}
-              />
-            </Suspense>
-          </SceneErrorBoundary>
-        ) : (
-          <LaboratoryFallback
-            message={
-              simpleMode
-                ? "A lightweight map of our laboratory and its research areas."
-                : "This browser cannot run the 3D laboratory. Explore the research map instead."
-            }
-          />
-        )}
-
-        <LoadingOverlay
-          visible={labVisible && show3d && !review && phase === "loading"}
-        />
-
-        {!labVisible && !review ? null : review &&
-          reviewAsset === "microscope" ? (
-          <Suspense fallback={null}>
-            <MicroscopeReviewHud view={reviewView} onView={setReviewView} />
-          </Suspense>
-        ) : review && reviewAsset === "computer" ? (
-          <Suspense fallback={null}>
-            <ComputerReviewHud view={reviewView} onView={setReviewView} />
-          </Suspense>
-        ) : review && reviewAsset === "bioreactor" ? (
-          <Suspense fallback={null}>
-            <BioreactorReviewHud view={reviewView} onView={setReviewView} />
-          </Suspense>
-        ) : review && reviewAsset === "researcher" ? (
-          <Suspense fallback={null}>
-            <ResearcherReviewHud view={reviewView} onView={setReviewView} />
-          </Suspense>
-        ) : review && reviewAsset === "glassware-station" ? (
-          <Suspense fallback={null}>
-            <GlasswareStationReviewHud
-              view={reviewView}
-              onView={setReviewView}
-            />
-          </Suspense>
-        ) : review && reviewAsset === "analytical-balance" ? (
-          <Suspense fallback={null}>
-            <AnalyticalBalanceReviewHud
-              view={reviewView}
-              onView={setReviewView}
-            />
-          </Suspense>
-        ) : review && reviewAsset === "laminar-hood" ? (
-          <Suspense fallback={null}>
-            <LaminarHoodReviewHud view={reviewView} onView={setReviewView} />
-          </Suspense>
-        ) : review && reviewAsset === "lab-chair" ? (
-          <Suspense fallback={null}>
-            <LabChairReviewHud view={reviewView} onView={setReviewView} />
-          </Suspense>
-        ) : (
-          <div className="lab-hud">
-            {!simpleMode && (
-              <>
-                <div className="lab-brand">
-                  <p className="lab-brand__mark">LBP-Mototype</p>
-                  <p className="lab-brand__hint">
-                    Click an instrument to look closer.
-                  </p>
-                </div>
-                <ChapterDirectory />
-              </>
-            )}
-            {show3d && <EquipmentInspector onNavigate={onNavigate} />}
-            <ObjectTooltip />
-            <button
-              type="button"
-              className="lab-simple"
-              onClick={() => setSimpleMode(!simpleMode)}
-            >
-              {simpleMode ? "Show 3D lab" : "Simple mode"}
-            </button>
-          </div>
-        )}
-      </div>
+      {review ? (
+        laboratory
+      ) : (
+        <CosmicJourney reduced={reduced || !webgl} onLabReady={setJourneyReady}>
+          {laboratory}
+        </CosmicJourney>
+      )}
     </main>
   );
 }
