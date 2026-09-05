@@ -71,6 +71,10 @@ export function CameraController({
       ),
     [mobile, size.width, size.height],
   );
+  const overviewRef = useRef(overview);
+  const aspectRef = useRef(size.width / Math.max(1, size.height));
+  overviewRef.current = overview;
+  aspectRef.current = size.width / Math.max(1, size.height);
 
   useEffect(() => {
     if (camera instanceof PerspectiveCamera) {
@@ -163,28 +167,30 @@ export function CameraController({
   useEffect(() => {
     if (review || (phase !== "focusing" && phase !== "returning")) return;
     if (phase === "focusing" && !inspectId) return;
+    const currentOverview = overviewRef.current;
+    const currentAspect = aspectRef.current;
     const returning = phase === "returning";
     if (!returning && !returnPose.current) {
       returnPose.current = {
         position: camera.position.toArray() as [number, number, number],
         target: [
-          controls.current?.target.x ?? overview.target[0],
-          controls.current?.target.y ?? overview.target[1],
-          controls.current?.target.z ?? overview.target[2],
+          controls.current?.target.x ?? currentOverview.target[0],
+          controls.current?.target.y ?? currentOverview.target[1],
+          controls.current?.target.z ?? currentOverview.target[2],
         ],
-        aspect: size.width / size.height,
+        aspect: currentAspect,
       };
     }
     const saved = returnPose.current;
     const shot = returning
-      ? saved && Math.abs(saved.aspect - size.width / size.height) < 0.01
+      ? saved && Math.abs(saved.aspect - currentAspect) < 0.01
         ? saved
-        : overview
+        : currentOverview
       : equipmentShot(inspectId!, mobile);
     const look = {
-      x: controls.current?.target.x ?? overview.target[0],
-      y: controls.current?.target.y ?? overview.target[1],
-      z: controls.current?.target.z ?? overview.target[2],
+      x: controls.current?.target.x ?? currentOverview.target[0],
+      y: controls.current?.target.y ?? currentOverview.target[1],
+      z: controls.current?.target.z ?? currentOverview.target[2],
     };
 
     if (controls.current) controls.current.enabled = false;
@@ -217,16 +223,12 @@ export function CameraController({
   }, [
     camera,
     mobile,
-    overview,
     reduced,
     phase,
     review,
     inspectId,
-    size.width,
-    size.height,
     finishMotion,
     setLocked,
-    setPhase,
   ]);
 
   return (
