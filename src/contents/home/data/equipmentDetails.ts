@@ -89,20 +89,6 @@ export const EQUIPMENT_DETAILS: Record<
     citation: "Rubens, Selvaggio & Lu · Nature Communications · 2016",
     doi: "https://doi.org/10.1038/ncomms11658",
   },
-  "paper-wang": {
-    name: "Proton motive force and antibiotic tolerance",
-    description:
-      "This study connects active maintenance of proton motive force with starvation-induced antibiotic tolerance in Escherichia coli.",
-    citation: "Wang et al. · Communications Biology · 2021",
-    doi: "https://doi.org/10.1038/s42003-021-02612-1",
-  },
-  "paper-teng": {
-    name: "Engineered E. coli Nissle 1917",
-    description:
-      "A probiotic engineering study in which E. coli Nissle 1917 expresses elafin to protect against inflammation and restore gut microbiota.",
-    citation: "Teng et al. · Frontiers in Microbiology · 2022",
-    doi: "https://doi.org/10.3389/fmicb.2022.819336",
-  },
 };
 
 export function equipmentShot(id: string, mobile: boolean): CameraShot {

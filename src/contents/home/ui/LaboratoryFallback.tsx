@@ -8,20 +8,27 @@ type Props = {
 export function LaboratoryFallback({ message }: Props) {
   return (
     <div className="lab-fallback">
-      <div className="lab-fallback__poster" aria-hidden="true">
-        <span className="lab-fallback__window" />
-        <span className="lab-fallback__bench" />
-        <span className="lab-fallback__dot lab-fallback__dot--a" />
-        <span className="lab-fallback__dot lab-fallback__dot--b" />
-        <span className="lab-fallback__dot lab-fallback__dot--c" />
-      </div>
+      <img
+        className="lab-fallback__image"
+        src={`${import.meta.env.BASE_URL}assets/laboratory/simple-lab-reference.png`}
+        alt="Illustrated overview of the SYPHU-China laboratory"
+      />
+      <div className="lab-fallback__shade" aria-hidden="true" />
       <div className="lab-fallback__copy">
-        <p>{message ?? "3D laboratory is unavailable. Use the chapter list below."}</p>
+        <span className="lab-fallback__eyebrow">
+          SYPHU-CHINA · LABORATORY ATLAS
+        </span>
+        <h2>Explore the lab</h2>
+        <p>
+          {message ??
+            "A lightweight map of our laboratory and its research areas."}
+        </p>
         <ul>
           {CHAPTER_LIST.map((chapter) => (
             <li key={chapter.id}>
               <Link to={chapter.path}>
-                {chapter.nameZh} · {chapter.name}
+                <span>{chapter.name}</span>
+                <small>{chapter.nameZh}</small>
               </Link>
             </li>
           ))}

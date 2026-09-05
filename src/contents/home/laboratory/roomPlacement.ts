@@ -217,9 +217,7 @@ function literatureFrame(id: string, t: number): FurnitureSpec {
   };
 }
 export const ROOM_FURNITURE: FurnitureSpec[] = [
-  literatureFrame("paper-rubens", 0.2),
-  literatureFrame("paper-wang", 0.5),
-  literatureFrame("paper-teng", 0.8),
+  literatureFrame("paper-rubens", 0.5),
   prepBench,
   placeOnTabletop(
     item("balance", "team", "balance", [0.48, 0.56, 0.46]),
