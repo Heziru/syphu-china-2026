@@ -236,10 +236,11 @@ export function CameraController({
       ref={controls as never}
       makeDefault
       enablePan={false}
+      enableZoom
       enableDamping
       dampingFactor={0.08}
       minDistance={review ? 1.2 : phase === "idle" ? 8 : 1}
-      maxDistance={review ? 4.2 : 45}
+      maxDistance={review ? 4.2 : 38}
       minPolarAngle={review ? 0.18 : 0.48}
       maxPolarAngle={review ? 1.45 : 1.18}
       minAzimuthAngle={review ? -Math.PI : -0.48}

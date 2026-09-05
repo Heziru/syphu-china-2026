@@ -42,15 +42,15 @@ export default function LaboratoryCanvas({
       frameloop={paused ? "never" : "always"}
       camera={{ fov: review ? 28 : mobile ? 42 : 34, near: 0.1, far: 80 }}
       gl={{
-        antialias: !mobile,
+        antialias: true,
         powerPreference: "high-performance",
         alpha: false,
       }}
       onCreated={({ gl }) => {
         gl.toneMapping = ACESFilmicToneMapping;
-        gl.toneMappingExposure = review ? 1.16 : 1.05;
+        gl.toneMappingExposure = review ? 1 : 1.05;
         gl.outputColorSpace = SRGBColorSpace;
-        gl.setClearColor(review ? "#F4F5F0" : "#DCCFBB", 1);
+        gl.setClearColor(review ? "#F4F5F0" : "#E9E9DD", 1);
         gl.domElement.addEventListener("webglcontextlost", (event) => {
           event.preventDefault();
           onContextLost();

@@ -1,4 +1,5 @@
-import { useTexture } from "@react-three/drei";
+import { orbitPoint, orbitAngle, ORBITS } from "./orbitLayout";
+import { CampusPlanet } from "./CampusPlanet";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Suspense,
@@ -12,15 +13,13 @@ import {
 } from "react";
 import {
   BackSide,
+  Vector3,
   BufferAttribute,
   BufferGeometry,
   Color,
   Group,
   Points,
-  Quaternion,
   ShaderMaterial,
-  SRGBColorSpace,
-  Vector3,
 } from "three";
 import { SceneErrorBoundary } from "../ui/SceneErrorBoundary";
 import "./cosmicJourney.css";
@@ -32,36 +31,11 @@ type Props = {
   onLabReady: (ready: boolean) => void;
 };
 const STAGES = [
-  {
-    at: 0,
-    eyebrow: "01 / COSMIC ORIGINS",
-    title: "A world of possibility",
-    copy: "A journey from the cosmos to our laboratory.",
-  },
-  {
-    at: 0.23,
-    eyebrow: "02 / OUR PLANET",
-    title: "One living planet",
-    copy: "An extraordinary world. A shared beginning.",
-  },
-  {
-    at: 0.46,
-    eyebrow: "03 / NORTHEAST CHINA",
-    title: "Closer to home",
-    copy: "China · Shenyang",
-  },
-  {
-    at: 0.66,
-    eyebrow: "04 / SHENYANG",
-    title: "Shenyang Pharmaceutical University",
-    copy: "People, ideas and biology meet here.",
-  },
-  {
-    at: 0.84,
-    eyebrow: "05 / THE LABORATORY",
-    title: "Discovery starts here",
-    copy: "Come inside. Take a closer look.",
-  },
+  { at: 0, title: "" },
+  { at: 0.29, title: "Library" },
+  { at: 0.54, title: "" },
+  { at: 0.7, title: "Research building" },
+  { at: 0.92, title: "" },
 ];
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 const smooth = (n: number) => {
@@ -160,7 +134,7 @@ function StarField({ progress }: { progress: Progress }) {
     let seed = 6106;
     const random = () =>
       (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
-    const count = 780;
+    const count = 260;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const palette = ["#4341b1", "#774ecc", "#ad64bb", "#397ba5"].map(
@@ -189,166 +163,100 @@ function StarField({ progress }: { progress: Progress }) {
   return (
     <points ref={points} geometry={geometry}>
       <pointsMaterial
-        size={2}
+        size={1.4}
         sizeAttenuation={false}
         vertexColors
         transparent
-        opacity={0.8}
+        opacity={0.35}
         depthWrite={false}
       />
     </points>
   );
 }
 
-function SolarSystem({
-  progress,
-  narrow,
-}: {
-  progress: Progress;
-  narrow: boolean;
-}) {
+function OrbitLine({ radius, aspect }: { radius: number; aspect: number }) {
+  const geometry = useMemo(
+    () =>
+      new BufferGeometry().setFromPoints(
+        Array.from(
+          { length: 241 },
+          (_, i) =>
+            new Vector3(...orbitPoint(radius, (i / 240) * Math.PI * 2, aspect)),
+        ),
+      ),
+    [radius, aspect],
+  );
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return (
+    <lineLoop geometry={geometry}>
+      <lineBasicMaterial color="#9aaea9" transparent opacity={0.62} />
+    </lineLoop>
+  );
+}
+const PLANETS = [
+  { orbit: 0.44, angle: 2.36, radius: 0.24, color: "#82bac7", band: "#badbd7" },
+  { orbit: 0.66, angle: 4.08, radius: 0.42, color: "#c1b4cf", band: "#e7d4d5" },
+  {
+    orbit: 1,
+    angle: 5.42,
+    radius: 0.53,
+    color: "#aaa8c6",
+    band: "#dcd0d7",
+    ring: true,
+  },
+  { orbit: 1, angle: 2.94, radius: 0.29, color: "#93c6be", band: "#c6ddcb" },
+  { orbit: 0.66, angle: 1.32, radius: 0.2, color: "#baacd2", band: "#dcd0e6" },
+];
+function SolarSystem({ progress }: { progress: Progress; narrow: boolean }) {
   const group = useRef<Group>(null);
+  const planets = useRef<Group[]>([]);
+  const aspect = useThree((s) => s.viewport.aspect);
   useFrame(({ clock }) => {
     if (!group.current) return;
-    const departure = smooth((progress.current - 0.14) / 0.46);
-    group.current.position.set(
-      -departure * (narrow ? 5 : 11),
-      departure * 3,
-      -departure * 4,
-    );
-    group.current.rotation.z = Math.sin(clock.elapsedTime * 0.05) * 0.015;
-    group.current.visible = progress.current < 0.68;
+    const departure = smooth((progress.current - 0.08) / 0.2);
+    group.current.position.set(-departure * 11, departure * 2, 0);
+    group.current.scale.setScalar(1 + departure * 0.55);
+    group.current.visible = progress.current < 0.3;
+    planets.current.forEach((node, i) => {
+      const p = PLANETS[i];
+      node.position.set(
+        ...orbitPoint(
+          p.orbit,
+          orbitAngle(p.angle, clock.elapsedTime, progress.current),
+          aspect,
+        ),
+      );
+    });
   });
   return (
     <group ref={group}>
-      <group
-        rotation={[0, 0, 0.26]}
-        position={[0, 0.35, -3]}
-        scale={[1, 0.31, 1]}
-      >
-        {[5.1, 6.25, 7.7].map((radius) => (
-          <group key={radius}>
-            <mesh>
-              <torusGeometry args={[radius, 0.015, 5, 220]} />
-              <meshBasicMaterial color="#638298" />
-            </mesh>
-            <mesh position={[0, 0.06, -0.01]}>
-              <torusGeometry args={[radius + 0.04, 0.008, 4, 220]} />
-              <meshBasicMaterial color="#f6dcac" />
-            </mesh>
-          </group>
-        ))}
+      {ORBITS.map((radius) => (
+        <OrbitLine key={radius} radius={radius} aspect={aspect} />
+      ))}
+      <group position={[0, 0.15, 0.05]}>
+        <InkPlanet
+          radius={aspect < 1 ? 0.46 : 0.88}
+          color="#efbd7d"
+          band="#fff0bd"
+          solar
+        />
       </group>
-      <group position={[narrow ? 0.25 : 0.5, 0.6, 0]}>
-        <InkPlanet radius={1.22} color="#ff8b88" band="#ffd89c" solar />
-      </group>
-      <group position={[narrow ? -1.5 : -3.7, -1.7, 1]}>
-        <InkPlanet radius={0.7} color="#9372bb" band="#d887c8" />
-      </group>
-      <group position={[narrow ? 1.8 : 4.6, -2.9, 0]}>
-        <InkPlanet radius={0.86} color="#de7aac" band="#a181c4" ring />
-      </group>
-      <group position={[narrow ? -2.1 : -5.6, -0.4, 0]}>
-        <InkPlanet radius={0.26} color="#80dbec" band="#4daac6" />
-      </group>
-      <group position={[narrow ? -1.6 : -3.3, 2.45, -1]}>
-        <InkPlanet radius={0.23} color="#849bdb" band="#b7a1e4" />
-      </group>
-      <group position={[narrow ? 2.3 : 5.4, 3.15, -1]}>
-        <InkPlanet radius={0.4} color="#86c8d3" band="#a3a0ce" />
-      </group>
-      <group position={[1.8, 0.9, 0]}>
-        <InkPlanet radius={0.17} color="#db9bce" band="#f1c0d7" />
-      </group>
-    </group>
-  );
-}
-
-// SphereGeometry's u=0 is longitude -180°, v=1 is the north pole.
-// Rotating the sampled surface vector to +Z keeps the map and the destination aligned.
-function facing(longitude: number, latitude: number) {
-  const lon = (longitude * Math.PI) / 180;
-  const lat = (latitude * Math.PI) / 180;
-  return new Quaternion().setFromUnitVectors(
-    new Vector3(
-      Math.cos(lat) * Math.cos(lon),
-      Math.sin(lat),
-      -Math.cos(lat) * Math.sin(lon),
-    ),
-    new Vector3(0, 0, 1),
-  );
-}
-
-function CartoonEarth({
-  progress,
-  narrow,
-}: {
-  progress: Progress;
-  narrow: boolean;
-}) {
-  const earth = useRef<Group>(null);
-  const surface = useRef<Group>(null);
-  const texture = useTexture(asset("cosmic/world-map.svg"));
-  const start = useMemo(() => facing(25, 16), []);
-  const destination = useMemo(() => facing(123.43, 41.8), []);
-  const material = useMemo(
-    () =>
-      new ShaderMaterial({
-        uniforms: { earthMap: { value: texture } },
-        vertexShader: planetVertex,
-        fragmentShader: `
-      uniform sampler2D earthMap;
-      varying vec2 vUv;
-      varying vec3 vNormal;
-      void main() {
-        vec3 n = normalize(vNormal);
-        vec3 color = texture2D(earthMap, vUv).rgb;
-        float light = dot(n, normalize(vec3(-0.65, 0.6, 1.0)));
-        color *= mix(0.67, 1.0, smoothstep(-0.3, 0.7, light));
-        gl_FragColor = vec4(color, 1.0);
-        #include <colorspace_fragment>
-      }
-    `,
-      }),
-    [texture],
-  );
-  useEffect(() => {
-    texture.colorSpace = SRGBColorSpace;
-    texture.needsUpdate = true;
-    return () => material.dispose();
-  }, [texture, material]);
-  useFrame(() => {
-    if (!earth.current || !surface.current) return;
-    const p = progress.current;
-    const enter = smooth((p - 0.12) / 0.22);
-    const focus = smooth((p - 0.35) / 0.21);
-    const leave = smooth((p - 0.59) / 0.12);
-    earth.current.visible = leave < 0.999;
-    earth.current.position.set(
-      (narrow ? 1.55 : 3.35) * (1 - enter) -
-        (narrow ? 0 : 1.9) * enter -
-        leave * 2,
-      1.9 * (1 - enter) + 0.35 * enter + leave * 4,
-      1,
-    );
-    earth.current.scale.setScalar(
-      (0.31 + enter * 1.5 + focus * 0.3) *
-        (1 - leave * 0.6) *
-        (narrow ? 0.88 : 1),
-    );
-    surface.current.quaternion.copy(start).slerp(destination, focus);
-  });
-  return (
-    <group ref={earth}>
-      <mesh scale={1.012}>
-        <sphereGeometry args={[1, 96, 64]} />
-        <meshBasicMaterial side={BackSide} color="#63859d" />
-      </mesh>
-      <group ref={surface}>
-        <mesh material={material}>
-          <sphereGeometry args={[1, 96, 64]} />
-        </mesh>
-      </group>
+      {PLANETS.map((p, i) => (
+        <group
+          key={i}
+          ref={(node) => {
+            if (node) planets.current[i] = node;
+          }}
+          position={orbitPoint(p.orbit, p.angle, aspect)}
+        >
+          <InkPlanet
+            radius={p.radius * (aspect < 1 ? 0.64 : 1)}
+            color={p.color}
+            band={p.band}
+            ring={p.ring}
+          />
+        </group>
+      ))}
     </group>
   );
 }
@@ -374,10 +282,16 @@ function JourneyScene({
   const scale = viewport.height / 9;
   return (
     <group scale={scale}>
+      <ambientLight intensity={1.4} />
+      <directionalLight
+        position={[-4, 8, 10]}
+        intensity={2.2}
+        color="#fff3de"
+      />
       <StarField progress={progress} />
       <SolarSystem progress={progress} narrow={viewport.aspect < 1} />
       <Suspense fallback={null}>
-        <CartoonEarth progress={progress} narrow={viewport.aspect < 1} />
+        <CampusPlanet progress={progress} narrow={viewport.aspect < 1} />
       </Suspense>
     </group>
   );
@@ -392,6 +306,15 @@ export function CosmicJourney({ reduced, children, onLabReady }: Props) {
   const [failed, setFailed] = useState(false);
   const staticIntro = reduced || failed;
   const [inLab, setInLab] = useState(false);
+  const docked = useRef(false);
+  useEffect(() => {
+    if (!inLab || staticIntro) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [inLab, staticIntro]);
   const onSceneError = useCallback(() => setFailed(true), []);
 
   useEffect(() => {
@@ -408,24 +331,22 @@ export function CosmicJourney({ reduced, children, onLabReady }: Props) {
       // The navbar occupies 56 CSS pixels. This is also the sticky offset.
       const rect = section.getBoundingClientRect();
       const range = Math.max(1, section.offsetHeight - sticky.offsetHeight);
-      const p = clamp01((56 - rect.top) / range);
+      const p = docked.current ? 1 : clamp01((56 - rect.top) / range);
       progress.current = p;
       setStageIndex(
         STAGES.reduce((index, item, i) => (p >= item.at ? i : index), 0),
       );
-      const warmth = smooth((p - 0.55) / 0.21);
-      const dissolve = smooth((p - 0.87) / 0.11);
+      const warmth = smooth((p - 0.2) / 0.6);
+      const dissolve = smooth((p - 0.92) / 0.065);
       sticky.style.setProperty("--warmth", String(warmth));
-      sticky.style.setProperty("--campus", String(smooth((p - 0.63) / 0.06)));
-      sticky.style.setProperty(
-        "--cosmos",
-        String(1 - smooth((p - 0.56) / 0.13)),
-      );
       sticky.style.setProperty("--intro-opacity", String(1 - dissolve));
-      setActive(!document.hidden && p < 0.7 && rect.bottom > 56);
+      setActive(!document.hidden && p < 0.995 && rect.bottom > 56);
       // Start the lab renderer before its first visible frame, but expose its controls only at the end.
       onLabReady(p > 0.85);
-      setInLab(p >= 0.985);
+      if (p >= 0.985) {
+        docked.current = true;
+        setInLab(true);
+      }
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -454,7 +375,14 @@ export function CosmicJourney({ reduced, children, onLabReady }: Props) {
         innerHeight;
     window.scrollTo({ top, behavior: staticIntro ? "instant" : "smooth" });
   };
-  const stage = staticIntro ? STAGES[3] : STAGES[stageIndex];
+  const replay = () => {
+    docked.current = false;
+    setInLab(false);
+    onLabReady(false);
+    window.scrollTo({ top: 0, behavior: "instant" });
+    window.dispatchEvent(new Event("scroll"));
+  };
+  const stage = staticIntro ? STAGES[1] : STAGES[stageIndex];
   return (
     <section
       ref={sectionRef}
@@ -501,6 +429,7 @@ export function CosmicJourney({ reduced, children, onLabReady }: Props) {
           )}
           <div className="cosmic-journey__paper" aria-hidden="true" />
           <div
+            hidden={!staticIntro}
             className="cosmic-journey__campus"
             aria-hidden={!staticIntro && stageIndex < 3}
           >
@@ -511,42 +440,29 @@ export function CosmicJourney({ reduced, children, onLabReady }: Props) {
               alt="Original illustration of Shenyang Pharmaceutical University"
             />
           </div>
-          <div
-            className={`cosmic-journey__copy${staticIntro || stageIndex >= 3 ? " is-campus" : ""}`}
-            key={stage.eyebrow}
-          >
-            <p>{stage.eyebrow}</p>
-            <h1>{stage.title}</h1>
-            <span>{stage.copy}</span>
-          </div>
-          <div
-            className="cosmic-journey__identity"
-            aria-hidden={!staticIntro && stageIndex < 3}
-          >
-            <img
-              src={asset("school/school-logo.jpg")}
-              alt="Shenyang Pharmaceutical University emblem"
-            />
-            <span>
-              SHENYANG
-              <br />
-              SINCE 1931
-            </span>
-          </div>
+          {stage.title && (
+            <div className="cosmic-journey__copy">
+              <h1>{stage.title}</h1>
+            </div>
+          )}
           <div className="cosmic-journey__footer">
             <span className="cosmic-journey__scroll" aria-hidden="true">
-              {staticIntro ? "SYPHU-CHINA / 2026" : "SCROLL TO EXPLORE ↓"}
+              {staticIntro ? "SYPHU-CHINA / 2026" : "Scroll ↓"}
             </span>
-            <div className="cosmic-journey__rail" aria-hidden="true">
-              {STAGES.map((s, i) => (
-                <i key={s.at} className={i <= stageIndex ? "is-active" : ""} />
-              ))}
-            </div>
             <button type="button" onClick={goToLab}>
-              Enter laboratory ↗
+              Skip ↗
             </button>
           </div>
         </div>
+        {inLab && (
+          <button
+            className="journey-replay"
+            onClick={replay}
+            aria-label="Replay opening"
+          >
+            ↺
+          </button>
+        )}
         <div
           className="cosmic-journey__lab"
           inert={!staticIntro && !inLab}

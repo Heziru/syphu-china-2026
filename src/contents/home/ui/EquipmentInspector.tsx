@@ -14,7 +14,7 @@ export function EquipmentInspector({
   const inspect = useLaboratoryStore((s) => s.inspect);
   const close = useLaboratoryStore((s) => s.closeInspection);
   const dialog = useRef<HTMLDialogElement>(null);
-  const selector = useRef<HTMLSelectElement>(null);
+  const picker = useRef<HTMLDetailsElement>(null);
   const detail = id ? EQUIPMENT_DETAILS[id] : null;
   const chapter = id
     ? chapterForObject(id === "storage-a" ? "bookshelf" : id)
@@ -25,24 +25,26 @@ export function EquipmentInspector({
   };
   useEffect(() => {
     const node = dialog.current;
-    if (phase === "inspecting" && detail && node && !node.open)
-      node.showModal();
-    else if (node?.open) {
+    if (phase === "inspecting" && detail && node) {
+      if (!node.open) node.showModal();
+    } else if (node?.open) {
       node.close();
     }
     if (phase === "idle" && document.activeElement === document.body)
-      selector.current?.focus({ preventScroll: true });
+      picker.current?.querySelector("summary")?.focus({ preventScroll: true });
   }, [phase, detail]);
   return (
     <>
-      <label className="lab-inspect-picker">
-        <span>Look closer</span>
+      <details ref={picker} className="lab-inspect-picker">
+        <summary>Equipment</summary>
         <select
-          ref={selector}
           aria-label="Inspect laboratory equipment"
           value=""
           disabled={phase !== "idle"}
-          onChange={(e) => inspect(e.target.value)}
+          onChange={(e) => {
+            if (picker.current) picker.current.open = false;
+            inspect(e.target.value);
+          }}
         >
           <option value="" disabled>
             Choose an object
@@ -53,7 +55,7 @@ export function EquipmentInspector({
             </option>
           ))}
         </select>
-      </label>
+      </details>
       {createPortal(
         <dialog
           ref={dialog}

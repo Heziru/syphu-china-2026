@@ -18,7 +18,7 @@ export function useQualityProfile(): {
   const mobile = tier !== "desktop";
   return {
     tier,
-    dpr: tier === "desktop" ? 1.5 : tier === "mobile" ? 1.25 : 1,
+    dpr: tier === "desktop" ? 1.75 : tier === "mobile" ? 1.5 : 1,
     shadows: tier === "desktop",
     mobile,
   };
@@ -30,8 +30,8 @@ function detectTier(): QualityTier {
   const cores = navigator.hardwareConcurrency || 4;
   const saveData =
     "connection" in navigator &&
-    (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
-      ?.saveData;
+    (navigator as Navigator & { connection?: { saveData?: boolean } })
+      .connection?.saveData;
   if (saveData || (cores <= 4 && narrow)) return "low";
   if (narrow) return "mobile";
   return "desktop";

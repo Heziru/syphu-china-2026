@@ -14,18 +14,18 @@ export function Lighting({ shadows, studio = false }: Props) {
   return (
     <>
       <primitive object={target.current} />
-      <hemisphereLight args={["#FFF4DF", "#D5CCB8", studio ? 0.72 : 1.25]} />
-      <ambientLight intensity={studio ? 0.58 : 0.38} color="#F2EADB" />
+      <hemisphereLight args={["#F5F6ED", "#C3C7B3", studio ? 0.55 : 1.05]} />
+      <ambientLight intensity={studio ? 0.3 : 0.38} color="#F4F4ED" />
       <directionalLight
         ref={key}
         position={studio ? [-1.35, 2.55, 1.55] : [-5.2, 8.5, 2.8]}
-        intensity={studio ? 1.7 : 2.0}
-        color="#FFE4B6"
+        intensity={studio ? 1.7 : 1.75}
+        color="#FFF4E4"
         castShadow={shadows}
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-bias={-0.00025}
-        shadow-normalBias={0.025}
+        shadow-normalBias={0.008}
         shadow-radius={4}
         shadow-blurSamples={8}
         shadow-camera-near={0.4}
@@ -38,7 +38,7 @@ export function Lighting({ shadows, studio = false }: Props) {
       <directionalLight
         position={studio ? [1.8, 1.4, 1.2] : [4, 5, 7]}
         intensity={studio ? 0.42 : 0.6}
-        color="#EFF3E9"
+        color="#DCEAF0"
       />
     </>
   );

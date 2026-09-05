@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { BlenderAsset } from "../../components/BlenderAsset";
 import { useLayoutEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
 import {
@@ -42,7 +44,10 @@ function makeStudioCube() {
   return texture;
 }
 
-export function LaminarHoodModel({ studio = false, tabletop = false }: Props) {
+function ProceduralLaminarHoodModel({
+  studio = false,
+  tabletop = false,
+}: Props) {
   const { scene } = useThree();
   const { group, stats, materials } = useMemo(
     () => createLaminarHoodModel(!tabletop),
@@ -74,9 +79,9 @@ export function LaminarHoodModel({ studio = false, tabletop = false }: Props) {
       mat.envMap = env;
       mat.envMapIntensity =
         mat.name === "glass"
-          ? 1.05
+          ? 0.65
           : mat.name === "steel"
-            ? 1.1
+            ? 0.7
             : mat.name === "controlPanel"
               ? 0.35
               : mat.name === "logoPanel"
@@ -86,7 +91,7 @@ export function LaminarHoodModel({ studio = false, tabletop = false }: Props) {
     });
     if (studio) {
       scene.environment = env;
-      scene.environmentIntensity = 0.72;
+      scene.environmentIntensity = 0.4;
     }
     return () => {
       delete host.__LAMINAR_HOOD_STATS;
@@ -108,4 +113,14 @@ export function LaminarHoodModel({ studio = false, tabletop = false }: Props) {
   }, [group, materials, scene, stats, studio]);
 
   return <primitive object={group} position={[0, 0, 0]} />;
+}
+
+export function LaminarHoodModel({ studio = false, tabletop = false }: Props) {
+  if (studio || tabletop)
+    return <ProceduralLaminarHoodModel studio={studio} tabletop={tabletop} />;
+  return (
+    <Suspense fallback={<ProceduralLaminarHoodModel />}>
+      <BlenderAsset name="clean-bench" />
+    </Suspense>
+  );
 }

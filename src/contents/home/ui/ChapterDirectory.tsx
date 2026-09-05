@@ -6,7 +6,10 @@ export function ChapterDirectory() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className={`lab-directory${open ? " is-open" : ""}`} aria-label="Wiki chapters">
+    <nav
+      className={`lab-directory${open ? " is-open" : ""}`}
+      aria-label="Wiki chapters"
+    >
       <button
         type="button"
         className="lab-directory__toggle"
@@ -14,7 +17,6 @@ export function ChapterDirectory() {
         onClick={() => setOpen((value) => !value)}
       >
         <span>Chapters</span>
-        <small>{open ? "Hide" : `${CHAPTER_LIST.length}`}</small>
       </button>
       {open ? (
         <ul>

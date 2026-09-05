@@ -1,0 +1,19 @@
+{
+  "name": "digestive-system",
+  "parts": [
+    "stomach fundus body antrum",
+    "pyloric junction",
+    "duodenum",
+    "jejunum and ileum",
+    "cecum ascending transverse descending sigmoid rectum",
+    "anterior taenia coli",
+    "rounded cecal pouch",
+    "vermiform appendix"
+  ],
+  "meshes": 8,
+  "triangles": 33916,
+  "views": [
+    "C:\\Users\\24183\\Desktop\\spu\\\u793e\u56e2\\iGEM\\2026 SYPHU-China\\wiki\\2026-syphu-china\\syphu-china-main\\outputs\\blender\\digestive-system-front.png",
+    "C:\\Users\\24183\\Desktop\\spu\\\u793e\u56e2\\iGEM\\2026 SYPHU-China\\wiki\\2026-syphu-china\\syphu-china-main\\outputs\\blender\\digestive-system-three-quarter.png"
+  ]
+}

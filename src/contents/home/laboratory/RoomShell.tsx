@@ -253,7 +253,12 @@ export function RoomShell() {
         receiveShadow
       >
         <planeGeometry args={[200, 200]} />
-        <meshStandardMaterial color="#DCCFBB" roughness={1} />
+        <shadowMaterial
+          color="#6c756d"
+          transparent
+          opacity={0.18}
+          depthWrite={false}
+        />
       </mesh>
       {[-2.45, 2.45].map((x) => (
         <group key={x} position={[x, 2.67, -4.42]}>

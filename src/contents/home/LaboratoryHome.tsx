@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { isWebGLAvailable } from "./laboratory/labPalette";
+import { ProjectStory } from "./ProjectStory";
 import { CosmicJourney } from "./journey/CosmicJourney";
 import {
   readLabReviewState,
@@ -80,6 +81,7 @@ export function LaboratoryHome() {
   const resetSession = useLaboratoryStore((s) => s.resetSession);
   const setLocked = useLaboratoryStore((s) => s.setLocked);
   const [paused, setPaused] = useState(false);
+  const [storyRunning, setStoryRunning] = useState(false);
   const labRef = useRef<HTMLDivElement>(null);
   const [webgl] = useState(() => isWebGLAvailable());
   const [reviewState] = useState(() => readLabReviewState());
@@ -207,27 +209,37 @@ export function LaboratoryHome() {
           <LabChairReviewHud view={reviewView} onView={setReviewView} />
         </Suspense>
       ) : (
-        <div className="lab-hud">
+        <div
+          className="lab-hud"
+          data-busy={storyRunning || !["idle", "fallback"].includes(phase)}
+        >
           {!simpleMode && (
             <>
               <div className="lab-brand">
                 <p className="lab-brand__mark">LBP-Mototype</p>
-                <p className="lab-brand__hint">
-                  Click an instrument to look closer.
-                </p>
               </div>
               <ChapterDirectory />
             </>
           )}
-          {show3d && <EquipmentInspector onNavigate={onNavigate} />}
+          {show3d && !storyRunning && (
+            <EquipmentInspector onNavigate={onNavigate} />
+          )}
+          <ProjectStory
+            reduced={reduced}
+            running={storyRunning}
+            onRunning={setStoryRunning}
+          />
           <ObjectTooltip />
-          <button
-            type="button"
-            className="lab-simple"
-            onClick={() => setSimpleMode(!simpleMode)}
-          >
-            {simpleMode ? "Show 3D lab" : "Simple mode"}
-          </button>
+          <details className="lab-options">
+            <summary aria-label="Display options">···</summary>
+            <button
+              type="button"
+              className="lab-simple"
+              onClick={() => setSimpleMode(!simpleMode)}
+            >
+              {simpleMode ? "Show 3D lab" : "Simple mode"}
+            </button>
+          </details>
         </div>
       )}
     </div>

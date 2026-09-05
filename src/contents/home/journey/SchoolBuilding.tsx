@@ -24,7 +24,14 @@ function Block({
 }) {
   return (
     <mesh position={position} castShadow receiveShadow>
-      <boxGeometry args={scale} />
+      <boxGeometry
+        args={[
+          ...scale,
+          Math.max(1, Math.ceil(scale[0] / 0.24)),
+          1,
+          Math.max(1, Math.ceil(scale[2] / 0.24)),
+        ]}
+      />
       <meshStandardMaterial color={color} roughness={roughness} />
     </mesh>
   );
@@ -88,7 +95,43 @@ function Wing({ side }: { side: -1 | 1 }) {
         scale={[4.02, 0.16, 0.78]}
         color={STONE_LIGHT}
       />
-      <WindowGrid x={0} count={8} />
+      <WindowGrid x={0} count={8} y={0.65} />
+      <Block
+        position={[0, 1.64, 0.75]}
+        scale={[3.85, 0.14, 0.78]}
+        color={STONE_LIGHT}
+      />
+      {[-1.6, -0.8, 0, 0.8, 1.6].map((px) => (
+        <group key={px} position={[px, 0, 1.02]}>
+          <mesh position={[0, 0.79, 0]}>
+            <cylinderGeometry args={[0.055, 0.07, 1.5, 12]} />
+            <meshStandardMaterial color={STONE_LIGHT} />
+          </mesh>
+          <Block
+            position={[0, 0.07, 0]}
+            scale={[0.19, 0.12, 0.19]}
+            color={STONE}
+          />
+          <Block
+            position={[0, 1.55, 0]}
+            scale={[0.17, 0.11, 0.17]}
+            color={STONE_LIGHT}
+          />
+        </group>
+      ))}
+      {Array.from({ length: 27 }, (_, i) => (
+        <Block
+          key={i}
+          position={[-1.82 + i * 0.14, 1.86, 1.02]}
+          scale={[0.025, 0.3, 0.025]}
+          color={STONE_LIGHT}
+        />
+      ))}
+      <Block
+        position={[0, 2.02, 1.02]}
+        scale={[3.86, 0.045, 0.06]}
+        color={STONE_LIGHT}
+      />
     </group>
   );
 }
@@ -163,6 +206,33 @@ export function SchoolBuilding({ scale = 1 }: Props) {
             color={STONE_LIGHT}
           />
         ))}
+        {[-0.86, 0, 0.86].map((x, i) => (
+          <group key={x} position={[x, 0.38, 0.54]}>
+            <Block
+              position={[0, 0.54, 0]}
+              scale={[i === 1 ? 0.82 : 0.53, 1.08, 0.06]}
+              color={GLASS}
+            />
+            <mesh position={[0, 1.08, 0]}>
+              <circleGeometry args={[i === 1 ? 0.41 : 0.265, 24, 0, Math.PI]} />
+              <meshStandardMaterial color={GLASS} />
+            </mesh>
+            <mesh position={[0, 1.08, 0.04]}>
+              <torusGeometry
+                args={[i === 1 ? 0.44 : 0.29, 0.045, 8, 24, Math.PI]}
+              />
+              <meshStandardMaterial color={STONE_LIGHT} />
+            </mesh>
+            {[0.2, 0.4, 0.6, 0.8, 1].map((y) => (
+              <Block
+                key={y}
+                position={[0, y, 0.05]}
+                scale={[i === 1 ? 0.8 : 0.51, 0.025, 0.025]}
+                color={STONE}
+              />
+            ))}
+          </group>
+        ))}
         <Columns />
         <mesh position={[0, 2.31, 0.69]} castShadow>
           <extrudeGeometry
@@ -181,8 +251,8 @@ export function SchoolBuilding({ scale = 1 }: Props) {
         {Array.from({ length: 7 }, (_, i) => (
           <Block
             key={i}
-            position={[0, 0.05 + i * 0.075, 1.04 + i * 0.12]}
-            scale={[2.65 - i * 0.12, 0.075, 0.32]}
+            position={[0, 0.04 + i * 0.06, 1.5 - i * 0.1]}
+            scale={[2.9 - i * 0.045, 0.08, 0.4]}
             color={STONE}
           />
         ))}
@@ -202,13 +272,13 @@ export function SchoolBuilding({ scale = 1 }: Props) {
               roughness={0.3}
             />
           ))}
-          <mesh position={[0, 0.52, 0]} scale={[1, 0.58, 0.72]} castShadow>
+          <mesh position={[0, 0.26, 0]} scale={[1, 1.05, 0.85]} castShadow>
             <sphereGeometry
               args={[0.67, 28, 14, 0, Math.PI * 2, 0, Math.PI / 2]}
             />
             <meshStandardMaterial color={STONE_LIGHT} roughness={0.58} />
           </mesh>
-          <mesh position={[0, 1.2, 0]} castShadow>
+          <mesh position={[0, 1.27, 0]} castShadow>
             <coneGeometry args={[0.055, 0.72, 12]} />
             <meshStandardMaterial
               color={STONE}

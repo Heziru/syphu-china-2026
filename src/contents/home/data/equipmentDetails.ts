@@ -45,7 +45,7 @@ export const EQUIPMENT_DETAILS: Record<
   "laminar-hood": {
     name: "Clean bench",
     description:
-      "A freestanding clean bench faces into its working aisle. Its own stand keeps the enclosure clear of neighbouring worktops.",
+      "A continuous steel worktop meets the side and rear liners. The sliding sash, overhead diffuser and task light frame the working chamber; cross-braced legs support the enclosure.",
   },
   fridge: {
     name: "Laboratory refrigerator",

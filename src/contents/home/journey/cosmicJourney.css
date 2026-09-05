@@ -1,164 +1,78 @@
 .cosmic-journey {
   position: relative;
-  height: 540svh;
-  background: #e2dbc7;
+  height: 720svh;
   color: #334f58;
+  background: #f3f2e9;
 }
-
 .cosmic-journey__sticky {
   --warmth: 0;
-  --campus: 0;
-  --cosmos: 1;
   --intro-opacity: 1;
   position: sticky;
   top: 56px;
   height: calc(100dvh - 56px);
   overflow: hidden;
   isolation: isolate;
-  background: #e2dbc7;
+  background: #f3f2e9;
 }
-
 .cosmic-journey__art {
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: #adc4bf;
   opacity: var(--intro-opacity);
+  background: linear-gradient(155deg, #f6f2e9 5%, #e5eded 70%, #e9eee2);
 }
-
 .cosmic-journey__art::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: #e2dbc7;
+  background: #f3f2e9;
   opacity: var(--warmth);
 }
-
 .cosmic-journey__space {
   position: absolute;
   inset: 0;
-  opacity: var(--cosmos);
   pointer-events: none;
 }
-
 .cosmic-journey__paper {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.2;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23818c87' filter='url(%23grain)' opacity='.7' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
   background-size: 160px 160px;
   mix-blend-mode: multiply;
 }
-
 .cosmic-journey__copy {
   position: absolute;
   z-index: 4;
-  right: 7%;
-  bottom: 19%;
-  width: min(28rem, 32%);
-  animation: journey-copy-in 400ms ease both;
+  top: 7%;
+  left: 6%;
+  animation: journey-copy-in 300ms ease both;
 }
-
-.cosmic-journey__copy p {
-  font:
-    700 0.7rem/1.4 ui-monospace,
-    monospace;
-  letter-spacing: 0.15em;
-  margin: 0 0 0.8rem;
-}
-
 .cosmic-journey__copy h1 {
   font:
-    800 clamp(1.7rem, 3vw, 3.2rem)/1.08 Arial,
+    500 clamp(18px, 2vw, 25px)/1.2 Arial,
     sans-serif;
-  letter-spacing: -0.035em;
-  text-wrap: balance;
-  text-transform: uppercase;
-  color: #ffebbc;
-  text-shadow: 0 1px 1px #536a71;
-  -webkit-text-stroke: 0.5px #687d82;
+  letter-spacing: -0.02em;
+  color: #315c62;
   margin: 0;
 }
-
-.cosmic-journey__copy span {
-  display: block;
-  margin-top: 0.8rem;
-  max-width: 34ch;
-  font-size: clamp(0.8rem, 1vw, 0.95rem);
-  line-height: 1.6;
-}
-
-.cosmic-journey[data-stage="0"] .cosmic-journey__copy {
-  top: 8%;
-  left: 6%;
-  right: auto;
-  bottom: auto;
-  width: min(23rem, 36%);
-}
-
-.cosmic-journey[data-stage="0"] .cosmic-journey__copy h1 {
-  font-size: clamp(1.6rem, 2.5vw, 2.8rem);
-}
-
-.cosmic-journey__copy.is-campus {
-  top: 7%;
-  bottom: auto;
-  left: 7%;
-  right: auto;
-  width: min(46rem, 75%);
-}
-
-.cosmic-journey__copy.is-campus h1 {
-  color: #3f5655;
-  text-shadow: none;
-  -webkit-text-stroke: 0;
-  font-size: clamp(1.6rem, 3.3vw, 3.5rem);
-  text-transform: none;
-}
-
 .cosmic-journey__campus {
   position: absolute;
   z-index: 3;
   width: min(80%, 1300px);
   left: 50%;
-  top: 56%;
+  top: 54%;
   transform: translate(-50%, -50%);
-  opacity: var(--campus);
   mix-blend-mode: multiply;
   pointer-events: none;
 }
-
 .cosmic-journey__campus img {
   display: block;
   width: 100%;
   height: auto;
-  /* Display the unchanged source at its original aspect ratio. Its parent
-     multiplies the white field into the warm paper backdrop. */
 }
-
-.cosmic-journey__identity {
-  position: absolute;
-  bottom: 11%;
-  right: 7%;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  opacity: var(--campus);
-  font:
-    700 0.66rem/1.7 ui-monospace,
-    monospace;
-  letter-spacing: 0.12em;
-}
-
-.cosmic-journey__identity img {
-  width: 3.4rem;
-  height: 3.4rem;
-  object-fit: contain;
-}
-
 .cosmic-journey__footer {
   position: absolute;
   z-index: 5;
@@ -170,11 +84,9 @@
   align-items: center;
   gap: 1rem;
   font:
-    700 0.65rem/1.4 ui-monospace,
-    monospace;
-  letter-spacing: 0.06em;
+    500 12px/1.4 Arial,
+    sans-serif;
 }
-
 .cosmic-journey__footer button {
   color: inherit;
   font: inherit;
@@ -182,49 +94,51 @@
   border: 0;
   border-bottom: 1px solid currentColor;
   padding: 0.65rem 0;
+  cursor: pointer;
 }
-
 .cosmic-journey__footer button:hover {
   color: #132e36;
 }
-.cosmic-journey__footer button:focus-visible {
+.cosmic-journey__footer button:focus-visible,
+.journey-replay:focus-visible {
   outline: 2px solid #315d66;
   outline-offset: 6px;
 }
-.cosmic-journey__rail {
-  display: flex;
-  gap: 0.6rem;
-}
-.cosmic-journey__rail i {
-  width: clamp(1rem, 3vw, 3rem);
-  height: 2px;
-  background: #78989c;
-}
-.cosmic-journey__rail i.is-active {
-  background: #ffe2a9;
-}
-
 .cosmic-journey__lab {
   position: absolute;
   inset: 0;
   z-index: 1;
-  opacity: 1;
   pointer-events: none;
 }
-
+.cosmic-journey__sticky.is-in-lab {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
 .cosmic-journey__sticky.is-in-lab .cosmic-journey__art {
   visibility: hidden;
 }
 .cosmic-journey__sticky.is-in-lab .cosmic-journey__lab {
   pointer-events: auto;
 }
-
 .cosmic-journey:not(.cosmic-journey--static)
   .cosmic-journey__sticky:not(.is-in-lab)
   .lab-hud {
   visibility: hidden;
 }
-
+.journey-replay {
+  position: absolute;
+  top: 15px;
+  left: 19px;
+  z-index: 4;
+  background: none;
+  border: 0;
+  color: #52766f;
+  font-size: 20px;
+  cursor: pointer;
+}
 @keyframes journey-copy-in {
   from {
     opacity: 0;
@@ -233,57 +147,22 @@
     opacity: 1;
   }
 }
-
 @media (max-width: 700px) {
   .cosmic-journey {
-    height: 460svh;
+    height: 660svh;
   }
-  .cosmic-journey__copy {
-    left: 6%;
-    right: 6%;
-    bottom: 14%;
-    width: auto;
-  }
-  .cosmic-journey__copy h1 {
-    font-size: clamp(1.5rem, 7vw, 2.5rem);
-  }
-  .cosmic-journey__copy span {
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
-  }
-  .cosmic-journey[data-stage="0"] .cosmic-journey__copy {
-    top: 6%;
-    width: 82%;
-  }
-  .cosmic-journey[data-stage="0"] .cosmic-journey__copy h1 {
-    max-width: 16ch;
-  }
-  .cosmic-journey__copy.is-campus {
-    top: 9%;
-    width: 85%;
+  .cosmic-journey__footer {
+    font-size: 11px;
+    bottom: max(1rem, env(safe-area-inset-bottom));
   }
   .cosmic-journey__campus {
     width: 96%;
-    top: 54%;
-  }
-  .cosmic-journey__identity {
-    bottom: 17%;
-    right: 6%;
-  }
-  .cosmic-journey__rail {
-    display: none;
-  }
-  .cosmic-journey__footer {
-    font-size: 0.6rem;
-    bottom: max(1rem, env(safe-area-inset-bottom));
   }
 }
-
 .cosmic-journey--static {
   height: auto;
 }
 .cosmic-journey--static .cosmic-journey__sticky {
-  --campus: 1;
   --warmth: 1;
   position: relative;
   top: auto;
@@ -295,11 +174,7 @@
 }
 .cosmic-journey--static .cosmic-journey__lab {
   position: relative;
-  opacity: 1;
   pointer-events: auto;
-}
-.cosmic-journey--static .cosmic-journey__rail {
-  display: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .cosmic-journey__copy {

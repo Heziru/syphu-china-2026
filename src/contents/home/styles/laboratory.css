@@ -130,6 +130,9 @@
   height: 100% !important;
 }
 
+.lab-hud[data-busy="true"] {
+  visibility: hidden;
+}
 .lab-hud {
   position: absolute;
   inset: 0;
@@ -544,4 +547,97 @@
 
 .lab-home-active footer {
   display: none;
+}
+
+/* Quiet controls: secondary options open on demand. */
+.lab-brand {
+  left: 3.7rem;
+  top: 1.15rem;
+}
+.lab-brand__mark {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+.lab-directory {
+  top: 1rem;
+  bottom: auto !important;
+  background: transparent;
+  border: 0;
+  min-width: 0;
+  padding: 0;
+}
+.lab-directory.is-open {
+  background: #f6f5eeed;
+  padding: 12px;
+  border-radius: 12px;
+}
+.lab-directory__toggle span {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: none;
+}
+.lab-inspect-picker {
+  display: block;
+  bottom: 24px;
+  left: 24px;
+}
+.lab-inspect-picker summary {
+  cursor: pointer;
+  font-size: 12px;
+  list-style: none;
+  padding: 8px 0;
+  color: #3f6865;
+}
+.lab-inspect-picker summary::after {
+  content: " +";
+}
+.lab-inspect-picker[open] {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #f8f7f0ee;
+}
+.lab-inspect-picker[open] summary::after {
+  content: " −";
+}
+.lab-inspect-picker select {
+  display: block;
+  max-width: 220px;
+  font-size: 12px;
+  padding: 7px 10px;
+}
+.lab-options {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  pointer-events: auto;
+}
+.lab-options summary {
+  font-size: 21px;
+  cursor: pointer;
+  list-style: none;
+}
+.lab-options .lab-simple {
+  position: static;
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .lab-brand {
+    left: 3.4rem;
+    right: auto;
+  }
+  .lab-directory {
+    right: 14px;
+    left: auto;
+  }
+  .lab-inspect-picker {
+    left: 16px;
+    bottom: 20px;
+  }
+  .lab-options {
+    right: 16px;
+    bottom: 20px;
+  }
+  .lab-inspect-picker select {
+    max-width: 165px;
+  }
 }
