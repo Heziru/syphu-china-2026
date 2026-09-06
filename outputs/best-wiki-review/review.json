@@ -1,0 +1,125 @@
+{
+  "errors": [],
+  "findings": [
+    {
+      "contextualHoldAndTap": true,
+      "keyboard": true,
+      "dataYearChanges": true,
+      "reversibleTitle": true
+    },
+    {
+      "name": "01-orbits",
+      "p": 0,
+      "overflow": false,
+      "heading": null
+    },
+    {
+      "name": "02-title",
+      "p": 0.04,
+      "overflow": false,
+      "heading": null
+    },
+    {
+      "name": "03-departure",
+      "p": 0.09,
+      "overflow": false,
+      "heading": null
+    },
+    {
+      "name": "04-world",
+      "p": 0.175,
+      "overflow": false,
+      "heading": "One world.\nMany lives."
+    },
+    {
+      "name": "05-person",
+      "p": 0.28,
+      "overflow": false,
+      "heading": "A day,\ninterrupted."
+    },
+    {
+      "name": "06-gut",
+      "p": 0.365,
+      "overflow": false,
+      "heading": "Look within."
+    },
+    {
+      "name": "07-section",
+      "p": 0.449,
+      "overflow": false,
+      "heading": "A living\nbarrier."
+    },
+    {
+      "name": "08-mucosa",
+      "p": 0.5,
+      "overflow": false,
+      "heading": "A living\nbarrier."
+    },
+    {
+      "name": "09-ecn",
+      "p": 0.584,
+      "overflow": false,
+      "heading": "Life, with\nconditions."
+    },
+    {
+      "name": "10-release",
+      "p": 0.669,
+      "overflow": false,
+      "heading": "Made within.\nReleased\nover time."
+    },
+    {
+      "name": "11-exit",
+      "p": 0.75,
+      "overflow": false,
+      "heading": "A gradual\nexit."
+    },
+    {
+      "name": "12-library",
+      "p": 0.873,
+      "overflow": false,
+      "heading": "Where ideas\nbegin."
+    },
+    {
+      "name": "13-orbit-between",
+      "p": 0.912,
+      "overflow": false,
+      "heading": "Where ideas\nbegin."
+    },
+    {
+      "name": "14-research",
+      "p": 0.955,
+      "overflow": false,
+      "heading": "Ideas meet\nevidence."
+    },
+    {
+      "name": "15-laboratory",
+      "p": 1,
+      "overflow": false,
+      "heading": "Step inside."
+    },
+    {
+      "labWheelRetainsStory": true
+    },
+    {
+      "evidenceReturnToLab": true,
+      "directLabDeepLink": true,
+      "replayClearsLink": true
+    },
+    {
+      "name": "mobile-orbits",
+      "overflow": false
+    },
+    {
+      "name": "mobile-world",
+      "overflow": false
+    },
+    {
+      "name": "mobile-gut",
+      "overflow": false
+    },
+    {
+      "name": "mobile-library",
+      "overflow": false
+    }
+  ]
+}

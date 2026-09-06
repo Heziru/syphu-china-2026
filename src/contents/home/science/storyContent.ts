@@ -27,11 +27,11 @@ export const STORY_STEPS = [
     label: "02 · INTESTINAL WALL",
     model: "colon-section",
     summary: "Tissue, lumen and environmental signals.",
-    text: "This opened colon segment separates the wall layers from the lumen. Warm markers represent an inflammation-associated ROS signal; violet markers represent the bile-acid environment.",
+    text: "A selected colon segment opens into its wall and mucosal surface. Warm markers represent an inflammation-associated ROS signal; violet markers represent the bile-acid environment.",
     details: [
       [
         "Wall layers",
-        "The cut edges distinguish mucosa, submucosa and two muscle layers. Thicknesses are enlarged for readability. The serosal surface is simplified.",
+        "The cut edges distinguish the lumen and wall. The close view separates mucosa, submucosa and muscle layers. Thicknesses are enlarged for readability; the outer surface is simplified.",
       ],
       [
         "Crypts",
@@ -42,7 +42,8 @@ export const STORY_STEPS = [
         "Marker shapes and colours are a visual key, not molecular structures or measured concentrations. Signal distribution is illustrative and does not depict active bacterial navigation.",
       ],
     ],
-    source: "https://www.ncbi.nlm.nih.gov/books/NBK54098/",
+    source:
+      "https://openstax.org/books/anatomy-and-physiology/pages/23-5-the-small-and-large-intestines",
   },
   {
     title: "Survival, under conditions",
@@ -61,7 +62,7 @@ export const STORY_STEPS = [
       ],
       [
         "PspA",
-        "Violet markers beside the inner membrane represent PspA association with membrane protection. Their number, shape and placement are illustrative. The design still requires experimental validation.",
+        "Green curved markers beside the inner membrane represent PspA association with membrane protection. Their number, shape and placement are illustrative. The design still requires experimental validation.",
       ],
     ],
     source: "https://pubmed.ncbi.nlm.nih.gov/19555453/",
@@ -104,7 +105,7 @@ export const STORY_STEPS = [
       ],
       [
         "Clearance",
-        "The receding cell represents a design expectation under relevant environmental and clearance conditions, rather than proven complete elimination or zero escape.",
+        "The gradually fading population represents a design expectation under relevant environmental and clearance conditions, rather than proven complete elimination or zero escape.",
       ],
     ],
   },

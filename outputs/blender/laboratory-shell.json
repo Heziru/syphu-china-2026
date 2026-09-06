@@ -1,0 +1,27 @@
+{
+  "name": "laboratory-shell",
+  "parts": [
+    "one-piece room shell",
+    "unbroken wall coping",
+    "unbroken floor trim"
+  ],
+  "validation": [
+    {
+      "part": "one-piece room shell",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "unbroken wall coping",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "unbroken floor trim",
+      "nonmanifold_edges": 0
+    }
+  ],
+  "views": [
+    "outputs/blender/laboratory-shell-overview.png",
+    "outputs/blender/laboratory-shell-front-corner.png",
+    "outputs/blender/laboratory-shell-rear-corner.png"
+  ]
+}

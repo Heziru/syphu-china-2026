@@ -1,4 +1,4 @@
-import { EQUIPMENT_DETAILS } from "../data/equipmentDetails";
+import { DETAIL_ANCHORS, EQUIPMENT_DETAILS } from "../data/equipmentDetails";
 import { useLaboratoryStore } from "../store/laboratoryStore";
 import { Supplies, SupplyCart } from "./LabSupplies";
 import { LabEquipment, GlassVessel } from "./LabEquipment";
@@ -143,11 +143,22 @@ export function LaboratoryFurniture({
                       position={spec.position}
                       rotation={[0, spec.rotationY, 0]}
                       onClick={(event) => {
+                        if (spec.role === "literature-frame") {
+                          event.stopPropagation();
+                          if (event.delta <= 6)
+                            window.dispatchEvent(
+                              new CustomEvent("lab:literature", {
+                                detail: spec.id.replace("paper-", ""),
+                              }),
+                            );
+                          return;
+                        }
                         if (!EQUIPMENT_DETAILS[spec.id] || event.delta > 6)
                           return;
                         event.stopPropagation();
                         const state = useLaboratoryStore.getState();
-                        if (state.phase === "idle") state.inspect(spec.id);
+                        if (["idle", "inspecting"].includes(state.phase))
+                          state.inspect(spec.id);
                       }}
                     >
                       <StaticBatch>
@@ -155,6 +166,21 @@ export function LaboratoryFurniture({
                       </StaticBatch>
                     </group>
                   )}
+                  {Object.entries(DETAIL_ANCHORS)
+                    .filter(([, anchor]) => anchor.parent === spec.id)
+                    .map(([key, anchor]) => (
+                      <group
+                        key={key}
+                        position={spec.position}
+                        rotation={[0, spec.rotationY, 0]}
+                      >
+                        <DetailHitbox
+                          id={key}
+                          position={anchor.offset}
+                          size={anchor.hitSize}
+                        />
+                      </group>
+                    ))}
                   {spec.id === "preparation-bench" && (
                     <group
                       position={spec.position}
@@ -193,5 +219,47 @@ export function LaboratoryFurniture({
         );
       })}
     </>
+  );
+}
+
+function DetailHitbox({
+  id,
+  position,
+  size,
+}: {
+  id: string;
+  position: [number, number, number];
+  size: [number, number, number];
+}) {
+  const hovered = useLaboratoryStore((s) => s.hoveredId === id);
+  return (
+    <mesh
+      name={"detail:" + id}
+      position={position}
+      onPointerOver={(event) => {
+        event.stopPropagation();
+        const state = useLaboratoryStore.getState();
+        if (["idle", "inspecting"].includes(state.phase)) state.setHovered(id);
+      }}
+      onPointerOut={(event) => {
+        event.stopPropagation();
+        const state = useLaboratoryStore.getState();
+        if (state.hoveredId === id) state.setHovered(null);
+      }}
+      onClick={(event) => {
+        event.stopPropagation();
+        const state = useLaboratoryStore.getState();
+        if (event.delta <= 6 && ["idle", "inspecting"].includes(state.phase))
+          state.inspect(id);
+      }}
+    >
+      <boxGeometry args={size} />
+      <meshBasicMaterial
+        color="#f6e5b8"
+        transparent
+        opacity={hovered ? 0.12 : 0}
+        depthWrite={false}
+      />
+    </mesh>
   );
 }

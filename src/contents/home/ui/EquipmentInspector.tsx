@@ -1,9 +1,10 @@
 import { createPortal } from "react-dom";
 import { useEffect, useRef } from "react";
 import { EQUIPMENT_DETAILS } from "../data/equipmentDetails";
-import { chapterForObject } from "../data/labObjects";
 import { useLaboratoryStore } from "../store/laboratoryStore";
+import "./labFocus.css";
 
+/** One caption beside the model. The scene stays interactive; there is no modal stack. */
 export function EquipmentInspector({
   onNavigate,
 }: {
@@ -13,99 +14,110 @@ export function EquipmentInspector({
   const id = useLaboratoryStore((s) => s.inspectId);
   const inspect = useLaboratoryStore((s) => s.inspect);
   const close = useLaboratoryStore((s) => s.closeInspection);
-  const dialog = useRef<HTMLDialogElement>(null);
   const picker = useRef<HTMLDetailsElement>(null);
+  const previousFocus = useRef<HTMLElement | null>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
   const detail = id ? EQUIPMENT_DETAILS[id] : null;
-  const chapter = id
-    ? chapterForObject(id === "storage-a" ? "bookshelf" : id)
-    : undefined;
-  const requestClose = () => {
-    dialog.current?.close();
-    close();
-  };
+  const visible = phase === "inspecting" && detail;
+
   useEffect(() => {
-    const node = dialog.current;
-    if (phase === "inspecting" && detail && node) {
-      if (!node.open) node.showModal();
-    } else if (node?.open) {
-      node.close();
+    if (phase === "focusing" && !previousFocus.current) {
+      const active = document.activeElement;
+      previousFocus.current =
+        active instanceof HTMLElement
+          ? (active.closest("details")?.querySelector("summary") ?? active)
+          : null;
     }
-    if (phase === "idle" && document.activeElement === document.body)
-      picker.current?.querySelector("summary")?.focus({ preventScroll: true });
-  }, [phase, detail]);
+    if (
+      phase === "inspecting" &&
+      previousFocus.current === picker.current?.querySelector("summary")
+    )
+      closeButton.current?.focus({ preventScroll: true });
+    if (phase === "idle" && previousFocus.current) {
+      if (previousFocus.current.isConnected)
+        previousFocus.current.focus({ preventScroll: true });
+      previousFocus.current = null;
+    }
+    if (phase !== "inspecting" && phase !== "focusing") return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !document.querySelector("dialog[open]")) {
+        event.preventDefault();
+        close();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [phase, close]);
+
   return (
     <>
-      <details ref={picker} className="lab-inspect-picker">
-        <summary>Equipment</summary>
+      <details ref={picker} className="lab-inspect-picker lab-focus-picker">
+        <summary>Explore objects</summary>
         <select
           aria-label="Inspect laboratory equipment"
           value=""
-          disabled={phase !== "idle"}
-          onChange={(e) => {
+          disabled={!["idle", "inspecting"].includes(phase)}
+          onChange={(event) => {
             if (picker.current) picker.current.open = false;
-            inspect(e.target.value);
+            inspect(event.target.value);
           }}
         >
           <option value="" disabled>
             Choose an object
           </option>
-          {Object.entries(EQUIPMENT_DETAILS).map(([key, value]) => (
-            <option key={key} value={key}>
-              {value.name}
-            </option>
-          ))}
+          {Object.entries(EQUIPMENT_DETAILS)
+            .filter(([, value]) => !value.doi)
+            .map(([key, value]) => (
+              <option key={key} value={key}>
+                {value.name}
+              </option>
+            ))}
         </select>
       </details>
-      {createPortal(
-        <dialog
-          ref={dialog}
-          className="lab-detail"
-          aria-labelledby="lab-detail-title"
-          onCancel={(e) => {
-            e.preventDefault();
-            requestClose();
-          }}
-        >
-          <button
-            type="button"
-            className="lab-detail__close"
-            aria-label="Close details"
-            onClick={requestClose}
+      {visible &&
+        createPortal(
+          <section
+            key={id}
+            className="lab-focus-caption"
+            aria-labelledby="lab-focus-title"
+            data-object={id}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M6 6l12 12M18 6L6 18"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
-          <p className="lab-detail__eyebrow">iGEM Lab · Close-up</p>
-          <h2 id="lab-detail-title">{detail?.name}</h2>
-          <p>{detail?.description}</p>
-          {detail?.citation && (
-            <p className="lab-detail__citation">{detail.citation}</p>
-          )}
-          <div className="lab-detail__actions">
-            <button type="button" onClick={requestClose}>
-              Back to laboratory
+            <button
+              ref={closeButton}
+              type="button"
+              className="lab-focus-caption__back"
+              onClick={close}
+              aria-label="Return to previous laboratory view"
+            >
+              ↙ <span>Laboratory</span>
             </button>
-            {chapter && (
-              <button type="button" onClick={() => onNavigate(chapter.path)}>
-                Explore {chapter.name} →
+            <div aria-live="polite" aria-atomic="true">
+              <h2 id="lab-focus-title">{detail.name}</h2>
+              <p>{detail.description}</p>
+            </div>
+            {detail.path && (
+              <button
+                type="button"
+                className="lab-focus-caption__link"
+                onClick={() => onNavigate(detail.path!)}
+              >
+                {detail.linkLabel ?? "Explore"}{" "}
+                <span aria-hidden="true">↗</span>
               </button>
             )}
-            {detail?.doi && (
-              <a href={detail.doi} target="_blank" rel="noreferrer noopener">
-                Open DOI source <span aria-hidden="true">↗</span>
+            {!detail.path && detail.doi && (
+              <a
+                className="lab-focus-caption__link"
+                href={detail.doi}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                DOI ↗
               </a>
             )}
-          </div>
-        </dialog>,
-        document.body,
-      )}
+          </section>,
+          document.body,
+        )}
     </>
   );
 }

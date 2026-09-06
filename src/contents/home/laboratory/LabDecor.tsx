@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useTexture } from "@react-three/drei";
-import { CanvasTexture, SRGBColorSpace } from "three";
+import { CanvasTexture, SRGBColorSpace, type Texture } from "three";
 import { SoftBox } from "./SoftBox";
 import { Plant, SpecimenBottles, TubeRack } from "./RoomAccents";
 import { Supplies } from "./LabSupplies";
@@ -24,7 +24,7 @@ function Sign() {
   }, []);
   useEffect(() => () => texture.dispose(), [texture]);
   return (
-    <mesh position={[-3.5, 0.42, 4.398]}>
+    <mesh position={[-3.67, 0.42, 4.546]}>
       <planeGeometry args={[1.65, 0.4125]} />
       <meshBasicMaterial
         map={texture}
@@ -35,29 +35,85 @@ function Sign() {
     </mesh>
   );
 }
+function fitLogoTexture(source: Texture) {
+  const image = source.image as HTMLImageElement;
+  const canvas = document.createElement("canvas");
+  canvas.width = image.naturalWidth || image.width;
+  canvas.height = image.naturalHeight || image.height;
+  const ctx = canvas.getContext("2d")!;
+  ctx.drawImage(image, 0, 0);
+  const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  let left = canvas.width;
+  let top = canvas.height;
+  let right = -1;
+  let bottom = -1;
+  for (let y = 0; y < canvas.height; y++) {
+    for (let x = 0; x < canvas.width; x++) {
+      if (data[(y * canvas.width + x) * 4 + 3] === 0) continue;
+      left = Math.min(left, x);
+      top = Math.min(top, y);
+      right = Math.max(right, x);
+      bottom = Math.max(bottom, y);
+    }
+  }
+  if (right < left) {
+    left = top = 0;
+    right = canvas.width - 1;
+    bottom = canvas.height - 1;
+  }
+  const inkWidth = right - left + 1;
+  const inkHeight = bottom - top + 1;
+  // Only change the displayed UV window; the original artwork stays untouched.
+  // Two transparent texels retain antialiased edges when the map is filtered.
+  const x = Math.max(0, left - 2);
+  const y = Math.max(0, top - 2);
+  const width = Math.min(canvas.width, right + 3) - x;
+  const height = Math.min(canvas.height, bottom + 3) - y;
+  const texture = source.clone();
+  texture.repeat.set(width / canvas.width, height / canvas.height);
+  texture.offset.set(x / canvas.width, 1 - (y + height) / canvas.height);
+  texture.needsUpdate = true;
+  const scale = Math.min(0.54 / inkHeight, 0.62 / inkWidth);
+  return { texture, width: width * scale, height: height * scale };
+}
+
 function LogoPlaque() {
-  const texture = useTexture(
+  const textures = useTexture([
+    import.meta.env.BASE_URL + "assets/school/school-logo.jpg",
+    import.meta.env.BASE_URL + "assets/laboratory/team-logo.png",
     import.meta.env.BASE_URL + "assets/laboratory/project-logo.png",
+  ]);
+  const logos = useMemo(() => textures.map(fitLogoTexture), [textures]);
+  useEffect(
+    () => () => logos.forEach(({ texture }) => texture.dispose()),
+    [logos],
   );
-  // Original PNG, no cropping, recolouring or resampling; preserve its native aspect.
   return (
-    <group name="original-project-logo" position={[0.12, 2.61, -4.45]}>
-      <SoftBox
-        position={[0, 0, 0]}
-        size={[0.75, 0.72, 0.055]}
-        color="#C1AB86"
-        radius={0.016}
-      />
-      <SoftBox
-        position={[0, 0, 0.032]}
-        size={[0.7, 0.67, 0.016]}
-        color="#F7F3E8"
-        radius={0.009}
-      />
-      <mesh position={[0, 0, 0.043]}>
-        <planeGeometry args={[0.62, (0.62 * 874) / 971]} />
-        <meshBasicMaterial map={texture} transparent toneMapped={false} />
-      </mesh>
+    <group name="school-team-project-identities" position={[0.12, 2.61, -4.45]}>
+      {logos.map(({ texture, width, height }, i) => (
+        <group key={i} position={[(i - 1) * 0.78, 0, 0]}>
+          <SoftBox
+            position={[0, 0, 0]}
+            size={[0.75, 0.72, 0.055]}
+            color="#C1AB86"
+            radius={0.016}
+          />
+          <SoftBox
+            position={[0, 0, 0.032]}
+            size={[0.7, 0.67, 0.016]}
+            color="#F7F3E8"
+            radius={0.009}
+          />
+          <mesh position={[0, 0, 0.043]}>
+            {i === 0 ? (
+              <circleGeometry args={[0.27, 96]} />
+            ) : (
+              <planeGeometry args={[width, height]} />
+            )}
+            <meshBasicMaterial map={texture} transparent toneMapped={false} />
+          </mesh>
+        </group>
+      ))}
     </group>
   );
 }
@@ -65,18 +121,6 @@ export function LabDecor() {
   return (
     <group name="lab-dressing">
       <StaticBatch>
-        <SoftBox
-          position={[-3.5, 0.36, 4.31]}
-          size={[2, 0.72, 0.16]}
-          color="#DDD4C1"
-          radius={0.018}
-        />
-        <SoftBox
-          position={[-3.5, 0.733, 4.31]}
-          size={[2.04, 0.036, 0.19]}
-          color="#F0E6D3"
-          radius={0.006}
-        />
         <group position={[-4.46, 0, 3.72]}>
           <Plant scale={1.45} />
         </group>

@@ -70,7 +70,7 @@ export function ProjectStory({
   onRunning: (v: boolean) => void;
 }) {
   const phase = useLaboratoryStore((s) => s.phase);
-  const simple = useLaboratoryStore((s) => s.simpleMode);
+  const simple = false;
   const dialog = useRef<HTMLDialogElement>(null),
     scroller = useRef<HTMLDivElement>(null),
     trigger = useRef<HTMLButtonElement>(null);

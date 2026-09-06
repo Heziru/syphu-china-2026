@@ -39,9 +39,11 @@ function prepare(source: Group) {
 export function BlenderAsset({
   name,
   activity = 1,
+  opacity = 1,
 }: {
   name: string;
   activity?: number;
+  opacity?: number;
 }) {
   const { scene } = useGLTF(
     import.meta.env.BASE_URL + "assets/models/" + name + ".glb",
@@ -49,24 +51,28 @@ export function BlenderAsset({
   const model = useMemo(() => {
     const copy = prepare(scene).clone(true);
     copy.traverse((o) => {
-      if (o instanceof Mesh && !Array.isArray(o.material))
+      if (o instanceof Mesh && !Array.isArray(o.material)) {
         o.material = o.material.clone();
+        o.material.userData.baseOpacity = o.material.opacity;
+        o.material.userData.baseDepthWrite = o.material.depthWrite;
+      }
     });
     return copy;
   }, [scene]);
   useEffect(() => {
     model.traverse((o) => {
-      if (
-        o instanceof Mesh &&
-        /pspa/i.test(o.name) &&
-        !Array.isArray(o.material)
-      ) {
-        o.material.transparent = true;
-        o.material.opacity = activity;
-        o.material.depthWrite = activity > 0.98;
+      if (o instanceof Mesh && !Array.isArray(o.material)) {
+        const alpha =
+          o.material.userData.baseOpacity *
+          opacity *
+          (/pspa/i.test(o.name) ? activity : 1);
+        o.material.transparent = alpha < 0.999;
+        o.material.opacity = alpha;
+        o.material.depthWrite =
+          alpha > 0.98 && o.material.userData.baseDepthWrite;
       }
     });
-  }, [model, activity]);
+  }, [model, activity, opacity]);
   useEffect(
     () => () =>
       model.traverse((o) => {

@@ -1,4 +1,5 @@
 import { LabDecor } from "./LabDecor";
+import { BlenderAsset } from "../components/BlenderAsset";
 import { WINDOW_OPENING } from "./roomPlacement";
 import { useEffect, useMemo } from "react";
 import { Float32BufferAttribute } from "three";
@@ -10,10 +11,7 @@ import { createStoneTexture } from "./roomSurfaces";
 import {
   createDioramaBaseGeometry,
   WALL_SEGMENTS,
-  WALL_HEIGHT,
-  WALL_THICKNESS,
   wallSegmentMetrics,
-  type FootprintXZ,
 } from "./roomLayout";
 
 function FloorJoints() {
@@ -54,134 +52,83 @@ function FloorJoints() {
     </lineSegments>
   );
 }
-function Wall({
-  a,
-  b,
-  window = false,
-  low = false,
-}: {
-  a: FootprintXZ;
-  b: FootprintXZ;
-  window?: boolean;
-  low?: boolean;
-}) {
+function WindowDressing() {
+  const [a, b] = WALL_SEGMENTS[4];
   const m = wallSegmentMetrics(a, b),
     yaw = Math.atan2(m.inwardX, m.inwardZ);
-  const height = low ? 0.24 : WALL_HEIGHT,
-    wallY = height / 2;
   const opening = WINDOW_OPENING;
-  const slab = (x: number, y: number, w: number, h: number) => (
-    <SoftBox
-      position={[x, y, 0]}
-      size={[w, h, WALL_THICKNESS]}
-      color={C.wall}
-      radius={0.012}
-    />
-  );
   return (
     <group position={[m.midX, 0, m.midZ]} rotation={[0, yaw, 0]}>
-      {window ? (
-        <>
-          {slab(0, opening.bottom / 2, m.length, opening.bottom)}
-          {slab(0, (opening.top + height) / 2, m.length, height - opening.top)}
-          {slab(
-            (-m.length / 2 + opening.x - opening.w / 2) / 2,
-            wallY,
-            opening.x - opening.w / 2 + m.length / 2,
-            height,
-          )}
-          {slab(
-            (m.length / 2 + opening.x + opening.w / 2) / 2,
-            wallY,
-            m.length / 2 - opening.x - opening.w / 2,
-            height,
-          )}
-          <group position={[opening.x, (opening.bottom + opening.top) / 2, 0]}>
-            <mesh position={[0, 0, -0.025]}>
-              <planeGeometry args={[opening.w, opening.top - opening.bottom]} />
-              <meshStandardMaterial
-                color="#DFE5CE"
-                emissive="#D9CFAD"
-                emissiveIntensity={0.35}
-                side={2}
-                roughness={1}
-              />
-            </mesh>
-            {[-1, 0, 1].map((s) => (
-              <SoftBox
-                key={s}
-                position={[(s * opening.w) / 2, 0, 0.05]}
-                size={[0.055, opening.top - opening.bottom + 0.08, 0.13]}
-                color={C.paper}
-                radius={0.006}
-              />
-            ))}
-            {[-1, 1].map((s) => (
-              <SoftBox
-                key={s}
-                position={[0, (s * (opening.top - opening.bottom)) / 2, 0.07]}
-                size={[opening.w + 0.13, 0.07, 0.15]}
-                color={C.paper}
-                radius={0.006}
-              />
-            ))}
-            {Array.from({ length: 11 }, (_, i) => (
-              <SoftBox
-                key={i}
-                position={[
-                  0,
-                  (opening.top - opening.bottom) / 2 - 0.07 - i * 0.042,
-                  0.12,
-                ]}
-                rotation={[0.18, 0, 0]}
-                size={[opening.w - 0.08, 0.012, 0.085]}
-                color="#C6B798"
-                radius={0.001}
-                cast
-              />
-            ))}
-            {[-0.65, 0.65].map((x) => (
-              <SoftBox
-                key={x}
-                position={[x, 0.39, 0.167]}
-                size={[0.007, 0.47, 0.008]}
-                color={C.paper}
-                radius={0.001}
-              />
-            ))}
-          </group>
-          <SoftBox
-            position={[
-              opening.x,
-              opening.bottom - opening.sillThickness / 2,
-              opening.sillOffset,
-            ]}
-            size={[opening.w + 0.18, opening.sillThickness, opening.sillDepth]}
-            color={C.wood}
-            radius={0.008}
+      <group position={[opening.x, (opening.bottom + opening.top) / 2, 0]}>
+        <mesh position={[0, 0, -0.025]}>
+          <planeGeometry args={[opening.w, opening.top - opening.bottom]} />
+          <meshStandardMaterial
+            color="#DFE5CE"
+            emissive="#D9CFAD"
+            emissiveIntensity={0.35}
+            side={2}
+            roughness={1}
           />
-          <group position={[opening.x - 0.83, opening.bottom, 0.17]}>
-            <Plant scale={0.72} />
-          </group>
-          <group position={[opening.x + 0.74, opening.bottom, 0.17]}>
-            <Plant scale={0.62} />
-          </group>
-        </>
-      ) : (
-        slab(0, wallY, m.length, height)
-      )}
+        </mesh>
+        {[-1, 0, 1].map((s) => (
+          <SoftBox
+            key={s}
+            position={[(s * opening.w) / 2, 0, 0.05]}
+            size={[0.055, opening.top - opening.bottom + 0.08, 0.13]}
+            color={C.paper}
+            radius={0.006}
+          />
+        ))}
+        {[-1, 1].map((s) => (
+          <SoftBox
+            key={s}
+            position={[0, (s * (opening.top - opening.bottom)) / 2, 0.07]}
+            size={[opening.w + 0.13, 0.07, 0.15]}
+            color={C.paper}
+            radius={0.006}
+          />
+        ))}
+        {Array.from({ length: 11 }, (_, i) => (
+          <SoftBox
+            key={i}
+            position={[
+              0,
+              (opening.top - opening.bottom) / 2 - 0.07 - i * 0.042,
+              0.12,
+            ]}
+            rotation={[0.18, 0, 0]}
+            size={[opening.w - 0.08, 0.012, 0.085]}
+            color="#C6B798"
+            radius={0.001}
+            cast
+          />
+        ))}
+        {[-0.65, 0.65].map((x) => (
+          <SoftBox
+            key={x}
+            position={[x, 0.39, 0.167]}
+            size={[0.007, 0.47, 0.008]}
+            color={C.paper}
+            radius={0.001}
+          />
+        ))}
+      </group>
       <SoftBox
-        position={[0, height + 0.015, 0]}
-        size={[m.length + 0.025, 0.05, 0.21]}
-        color={C.paper}
-        radius={0.007}
+        position={[
+          opening.x,
+          opening.bottom - opening.sillThickness / 2,
+          opening.sillOffset,
+        ]}
+        size={[opening.w + 0.18, opening.sillThickness, opening.sillDepth]}
+        color={C.wood}
+        radius={0.008}
       />
-      <SoftBox
-        position={[0, 0.08, 0.104]}
-        size={[m.length, 0.14, 0.028]}
-        color="#B8B4A2"
-        radius={0.002}
-      />
+      <group position={[opening.x - 0.83, opening.bottom, 0.17]}>
+        <Plant scale={0.72} />
+      </group>
+      <group position={[opening.x + 0.74, opening.bottom, 0.17]}>
+        <Plant scale={0.62} />
+      </group>
     </group>
   );
 }
@@ -235,9 +182,8 @@ export function RoomShell() {
       <mesh geometry={base} receiveShadow castShadow>
         <meshStandardMaterial map={stone} roughness={0.83} />
       </mesh>
-      {WALL_SEGMENTS.map(([a, b], i) => (
-        <Wall key={i} a={a} b={b} window={i === 4} low={i === 2 || i === 3} />
-      ))}
+      <BlenderAsset name="laboratory-shell" />
+      <WindowDressing />
       <FloorJoints />
       <LabDecor />
       <WallShelf x={2.42} />

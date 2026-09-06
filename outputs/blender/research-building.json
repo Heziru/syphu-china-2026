@@ -369,7 +369,7 @@
   "meshes": 364,
   "triangles": 69800,
   "views": [
-    "C:\\Users\\24183\\Desktop\\spu\\\u793e\u56e2\\iGEM\\2026 SYPHU-China\\wiki\\2026-syphu-china\\syphu-china-main\\outputs\\blender\\research-building-front.png",
-    "C:\\Users\\24183\\Desktop\\spu\\\u793e\u56e2\\iGEM\\2026 SYPHU-China\\wiki\\2026-syphu-china\\syphu-china-main\\outputs\\blender\\research-building-three-quarter.png"
+    "outputs/blender/research-building-front.png",
+    "outputs/blender/research-building-three-quarter.png"
   ]
 }

@@ -1,12 +1,12 @@
 import { orbitPoint, CAMPUS_ORBIT, CAMPUS_ANGLE } from "./orbitLayout";
-export const PLANET_RADIUS = 8;
+export const PLANET_RADIUS = 16;
 export const SITE_SEPARATION = Math.PI;
 export const smooth = (a: number, b: number, p: number) => {
   const t = Math.max(0, Math.min(1, (p - a) / (b - a)));
   return t * t * (3 - 2 * t);
 };
 
-/** Explicit holds separate inspecting a building from rotating to the next one. */
+/** Camera dwell intervals separate building inspection from orbital travel. */
 export function journeyPose(p: number, aspect: number, angle = CAMPUS_ANGLE) {
   const narrow = aspect < 1;
   const arrive = smooth(0.08, 0.29, p);
@@ -16,8 +16,8 @@ export function journeyPose(p: number, aspect: number, angle = CAMPUS_ANGLE) {
     -0.65 * (1 - arrive) + SITE_SEPARATION * smooth(0.54, 0.7, p);
   const origin = orbitPoint(CAMPUS_ORBIT, angle, aspect);
   const initialScale = (narrow ? 0.34 : 0.56) / PLANET_RADIUS;
-  const baseScale = narrow ? 0.45 : 0.83;
-  const closeScale = Math.min(narrow ? 0.65 : 1.4, (aspect * 9) / 7.2);
+  const baseScale = ((narrow ? 0.45 : 0.83) * 8) / PLANET_RADIUS;
+  const closeScale = Math.min(narrow ? 0.59 : 1.22, (aspect * 9) / 7.2);
   const magnification = Math.max(firstClose, secondClose);
   const scale =
     initialScale +
@@ -25,9 +25,9 @@ export function journeyPose(p: number, aspect: number, angle = CAMPUS_ANGLE) {
     (closeScale - baseScale) * magnification;
   const enterLab = smooth(0.91, 0.985, p);
   const finalScale = scale * (1 + enterLab * 0.8);
-  const pitch = magnification * 0.18;
+  const pitch = magnification * 0.2;
   // Keep the local horizon in frame as the planet grows, not the centre of the globe.
-  const horizon = -0.65 - magnification * 0.8;
+  const horizon = -0.65 - magnification * (narrow ? 0.75 : 1.0);
   const y =
     origin[1] * (1 - arrive) +
     arrive * (horizon - PLANET_RADIUS * finalScale * Math.cos(pitch)) -
@@ -35,7 +35,7 @@ export function journeyPose(p: number, aspect: number, angle = CAMPUS_ANGLE) {
   return {
     scale: finalScale,
     y,
-    x: origin[0] * (1 - arrive),
+    x: origin[0] * (1 - arrive) + (narrow ? 0 : 1.9) * arrive,
     rotation,
     pitch,
     libraryVisible: p < 0.62,

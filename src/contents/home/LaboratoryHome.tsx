@@ -9,8 +9,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useReducedMotion } from "./hooks/useReducedMotion";
 import { isWebGLAvailable } from "./laboratory/labPalette";
-import { ProjectStory } from "./ProjectStory";
-import { CosmicJourney } from "./journey/CosmicJourney";
+import { CosmicJourney } from "./journey/ContinuousJourney";
+import { Link } from "react-router-dom";
+import { LiteratureLibrary } from "./ui/LiteratureLibrary";
 import {
   readLabReviewState,
   type LabReviewAsset,
@@ -75,13 +76,12 @@ export function LaboratoryHome() {
   const navigate = useNavigate();
   const reduced = useReducedMotion();
   const phase = useLaboratoryStore((s) => s.phase);
-  const simpleMode = useLaboratoryStore((s) => s.simpleMode);
-  const setSimpleMode = useLaboratoryStore((s) => s.setSimpleMode);
   const setPhase = useLaboratoryStore((s) => s.setPhase);
   const resetSession = useLaboratoryStore((s) => s.resetSession);
   const setLocked = useLaboratoryStore((s) => s.setLocked);
   const [paused, setPaused] = useState(false);
-  const [storyRunning, setStoryRunning] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const storyRunning = false;
   const labRef = useRef<HTMLDivElement>(null);
   const [webgl] = useState(() => isWebGLAvailable());
   const [reviewState] = useState(() => readLabReviewState());
@@ -135,7 +135,7 @@ export function LaboratoryHome() {
     [navigate, setLocked, setPhase],
   );
 
-  const show3d = webgl && !simpleMode && phase !== "fallback";
+  const show3d = webgl && phase !== "fallback";
 
   const laboratory = (
     <div
@@ -150,7 +150,7 @@ export function LaboratoryHome() {
           <Suspense fallback={<LoadingOverlay visible />}>
             <LaboratoryCanvas
               reduced={reduced}
-              paused={paused || !labActive}
+              paused={paused || !labActive || galleryOpen}
               onNavigate={onNavigate}
               onContextLost={goFallback}
               review={review}
@@ -162,9 +162,7 @@ export function LaboratoryHome() {
       ) : (
         <LaboratoryFallback
           message={
-            simpleMode
-              ? "A lightweight map of our laboratory and its research areas."
-              : "This browser cannot run the 3D laboratory. Explore the research map instead."
+            "The 3D laboratory is unavailable. All research pages remain accessible."
           }
         />
       )}
@@ -211,37 +209,38 @@ export function LaboratoryHome() {
       ) : (
         <div
           className="lab-hud"
-          data-busy={storyRunning || !["idle", "fallback"].includes(phase)}
+          data-focused={phase === "inspecting" || phase === "focusing"}
+          data-busy={
+            storyRunning || !["idle", "inspecting", "fallback"].includes(phase)
+          }
         >
-          {!simpleMode && (
-            <>
-              <div className="lab-brand">
-                <p className="lab-brand__mark">LBP-Mototype</p>
-              </div>
-              <ChapterDirectory />
-            </>
-          )}
+          <div className="lab-brand">
+            <p className="lab-brand__mark">LBP-Mototype</p>
+          </div>
+          <ChapterDirectory />
           {show3d && !storyRunning && (
             <EquipmentInspector onNavigate={onNavigate} />
           )}
-          <ProjectStory
-            reduced={reduced}
-            running={storyRunning}
-            onRunning={setStoryRunning}
-          />
+          <nav className="lab-evidence-links" aria-label="Research evidence">
+            {[
+              ["Design", "/description"],
+              ["Experiments", "/experiments"],
+              ["Model", "/model"],
+              ["Results", "/results"],
+              ["Safety", "/safety-and-security"],
+            ].map(([label, path]) => (
+              <Link key={label} to={path}>
+                {label}
+              </Link>
+            ))}
+          </nav>
           <ObjectTooltip />
-          <details className="lab-options">
-            <summary aria-label="Display options">···</summary>
-            <button
-              type="button"
-              className="lab-simple"
-              onClick={() => setSimpleMode(!simpleMode)}
-            >
-              {simpleMode ? "Show 3D lab" : "Simple mode"}
-            </button>
-          </details>
         </div>
       )}
+      <LiteratureLibrary
+        visible={labActive && !review && phase === "idle"}
+        onOpenChange={setGalleryOpen}
+      />
     </div>
   );
   return (

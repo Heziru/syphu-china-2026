@@ -26,3 +26,13 @@ dist-ssr
 # MediaPipe WASM is copied from node_modules at predev/prebuild/postinstall
 public/mediapipe/wasm/
 _ref/
+
+# Local verification sessions and private project-book extraction
+outputs/story-review/browser-profile/
+outputs/story-sources/
+*.blend1
+scripts/blender/__pycache__/
+outputs/best-wiki-review/profile/
+outputs/lab-focus-review/browser-profile/
+outputs/gallery-review/browser-profile/
+outputs/gallery-review/profile/

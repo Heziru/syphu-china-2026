@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { CHAPTER_LIST } from "../data/chapters";
 
 type Props = {
   message?: string;
@@ -7,33 +6,16 @@ type Props = {
 
 export function LaboratoryFallback({ message }: Props) {
   return (
-    <div className="lab-fallback">
-      <img
-        className="lab-fallback__image"
-        src={`${import.meta.env.BASE_URL}assets/laboratory/simple-lab-reference.png`}
-        alt="Illustrated overview of the SYPHU-China laboratory"
-      />
-      <div className="lab-fallback__shade" aria-hidden="true" />
-      <div className="lab-fallback__copy">
-        <span className="lab-fallback__eyebrow">
-          SYPHU-CHINA · LABORATORY ATLAS
-        </span>
-        <h2>Explore the lab</h2>
-        <p>
-          {message ??
-            "A lightweight map of our laboratory and its research areas."}
-        </p>
-        <ul>
-          {CHAPTER_LIST.map((chapter) => (
-            <li key={chapter.id}>
-              <Link to={chapter.path}>
-                <span>{chapter.name}</span>
-                <small>{chapter.nameZh}</small>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="lab-unavailable" role="status">
+      <h1>Explore the research.</h1>
+      <p>{message}</p>
+      <nav aria-label="Research pages">
+        <Link to="/description">Design ↗</Link>
+        <Link to="/experiments">Experiments ↗</Link>
+        <Link to="/model">Model ↗</Link>
+        <Link to="/results">Results ↗</Link>
+        <Link to="/safety-and-security">Safety ↗</Link>
+      </nav>
     </div>
   );
 }

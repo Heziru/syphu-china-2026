@@ -1,0 +1,68 @@
+{
+  "original": {
+    "position": [
+      -7.34026197596444,
+      7.198770622193608,
+      13.849325931958171
+    ],
+    "target": [
+      0,
+      0.65,
+      -0.25
+    ],
+    "phase": "idle"
+  },
+  "defaultPose": {
+    "position": [
+      5.7559059999999995,
+      9.103986999999998,
+      14.679382000000006
+    ],
+    "target": [
+      0,
+      0.65,
+      -0.25
+    ],
+    "phase": "idle"
+  },
+  "afterGallery": {
+    "position": [
+      -7.34026197596444,
+      7.198770622193608,
+      13.849325931958171
+    ],
+    "target": [
+      0,
+      0.65,
+      -0.25
+    ],
+    "phase": "idle"
+  },
+  "restored": {
+    "position": [
+      -7.34026197596444,
+      7.198770622193608,
+      13.849325931958171
+    ],
+    "target": [
+      0,
+      0.65,
+      -0.24999999999999994
+    ],
+    "phase": "idle"
+  },
+  "errors": [],
+  "checks": [
+    "single caption",
+    "no modal stack",
+    "wheel zoom",
+    "preserve scroll",
+    "switch objects",
+    "restore camera",
+    "mobile",
+    "custom camera preserved across literature gallery",
+    "gallery wheel isolated from lab",
+    "five evidence entries restored",
+    "mobile gallery retained during resize"
+  ]
+}

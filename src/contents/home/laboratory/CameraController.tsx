@@ -73,8 +73,40 @@ export function CameraController({
   );
   const overviewRef = useRef(overview);
   const aspectRef = useRef(size.width / Math.max(1, size.height));
+  const previousAspect = useRef(size.width / Math.max(1, size.height));
   overviewRef.current = overview;
   aspectRef.current = size.width / Math.max(1, size.height);
+
+  useEffect(() => {
+    if (Math.abs(previousAspect.current - aspectRef.current) < 0.01) return;
+    previousAspect.current = aspectRef.current;
+    const state = useLaboratoryStore.getState();
+    if (state.phase === "inspecting" && state.inspectId)
+      state.inspect(state.inspectId);
+  }, [size.width, size.height]);
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const host = window as Window & {
+      __LAB_CAMERA?: () => {
+        position: number[];
+        target: number[];
+        phase: string;
+      };
+    };
+    host.__LAB_CAMERA = () => ({
+      position: camera.position.toArray(),
+      target: [
+        controls.current?.target.x ?? 0,
+        controls.current?.target.y ?? 0,
+        controls.current?.target.z ?? 0,
+      ],
+      phase: useLaboratoryStore.getState().phase,
+    });
+    return () => {
+      delete host.__LAB_CAMERA;
+    };
+  }, [camera]);
 
   useEffect(() => {
     if (camera instanceof PerspectiveCamera) {
@@ -186,7 +218,7 @@ export function CameraController({
       ? saved && Math.abs(saved.aspect - currentAspect) < 0.01
         ? saved
         : currentOverview
-      : equipmentShot(inspectId!, mobile);
+      : equipmentShot(inspectId!, mobile, currentAspect);
     const look = {
       x: controls.current?.target.x ?? currentOverview.target[0],
       y: controls.current?.target.y ?? currentOverview.target[1],
@@ -208,6 +240,10 @@ export function CameraController({
       ease: "power2.inOut",
       onUpdate: () => {
         camera.position.lerpVectors(from, to, clock.t);
+        // A shallow lift clears the worktops when moving between two close-ups.
+        camera.position.y +=
+          Math.sin(Math.PI * clock.t) *
+          Math.min(0.75, from.distanceTo(to) * 0.08);
         target.lerpVectors(fromLook, toLook, clock.t);
         camera.lookAt(target);
         controls.current?.target.set(target.x, target.y, target.z);
@@ -239,13 +275,14 @@ export function CameraController({
       enableZoom
       enableDamping
       dampingFactor={0.08}
-      minDistance={review ? 1.2 : phase === "idle" ? 8 : 1}
+      minDistance={review ? 1.2 : phase === "idle" ? 8 : 1.2}
       maxDistance={review ? 4.2 : 38}
-      minPolarAngle={review ? 0.18 : 0.48}
-      maxPolarAngle={review ? 1.45 : 1.18}
-      minAzimuthAngle={review ? -Math.PI : -0.48}
-      maxAzimuthAngle={review ? Math.PI : 0.78}
-      enabled={phase === "idle"}
+      minPolarAngle={review ? 0.18 : phase === "inspecting" ? 0 : 0.48}
+      maxPolarAngle={review ? 1.45 : phase === "inspecting" ? Math.PI : 1.18}
+      minAzimuthAngle={review || phase === "inspecting" ? -Infinity : -0.48}
+      maxAzimuthAngle={review || phase === "inspecting" ? Infinity : 0.78}
+      enableRotate={phase === "idle"}
+      enabled={phase === "idle" || phase === "inspecting"}
     />
   );
 }

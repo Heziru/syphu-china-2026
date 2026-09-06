@@ -760,7 +760,7 @@
   "meshes": 755,
   "triangles": 109074,
   "views": [
-    "C:\\Users\\24183\\Desktop\\spu\\\u793e\u56e2\\iGEM\\2026 SYPHU-China\\wiki\\2026-syphu-china\\syphu-china-main\\outputs\\blender\\library-front.png",
-    "C:\\Users\\24183\\Desktop\\spu\\\u793e\u56e2\\iGEM\\2026 SYPHU-China\\wiki\\2026-syphu-china\\syphu-china-main\\outputs\\blender\\library-three-quarter.png"
+    "outputs/blender/library-front.png",
+    "outputs/blender/library-three-quarter.png"
   ]
 }

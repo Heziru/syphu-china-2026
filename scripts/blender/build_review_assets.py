@@ -36,8 +36,8 @@ def box(name,p,size,m,bevel=.015):
     o=bpy.context.object;o.scale=(size[0],size[2],size[1])
     bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
     return finish(o,name,m,min(bevel,min(size)*.2))
-def uv(name,p,scale,m):
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=32,ring_count=20,location=xyz(p))
+def uv(name,p,scale,m,segments=32,rings=20):
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=segments,ring_count=rings,location=xyz(p))
     o=bpy.context.object;o.scale=(scale[0],scale[2],scale[1])
     bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
     return finish(o,name,m,smooth=True)
@@ -197,7 +197,9 @@ def digestive():
     centers=sample_path([(.18,3.4,0),(.18,2.85,0),(.34,2.65,0),(.83,2.57,0),(1.17,2.15,0),(1.19,1.52,0),(.78,1.11,0),(.18,1.13,0),(-.23,1.20,0)],12)
     radii=[.17,.17,.19,.48,.56,.51,.36,.22,.15];verts=[];faces=[];n=40
     for j,p in enumerate(centers):
-        f=j/(len(centers)-1)*(len(radii)-1);k=min(int(f),len(radii)-2);rr=radii[k]+(radii[k+1]-radii[k])*(f-k)
+        f=j/(len(centers)-1)*(len(radii)-1);k=min(int(f),len(radii)-2);t=f-k
+        a=radii[max(0,k-1)];b=radii[k];c=radii[k+1];d=radii[min(len(radii)-1,k+2)]
+        rr=.5*((2*b)+(-a+c)*t+(2*a-5*b+4*c-d)*t*t+(-a+3*b-3*c+d)*t*t*t)
         tangent=(centers[min(j+1,len(centers)-1)]-centers[max(0,j-1)]).normalized()
         u=tangent.cross(Vector((0,0,1))).normalized();v=tangent.cross(u).normalized()
         for i in range(n):verts.append(tuple(p+rr*(math.cos(2*PI*i/n)*u+.78*math.sin(2*PI*i/n)*v)))
@@ -352,15 +354,17 @@ def export_review(name,build):
         o.rotation_euler=(Vector(xyz(target))-o.location).to_track_quat("-Z","Y").to_euler()
     bpy.ops.object.camera_add();camera=bpy.context.object;scene.camera=camera;camera.data.type="ORTHO";camera.data.ortho_scale=span
     manifest={"name":name,"parts":[o.name for o in objects],"meshes":len(objects),"triangles":sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in objects),"views":[]}
-    for view,dx,dy in [("front",0,.14),("three-quarter",.30,.22)]:
+    views=[("front",0,1.25),("three-quarter",.30,1.55)] if name=="colon-section" else [("front",0,.14),("three-quarter",.30,.22)]
+    for view,dx,dy in views:
         camera.location=xyz((target[0]+span*dx,target[1]+span*dy,target[2]+span*1.7))
         camera.rotation_euler=(Vector(xyz(target))-camera.location).to_track_quat("-Z","Y").to_euler()
         scene.render.filepath=str(MASTERS/(name+"-"+view+".png"));bpy.ops.render.render(write_still=True)
-        manifest["views"].append(scene.render.filepath)
+        manifest["views"].append(Path(scene.render.filepath).relative_to(ROOT).as_posix())
     bpy.ops.wm.save_as_mainfile(filepath=str(MASTERS/(name+".blend")))
     (MASTERS/(name+".json")).write_text(json.dumps(manifest,indent=2),encoding="utf-8")
     print("ASSET_COMPLETE",name,manifest["triangles"],flush=True)
 
 builders={"library":library,"research-building":research,"digestive-system":digestive,"colon-section":colon_section,"engineered-ecn":bacterium,"clean-bench":clean_bench}
 selected=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else list(builders)
-for name in selected:export_review(name,builders[name])
+if __name__ == "__main__":
+    for name in selected:export_review(name,builders[name])

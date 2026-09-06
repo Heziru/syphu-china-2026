@@ -1,0 +1,210 @@
+:root {
+  --wiki-font: Arial, Helvetica, sans-serif;
+  --wiki-ink: #365954;
+  --wiki-cream: #f8e7bd;
+  --wiki-paper: #f4f2e8;
+  --bs-font-sans-serif: var(--wiki-font);
+  --bs-body-font-family: var(--wiki-font);
+  --bs-body-color: var(--wiki-ink);
+  --bs-body-bg: var(--wiki-paper);
+  --bs-link-color: #356a65;
+}
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--wiki-font);
+}
+body {
+  background: var(--wiki-paper);
+  color: var(--wiki-ink);
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible {
+  outline: 2px solid #527d76;
+  outline-offset: 5px;
+}
+.navbar {
+  background: #f8f7f0ed !important;
+  border-bottom: 1px solid #47736b16;
+  backdrop-filter: blur(16px);
+}
+.navbar .navbar-brand {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-size: 1.2rem;
+  color: #365954;
+}
+.navbar .nav-link {
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: #49635e;
+}
+.dropdown-menu {
+  background: #f9f8efed;
+  border: 1px solid #ffffff;
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: 0 16px 40px #2c4c4320;
+}
+.dropdown-item {
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #365954;
+  padding: 9px 14px;
+}
+.wiki-page-header {
+  padding: clamp(50px, 9vw, 110px) 0 36px;
+  background: radial-gradient(ellipse at 80% 10%, #e3eae0, transparent 60%);
+}
+.wiki-page-header h1,
+.wiki-document h2 {
+  font-family: var(--wiki-font);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  color: var(--wiki-cream);
+  -webkit-text-stroke: 1px #55756f;
+  paint-order: stroke fill;
+  text-shadow: 1px 2px 0 #52766b28;
+}
+.wiki-page-header h1 {
+  font-size: clamp(42px, 7vw, 100px);
+  line-height: 0.98;
+  max-width: 1000px;
+  margin: 0 0 22px;
+  text-wrap: balance;
+}
+.wiki-page-header p {
+  font-size: 1rem;
+  max-width: 600px;
+  line-height: 1.65;
+}
+.wiki-document {
+  min-height: 55vh;
+  padding-bottom: 80px;
+}
+.wiki-document h2 {
+  font-size: clamp(26px, 3.2vw, 44px);
+}
+.wiki-document h3,
+.wiki-document h4 {
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.wiki-document p,
+.wiki-document li {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+.wiki-document section,
+.wiki-document [id] {
+  scroll-margin-top: 90px;
+}
+.wiki-document .bd-callout {
+  border: 0;
+  background: #fffdf680;
+  border-radius: 24px;
+  padding: 28px;
+}
+.wiki-document a {
+  text-underline-offset: 4px;
+}
+.lab-unavailable {
+  max-width: 620px;
+  padding: 18vh 24px 20px;
+  margin: auto;
+}
+.lab-unavailable h1 {
+  text-transform: uppercase;
+  font-weight: 900;
+}
+.lab-unavailable nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 32px;
+}
+.lab-home .lab-brand__mark {
+  font-weight: 800;
+}
+.wiki-world-loading {
+  min-height: calc(100svh - 56px);
+  display: flex;
+  gap: 28px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6a8477;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  font-size: 24px;
+}
+.wiki-world-loading i {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #a7bcaf;
+  border-top-color: #46665a;
+  border-radius: 50%;
+  animation: world-load 1.6s linear infinite;
+}
+@keyframes world-load {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.lab-evidence-links {
+  position: absolute;
+  pointer-events: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 26px;
+  display: flex;
+  gap: 24px;
+  padding: 14px 24px;
+  background: #fbf8eabf;
+  border: 1px solid #ffffffc9;
+  border-radius: 999px;
+  backdrop-filter: blur(14px);
+  white-space: nowrap;
+}
+.lab-evidence-links a {
+  font-size: 12px;
+  font-weight: 800;
+  color: #365954;
+  text-decoration: none;
+}
+.lab-evidence-links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.lab-hud[data-focused="true"] .lab-evidence-links,
+.lab-hud[data-focused="true"] .lab-brand,
+.lab-hud[data-focused="true"] .lab-directory {
+  visibility: hidden;
+}
+@media (max-width: 700px) {
+  .lab-evidence-links {
+    bottom: 80px;
+    max-width: 94%;
+    padding: 12px 18px;
+    gap: 15px;
+  }
+  .lab-evidence-links a {
+    font-size: 10px;
+  }
+  .wiki-page-header {
+    padding-top: 52px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

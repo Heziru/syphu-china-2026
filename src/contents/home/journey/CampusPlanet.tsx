@@ -6,40 +6,15 @@ import {
   type MutableRefObject,
 } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { SphereMounted } from "./SphereMounted";
 import {
   journeyPose,
   smooth,
   PLANET_RADIUS as R,
   SITE_SEPARATION,
 } from "./journeyMotion";
-import { Group, ShaderMaterial, Color } from "three";
+import { Group, ShaderMaterial, Color, SphereGeometry } from "three";
 import { BlenderAsset } from "../components/BlenderAsset";
 import { orbitAngle, CAMPUS_ANGLE } from "./orbitLayout";
-
-function Block({
-  p,
-  s,
-  color = "#a34843",
-}: {
-  p: [number, number, number];
-  s: [number, number, number];
-  color?: string;
-}) {
-  return (
-    <mesh position={p}>
-      <boxGeometry
-        args={[
-          ...s,
-          Math.max(1, Math.ceil(s[0] / 0.24)),
-          1,
-          Math.max(1, Math.ceil(s[2] / 0.24)),
-        ]}
-      />
-      <meshStandardMaterial color={color} roughness={0.8} />
-    </mesh>
-  );
-}
 
 function Tree({ x, z, scale = 1 }: { x: number; z: number; scale?: number }) {
   return (
@@ -57,29 +32,43 @@ function Tree({ x, z, scale = 1 }: { x: number; z: number; scale?: number }) {
 }
 function CampusSite({ research = false }: { research?: boolean }) {
   return (
-    <SphereMounted>
+    <group>
       <group scale={research ? 0.6 : 0.49}>
         <BlenderAsset name={research ? "research-building" : "library"} />
       </group>
       {[-3.1, -2.75, 2.75, 3.1].map((x, i) => (
         <Tree key={x} x={x} z={i % 2 ? -0.3 : -1} scale={0.7 + i * 0.07} />
       ))}
-      <Block
-        p={[0, -0.009, research ? 1.85 : 2.38]}
-        s={[research ? 1.05 : 1.7, 0.035, research ? 1.6 : 1.4]}
-        color="#d2ccae"
-      />
       {[-3.15, 3.15].map((x) => (
         <mesh key={x} position={[x, 0.04, 0.8]} scale={[0.45, 0.13, 0.28]}>
           <icosahedronGeometry args={[1, 1]} />
           <meshStandardMaterial color="#b2c4aa" roughness={1} />
         </mesh>
       ))}
-    </SphereMounted>
+    </group>
   );
 }
 
 function StoryPlanetSurface() {
+  // A single watertight sphere with gently levelled polar gardens.
+  // No coplanar overlay, detached soil apron, or out-of-sphere grid vertices.
+  const geometry = useMemo(() => {
+    const g = new SphereGeometry(R, 256, 192);
+    const positions = g.getAttribute("position");
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i),
+        y = positions.getY(i),
+        z = positions.getZ(i);
+      if (Math.abs(y) < R * 0.84) continue;
+      const edge = Math.hypot(x / 3.65, z / 1.75);
+      const blend = 1 - smooth(0.98, 1.85, edge);
+      positions.setY(i, y + (Math.sign(y) * R - y) * blend);
+    }
+    positions.needsUpdate = true;
+    g.computeVertexNormals();
+    return g;
+  }, []);
+  useEffect(() => () => geometry.dispose(), [geometry]);
   const material = useMemo(
     () =>
       new ShaderMaterial({
@@ -94,7 +83,7 @@ function StoryPlanetSurface() {
     void main(){vec3 p=normalize(vP);float f=p.y*9.+sin(p.x*5.+p.z*3.)*.7+sin(p.z*7.)*.3;
     float wave=sin(f);float fill=smoothstep(-.22,-.17,wave);float stroke=1.-smoothstep(.015,.03,abs(wave+.19));
     vec3 c=mix(base,band,fill*.48);c=mix(c,line,stroke*.55);
-    c=mix(base,c,1.-smoothstep(.70,.91,abs(p.y)));\n    float light=smoothstep(-.7,.8,dot(normalize(vN),normalize(vec3(-.4,.8,1.))));c*=.82+.18*light;
+    c=mix(base,c,1.-smoothstep(.70,.91,abs(p.y))); float garden=(1.-smoothstep(1.0,1.85,length(vP.xz/vec2(3.65,1.75))))*smoothstep(.82,.94,abs(p.y)); c=mix(c,vec3(.66,.74,.57),garden*.62);\n    float light=smoothstep(-.7,.8,dot(normalize(vN),normalize(vec3(-.4,.8,1.))));c*=.82+.18*light;
     gl_FragColor=vec4(c,1.);#include <colorspace_fragment>}`.replace(
             ";#include",
             ";\n#include",
@@ -103,18 +92,16 @@ function StoryPlanetSurface() {
     [],
   );
   useEffect(() => () => material.dispose(), [material]);
-  return (
-    <mesh material={material}>
-      <sphereGeometry args={[R, 128, 72]} />
-    </mesh>
-  );
+  return <mesh material={material} geometry={geometry}></mesh>;
 }
 
 export function CampusPlanet({
   progress,
+  inspection = 0,
 }: {
   progress: MutableRefObject<number>;
   narrow: boolean;
+  inspection?: number;
 }) {
   const root = useRef<Group>(null),
     wheel = useRef<Group>(null),
@@ -122,6 +109,8 @@ export function CampusPlanet({
     research = useRef<Group>(null);
   const aspect = useThree((s) => s.viewport.aspect);
   const displayed = useRef(progress.current);
+  const holdBlend = useRef(0),
+    holdTime = useRef(0);
   useFrame(({ clock }, dt) => {
     if (
       !root.current ||
@@ -138,9 +127,20 @@ export function CampusPlanet({
       aspect,
       orbitAngle(CAMPUS_ANGLE, clock.elapsedTime, displayed.current),
     );
-    root.current.scale.setScalar(pose.scale);
-    root.current.position.set(pose.x, pose.y, 0);
+    const step = Math.min(dt, 0.25);
+    holdBlend.current +=
+      (inspection - holdBlend.current) * (1 - Math.exp(-7 * step));
+    if (inspection > 0.5) holdTime.current += step;
+    const zoom = 1 + holdBlend.current * 0.09;
+    root.current.scale.setScalar(pose.scale * zoom);
+    root.current.position.set(
+      pose.x,
+      pose.y - R * pose.scale * (zoom - 1) * Math.cos(pose.pitch),
+      0,
+    );
     root.current.rotation.x = pose.pitch;
+    root.current.rotation.y =
+      holdBlend.current * Math.sin(holdTime.current * 0.7) * 0.14;
     wheel.current.rotation.z =
       pose.rotation +
       (displayed.current < 0.08
@@ -155,7 +155,7 @@ export function CampusPlanet({
     research.current.visible = pose.researchVisible && displayed.current > 0.14;
   });
   return (
-    <group ref={root}>
+    <group ref={root} name="campus-planet">
       <group ref={wheel}>
         <StoryPlanetSurface />
         <group ref={library} position={[0, R - 0.012, 0]}>
