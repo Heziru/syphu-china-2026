@@ -1,9 +1,24 @@
 import { stringToSlug } from "../utils";
 
-export function Footer() {
+export function Footer({ compact = false }: { compact?: boolean }) {
   const teamYear = import.meta.env.VITE_TEAM_YEAR;
   const teamName = import.meta.env.VITE_TEAM_NAME;
   const teamSlug = stringToSlug(teamName);
+
+  if (compact)
+    return (
+      <footer className="team-site-footer">
+        <span>
+          © {teamYear} {teamName}
+        </span>
+        <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">
+          Content licensed under CC BY 4.0 ↗
+        </a>
+        <a href={`https://gitlab.igem.org/${teamYear}/${teamSlug}`}>
+          Wiki source ↗
+        </a>
+      </footer>
+    );
 
   return (
     <footer className="pt-5 pb-5 footer py-5 mt-5 bg-dark text-white">

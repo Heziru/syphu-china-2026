@@ -48,7 +48,7 @@ const App = () => {
               key={path}
               path={path}
               element={
-                path === "/" ? (
+                path === "/" || path === "/team" ? (
                   <Component />
                 ) : (
                   <>
@@ -78,7 +78,7 @@ const App = () => {
 
       {/* Footer */}
       {/* MUST mention license AND have a link to team wiki's repository on gitlab.igem.org */}
-      <Footer />
+      <Footer compact={currentPath === "/team"} />
     </>
   );
 };
