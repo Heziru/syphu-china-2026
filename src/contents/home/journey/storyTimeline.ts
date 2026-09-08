@@ -94,3 +94,44 @@ export const smooth = (a: number, b: number, p: number) => {
 };
 export const sciencePhase = (p: number) =>
   p < 0.43 ? 0 : p < 0.535 ? 1 : p < 0.625 ? 2 : p < 0.71 ? 3 : 4;
+
+// Insert reading time without changing any of the calibrated globe, anatomy or
+// campus camera intervals. Both scroll and chapter navigation use this mapping.
+export const BRIDGE_AT = 0.32;
+export const BRIDGE_LENGTH = 0.3;
+export const DELIVERY_LENGTH = 0.2;
+const READING_LENGTH = BRIDGE_LENGTH + DELIVERY_LENGTH;
+export function journeyPosition(scroll: number) {
+  const elapsed = clamp(scroll) * (1 + READING_LENGTH);
+  const inBridge = elapsed >= BRIDGE_AT && elapsed < BRIDGE_AT + BRIDGE_LENGTH;
+  const inDelivery =
+    elapsed >= BRIDGE_AT + BRIDGE_LENGTH &&
+    elapsed < BRIDGE_AT + READING_LENGTH;
+  return {
+    progress:
+      inBridge || inDelivery
+        ? BRIDGE_AT
+        : elapsed < BRIDGE_AT
+          ? elapsed
+          : Math.min(1, elapsed - READING_LENGTH),
+    bridge: inBridge ? (elapsed - BRIDGE_AT) / BRIDGE_LENGTH : null,
+    delivery: inDelivery
+      ? (elapsed - BRIDGE_AT - BRIDGE_LENGTH) / DELIVERY_LENGTH
+      : null,
+  };
+}
+export function storyScrollPosition(progress: number) {
+  return (
+    (progress + (progress >= BRIDGE_AT ? READING_LENGTH : 0)) /
+    (1 + READING_LENGTH)
+  );
+}
+export function bridgeScrollPosition(progress = 0.1) {
+  return (BRIDGE_AT + clamp(progress) * BRIDGE_LENGTH) / (1 + READING_LENGTH);
+}
+export function deliveryScrollPosition(progress = 0) {
+  return (
+    (BRIDGE_AT + BRIDGE_LENGTH + clamp(progress) * DELIVERY_LENGTH) /
+    (1 + READING_LENGTH)
+  );
+}

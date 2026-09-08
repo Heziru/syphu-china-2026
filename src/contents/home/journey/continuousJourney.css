@@ -1,9 +1,49 @@
 .continuous-journey {
-  height: 1900svh;
+  height: 2850svh;
   color: #365954;
 }
 .continuous-journey.cosmic-journey--static {
   height: auto;
+}
+.continuous-journey.cosmic-journey--static .cosmic-journey__art {
+  height: auto;
+}
+.continuous-journey.cosmic-journey--static .cosmic-journey__footer {
+  display: none;
+}
+.journey-static-mechanism {
+  position: relative;
+  height: max(800px, 100svh);
+}
+.journey-static-mechanism .journey-editorial h2 {
+  font-size: clamp(36px, 4vw, 60px);
+  font-weight: 900;
+  color: #3f6559;
+  text-transform: uppercase;
+}
+.journey-static-mechanism nav {
+  pointer-events: auto;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+.journey-static-mechanism nav button {
+  border: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: #527766;
+  font-size: 12px;
+}
+.journey-static-mechanism nav button[aria-pressed="true"] {
+  border-color: #527766;
+  font-weight: 800;
+}
+.continuous-journey[data-stage="why"] .cosmic-journey__space,
+.continuous-journey[data-stage="delivery"] .cosmic-journey__space {
+  opacity: 0;
+  pointer-events: none;
 }
 .continuous-journey .cosmic-journey__space {
   pointer-events: auto;
@@ -18,6 +58,28 @@
 }
 .continuous-journey .cosmic-journey__art::before {
   display: none;
+}
+.solar-painted-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  transform-origin: 62% 50%;
+}
+@media (max-width: 700px) {
+  .solar-painted-backdrop {
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    width: calc(100dvh - 56px);
+    height: 100vw;
+    translate: -50% -50%;
+    rotate: 90deg;
+    object-fit: cover;
+    transform-origin: center;
+  }
 }
 .journey-editorial {
   position: absolute;
@@ -302,6 +364,17 @@
   color: #597b70;
   font-size: 11px;
 }
+.continuous-journey[data-opening="night"] .cosmic-journey__footer {
+  color: #e5dbc2;
+}
+.continuous-journey[data-opening="night"] .cosmic-journey__footer button:hover {
+  color: #fff3d9;
+}
+.continuous-journey[data-opening="night"]
+  .cosmic-journey__footer
+  button:focus-visible {
+  outline-color: #eed4a1;
+}
 .cosmic-journey__footer nav {
   display: flex;
   gap: 20px;
@@ -449,7 +522,7 @@
 }
 @media (max-width: 700px) {
   .continuous-journey {
-    height: 1800svh;
+    height: 2340svh;
   }
   .journey-editorial {
     top: 5%;

@@ -15,18 +15,21 @@ const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 const findings = [];
 async function at(p) {
-  await page.evaluate((p) => {
-    const s = document.querySelector(".continuous-journey"),
-      t = document.querySelector(".cosmic-journey__sticky");
-    scrollTo({
-      top:
-        s.getBoundingClientRect().top +
-        scrollY -
-        56 +
-        (s.offsetHeight - t.offsetHeight) * p,
-      behavior: "instant",
-    });
-  }, p);
+  await page.evaluate(
+    (p) => {
+      const s = document.querySelector(".continuous-journey"),
+        t = document.querySelector(".cosmic-journey__sticky");
+      scrollTo({
+        top:
+          s.getBoundingClientRect().top +
+          scrollY -
+          56 +
+          (s.offsetHeight - t.offsetHeight) * p,
+        behavior: "instant",
+      });
+    },
+    (p + (p >= 0.32 ? 0.5 : 0)) / 1.5,
+  );
   await page.waitForTimeout(1100);
 }
 try {

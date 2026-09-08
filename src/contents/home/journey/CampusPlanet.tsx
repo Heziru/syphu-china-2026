@@ -12,7 +12,8 @@ import {
   PLANET_RADIUS as R,
   SITE_SEPARATION,
 } from "./journeyMotion";
-import { Group, ShaderMaterial, Color, SphereGeometry } from "three";
+import { Group, ShaderMaterial, Color, SphereGeometry, Vector4 } from "three";
+import { SOLAR_ART, solarArtworkTexture, paintedSurface } from "./solarArtwork";
 import { BlenderAsset } from "../components/BlenderAsset";
 import { orbitAngle, CAMPUS_ANGLE } from "./orbitLayout";
 
@@ -49,7 +50,12 @@ function CampusSite({ research = false }: { research?: boolean }) {
   );
 }
 
-function StoryPlanetSurface() {
+function StoryPlanetSurface({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  const artwork = useMemo(solarArtworkTexture, []);
   // A single watertight sphere with gently levelled polar gardens.
   // No coplanar overlay, detached soil apron, or out-of-sphere grid vertices.
   const geometry = useMemo(() => {
@@ -76,21 +82,30 @@ function StoryPlanetSurface() {
           base: { value: new Color("#b7d5ce") },
           band: { value: new Color("#82aaa8") },
           line: { value: new Color("#6f9297") },
+          artwork: { value: artwork },
+          artRect: { value: new Vector4(...SOLAR_ART.campus) },
+          artReady: { value: 0 },
         },
         vertexShader: `varying vec3 vP; varying vec3 vN; void main(){vP=position;vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
         fragmentShader:
-          `varying vec3 vP; varying vec3 vN; uniform vec3 base;uniform vec3 band;uniform vec3 line;
+          `${paintedSurface}\nvarying vec3 vP; varying vec3 vN; uniform vec3 base;uniform vec3 band;uniform vec3 line;
     void main(){vec3 p=normalize(vP);float f=p.y*9.+sin(p.x*5.+p.z*3.)*.7+sin(p.z*7.)*.3;
     float wave=sin(f);float fill=smoothstep(-.22,-.17,wave);float stroke=1.-smoothstep(.015,.03,abs(wave+.19));
     vec3 c=mix(base,band,fill*.48);c=mix(c,line,stroke*.55);
     c=mix(base,c,1.-smoothstep(.70,.91,abs(p.y))); float garden=(1.-smoothstep(1.0,1.85,length(vP.xz/vec2(3.65,1.75))))*smoothstep(.82,.94,abs(p.y)); c=mix(c,vec3(.66,.74,.57),garden*.62);\n    float light=smoothstep(-.7,.8,dot(normalize(vN),normalize(vec3(-.4,.8,1.))));c*=.82+.18*light;
+    c=mix(c,paintedColor(normalize(vN)),artReady);
     gl_FragColor=vec4(c,1.);#include <colorspace_fragment>}`.replace(
             ";#include",
             ";\n#include",
           ),
       }),
-    [],
+    [artwork],
   );
+  useFrame(() => {
+    material.uniforms.artReady.value = artwork.image
+      ? 1 - smooth(0.06, 0.16, progress.current)
+      : 0;
+  });
   useEffect(() => () => material.dispose(), [material]);
   return <mesh material={material} geometry={geometry}></mesh>;
 }
@@ -157,7 +172,7 @@ export function CampusPlanet({
   return (
     <group ref={root} name="campus-planet">
       <group ref={wheel}>
-        <StoryPlanetSurface />
+        <StoryPlanetSurface progress={displayed} />
         <group ref={library} position={[0, R - 0.012, 0]}>
           <Suspense fallback={null}>
             <CampusSite />
