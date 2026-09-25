@@ -2,6 +2,8 @@ image: node:22
 
 pages:
   stage: build
+  variables:
+    VITE_IGEM_CDN: "true"
   cache:
     - key:
         files:
@@ -14,11 +16,12 @@ pages:
     - yarn install --frozen-lockfile
   script:
     - yarn build
-    - cp -a dist/. public/
-    - printf '/syphu-china/* /syphu-china/index.html 200\n/* /index.html 200\n' > public/_redirects
+    - node scripts/package-igem.mjs
+  pages:
+    publish: .igem-pages
   artifacts:
     paths:
-      - public
+      - .igem-pages
   rules:
     - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
       when: never # No runners will run on branches other than main

@@ -2,6 +2,7 @@ import { useMemo, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Group, Mesh, type Material, type BufferGeometry } from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
+import { assetUrl } from "../../../utils/assetUrl";
 
 const cache = new WeakMap<Group, Group>();
 /** Batch static Blender parts by material; the editable master retains every named part. */
@@ -45,9 +46,7 @@ export function BlenderAsset({
   activity?: number;
   opacity?: number;
 }) {
-  const { scene } = useGLTF(
-    import.meta.env.BASE_URL + "assets/models/" + name + ".glb",
-  );
+  const { scene } = useGLTF(assetUrl(`assets/models/${name}.glb`));
   const model = useMemo(() => {
     const copy = prepare(scene).clone(true);
     copy.traverse((o) => {

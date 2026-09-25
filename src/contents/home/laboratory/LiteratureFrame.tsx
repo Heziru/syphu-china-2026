@@ -1,6 +1,7 @@
 import { useTexture } from "@react-three/drei";
 import type { Size } from "./layoutMath";
 import { SoftBox } from "./SoftBox";
+import { assetUrl } from "../../../utils/assetUrl";
 
 const PAGE_ASSETS: Record<string, string> = {
   "paper-rubens": "rubens-2016.webp",
@@ -10,7 +11,7 @@ const PAGE_ASSETS: Record<string, string> = {
 
 export function LiteratureFrame({ id, size }: { id: string; size: Size }) {
   const texture = useTexture(
-    `${import.meta.env.BASE_URL}assets/laboratory/literature/${PAGE_ASSETS[id]}`,
+    assetUrl(`assets/laboratory/literature/${PAGE_ASSETS[id]}`),
   );
   const [width, height, depth] = size;
   const pageHeight = height * 0.76;

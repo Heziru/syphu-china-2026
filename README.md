@@ -55,11 +55,26 @@ do not force-push over another team member's work.
 The GitLab build uses the official `/syphu-china/` base path; the GitHub preview
 sets its own base in `.github/workflows/deploy-pages.yml`. Verify Home and a
 direct Team page refresh after the official pipeline completes. The generated
-`public/_redirects` covers both the project-prefixed and root proxy paths.
+`.igem-pages/_redirects` covers both the project-prefixed and root proxy paths.
 
-Before the competition submission, migrate image assets currently in `public`
-to the team's official Uploads storage (`static.igem.wiki`) and update their
-references, as required by the wiki hosting instructions above.
+Official GitLab builds set `VITE_IGEM_CDN=true`. Images and active 3D models are
+loaded from the team's official Uploads storage using `src/data/igem-assets.json`.
+Local development and GitHub previews continue to use the original public assets.
+The official packaging step creates `.igem-pages`, excludes uploaded and unused
+legacy resources, and checks the 5 MB Pages artifact budget before deployment.
+
+When replacing a public image or model, upload it through the team's Uploads tab
+under a new filename (to avoid CDN caching), then update its exact returned URL
+in the manifest. PNG/JPG uploads may become AVIF; use the returned extension and
+verify dimensions and transparency. The uploader limits each batch to 10 MB.
+Never add account tokens to the manifest. To check the official build locally:
+
+```powershell
+$env:VITE_IGEM_CDN = 'true'
+npm run build
+node scripts/package-igem.mjs
+Remove-Item Env:VITE_IGEM_CDN
+```
 
 Before refactoring the code of this template to suit your wiki needs, please make sure you have the ability to use React
 for web development.

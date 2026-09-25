@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
 import { LITERATURE } from "../data/literature";
+import { assetUrl } from "../../../utils/assetUrl";
 import {
   galleryOffset,
   galleryCurvePose,
@@ -404,8 +405,10 @@ export function CurveLiteratureGallery({
                 {"image" in paper ? (
                   <div className="literature-gallery__page">
                     <img
-                      src={`${import.meta.env.BASE_URL}assets/laboratory/literature/${paper.image.replace(".webp", "-small.webp")}`}
-                      srcSet={`${import.meta.env.BASE_URL}assets/laboratory/literature/${paper.image.replace(".webp", "-small.webp")} 600w, ${import.meta.env.BASE_URL}assets/laboratory/literature/${paper.image} 1200w`}
+                      src={assetUrl(
+                        `assets/laboratory/literature/${paper.image.replace(".webp", "-small.webp")}`,
+                      )}
+                      srcSet={`${assetUrl(`assets/laboratory/literature/${paper.image.replace(".webp", "-small.webp")}`)} 600w, ${assetUrl(`assets/laboratory/literature/${paper.image}`)} 1200w`}
                       sizes="(max-width: 600px) 240px, (max-height: 640px) 220px, 365px"
                       alt={`First page of ${paper.title}`}
                       draggable={false}

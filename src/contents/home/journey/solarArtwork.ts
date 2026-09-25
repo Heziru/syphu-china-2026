@@ -1,7 +1,8 @@
 import { SRGBColorSpace, Texture, TextureLoader } from "three";
+import { assetUrl } from "../../../utils/assetUrl";
 
-export const SOLAR_ARTWORK = `${import.meta.env.BASE_URL}assets/story/solar/painted-planets.png`;
-export const SOLAR_BACKDROP = `${import.meta.env.BASE_URL}assets/story/solar/paper-stardust.png`;
+export const SOLAR_ARTWORK = assetUrl("assets/story/solar/painted-planets.png");
+export const SOLAR_BACKDROP = assetUrl("assets/story/solar/paper-stardust.png");
 export type ArtRect = readonly [number, number, number, number];
 
 // Pixel windows into the approved illustration. The source bitmap is unchanged.

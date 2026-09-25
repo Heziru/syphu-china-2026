@@ -27,50 +27,76 @@ import { SceneErrorBoundary } from "./ui/SceneErrorBoundary";
 import "./styles/laboratory.css";
 
 const LaboratoryCanvas = lazy(() => import("./laboratory/LaboratoryCanvas"));
-const MicroscopeReviewHud = lazy(() =>
-  import("./laboratory/microscope/MicroscopeReviewHud").then((mod) => ({
-    default: mod.MicroscopeReviewHud,
-  })),
-);
-const ComputerReviewHud = lazy(() =>
-  import("./laboratory/computer/ComputerReviewHud").then((mod) => ({
-    default: mod.ComputerReviewHud,
-  })),
-);
-const BioreactorReviewHud = lazy(() =>
-  import("./laboratory/bioreactor/BioreactorReviewHud").then((mod) => ({
-    default: mod.BioreactorReviewHud,
-  })),
-);
-const ResearcherReviewHud = lazy(() =>
-  import("./laboratory/researcher/ResearcherReviewHud").then((mod) => ({
-    default: mod.ResearcherReviewHud,
-  })),
-);
-const GlasswareStationReviewHud = lazy(() =>
-  import("./laboratory/glassware-station/GlasswareStationReviewHud").then(
-    (mod) => ({
-      default: mod.GlasswareStationReviewHud,
-    }),
-  ),
-);
-const AnalyticalBalanceReviewHud = lazy(() =>
-  import("./laboratory/analytical-balance/AnalyticalBalanceReviewHud").then(
-    (mod) => ({
-      default: mod.AnalyticalBalanceReviewHud,
-    }),
-  ),
-);
-const LaminarHoodReviewHud = lazy(() =>
-  import("./laboratory/laminar-hood/LaminarHoodReviewHud").then((mod) => ({
-    default: mod.LaminarHoodReviewHud,
-  })),
-);
-const LabChairReviewHud = lazy(() =>
-  import("./laboratory/lab-chair/LabChairReviewHud").then((mod) => ({
-    default: mod.LabChairReviewHud,
-  })),
-);
+const MicroscopeReviewHud =
+  import.meta.env.VITE_IGEM_CDN === "true"
+    ? () => null
+    : lazy(() =>
+        import("./laboratory/microscope/MicroscopeReviewHud").then((mod) => ({
+          default: mod.MicroscopeReviewHud,
+        })),
+      );
+const ComputerReviewHud =
+  import.meta.env.VITE_IGEM_CDN === "true"
+    ? () => null
+    : lazy(() =>
+        import("./laboratory/computer/ComputerReviewHud").then((mod) => ({
+          default: mod.ComputerReviewHud,
+        })),
+      );
+const BioreactorReviewHud =
+  import.meta.env.VITE_IGEM_CDN === "true"
+    ? () => null
+    : lazy(() =>
+        import("./laboratory/bioreactor/BioreactorReviewHud").then((mod) => ({
+          default: mod.BioreactorReviewHud,
+        })),
+      );
+const ResearcherReviewHud =
+  import.meta.env.VITE_IGEM_CDN === "true"
+    ? () => null
+    : lazy(() =>
+        import("./laboratory/researcher/ResearcherReviewHud").then((mod) => ({
+          default: mod.ResearcherReviewHud,
+        })),
+      );
+const GlasswareStationReviewHud =
+  import.meta.env.VITE_IGEM_CDN === "true"
+    ? () => null
+    : lazy(() =>
+        import("./laboratory/glassware-station/GlasswareStationReviewHud").then(
+          (mod) => ({
+            default: mod.GlasswareStationReviewHud,
+          }),
+        ),
+      );
+const AnalyticalBalanceReviewHud =
+  import.meta.env.VITE_IGEM_CDN === "true"
+    ? () => null
+    : lazy(() =>
+        import("./laboratory/analytical-balance/AnalyticalBalanceReviewHud").then(
+          (mod) => ({
+            default: mod.AnalyticalBalanceReviewHud,
+          }),
+        ),
+      );
+const LaminarHoodReviewHud =
+  import.meta.env.VITE_IGEM_CDN === "true"
+    ? () => null
+    : lazy(() =>
+        import("./laboratory/laminar-hood/LaminarHoodReviewHud").then(
+          (mod) => ({
+            default: mod.LaminarHoodReviewHud,
+          }),
+        ),
+      );
+const LabChairReviewHud =
+  import.meta.env.VITE_IGEM_CDN === "true"
+    ? () => null
+    : lazy(() =>
+        import("./laboratory/lab-chair/LabChairReviewHud").then((mod) => ({
+          default: mod.LabChairReviewHud,
+        })),
+      );
 
 export function LaboratoryHome() {
   const navigate = useNavigate();

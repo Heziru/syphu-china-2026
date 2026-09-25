@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CampusPlanet } from "./CampusPlanet";
 import { SolarSystem, StarField } from "./OrbitArt";
 import { DataGlobe } from "./DataGlobe";
+import { assetUrl } from "../../../utils/assetUrl";
 import { ScienceAnatomy } from "../science/ScienceAnatomy";
 import { PersonScene } from "./PersonScene";
 import { OpeningSequence } from "./OpeningSequence";
@@ -478,12 +479,7 @@ export function CosmicJourney({
                   }
                 >
                   <img
-                    src={
-                      import.meta.env.BASE_URL +
-                      "assets/school/" +
-                      campusPhoto +
-                      "-photo.png"
-                    }
+                    src={assetUrl(`assets/school/${campusPhoto}-photo.png`)}
                     alt={
                       "Shenyang Pharmaceutical University South Campus " +
                       (campusPhoto === "library"

@@ -7,8 +7,9 @@ import {
   type PointerEvent,
 } from "react";
 import "./deliveryJourney.css";
+import { assetUrl } from "../../../utils/assetUrl";
 
-const artwork = `${import.meta.env.BASE_URL}assets/story/artist/`;
+const artwork = (file: string) => assetUrl(`assets/story/artist/${file}`);
 const segments = [
   "M 860 73 C 930 73 927 150 929 260 C 929 460 960 675 972 828 C 981 947 998 1007 1050 1080",
   "M 1050 1080 C 1130 996 1235 1037 1237 1135 C 1240 1227 1130 1300 1010 1280 C 900 1264 815 1240 782 1188 C 760 1157 706 1167 727 1220 C 751 1281 825 1378 853 1440",
@@ -507,7 +508,7 @@ export function DeliveryJourney({
       >
         <g ref={cameraRef}>
           <image
-            href={`${artwork}gut-original.png`}
+            href={artwork("gut-original.png")}
             width="2051"
             height="2051"
             className="delivery-journey__gut"
@@ -549,7 +550,7 @@ export function DeliveryJourney({
               overflow="visible"
             >
               <image
-                href={`${artwork}capsule-original.png`}
+                href={artwork("capsule-original.png")}
                 width="777"
                 height="777"
                 className="delivery-journey__capsule-image"

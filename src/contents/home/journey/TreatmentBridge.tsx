@@ -1,5 +1,6 @@
 import { useId, useState, type CSSProperties } from "react";
 import "./treatmentBridge.css";
+import { assetUrl } from "../../../utils/assetUrl";
 
 const NIDDK =
   "https://www.niddk.nih.gov/health-information/digestive-diseases/";
@@ -96,8 +97,7 @@ const CHAPTERS = [
 ];
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
-const asset = (file: string) =>
-  `${import.meta.env.BASE_URL}assets/story/artist/${file}`;
+const asset = (file: string) => assetUrl(`assets/story/artist/${file}`);
 const CARE_IMAGES = [
   "drug-therapy-original.png",
   "surgery-original.png",

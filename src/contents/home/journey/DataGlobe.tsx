@@ -20,6 +20,7 @@ import {
 } from "three";
 import { earthPose } from "./orbitalSceneMotion";
 import { PREVIEW_POLYGONS } from "./globePreviewData";
+import { gunzipSync } from "three/addons/libs/fflate.module.js";
 export type GlobeData = {
   source: string;
   metric: string;
@@ -102,21 +103,23 @@ function loadAssets() {
   if (!pending) {
     const base = import.meta.env.BASE_URL + "assets/cosmic/";
     const binary = async () => {
-      const compressed = typeof DecompressionStream !== "undefined";
-      const response = await fetch(
-        base + "earth-geometry.bin" + (compressed ? ".gz" : ""),
-      );
+      const response = await fetch(base + "earth-geometry.bin.gz");
       if (!response.ok) throw new Error("Earth geometry unavailable");
       const bytes = await response.arrayBuffer();
       const signature = new Uint8Array(bytes, 0, Math.min(2, bytes.byteLength));
       // Vite/CDNs may already decode Content-Encoding; static hosts may send
       // the gzip file verbatim. Decode only when its magic bytes remain.
-      if (compressed && signature[0] === 0x1f && signature[1] === 0x8b)
-        return new Response(
-          new Blob([bytes])
-            .stream()
-            .pipeThrough(new DecompressionStream("gzip")),
-        ).arrayBuffer();
+      if (signature[0] === 0x1f && signature[1] === 0x8b) {
+        if (typeof DecompressionStream !== "undefined") {
+          return new Response(
+            new Blob([bytes])
+              .stream()
+              .pipeThrough(new DecompressionStream("gzip")),
+          ).arrayBuffer();
+        }
+        // The installed Three.js decoder preserves support without a second raw asset.
+        return new Uint8Array(gunzipSync(new Uint8Array(bytes))).buffer;
+      }
       return bytes;
     };
     pending = Promise.all([

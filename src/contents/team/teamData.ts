@@ -1,5 +1,6 @@
 import roster from "./teamRoster.json";
 import mentorProfiles from "./mentorProfiles.json";
+import { assetUrl } from "../../utils/assetUrl";
 
 export type GroupId = "wet" | "dry" | "art" | "hp" | "wiki";
 export interface TeamPerson {
@@ -39,8 +40,7 @@ export const principalInvestigator = {
   ...roster.pi,
   ...mentorDetails.pi,
 } as TeamPerson;
-export const teamAsset = (name: string) =>
-  `${import.meta.env.BASE_URL}assets/team/${name}`;
+export const teamAsset = (name: string) => assetUrl(`assets/team/${name}`);
 export const groups: {
   id: GroupId;
   name: string;

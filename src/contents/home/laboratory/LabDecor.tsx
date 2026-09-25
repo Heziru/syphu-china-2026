@@ -5,6 +5,7 @@ import { SoftBox } from "./SoftBox";
 import { Plant, SpecimenBottles, TubeRack } from "./RoomAccents";
 import { Supplies } from "./LabSupplies";
 import { StaticBatch } from "./StaticBatch";
+import { assetUrl } from "../../../utils/assetUrl";
 
 function Sign() {
   const texture = useMemo(() => {
@@ -79,9 +80,9 @@ function fitLogoTexture(source: Texture) {
 
 function LogoPlaque() {
   const textures = useTexture([
-    import.meta.env.BASE_URL + "assets/school/school-logo.jpg",
-    import.meta.env.BASE_URL + "assets/laboratory/team-logo.png",
-    import.meta.env.BASE_URL + "assets/laboratory/project-logo.png",
+    assetUrl("assets/school/school-logo.jpg"),
+    assetUrl("assets/laboratory/team-logo.png"),
+    assetUrl("assets/laboratory/project-logo.png"),
   ]);
   const logos = useMemo(() => textures.map(fitLogoTexture), [textures]);
   useEffect(
