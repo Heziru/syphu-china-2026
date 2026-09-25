@@ -15,7 +15,7 @@ pages:
   script:
     - yarn build
     - cp -a dist/. public/
-    - echo '/* /index.html 200' > public/_redirects
+    - printf '/syphu-china/* /syphu-china/index.html 200\n/* /index.html 200\n' > public/_redirects
   artifacts:
     paths:
       - public

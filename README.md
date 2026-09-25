@@ -25,6 +25,42 @@ For up-to-date requirements, resources, help and guidance, visit
 
 ## Getting Started
 
+### Development and official publishing
+
+- Development repository: https://github.com/Heziru/syphu-china-2026
+- Official repository: https://gitlab.igem.org/2026/syphu-china
+- Official website: https://2026.igem.wiki/syphu-china/
+
+The local `origin` remote points to GitHub; `igem` points to the official GitLab
+repository. GitHub Pages is a preview. Publishing the official wiki requires a
+successful push to GitLab `main`, followed by a successful `pages` pipeline.
+
+```bash
+npm run build
+git push origin main
+git push igem main
+```
+
+On a new clone, add the official remote once:
+
+```bash
+git remote add igem https://gitlab.igem.org/2026/syphu-china.git
+```
+
+Authenticate Git separately from the browser, using an authorized iGEM GitLab
+account and a valid repository write credential. Keep credentials out of source
+files and remote URLs. Fetch both remotes before publishing and merge changes;
+do not force-push over another team member's work.
+
+The GitLab build uses the official `/syphu-china/` base path; the GitHub preview
+sets its own base in `.github/workflows/deploy-pages.yml`. Verify Home and a
+direct Team page refresh after the official pipeline completes. The generated
+`public/_redirects` covers both the project-prefixed and root proxy paths.
+
+Before the competition submission, migrate image assets currently in `public`
+to the team's official Uploads storage (`static.igem.wiki`) and update their
+references, as required by the wiki hosting instructions above.
+
 Before refactoring the code of this template to suit your wiki needs, please make sure you have the ability to use React
 for web development.
 
