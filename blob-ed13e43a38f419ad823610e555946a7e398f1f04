@@ -1,0 +1,539 @@
+{
+  "name": "clean-bench",
+  "parts": [
+    "support leg",
+    "rubber caster",
+    "caster fork",
+    "support leg.001",
+    "rubber caster.001",
+    "caster fork.001",
+    "lower side brace",
+    "support leg.002",
+    "rubber caster.002",
+    "caster fork.002",
+    "support leg.003",
+    "rubber caster.003",
+    "caster fork.003",
+    "lower side brace.001",
+    "stand cross member",
+    "stand cross member.001",
+    "rear cabinet wall",
+    "closed side casing",
+    "closed side casing.001",
+    "upper filter housing",
+    "filter grille recess",
+    "HEPA diffuser slat",
+    "HEPA diffuser slat.001",
+    "HEPA diffuser slat.002",
+    "HEPA diffuser slat.003",
+    "HEPA diffuser slat.004",
+    "HEPA diffuser slat.005",
+    "HEPA diffuser slat.006",
+    "HEPA diffuser slat.007",
+    "HEPA diffuser slat.008",
+    "HEPA diffuser slat.009",
+    "HEPA diffuser slat.010",
+    "HEPA diffuser slat.011",
+    "HEPA diffuser slat.012",
+    "HEPA diffuser slat.013",
+    "HEPA diffuser slat.014",
+    "HEPA diffuser slat.015",
+    "HEPA diffuser slat.016",
+    "HEPA diffuser slat.017",
+    "HEPA diffuser slat.018",
+    "HEPA diffuser slat.019",
+    "HEPA diffuser slat.020",
+    "HEPA diffuser slat.021",
+    "HEPA diffuser slat.022",
+    "HEPA diffuser slat.023",
+    "HEPA diffuser slat.024",
+    "HEPA diffuser slat.025",
+    "HEPA diffuser slat.026",
+    "worktop continuous seal",
+    "sash",
+    "sash runner",
+    "sash runner.001",
+    "sash handle",
+    "control band",
+    "display glass",
+    "control key",
+    "control key.001",
+    "control key.002",
+    "control key.003",
+    "task light",
+    "panel screw",
+    "panel screw.001",
+    "panel screw.002",
+    "panel screw.003",
+    "panel screw.004",
+    "panel screw.005",
+    "front return grille",
+    "front return grille.001",
+    "front return grille.002",
+    "front return grille.003",
+    "front return grille.004",
+    "front return grille.005",
+    "front return grille.006",
+    "front return grille.007",
+    "front return grille.008",
+    "front return grille.009",
+    "front return grille.010",
+    "front return grille.011",
+    "front return grille.012",
+    "front return grille.013",
+    "front return grille.014",
+    "front return grille.015",
+    "front return grille.016",
+    "front return grille.017",
+    "front return grille.018",
+    "front return grille.019",
+    "front return grille.020",
+    "front return grille.021",
+    "front return grille.022",
+    "front return grille.023",
+    "front return grille.024",
+    "front return grille.025",
+    "front return grille.026",
+    "front return grille.027",
+    "front return grille.028",
+    "front return grille.029",
+    "single sealed stainless chamber",
+    "continuous lower enclosure fascia",
+    "front worktop nose",
+    "leg to cabinet joint",
+    "enclosed lower side return",
+    "leg to cabinet joint.001",
+    "enclosed lower side return.001",
+    "rear diagonal structural brace",
+    "rear complementary brace",
+    "service socket",
+    "rear service inlet"
+  ],
+  "validation": [
+    {
+      "part": "support leg",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "rubber caster",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "caster fork",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "support leg.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "rubber caster.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "caster fork.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "lower side brace",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "support leg.002",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "rubber caster.002",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "caster fork.002",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "support leg.003",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "rubber caster.003",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "caster fork.003",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "lower side brace.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "stand cross member",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "stand cross member.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "rear cabinet wall",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "closed side casing",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "closed side casing.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "upper filter housing",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "filter grille recess",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.002",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.003",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.004",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.005",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.006",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.007",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.008",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.009",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.010",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.011",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.012",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.013",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.014",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.015",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.016",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.017",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.018",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.019",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.020",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.021",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.022",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.023",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.024",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.025",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "HEPA diffuser slat.026",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "worktop continuous seal",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "sash",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "sash runner",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "sash runner.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "sash handle",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "control band",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "display glass",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "control key",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "control key.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "control key.002",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "control key.003",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "task light",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "panel screw",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "panel screw.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "panel screw.002",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "panel screw.003",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "panel screw.004",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "panel screw.005",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.002",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.003",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.004",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.005",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.006",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.007",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.008",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.009",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.010",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.011",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.012",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.013",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.014",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.015",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.016",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.017",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.018",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.019",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.020",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.021",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.022",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.023",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.024",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.025",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.026",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.027",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.028",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front return grille.029",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "single sealed stainless chamber",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "continuous lower enclosure fascia",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "front worktop nose",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "leg to cabinet joint",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "enclosed lower side return",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "leg to cabinet joint.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "enclosed lower side return.001",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "service socket",
+      "nonmanifold_edges": 0
+    },
+    {
+      "part": "rear service inlet",
+      "nonmanifold_edges": 0
+    }
+  ],
+  "views": [
+    "outputs/blender/clean-bench-front.png",
+    "outputs/blender/clean-bench-three-quarter.png",
+    "outputs/blender/clean-bench-chamber-junction.png"
+  ]
+}

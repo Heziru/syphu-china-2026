@@ -1,0 +1,111 @@
+{
+  "preview": {
+    "scale": 0.23,
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "spin": -0.3999999999967145,
+    "visible": true,
+    "vertices": 6305,
+    "regions": 1
+  },
+  "htmlFallback": {
+    "scale": 0.23,
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "spin": -0.39999995733516247,
+    "visible": true,
+    "vertices": 6305,
+    "regions": 1
+  },
+  "truncatedFallback": {
+    "scale": 0.23,
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "spin": -0.3999993883408976,
+    "visible": true,
+    "vertices": 6305,
+    "regions": 1
+  },
+  "rawGzip": {
+    "scale": 0.23,
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "spin": -0.39998654137955425,
+    "visible": true,
+    "vertices": 191973,
+    "regions": 23
+  },
+  "loaded": {
+    "scale": 0.23,
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "spin": -0.3999995717208918,
+    "visible": true,
+    "vertices": 191973,
+    "regions": 23
+  },
+  "resources": [
+    {
+      "url": "earth-manifest.json",
+      "duration": 5.400000002235174,
+      "transfer": 300
+    },
+    {
+      "url": "earth-geometry.bin.gz",
+      "duration": 189.30000000074506,
+      "transfer": 2050369
+    }
+  ],
+  "held": {
+    "scale": 1.5124917203031036,
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "spin": -2.2352562238557874,
+    "visible": true,
+    "vertices": 191973,
+    "regions": 23
+  },
+  "baseline": {
+    "scale": 1.25,
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "spin": -2.9281940299589837,
+    "visible": true,
+    "vertices": 191973,
+    "regions": 23
+  },
+  "released": {
+    "scale": 1.2515353386803216,
+    "rotation": [
+      0,
+      0,
+      0
+    ],
+    "spin": -2.915415479164103,
+    "visible": true,
+    "vertices": 191973,
+    "regions": 23
+  },
+  "errors": []
+}

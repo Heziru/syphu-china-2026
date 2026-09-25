@@ -1,0 +1,32 @@
+.nc-home--splash-only {
+  background: #000;
+  overflow: hidden;
+}
+
+.nocturne-gate {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px);
+  background: #000;
+  cursor: none;
+}
+
+.nocturne-gate__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nocturne-gate {
+    cursor: default;
+  }
+
+  .nocturne-gate__canvas {
+    cursor: default;
+  }
+}

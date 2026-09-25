@@ -1,0 +1,92 @@
+{
+  "advisor-1": {
+    "photo": "advisor-lirong",
+    "focal": [48, 35],
+    "bio": "A member of the 2025 Wet Lab team, Lirong returns as a Wet Lab advisor. Outside the lab, his curiosity turns to natural history.",
+    "interests": "Natural history.",
+    "previousRole": "Wet Lab member",
+    "previousYear": "2025",
+    "sourceLinks": [
+      {
+        "label": "2025 team profile",
+        "url": "https://2025.igem.wiki/syphu-china/members"
+      }
+    ],
+    "imageCredit": "Portrait: SYPHU-China 2025 · CC BY 4.0"
+  },
+  "advisor-2": {
+    "photo": "advisor-yixin",
+    "focal": [50, 37],
+    "bio": "Yixin was part of the SYPHU-China Wet Lab team in 2025. Alongside laboratory work, Yixin enjoys handicrafts and creative making.",
+    "interests": "Handicrafts and creative making.",
+    "previousRole": "Wet Lab member",
+    "previousYear": "2025",
+    "sourceLinks": [
+      {
+        "label": "2025 team profile",
+        "url": "https://2025.igem.wiki/syphu-china/members"
+      }
+    ],
+    "imageCredit": "Portrait: SYPHU-China 2025 · CC BY 4.0"
+  },
+  "advisor-3": {
+    "photo": "advisor-haibo",
+    "photoKind": "avatar",
+    "focal": [50, 50],
+    "bio": "Haibo served as Human Practices Leader for SYPHU-China in 2025 and returns as a Dry Lab advisor in the 2026 team.",
+    "previousRole": "Human Practices Leader",
+    "previousYear": "2025",
+    "sourceLinks": [
+      {
+        "label": "2025 team profile",
+        "url": "https://2025.igem.wiki/syphu-china/members"
+      }
+    ],
+    "imageCredit": "Profile avatar used on the SYPHU-China 2025 Wiki"
+  },
+  "pi": {
+    "name": "Xianpu Ni",
+    "photo": "pi-xianpu-ni",
+    "focal": [50, 42],
+    "credential": "Professor · Associate Dean",
+    "bio": "Professor Xianpu Ni is Associate Dean of the School of Life Sciences and Biopharmaceutics at Shenyang Pharmaceutical University. His research connects microbial drug production, biosynthetic pathways and the synthetic biology of living medicines.",
+    "school": "School of Life Sciences and Biopharmaceutics · Shenyang Pharmaceutical University",
+    "researchAreas": [
+      "Metabolic engineering",
+      "Biosynthetic pathways",
+      "Living biotherapeutics"
+    ],
+    "milestones": [
+      {
+        "year": "2011",
+        "title": "A foundation in pharmaceutical science",
+        "text": "Completed his PhD at Shenyang Pharmaceutical University and joined the university faculty."
+      },
+      {
+        "year": "2016–17",
+        "title": "An international perspective",
+        "text": "Visiting scholar at the University of Freiburg, supported by the China Scholarship Council."
+      },
+      {
+        "year": "Teaching",
+        "title": "Knowledge, passed on",
+        "text": "Teaches Biotechnology Pharmaceuticals and Synthetic Biology, and has contributed to six textbooks."
+      }
+    ],
+    "sourceLinks": [
+      {
+        "label": "University profile",
+        "url": "https://sls.syphu.edu.cn/info/1111/12513.htm"
+      },
+      {
+        "label": "Research profile",
+        "url": "https://grs.syphu.edu.cn/info/1103/9443.htm"
+      },
+      {
+        "label": "2025 team profile",
+        "url": "https://2025.igem.wiki/syphu-china/members"
+      }
+    ],
+    "imageCredit": "Portrait: SYPHU-China 2025 · CC BY 4.0"
+  }
+}

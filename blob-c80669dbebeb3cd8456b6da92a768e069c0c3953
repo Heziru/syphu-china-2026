@@ -1,0 +1,63 @@
+/** 实验室资源清单。不引用仓库中不存在的 GLB。 */
+export const LAB_ASSET_MANIFEST = {
+  room: {
+    kind: "placeholder" as const,
+    note: "房间壳仍为灰模；仅中央实验台进入程序化精修。",
+  },
+  objects: {
+    computer: {
+      kind: "procedural" as const,
+      note: "Dry Lab digital workstation: wood desk platform, monitor + laptop, abstract screen glyphs, headphones.",
+    },
+    microscope: {
+      kind: "procedural" as const,
+      note: "Reference-matched procedural compound microscope: horseshoe base, C-arm, monocular tube, turret, stage, coaxial knobs.",
+    },
+    researcher: {
+      kind: "procedural" as const,
+      note: "Stylized lab researcher: open warm-white coat, bun hair, clipboard; Team station.",
+    },
+    bookshelf: { kind: "placeholder" as const, note: "灰模对照，尚未精修。" },
+    device: {
+      kind: "procedural" as const,
+      note: "Desktop bioreactor: transparent culture chamber, soft green medium, headplate + drive motor, sparse tubing.",
+    },
+  },
+};
+
+/** 后续正式资产交付清单（当前仓库无 Blender / GLB）。 */
+export const MODEL_HANDOFF = [
+  {
+    id: "microscope",
+    format: "GLB",
+    style: "cartoon hard-surface",
+    triangles: "<12k",
+    origin: "底座中心，Y-up，单位米",
+    materials: "白壳 / 深灰结构 / 金属旋钮 / 暖色底灯",
+    license: "需可放入 iGEM wiki 的授权，避免禁止再分发的资产",
+  },
+  {
+    id: "researcher",
+    format: "GLB",
+    style: "stylized character",
+    triangles: "<15k",
+    notes: "白大褂、头发、手臂、自然站姿；与实验室卡通硬表面统一",
+  },
+  {
+    id: "workstation",
+    format: "GLB or procedural",
+    notes: "显示器支架、键盘、鼠标、主机、少量线缆",
+  },
+  {
+    id: "device",
+    format: "GLB",
+    notes: "可识别的实验装置结构，避免圆柱+球体",
+  },
+] as const;
+
+export function resolvePublicAsset(path: string) {
+  const base = import.meta.env.BASE_URL.endsWith("/")
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
+  return `${base}${path.replace(/^\//, "")}`;
+}

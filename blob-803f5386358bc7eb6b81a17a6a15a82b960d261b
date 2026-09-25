@@ -1,0 +1,22 @@
+{
+  "name": "digestive-system",
+  "parts": [
+    "stomach fundus body antrum",
+    "pyloric junction",
+    "duodenum",
+    "cecum ascending transverse descending sigmoid rectum",
+    "anterior taenia coli",
+    "rounded cecal pouch",
+    "vermiform appendix",
+    "continuous jejunum and ileum",
+    "subtle serosal vessel",
+    "subtle serosal vessel.001",
+    "subtle serosal vessel.002"
+  ],
+  "meshes": 11,
+  "triangles": 36768,
+  "views": [
+    "outputs/blender/digestive-system-front.png",
+    "outputs/blender/digestive-system-three-quarter.png"
+  ]
+}

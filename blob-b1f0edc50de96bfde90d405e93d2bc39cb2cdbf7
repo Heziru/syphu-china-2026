@@ -1,0 +1,33 @@
+---
+description: 实验室 3D 物件按参考图程序化精修，禁止圆柱占位，构建通过不等于视觉验收
+globs: src/contents/home/laboratory/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# 实验室程序化物件
+
+精修实验台设备时，一次只做一件，先显微镜级验收，再套用到下一件。
+
+## img2threejs
+
+先在技能目录确认 `img2threejs` 已安装并读 `SKILL.md`。未安装就明确说，不要假装调用 `forge/next.py`。
+
+## 建模
+
+- 独立 Three.js 工厂模块接入现有 R3F Canvas，禁止第二套 renderer / 相机。
+- 按参考图做底座、支架、活动件、材质分件；禁止用几根圆柱/方块代表整机。
+- 保留现有 `id`、hitbox、点击导航和 `def.camera` 聚焦。
+
+```tsx
+// ❌ BAD
+<cylinderGeometry args={[0.08, 0.08, 0.4]} />
+
+// ✅ GOOD
+<primitive object={createMicroscopeModel().group} />
+```
+
+## 验收
+
+- 用 `?labReview=<id>` 按参考图同角度并排对照，并检查侧面与背面。
+- 报告三角形数、材质数、网格数、FPS、draw calls。
+- `npm run build` 通过不等于视觉验收通过；轮廓、比例或分件不对就继续改，不要开始下一件设备。

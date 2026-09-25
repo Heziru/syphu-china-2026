@@ -1,0 +1,94 @@
+{
+  "description": "True first-page renders. Missing previews are not generated.",
+  "papers": [
+    {
+      "id": "rubens-2016",
+      "doi": "10.1038/ncomms11658",
+      "source": "Existing project PDF: outputs/literature/rubens-2016.pdf",
+      "check": "Synthetic mixed-signal computation",
+      "page": 1,
+      "pdf_sha256": "32073ba13f56bfee3040847c54292049188a2d1b577aec5d761a1bb87b98f4ad",
+      "preview": "rubens-2016.webp",
+      "small_preview": "rubens-2016-small.webp",
+      "size": [
+        1200,
+        1576
+      ]
+    },
+    {
+      "id": "wang-2021",
+      "doi": "10.1038/s42003-021-02612-1",
+      "source": "Existing project PDF: outputs/literature/wang-2021.pdf",
+      "check": "Active maintenance of proton motive force",
+      "page": 1,
+      "pdf_sha256": "42e2b3c056b35cf586f4c5be3ba6d625c2711c9f35bc6e432f67749f69da827e",
+      "preview": "wang-2021.webp",
+      "small_preview": "wang-2021-small.webp",
+      "size": [
+        1200,
+        1576
+      ]
+    },
+    {
+      "id": "teng-2022",
+      "doi": "10.3389/fmicb.2022.819336",
+      "source": "Existing project PDF: outputs/literature/teng-2022.pdf",
+      "check": "Nissle",
+      "page": 1,
+      "pdf_sha256": "b118fa3f45033b956a96460b4da9d0e142826a4723c43089c1bdfe185d84d828",
+      "preview": "teng-2022.webp",
+      "small_preview": "teng-2022-small.webp",
+      "size": [
+        1200,
+        1571
+      ]
+    },
+    {
+      "id": "inda-2023",
+      "doi": "10.1038/s41586-023-06369-x",
+      "source": "https://par.nsf.gov/servlets/purl/10438292",
+      "check": "capsule for detecting labile",
+      "version": "NSF public-access archived article PDF.",
+      "page": 1,
+      "pdf_sha256": "7be9df125c58914b5d9f8f414a3babbc3283b981863897653af485dd6447633f",
+      "preview": "inda-2023.webp",
+      "small_preview": "inda-2023-small.webp",
+      "size": [
+        1200,
+        1593
+      ]
+    },
+    {
+      "id": "andersen-1998",
+      "doi": "10.1128/AEM.64.6.2240-2246.1998",
+      "source": "https://europepmc.org/articles/PMC106306?pdf=render",
+      "check": "New Unstable Variants",
+      "page": 1,
+      "pdf_sha256": "d9dac18068636b5843e0202ca67cf6291e13b26b059a68a1558f55dd211299b5",
+      "preview": "andersen-1998.webp",
+      "small_preview": "andersen-1998-small.webp",
+      "size": [
+        1200,
+        1552
+      ]
+    },
+    {
+      "id": "hoffmann-2024",
+      "doi": "10.1038/s41467-024-44988-8",
+      "source": "https://www.nature.com/articles/s41467-024-44988-8.pdf",
+      "check": "Engineering stringent genetic",
+      "page": 1,
+      "pdf_sha256": "96fcbf6808238f21553d2e14dd5f907b3c6857dabc144ad39abf200323bf74c5",
+      "preview": "hoffmann-2024.webp",
+      "small_preview": "hoffmann-2024-small.webp",
+      "size": [
+        1200,
+        1593
+      ]
+    }
+  ],
+  "without_preview": [
+    "begley-2005",
+    "simmonds-1992"
+  ]
+}

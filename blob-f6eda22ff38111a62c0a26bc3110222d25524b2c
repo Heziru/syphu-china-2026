@@ -1,0 +1,703 @@
+/* Home — chaos opening + dark story sections */
+
+.nc-home {
+  --nc-bg: #0b0f19;
+  --nc-bg-deep: #070a13;
+  --nc-card: #141b2d;
+  --nc-card-elevated: #1a2238;
+  --nc-border: rgba(255, 255, 255, 0.08);
+  --nc-text: #f1f5f9;
+  --nc-muted: #94a3b8;
+  --nc-accent: #6366f1;
+  --nc-accent-2: #a855f7;
+  --nc-accent-glow: rgba(99, 102, 241, 0.25);
+  --nc-success: #34d399;
+  --nc-danger: #f87171;
+  --nc-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+  --nc-display: "Bahnschrift", "Segoe UI", "PingFang SC", sans-serif;
+
+  color: var(--nc-text);
+  font-family: var(--nc-font);
+  background: var(--nc-bg);
+  overflow-x: clip;
+}
+
+.nc-home__story {
+  position: relative;
+  z-index: 1;
+}
+
+/* —— Chaos opening: Lorenz + Möbius + particles —— */
+.chaos-splash {
+  position: relative;
+  min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px);
+  overflow: hidden;
+  background: #03050c;
+}
+
+.chaos-splash__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.chaos-splash__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 45%, transparent 35%, rgba(3, 5, 12, 0.75) 100%),
+    linear-gradient(180deg, rgba(3, 5, 12, 0.35) 0%, transparent 28%, transparent 72%, rgba(3, 5, 12, 0.92) 100%);
+}
+
+.chaos-splash__hud {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(3.5rem, 12vh, 6rem);
+  z-index: 3;
+  transform: translateX(-50%) translateY(18px);
+  width: min(92vw, 720px);
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 1.1s ease,
+    transform 1.1s ease;
+}
+
+.chaos-splash__hud.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.chaos-splash__hud .chaos-splash__enter {
+  pointer-events: auto;
+}
+
+.chaos-splash__kicker {
+  margin: 0 0 0.65rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(165, 180, 252, 0.72);
+}
+
+.chaos-splash__title {
+  margin: 0;
+  font-family: var(--nc-display);
+  font-size: clamp(2.6rem, 9vw, 5.2rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #f8fafc;
+  text-shadow: 0 0 40px rgba(129, 140, 248, 0.35);
+}
+
+.chaos-splash__zh {
+  margin: 0.85rem 0 0;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  letter-spacing: 0.14em;
+  color: rgba(199, 210, 254, 0.88);
+}
+
+.chaos-splash__tag {
+  margin: 0.55rem 0 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.65);
+}
+
+.chaos-splash__enter {
+  margin-top: 1.35rem;
+  padding: 0.7rem 1.6rem;
+  border: 1px solid rgba(129, 140, 248, 0.45);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  color: #e0e7ff;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.chaos-splash__enter:hover {
+  border-color: rgba(196, 181, 253, 0.85);
+  box-shadow: 0 0 28px rgba(99, 102, 241, 0.35);
+  transform: translateY(-2px);
+}
+
+.chaos-splash__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 1.25rem;
+  z-index: 3;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.chaos-splash__scroll-line {
+  display: block;
+  width: 1px;
+  height: 100%;
+  margin-inline: auto;
+  background: linear-gradient(180deg, transparent, rgba(165, 180, 252, 0.85));
+  animation: chaos-scroll-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes chaos-scroll-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scaleY(0.65);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* Legacy nc-splash removed — opening uses chaos-splash only */
+
+/* —— Scroll scenes —— */
+.nc-scene {
+  position: relative;
+}
+
+.nc-scene--void {
+  background: var(--nc-bg-deep);
+  color: var(--nc-text);
+}
+
+.nc-scene--panel {
+  background: var(--nc-bg);
+  color: var(--nc-text);
+}
+
+.nc-scene--deep {
+  background: linear-gradient(180deg, var(--nc-bg) 0%, var(--nc-bg-deep) 100%);
+  color: var(--nc-text);
+}
+
+.nc-scene--pin {
+  height: calc(100vh * (1 + var(--moto-travel, 1.35)));
+  height: calc(100dvh * (1 + var(--moto-travel, 1.35)));
+}
+
+.nc-scene--pin .nc-scene__stage {
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px);
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  will-change: opacity;
+}
+
+.nc-scene--static .nc-scene__stage {
+  min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px);
+  display: grid;
+  align-items: center;
+  padding-block: clamp(3rem, 8vh, 5rem);
+}
+
+.nc-scene__stage > * {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.moto-scene-title {
+  margin: 0 0 0.75rem;
+  max-width: 16ch;
+  font-family: var(--nc-display);
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--nc-text);
+  text-wrap: balance;
+}
+
+.moto-scene-title--on-ink {
+  color: var(--nc-text);
+}
+
+.moto-scene-sub {
+  margin: 0;
+  max-width: 36ch;
+  font-size: clamp(1rem, 1.35vw, 1.15rem);
+  line-height: 1.55;
+  color: var(--nc-muted);
+}
+
+.moto-scene-zh {
+  margin: 0 0 0.65rem;
+  font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+  letter-spacing: 0.06em;
+  color: #a5b4fc;
+}
+
+.moto-scene-zh--secondary {
+  margin-top: 0.85rem;
+  color: var(--nc-muted);
+  max-width: 36ch;
+  line-height: 1.55;
+}
+
+.moto-scene-zh--on-ink {
+  color: #c7d2fe;
+}
+
+/* Scene panels — shared card shell */
+.moto-balance,
+.moto-disease,
+.moto-turn,
+.moto-mech,
+.moto-recovery {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 16px;
+  border: 1px solid var(--nc-border);
+  background: var(--nc-card);
+  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.45);
+}
+
+.moto-balance,
+.moto-disease,
+.moto-turn,
+.moto-recovery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.moto-mech {
+  display: grid;
+  gap: 1.25rem;
+}
+
+/* Balance */
+.moto-balance__visual {
+  position: relative;
+  min-height: 200px;
+  display: grid;
+  place-items: center;
+}
+
+.moto-balance__scale {
+  width: min(100%, 300px);
+  height: auto;
+  filter: brightness(1.15);
+}
+
+.moto-balance__taiji {
+  position: absolute;
+  width: min(40%, 130px);
+  right: 6%;
+  bottom: 0;
+}
+
+/* Disease */
+.moto-disease__figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--nc-border);
+  border-radius: 12px;
+}
+
+.moto-disease__timeline {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.moto-disease__step {
+  display: grid;
+  gap: 0.15rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid rgba(148, 163, 184, 0.25);
+}
+
+.moto-disease__step.is-active {
+  border-left-color: var(--nc-accent);
+}
+
+.moto-disease__year {
+  font-family: var(--nc-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #c7d2fe;
+}
+
+.moto-disease__note {
+  font-size: 0.9rem;
+  color: var(--nc-muted);
+}
+
+.moto-disease__failed {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--nc-border);
+}
+
+.moto-disease__failed-zh {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  color: var(--nc-danger);
+}
+
+.moto-disease__failed-title {
+  margin: 0 0 0.5rem;
+  font-family: var(--nc-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+}
+
+.moto-disease__failed-body {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--nc-muted);
+}
+
+.moto-disease__treatments {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.moto-disease__treatments li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: #fecaca;
+}
+
+.moto-disease__x {
+  color: var(--nc-danger);
+  font-weight: 700;
+}
+
+/* Turning point */
+.moto-turn__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.moto-turn__milestones {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.moto-turn__milestones li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.88rem;
+  color: var(--nc-muted);
+  opacity: 0.45;
+}
+
+.moto-turn__milestones li.is-active {
+  opacity: 1;
+  color: var(--nc-text);
+}
+
+/* Mechanism */
+.moto-mech__gene {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem 1.5rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.moto-mech__gene-svg {
+  width: min(100%, 260px);
+  height: auto;
+}
+
+.moto-mech__gene-title {
+  margin: 0 0 0.35rem;
+  font-family: var(--nc-display);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+}
+
+.moto-mech__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--nc-border);
+  border-radius: 12px;
+}
+
+.moto-mech__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.moto-mech__steps li p {
+  margin: 0.25rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--nc-muted);
+}
+
+.moto-mech__step-label {
+  font-family: var(--nc-display);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  letter-spacing: 0.05em;
+  color: var(--nc-text);
+}
+
+.moto-mech__step-zh {
+  margin-left: 0.5rem;
+  font-size: 0.82rem;
+  color: #a5b4fc;
+}
+
+/* Recovery */
+.moto-recovery__visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.moto-recovery__svg {
+  width: min(100%, 260px);
+  height: auto;
+}
+
+.moto-recovery__figure {
+  position: absolute;
+  width: 72px;
+  bottom: -6px;
+  right: 10%;
+}
+
+/* Explore */
+.nc-explore .nc-scene__stage {
+  width: min(900px, calc(100% - 2.5rem));
+  margin-inline: auto;
+  position: relative;
+}
+
+.nc-explore__zh {
+  margin: 0 0 2rem;
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  color: var(--nc-muted);
+  max-width: 32ch;
+}
+
+.nc-explore__nav {
+  display: grid;
+}
+
+.nc-explore__link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 1rem;
+  align-items: baseline;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid var(--nc-border);
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.42;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.nc-explore__link:first-child {
+  border-top: 1px solid var(--nc-border);
+}
+
+.nc-explore__link:hover,
+.nc-explore__link:focus-visible,
+.nc-explore__link.is-active {
+  opacity: 1;
+  transform: translateX(6px);
+}
+
+.nc-explore__link:focus-visible {
+  outline: 2px solid var(--nc-accent);
+  outline-offset: 4px;
+}
+
+.nc-explore__label {
+  font-family: var(--nc-display);
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  line-height: 1.1;
+  color: var(--nc-text);
+}
+
+.nc-explore__blurb {
+  grid-column: 1;
+  font-size: 0.92rem;
+  color: var(--nc-muted);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    opacity 0.3s ease,
+    max-height 0.3s ease;
+}
+
+.nc-explore__link:hover .nc-explore__blurb,
+.nc-explore__link:focus-visible .nc-explore__blurb,
+.nc-explore__link.is-active .nc-explore__blurb {
+  opacity: 1;
+  max-height: 3rem;
+}
+
+.nc-explore__arrow {
+  font-size: 1.3rem;
+  color: #818cf8;
+}
+
+.nc-explore__symbol {
+  position: absolute;
+  right: 0;
+  top: 28%;
+  opacity: 0;
+  transform: translateX(12px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+  pointer-events: none;
+}
+
+.nc-explore__symbol.is-visible {
+  opacity: 0.85;
+  transform: none;
+}
+
+/* Logo crop (Explore symbol) */
+.mototype-symbol-crop {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 971 / 870;
+}
+
+.mototype-symbol-crop img {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.mototype-symbol-crop--mark {
+  width: min(28vw, 200px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .nc-scene--pin {
+    height: auto;
+  }
+
+  .nc-scene--pin .nc-scene__stage {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: calc(100vh - 56px);
+    opacity: 1 !important;
+    padding-block: clamp(3rem, 8vh, 5rem);
+  }
+
+  .moto-balance,
+  .moto-disease,
+  .moto-turn,
+  .moto-recovery {
+    grid-template-columns: 1fr;
+  }
+
+  .moto-mech__gene {
+    grid-template-columns: 1fr;
+  }
+
+  .nc-explore__symbol {
+    display: none;
+  }
+
+  .nc-explore__link {
+    opacity: 1;
+  }
+
+  .nc-explore__blurb {
+    opacity: 1;
+    max-height: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chaos-splash__scroll-line {
+    animation: none;
+  }
+
+  .nc-explore__link,
+  .nc-explore__blurb,
+  .nc-explore__symbol {
+    transition: none;
+  }
+
+  .nc-scene--pin {
+    height: auto;
+  }
+
+  .nc-scene--pin .nc-scene__stage {
+    position: relative;
+    height: auto;
+    min-height: calc(100vh - 56px);
+    opacity: 1 !important;
+  }
+}
+
+.home-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

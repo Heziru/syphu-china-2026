@@ -1,0 +1,348 @@
+/* Port of Nocturne-Memory-Core dashboard.html hero + archive-stars (dark theme) */
+
+.nocturne-archive {
+  --bg: #030201;
+  --surface: rgba(48, 31, 20, 0.34);
+  --surface-soft: rgba(255, 224, 186, 0.045);
+  --line: rgba(225, 164, 97, 0.12);
+  --line-soft: rgba(239, 224, 196, 0.075);
+  --ink: rgba(239, 224, 196, 0.94);
+  --ink-soft: rgba(239, 224, 196, 0.76);
+  --mute: rgba(198, 170, 135, 0.52);
+  --accent: #c47a38;
+  --accent-deep: #e8954f;
+  --font-display: Georgia, "Palatino Linotype", "Book Antiqua", serif;
+  --font-body: Inter, "PingFang SC", system-ui, sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", monospace;
+  --fs-micro: 0.62rem;
+  --fs-hero: clamp(4.8rem, 10vw, 10.5rem);
+  --page-pad: clamp(1.25rem, 4.2vw, 5rem);
+  --hero-pad-bottom: clamp(4rem, 8vh, 7rem);
+
+  position: relative;
+  min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px);
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 76% 18%, rgba(112, 64, 34, 0.24), transparent 30%),
+    radial-gradient(ellipse at 14% 22%, rgba(54, 91, 132, 0.1), transparent 26%),
+    radial-gradient(ellipse at 12% 72%, rgba(61, 35, 20, 0.18), transparent 34%),
+    linear-gradient(145deg, rgba(14, 8, 4, 0.22), transparent 56%),
+    var(--bg);
+  font: 300 16px/1.65 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.nocturne-archive__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.17'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+.nocturne-archive__cosmic {
+  position: absolute;
+  inset: -12%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(73, 112, 155, 0.13), transparent 24%),
+    radial-gradient(circle at 72% 68%, rgba(178, 100, 48, 0.11), transparent 27%);
+  filter: blur(42px);
+  transform-origin: 45% 50%;
+  animation: nocturne-cosmic-breath 16s ease-in-out infinite alternate;
+}
+
+.nocturne-archive__stars {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  opacity: 1;
+  mix-blend-mode: screen;
+}
+
+.nocturne-archive__topbar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem var(--page-pad);
+  pointer-events: none;
+  animation: nocturne-reveal-down 1s 0.08s both;
+}
+
+.nocturne-archive__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  pointer-events: auto;
+}
+
+.nocturne-archive__brand-mark {
+  width: 14px;
+  height: 14px;
+  color: var(--accent-deep);
+}
+
+.nocturne-archive__brand-name,
+.nocturne-archive__brand-sep,
+.nocturne-archive__stats-line {
+  font: 400 var(--fs-micro) / 1 var(--font-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.nocturne-archive__brand-sep {
+  color: var(--accent);
+}
+
+.nocturne-archive__stats-line {
+  color: var(--mute);
+}
+
+.nocturne-archive__hero {
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  padding: clamp(8rem, 15vh, 12rem) var(--page-pad) var(--hero-pad-bottom);
+}
+
+.nocturne-archive__hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 2, 1, 0.98) 0%,
+      rgba(3, 2, 1, 0.77) 45%,
+      rgba(3, 2, 1, 0.14) 77%,
+      rgba(3, 2, 1, 0.56) 100%
+    ),
+    radial-gradient(circle at 77% 42%, rgba(154, 82, 37, 0.1), transparent 30%);
+}
+
+.nocturne-archive__hero::after {
+  content: "";
+  position: absolute;
+  left: var(--page-pad);
+  right: var(--page-pad);
+  bottom: 1.4rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--line), transparent 74%);
+}
+
+.nocturne-archive__hero-copy {
+  position: relative;
+  z-index: 4;
+  width: min(82vw, 1100px);
+}
+
+.nocturne-archive__kicker {
+  margin-bottom: clamp(1.4rem, 3vh, 2.7rem);
+  color: var(--ink-soft);
+  font: 400 var(--fs-micro) / 1.4 var(--font-mono);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  animation: nocturne-reveal-up 1s 0.18s both;
+}
+
+.nocturne-archive__title {
+  max-width: 1050px;
+  margin: 0;
+  font: 300 var(--fs-hero) / 0.78 var(--font-display);
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  text-wrap: balance;
+  animation: nocturne-title-in 1.25s 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform;
+}
+
+.nocturne-archive__title em {
+  display: block;
+  margin-left: clamp(1.5rem, 10vw, 10rem);
+  font-style: normal;
+  font-weight: 300;
+}
+
+.nocturne-archive__subtitle {
+  width: min(28rem, 72vw);
+  margin: clamp(2.4rem, 5vh, 4.5rem) 0 0 clamp(0rem, 16vw, 13rem);
+  color: var(--ink-soft);
+  font-size: clamp(0.82rem, 1.1vw, 1rem);
+  letter-spacing: 0.02em;
+  animation: nocturne-reveal-up 1s 0.65s both;
+}
+
+.nocturne-archive__ledger {
+  margin-top: 1.7rem;
+  margin-left: clamp(0rem, 16vw, 13rem);
+  color: var(--mute);
+  font: 300 var(--fs-micro) / 1.5 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  animation: nocturne-reveal-up 1s 0.78s both;
+}
+
+.nocturne-archive__scroll-cue {
+  position: absolute;
+  z-index: 6;
+  right: var(--page-pad);
+  bottom: var(--hero-pad-bottom);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mute);
+  font: 300 var(--fs-micro) / 1 var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  animation: nocturne-reveal-up 1s 1s both;
+}
+
+.nocturne-archive__scroll-cue::after {
+  content: "";
+  width: 48px;
+  height: 1px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: nocturne-cue-line 2.8s 1.8s ease-in-out infinite;
+}
+
+.nocturne-archive__scroll-cue:hover {
+  color: var(--ink-soft);
+}
+
+@keyframes nocturne-reveal-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes nocturne-reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes nocturne-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+    filter: blur(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes nocturne-cue-line {
+  0%,
+  100% {
+    transform: scaleX(0.25);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 0.9;
+  }
+}
+
+@keyframes nocturne-cosmic-breath {
+  from {
+    opacity: 0.58;
+    transform: scale(0.98) translate3d(-0.5%, 0.5%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.045) translate3d(0.8%, -0.6%, 0);
+  }
+}
+
+@media (max-width: 900px) {
+  .nocturne-archive__hero {
+    align-items: center;
+    padding-top: 8rem;
+  }
+
+  .nocturne-archive__title {
+    line-height: 0.78;
+  }
+
+  .nocturne-archive__title em {
+    margin-left: 0;
+  }
+
+  .nocturne-archive__subtitle,
+  .nocturne-archive__ledger {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .nocturne-archive__hero {
+    min-height: 92svh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nocturne-archive__cosmic {
+    animation: none;
+  }
+
+  .nocturne-archive__title {
+    transform: none !important;
+  }
+
+  .nocturne-archive__topbar,
+  .nocturne-archive__kicker,
+  .nocturne-archive__title,
+  .nocturne-archive__subtitle,
+  .nocturne-archive__ledger,
+  .nocturne-archive__scroll-cue {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .nocturne-archive__scroll-cue::after {
+    animation: none;
+    opacity: 0.9;
+    transform: scaleX(1);
+  }
+}

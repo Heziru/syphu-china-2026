@@ -1,0 +1,183 @@
+.cosmic-journey {
+  position: relative;
+  height: 720svh;
+  color: #334f58;
+  background: #f3f2e9;
+}
+.cosmic-journey__sticky {
+  --warmth: 0;
+  --intro-opacity: 1;
+  position: sticky;
+  top: 56px;
+  height: calc(100dvh - 56px);
+  overflow: hidden;
+  isolation: isolate;
+  background: #f3f2e9;
+}
+.cosmic-journey__art {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: var(--intro-opacity);
+  background: linear-gradient(155deg, #f6f2e9 5%, #e5eded 70%, #e9eee2);
+}
+.cosmic-journey__art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #f3f2e9;
+  opacity: var(--warmth);
+}
+.cosmic-journey__space {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.cosmic-journey__paper {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23818c87' filter='url(%23grain)' opacity='.7' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: multiply;
+}
+.cosmic-journey__copy {
+  position: absolute;
+  z-index: 4;
+  top: 7%;
+  left: 6%;
+  animation: journey-copy-in 300ms ease both;
+}
+.cosmic-journey__copy h1 {
+  font:
+    500 clamp(18px, 2vw, 25px)/1.2 Arial,
+    sans-serif;
+  letter-spacing: -0.02em;
+  color: #315c62;
+  margin: 0;
+}
+.cosmic-journey__campus {
+  position: absolute;
+  z-index: 3;
+  width: min(80%, 1300px);
+  left: 50%;
+  top: 54%;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.cosmic-journey__campus img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cosmic-journey__footer {
+  position: absolute;
+  z-index: 5;
+  bottom: max(1.6rem, env(safe-area-inset-bottom));
+  left: 5%;
+  right: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font:
+    500 12px/1.4 Arial,
+    sans-serif;
+}
+.cosmic-journey__footer button {
+  color: inherit;
+  font: inherit;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  padding: 0.65rem 0;
+  cursor: pointer;
+}
+.cosmic-journey__footer button:hover {
+  color: #132e36;
+}
+.cosmic-journey__footer button:focus-visible,
+.journey-replay:focus-visible {
+  outline: 2px solid #315d66;
+  outline-offset: 6px;
+}
+.cosmic-journey__lab {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.cosmic-journey__sticky.is-in-lab {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+.cosmic-journey__sticky.is-in-lab .cosmic-journey__art {
+  visibility: hidden;
+}
+.cosmic-journey__sticky.is-in-lab .cosmic-journey__lab {
+  pointer-events: auto;
+}
+.cosmic-journey:not(.cosmic-journey--static)
+  .cosmic-journey__sticky:not(.is-in-lab)
+  .lab-hud {
+  visibility: hidden;
+}
+.journey-replay {
+  position: absolute;
+  top: 15px;
+  left: 19px;
+  z-index: 4;
+  background: none;
+  border: 0;
+  color: #52766f;
+  font-size: 20px;
+  cursor: pointer;
+}
+@keyframes journey-copy-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 700px) {
+  .cosmic-journey {
+    height: 660svh;
+  }
+  .cosmic-journey__footer {
+    font-size: 11px;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  .cosmic-journey__campus {
+    width: 96%;
+  }
+}
+.cosmic-journey--static {
+  height: auto;
+}
+.cosmic-journey--static .cosmic-journey__sticky {
+  --warmth: 1;
+  position: relative;
+  top: auto;
+  height: auto;
+}
+.cosmic-journey--static .cosmic-journey__art {
+  position: relative;
+  height: min(800px, 90svh);
+}
+.cosmic-journey--static .cosmic-journey__lab {
+  position: relative;
+  pointer-events: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cosmic-journey__copy {
+    animation: none;
+  }
+}

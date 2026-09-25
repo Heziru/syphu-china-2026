@@ -1,0 +1,54 @@
+.opening-sequence.paper-opening {
+  overflow: hidden;
+  background: transparent;
+}
+.paper-opening__signature {
+  position: absolute;
+  top: 7.5%;
+  left: 6%;
+  color: #54786c;
+  font:
+    800 11px/1.5 Arial,
+    Helvetica,
+    sans-serif;
+  letter-spacing: 0.22em;
+  margin: 0;
+}
+.paper-opening__signature span {
+  color: #87977e;
+  display: inline-block;
+  padding-left: 20px;
+}
+.opening-title.paper-opening__title {
+  color: #fff0c5;
+  -webkit-text-stroke: 1px #729085;
+  text-shadow:
+    0 2px 0 #6b827630,
+    0 8px 32px #f5f0de;
+  font-size: clamp(52px, 10.6vw, 174px);
+  padding: 0 5%;
+}
+.paper-opening__title p {
+  color: #547369;
+  -webkit-text-stroke: 0;
+  text-transform: none;
+  font:
+    700 clamp(12px, 1.1vw, 16px)/1.4 Arial,
+    Helvetica,
+    sans-serif;
+  letter-spacing: 0.035em;
+  margin: 28px 0 0;
+}
+@media (max-width: 700px) {
+  .paper-opening__signature {
+    top: 8%;
+    font-size: 9px;
+  }
+  .opening-title.paper-opening__title {
+    font-size: clamp(38px, 10.6vw, 74px);
+  }
+  .paper-opening__title p {
+    margin-top: 23px;
+    font-size: 11px;
+  }
+}
