@@ -1,0 +1,230 @@
+{
+  "selected_residues": {
+    "E": [
+      57,
+      192,
+      193,
+      195
+    ],
+    "I": [
+      24,
+      25,
+      26,
+      27
+    ]
+  },
+  "pairs": [
+    {
+      "a": [
+        "I",
+        24,
+        "C"
+      ],
+      "b": [
+        "E",
+        195,
+        "OG"
+      ],
+      "role": "Reactive-site proximity",
+      "start": {
+        "x": 16.131,
+        "y": 100.807,
+        "z": 11.56
+      },
+      "end": {
+        "x": 19.314,
+        "y": 100.258,
+        "z": 12.225
+      },
+      "distance_A": 3.2977439257771377,
+      "start_screen": {
+        "x": 707.7689921331857,
+        "y": 521.8369088740689
+      },
+      "end_screen": {
+        "x": 686.1167930874619,
+        "y": 426.10080324606247
+      }
+    },
+    {
+      "a": [
+        "I",
+        26,
+        "O"
+      ],
+      "b": [
+        "E",
+        193,
+        "N"
+      ],
+      "role": "Backbone separation",
+      "start": {
+        "x": 16.285,
+        "y": 106.147,
+        "z": 12.968
+      },
+      "end": {
+        "x": 19.497,
+        "y": 105.63,
+        "z": 13.263
+      },
+      "distance_A": 3.2666891495824952,
+      "start_screen": {
+        "x": 1001.9881136248505,
+        "y": 569.4906029147841
+      },
+      "end_screen": {
+        "x": 968.0575254227975,
+        "y": 458.56524521959307
+      }
+    },
+    {
+      "a": [
+        "I",
+        27,
+        "OD1"
+      ],
+      "b": [
+        "E",
+        192,
+        "O"
+      ],
+      "role": "Short O···O contact",
+      "start": {
+        "x": 19.138,
+        "y": 109.202,
+        "z": 13.44
+      },
+      "end": {
+        "x": 19.771,
+        "y": 107.451,
+        "z": 14.578
+      },
+      "distance_A": 2.182139775541433,
+      "start_screen": {
+        "x": 1154.5011344638085,
+        "y": 478.24185599083546
+      },
+      "end_screen": {
+        "x": 1058.3526144272018,
+        "y": 496.6947064421395
+      }
+    }
+  ],
+  "labels": [
+    {
+      "chain": "I",
+      "resi": 24,
+      "resname": "ALA",
+      "anchor": {
+        "x": 669.402744559323,
+        "y": 584.1535179238213
+      }
+    },
+    {
+      "chain": "I",
+      "resi": 25,
+      "resname": "MET",
+      "anchor": {
+        "x": 805.7698265840162,
+        "y": 480.7395345664694
+      }
+    },
+    {
+      "chain": "I",
+      "resi": 26,
+      "resname": "LEU",
+      "anchor": {
+        "x": 1009.0229237633112,
+        "y": 459.8744434806363
+      }
+    },
+    {
+      "chain": "I",
+      "resi": 27,
+      "resname": "ASN",
+      "anchor": {
+        "x": 1145.766259395933,
+        "y": 598.2359814575091
+      }
+    },
+    {
+      "chain": "E",
+      "resi": 57,
+      "resname": "HIS",
+      "anchor": {
+        "x": 387.6705357181053,
+        "y": 355.1072919525346
+      }
+    },
+    {
+      "chain": "E",
+      "resi": 192,
+      "resname": "PHE",
+      "anchor": {
+        "x": 964.9101532658324,
+        "y": 573.1393743547859
+      }
+    },
+    {
+      "chain": "E",
+      "resi": 193,
+      "resname": "GLY",
+      "anchor": {
+        "x": 993.0426898604903,
+        "y": 386.4455673024456
+      }
+    },
+    {
+      "chain": "E",
+      "resi": 195,
+      "resname": "SER",
+      "anchor": {
+        "x": 716.0417170295337,
+        "y": 328.6713934815058
+      }
+    }
+  ],
+  "view": [
+    -17.26468333333333,
+    -103.35925000000002,
+    -11.88575,
+    99.10177477562692,
+    0.6532814824,
+    0.6532814824,
+    -0.2705980501,
+    0.2705980501
+  ],
+  "canvas": {
+    "width": 1700,
+    "height": 980
+  },
+  "secondary_structure": {
+    "c": 165,
+    "s": 89,
+    "h": 21
+  },
+  "input": {
+    "path": "docking/human-ne-elafin/geometry-candidate.pdb",
+    "sha256": "5e19a3f818d92924ab064e4df3ab79f4c242d30bec72ffce191bfd38ecc8ad5d",
+    "original_HDOCK_rank": 29
+  },
+  "interpretation": "Post-hoc geometric candidate, not a validated inhibitory complex. Distances are geometric atom separations, not assigned hydrogen bonds. The 2.18 A O-O contact requires relaxation/assessment.",
+  "rendering": {
+    "software": "3Dmol.js 2.5.5",
+    "source": "Deposited source monomer secondary-structure records transferred without changing coordinates; local ribbon context within 11 A of selected atoms.",
+    "atoms": "Carbon gray, oxygen red, nitrogen blue, sulfur yellow.",
+    "labels": "Separate SVG screen-space annotations."
+  },
+  "width": 3400,
+  "height": 2440,
+  "actualwidth": 3400,
+  "actualheight": 2440,
+  "files": {
+    "png": "docking-interface-closeup.png",
+    "svg": "docking-interface-closeup.svg",
+    "pdf": "docking-interface-closeup.pdf",
+    "contacts": "closeup-contacts.csv",
+    "script": "render_docking_closeup.mjs"
+  }
+}

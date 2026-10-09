@@ -2,6 +2,8 @@ import { orbitPoint, orbitAngle, ORBITS } from "./orbitLayout";
 import { SOLAR_PLANETS as PLANETS, solarPose } from "./orbitalSceneMotion";
 import {
   SOLAR_ART,
+  SOLAR_STARS_PORTRAIT,
+  SOLAR_STARS_WIDE,
   solarArtworkTexture,
   paintedSurface,
   type ArtRect,
@@ -12,12 +14,13 @@ import {
   BackSide,
   Vector3,
   Vector4,
-  BufferAttribute,
   BufferGeometry,
   Color,
   Group,
-  Points,
+  Mesh,
+  SRGBColorSpace,
   ShaderMaterial,
+  TextureLoader,
 } from "three";
 type Progress = MutableRefObject<number>;
 const planetVertex = `
@@ -121,48 +124,31 @@ function InkPlanet({
 }
 
 export function StarField({ progress }: { progress: Progress }) {
-  const points = useRef<Points>(null);
-  const geometry = useMemo(() => {
-    let seed = 6106;
-    const random = () =>
-      (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
-    const count = 260;
-    const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-    const palette = ["#4341b1", "#774ecc", "#ad64bb", "#397ba5"].map(
-      (c) => new Color(c),
+  const image = useRef<Mesh>(null);
+  const aspect = useThree((state) => state.viewport.aspect);
+  const portrait = aspect < 1;
+  const artwork = useMemo(() => {
+    const texture = new TextureLoader().load(
+      portrait ? SOLAR_STARS_PORTRAIT : SOLAR_STARS_WIDE,
     );
-    for (let i = 0; i < count; i++) {
-      positions.set(
-        [(random() - 0.5) * 23, (random() - 0.5) * 13, -5 - random() * 3],
-        i * 3,
-      );
-      colors.set(
-        palette[Math.floor(random() * palette.length)].toArray(),
-        i * 3,
-      );
-    }
-    const g = new BufferGeometry();
-    g.setAttribute("position", new BufferAttribute(positions, 3));
-    g.setAttribute("color", new BufferAttribute(colors, 3));
-    return g;
-  }, []);
-  useFrame(({ clock }) => {
-    if (!points.current) return;
-    points.current.rotation.z = Math.sin(clock.elapsedTime * 0.025) * 0.025;
-    points.current.position.x = -progress.current * 0.25;
+    texture.colorSpace = SRGBColorSpace;
+    return texture;
+  }, [portrait]);
+  useEffect(() => () => artwork.dispose(), [artwork]);
+  useFrame(() => {
+    if (image.current) image.current.position.x = -progress.current * 0.25;
   });
   return (
-    <points ref={points} geometry={geometry}>
-      <pointsMaterial
-        size={1.4}
-        sizeAttenuation={false}
-        vertexColors
+    <mesh ref={image} position={[0, 0, -8]}>
+      <planeGeometry args={[9 * aspect + 0.6, 9.6]} />
+      <meshBasicMaterial
+        map={artwork}
         transparent
-        opacity={0.35}
+        opacity={0.5}
         depthWrite={false}
+        toneMapped={false}
       />
-    </points>
+    </mesh>
   );
 }
 
@@ -183,59 +169,6 @@ function OrbitLine({ radius, aspect }: { radius: number; aspect: number }) {
     <lineLoop geometry={geometry}>
       <lineBasicMaterial color="#80aa9e" transparent opacity={0.65} />
     </lineLoop>
-  );
-}
-/** One draw call for fine stardust, on the same ellipses as the planets. */
-function OrbitDust({ aspect }: { aspect: number }) {
-  const material = useRef<ShaderMaterial>(null);
-  const geometry = useMemo(() => {
-    let seed = 20260908;
-    const random = () =>
-      (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
-    const count = aspect < 1 ? 760 : 1400;
-    const positions = new Float32Array(count * 3);
-    const sizes = new Float32Array(count);
-    const phases = new Float32Array(count);
-    const colors = new Float32Array(count * 3);
-    const palette = ["#f7d897", "#fff4d1", "#a2bcad", "#c1b4cd"].map(
-      (c) => new Color(c),
-    );
-    for (let i = 0; i < count; i++) {
-      const radius =
-        ORBITS[i % ORBITS.length] + (random() + random() - 1) * 0.029;
-      const point = orbitPoint(radius, random() * Math.PI * 2, aspect);
-      point[2] = -0.12;
-      positions.set(point, i * 3);
-      sizes[i] = i % 131 === 0 ? 13 : 1.2 + random() * 2.5;
-      phases[i] = random() * Math.PI * 2;
-      colors.set(palette[i % palette.length].toArray(), i * 3);
-    }
-    const g = new BufferGeometry();
-    g.setAttribute("position", new BufferAttribute(positions, 3));
-    g.setAttribute("color", new BufferAttribute(colors, 3));
-    g.setAttribute("size", new BufferAttribute(sizes, 1));
-    g.setAttribute("phase", new BufferAttribute(phases, 1));
-    return g;
-  }, [aspect]);
-  useEffect(() => () => geometry.dispose(), [geometry]);
-  useFrame(({ clock }) => {
-    if (material.current)
-      material.current.uniforms.time.value = clock.elapsedTime;
-  });
-  return (
-    <points geometry={geometry}>
-      <shaderMaterial
-        ref={material}
-        transparent
-        depthWrite={false}
-        uniforms={{ time: { value: 0 } }}
-        vertexShader={`attribute float size; attribute float phase; varying vec3 vColor; varying float vPhase; varying float vSize; void main(){vColor=color;vPhase=phase;vSize=size;gl_PointSize=size;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`}
-        fragmentShader={`uniform float time; varying vec3 vColor; varying float vPhase; varying float vSize; void main(){vec2 p=abs(gl_PointCoord-.5)*2.0;float roundStar=1.0-smoothstep(.2,1.0,length(p));float crossStar=1.0-smoothstep(.13,.36,p.x*p.y+min(p.x,p.y)*.45);float alpha=vSize>8.0?crossStar*(1.0-max(p.x,p.y)):roundStar;alpha*=.44+.17*sin(time*.65+vPhase);gl_FragColor=vec4(vColor,alpha);
-      #include <colorspace_fragment>
-      }`}
-        vertexColors
-      />
-    </points>
   );
 }
 export function SolarSystem({
@@ -266,7 +199,6 @@ export function SolarSystem({
   });
   return (
     <group ref={group}>
-      <OrbitDust aspect={aspect} />
       {ORBITS.map((radius) => (
         <OrbitLine key={radius} radius={radius} aspect={aspect} />
       ))}

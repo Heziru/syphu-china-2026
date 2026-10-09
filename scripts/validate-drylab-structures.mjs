@@ -1,0 +1,24 @@
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { build } from "esbuild";
+const bundled = await build({ entryPoints: ["src/contents/drylab/pdbCoordinates.ts"], bundle: true, write: false, platform: "node", format: "esm" });
+const { parsePdb } = await import("data:text/javascript;base64," + Buffer.from(bundled.outputFiles[0].text).toString("base64"));
+const complex = parsePdb(await fs.readFile("public/assets/dry-lab/structures/1fle.pdb", "utf8"));
+const elafin = parsePdb(await fs.readFile("public/assets/dry-lab/structures/2rel.pdb", "utf8"));
+assert.deepEqual(complex.chains, ["E", "I"]);
+assert.equal(complex.atoms.filter(a => a.name === "CA" && a.chain === "E").length, 240);
+assert.equal(complex.atoms.filter(a => a.name === "CA" && a.chain === "I").length, 47);
+assert.deepEqual(elafin.chains, ["A"]);
+assert.equal(elafin.modelCount, 11);
+assert.equal(elafin.atoms.filter(a => a.name === "CA").length, 57);
+assert.equal(elafin.contacts.length, 0);
+assert.ok(complex.contacts.length > 0);
+assert.ok(complex.contacts.every(c => c.left.chain !== c.right.chain && c.distance < 4 && c.left.element !== "H" && c.right.element !== "H"));
+assert.ok(complex.contacts.some(c => [c.left,c.right].some(a => a.chain === "I" && a.residue === "24" && a.residueName === "ALA")));
+assert.throws(() => parsePdb("<!doctype html>"), /no readable/);
+const result = { representations: "First deposited model; C-alpha trace. Waters, ligands and HETATM excluded from contact analysis.", complex: { chains: complex.chains, atoms: complex.atoms.length, contacts: complex.contacts.length, interfaceResidues: [...complex.interfaceResidues], closestContacts: complex.contacts.slice(0,8) }, elafin: { chains: elafin.chains, models: elafin.modelCount, displayedCaAtoms: 57 }};
+await fs.mkdir("outputs/dry-lab-review", { recursive: true });
+await fs.writeFile(path.join("outputs/dry-lab-review","coordinate-check.json"), JSON.stringify(result,null,2)+"\n");
+console.log("PDB checks passed: 1FLE E=240 / I=47 modeled residues, 2REL model 1=57 residues, 11 deposited conformers; " + complex.contacts.length + " distinct residue-pair contacts under 4 Å.");
+

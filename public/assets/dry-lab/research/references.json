@@ -1,0 +1,92 @@
+[
+  {
+    "id": "brune-kim-1993",
+    "title": "Predicting protein diffusion coefficients.",
+    "authors": "D. Brune, S. Kim",
+    "year": 1993,
+    "journal": "Proceedings of the National Academy of Sciences",
+    "doi": "10.1073/pnas.90.9.3835",
+    "url": "https://doi.org/10.1073/pnas.90.9.3835",
+    "use": "Supports hydrodynamic estimation of protein diffusion in water and the importance of molecular shape."
+  },
+  {
+    "id": "venturelli-2018",
+    "title": "Deciphering microbial interactions in synthetic human gut microbiome communities",
+    "authors": "Ophelia S. Venturelli, Alex V. Carr, Garth Fisher, Ryan H. Hsu, Rebecca Lau, Benjamin P. Bowen, Susan Hromada, Trent Northen, Adam P. Arkin",
+    "year": 2018,
+    "journal": "Molecular Systems Biology",
+    "doi": "10.15252/msb.20178157",
+    "url": "https://doi.org/10.15252/msb.20178157",
+    "use": "Supports generalized Lotka–Volterra inference from measured synthetic-community time series and illustrates the need for monoculture/pairwise data plus higher-order validation."
+  },
+  {
+    "id": "tsunemi-1996",
+    "title": "Crystal structure of an elastase-specific inhibitor elafin complexed with porcine pancreatic elastase determined at 1.9 A resolution",
+    "authors": "M. Tsunemi, Y. Matsuura, S. Sakakibara, Y. Katsube",
+    "year": 1996,
+    "journal": "Biochemistry",
+    "doi": "10.1021/bi960900l",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/8794736/",
+    "use": "Experimental structural reference for Elafin's inhibitory interface; PDB 1FLE."
+  },
+  {
+    "id": "ying-simon-1993",
+    "title": "Kinetics of the inhibition of human leukocyte elastase by elafin, a 6-kilodalton elastase-specific inhibitor from human skin.",
+    "authors": "Q. L. Ying, S. R. Simon",
+    "year": 1993,
+    "journal": "Biochemistry",
+    "doi": "10.1021/bi00058a021",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/8439544/",
+    "use": "Primary controlled-buffer evidence for reversible 1:1 Elafin–human leukocyte elastase inhibition."
+  },
+  {
+    "id": "stein-2013",
+    "title": "Ecological Modeling from Time-Series Inference: Insight into Dynamics and Stability of Intestinal Microbiota",
+    "authors": "Richard R. Stein, Vanni Bucci, Nora C. Toussaint, Charlie G. Buffie, Gunnar Rätsch, Eric G. Pamer, Chris Sander, João B. Xavier",
+    "year": 2013,
+    "journal": "PLOS Computational Biology",
+    "doi": "10.1371/journal.pcbi.1003388",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003388",
+    "use": "Generalized Lotka–Volterra inference with external perturbations; motivates measured longitudinal data rather than assumed interaction coefficients."
+  },
+  {
+    "id": "momeni-2017",
+    "title": "Lotka-Volterra pairwise modeling fails to capture diverse pairwise microbial interactions",
+    "authors": "Babak Momeni, Li Xie, Wenying Shou",
+    "year": 2017,
+    "journal": "eLife",
+    "doi": "10.7554/eLife.25051",
+    "url": "https://elifesciences.org/articles/25051",
+    "use": "Limits of fixed pairwise models when interactions depend on chemical mediators, population density or community context."
+  },
+  {
+    "id": "pdb-2rel",
+    "title": "2REL: Solution structure of R-elafin, a specific inhibitor of elastase, NMR, 11 structures",
+    "authors": "C. Francart, M. Dauchez, A. J. P. Alix, G. Lippens",
+    "year": 1997,
+    "journal": "RCSB Protein Data Bank record",
+    "doi": "10.2210/pdb2REL/pdb",
+    "url": "https://www.rcsb.org/structure/2REL",
+    "use": "Experimental human Elafin NMR ensemble: 57 residues and 11 submitted conformers. Provides structure context, not a docking or simulation result."
+  },
+  {
+    "id": "uniprot-p19957",
+    "title": "UniProtKB P19957 (ELAF_HUMAN): Elafin, Homo sapiens",
+    "authors": "The UniProt Consortium",
+    "year": 2026,
+    "journal": "UniProtKB reviewed record; version 221, accessed 8 October 2026",
+    "doi": null,
+    "url": "https://www.uniprot.org/uniprotkb/P19957/entry",
+    "use": "Reviewed reference sequence and processing annotations; distinguishes the 117-residue precursor from the mature Elafin chain."
+  },
+  {
+    "id": "peking-model-format",
+    "title": "Peking 2025 iGEM Wiki — Model",
+    "authors": "Peking 2025 iGEM Team",
+    "year": 2025,
+    "journal": "iGEM Wiki",
+    "doi": null,
+    "url": "https://2025.igem.wiki/peking/model/",
+    "use": "Acknowledgment of article organization: model questions, equations, parameter tables, numbered figures, code and references. No biological models, data or conclusions were transferred."
+  }
+]

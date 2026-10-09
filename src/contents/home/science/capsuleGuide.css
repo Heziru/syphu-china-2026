@@ -1,0 +1,249 @@
+.capsule-guide {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.capsule-guide-map {
+  width: 100%;
+  height: 100%;
+  max-height: 760px;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  pointer-events: auto;
+  touch-action: none;
+}
+.capsule-guide-map.has-cursor {
+  cursor: none;
+}
+.continuous-journey:has(.capsule-guide.is-active) .journey-tap-position,
+.science-atlas:has(.capsule-guide.is-active) .science-atlas-key {
+  visibility: hidden;
+}
+.capsule-guide-map path,
+.capsule-guide-map image,
+.capsule-guide-map g {
+  pointer-events: none;
+}
+.capsule-guide-trail {
+  fill: none;
+  stroke: #426b60;
+  stroke-width: 2;
+  stroke-dasharray: 0.002 0.005;
+  opacity: 0.65;
+}
+.capsule-guide-travelled {
+  fill: none;
+  stroke: #fff3c9;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.capsule-guide-stop circle {
+  fill: #eff0df;
+  stroke: #547b6c;
+  stroke-width: 1.5;
+}
+.capsule-guide-stop[data-current="true"] circle {
+  fill: #f6dfa9;
+}
+.capsule-guide-stop text {
+  font:
+    800 12px Arial,
+    sans-serif;
+  fill: #44695d;
+}
+.capsule-guide-return {
+  fill: none;
+  stroke: #b87b64;
+  stroke-width: 2;
+  stroke-dasharray: 4 6;
+}
+.capsule-guide-console {
+  position: absolute;
+  top: 50%;
+  left: -48.4%;
+  width: 43%;
+  max-width: 310px;
+  color: #496e61;
+  pointer-events: auto;
+}
+.capsule-guide-console button {
+  background: none;
+  border: 0;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+.capsule-guide-console button:focus-visible {
+  outline: 2px solid #5d8272;
+  outline-offset: 4px;
+}
+.capsule-guide-launch {
+  border-bottom: 1px solid #9bb6a2 !important;
+  padding: 12px 0;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+.capsule-guide-launch span {
+  font-size: 19px;
+}
+.capsule-guide-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #aac0ad;
+  padding-top: 9px;
+}
+.capsule-guide-heading > span {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+.capsule-guide-heading button {
+  padding: 0 4px;
+  font-size: 23px;
+  line-height: 1;
+}
+.capsule-guide-story {
+  min-height: 118px;
+  padding-top: 17px;
+}
+.capsule-guide-story strong {
+  font-size: 19px;
+  line-height: 1.15;
+  font-weight: 800;
+  display: block;
+}
+.capsule-guide-story p {
+  margin: 9px 0 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 290px;
+}
+.capsule-guide-console nav {
+  display: flex;
+  gap: 9px;
+}
+.capsule-guide-console nav button {
+  height: 33px;
+  width: 38px;
+  font-size: 11px;
+  border: 1px solid #b0c2ad;
+  border-radius: 50%;
+}
+.capsule-guide-console nav button[aria-current="step"] {
+  color: #fff0c9;
+  background: #567a69;
+  border-color: #567a69;
+}
+.capsule-guide-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 13px;
+}
+.capsule-guide-actions small {
+  font-size: 9px;
+}
+.capsule-guide-actions button {
+  padding: 6px 0;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.capsule-guide-note {
+  display: block;
+  margin-top: 9px;
+  font-size: 8px;
+  opacity: 0.85;
+}
+@media (max-width: 700px), (max-aspect-ratio: 1/1) {
+  .science-atlas:has(.capsule-guide.is-active) .science-atlas-art {
+    height: calc(100% - 145px);
+    align-self: flex-start;
+  }
+  .capsule-guide-map {
+    height: calc(100% - 145px);
+    inset: 0 0 auto;
+    margin: 0;
+  }
+  .capsule-guide-console {
+    top: auto;
+    left: 7%;
+    bottom: -5%;
+    width: 86%;
+    max-width: none;
+  }
+  .capsule-guide.is-active .capsule-guide-console {
+    padding: 9px 14px;
+    border: 1px solid #fdfbed;
+    background: #f2f3e7f5;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px #4963440c;
+  }
+  .capsule-guide-heading {
+    border: 0;
+    padding: 0;
+  }
+  .capsule-guide-story {
+    min-height: 78px;
+    padding-top: 5px;
+  }
+  .capsule-guide-story strong {
+    font-size: 14px;
+  }
+  .capsule-guide-story p {
+    font-size: 10px;
+    line-height: 1.45;
+    margin: 5px 0 8px;
+    max-width: none;
+  }
+  .capsule-guide-console nav {
+    gap: 8px;
+  }
+  .capsule-guide-console nav button {
+    width: 32px;
+    height: 28px;
+    font-size: 9px;
+  }
+  .capsule-guide-actions {
+    position: absolute;
+    right: 14px;
+    bottom: 35px;
+    flex-direction: column-reverse;
+    gap: 0;
+    margin: 0;
+    align-items: end;
+  }
+  .capsule-guide-actions small {
+    font-size: 8px;
+  }
+  .capsule-guide-actions button {
+    font-size: 10px;
+    padding-bottom: 2px;
+  }
+  .capsule-guide-note {
+    font-size: 7px;
+    margin-top: 7px;
+  }
+}
+@media (max-height: 660px) and (min-aspect-ratio: 1/1) {
+  .capsule-guide-console {
+    top: 47%;
+  }
+  .capsule-guide-story {
+    min-height: 80px;
+    padding-top: 7px;
+  }
+  .capsule-guide-story strong {
+    font-size: 15px;
+  }
+  .capsule-guide-story p {
+    font-size: 10px;
+  }
+}

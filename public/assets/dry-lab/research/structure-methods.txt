@@ -1,0 +1,130 @@
+SYPHU-China — deposited Elafin structure reanalysis
+Version: 2026-10-08
+
+QUESTION
+What variability is represented by the deposited Elafin NMR ensemble, and
+which residues are geometrically adjacent in a published Elafin complex?
+These analyses create reproducible measurements from real coordinates.
+They do not constitute a new docking experiment, MD run or efficacy test.
+
+INPUTS AND IDENTITY
+2REL: 11 solution-NMR conformers of human recombinant Elafin, chain A,
+57 residues per conformer. All 57 C-alpha positions are present in each.
+RCSB: https://www.rcsb.org/structure/2REL
+Primary publication: https://doi.org/10.1006/jmbi.1997.0983
+
+1FLE: X-ray complex at 1.90 Angstrom resolution. Chain I is human Elafin;
+47 of 57 residues are modeled, with author residues 1–10 absent. Chain E
+is PORCINE PANCREATIC ELASTASE (240 modeled residues), not human neutrophil
+elastase. Author residue numbering and insertion codes are retained.
+RCSB: https://www.rcsb.org/structure/1FLE
+Primary publication: https://doi.org/10.1021/bi960900l
+Original PDB files remain unchanged. SHA-256 hashes are in structure-summary.json.
+
+The earlier local 2Z7F material is not used: its inhibitor is SLPI rather
+than Elafin. Its trajectories cannot validate Elafin-specific behavior.
+
+NMR ANALYSIS
+1. Parse protein ATOM records, selecting blank/A alternate locations and
+   preserving model boundaries. Select corresponding chain-A C-alpha atoms.
+2. For every unique conformer pair (11 choose 2 = 55), center the selected
+   coordinates and compute the proper Kabsch rotation using an SVD:
+   H = X_centered^T Y_centered = U S V^T;
+   R = U diag(1,1,det(U V^T)) V^T.
+   Translation and rotation are allowed; scaling/reflection are not.
+3. RMSD = sqrt(mean_r(||x_aligned,r - y_r||^2)), in Angstroms.
+   Calculate separate optimal fits and evaluations on residues 1–57 and
+   on residues 9–57. The latter corresponds to the UniProt P19957 WAP
+   domain (precursor 69–117; mature Elafin begins at precursor 61).
+   https://www.uniprot.org/uniprotkb/P19957/entry
+4. For per-residue ensemble dispersion, use iterative generalized
+   Procrustes superposition. Initialize the reference with conformer 1;
+   align all models to the current mean, update the mean and repeat until
+   its fitted-coordinate RMSD change is <1e-10 Angstrom. Both fits converged
+   in seven iterations. Use a maximum of 1000 iterations as a failure guard.
+5. For each residue r, D_r = sqrt((1/M) sum_m ||x_aligned,m,r - mean_r||^2),
+   M=11. The population denominator M describes these deposited conformers,
+   not an estimated population standard error. Preserve both full-length
+   and WAP-domain alignments to expose alignment sensitivity.
+6. Apply the WAP-derived rigid transforms to all atoms of each conformer
+   for the ensemble rendering; do not change internal geometry. The
+   derived PDB rounds only its display coordinates to 0.001 Angstrom;
+   quantitative calculations use full floating-point aligned coordinates.
+
+Kabsch reference: https://doi.org/10.1107/S0567739476001873
+
+NMR INTERPRETATION
+The 11 conformers are a deposited structural ensemble, not a time-ordered
+trajectory. D_r is ensemble dispersion, NOT MD-RMSF or experimental evidence
+of kinetic motion. The 55 pairs are not 55 independent biological replicates.
+No p values or statistical confidence intervals are inferred from them.
+Differences between full-length and domain-only RMSD also reflect the
+change in the residue set being fitted/evaluated; they are not a treatment
+effect. The spread may reflect restraints, modeling ambiguity and genuine
+structural heterogeneity, which this reanalysis cannot separate.
+
+INTERFACE ANALYSIS
+For every Elafin residue i and elastase residue j, calculate
+  d_ij = min_{a in i, b in j} ||x_a - x_b||,
+over protein heavy atoms only. Exclude hydrogen/deuterium, water, HETATM,
+and alternate locations other than the selected blank/A conformer.
+Use the deposited asymmetric-unit complex, without symmetry mates.
+Export the complete 47 x 240 matrix with uncapped distances.
+Define a geometric contact strictly as d_ij < cutoff. Sweep cutoff from
+3.00 to 6.00 Angstrom in 0.25-Angstrom increments, counting residue pairs
+and the participating residues in each chain.
+The main map displays the 14 x 22 residues with at least one contact <4 A;
+its colormap saturates outside 2–6 A. Only <4 A cells are numerically labeled.
+The complete matrix figure and CSV prevent the restricted interface view
+from being mistaken for a whole-protein matrix.
+
+INTERFACE INTERPRETATION
+The <4-Angstrom definition yields 40 residue pairs, involving 14 Elafin and
+22 elastase residues. Counts range from 6 pairs at 3 A to 90 pairs at 6 A.
+These are geometric descriptions, not hydrogen-bond assignments, binding
+free energies, affinity estimates or proof of human-neutrophil-elastase
+inhibition. Water-mediated and crystal-symmetry interactions are omitted.
+The closest deposited contact (ARG31 NH2–ASP97 OD2, 1.988 A) is unusually
+short; report it as a coordinate proximity and inspect the experimental
+model rather than interpreting a shorter distance as a stronger bond.
+
+STRUCTURE FIGURES
+Render local coordinates with pinned 3Dmol.js 2.5.5 (MIT), using deposited
+HELIX/SHEET annotations (noComputeSecondaryStructure=true). The 1FLE whole
+complex is a secondary-structure cartoon; the four-residue inset uses
+ball-and-stick geometry. Inset labels use modelToScreen projections of
+the actual atom coordinates, with vector leader lines added by Matplotlib.
+Only ALA24/ARG22 in I and GLY193/VAL216 in E appear in the inset; other
+residues are omitted for clarity. ALA24 is the published P1 residue.
+Distances shown are ALA24 O–GLY193 N (2.635 A) and ARG22 N–VAL216 O (2.783 A).
+They are not assigned hydrogen bonds. Carbon follows chain colors;
+oxygen is red and nitrogen blue. Ensemble images show 11 aligned C-alpha
+traces, with mature residues 1–8 gold and WAP 9–57 teal.
+
+Render provenance, exact view matrices and library SHA-256 are retained.
+Sources: https://3dmol.csb.pitt.edu/doc/ and pinned distribution
+https://cdn.jsdelivr.net/npm/3dmol@2.5.5/build/3Dmol-min.js
+Plots have a white background, teal/coral palette, lettered panels and
+explicit Angstrom units. Export formats: 300-dpi PNG, SVG and PDF.
+SVG/PDF retain vector axes/text while embedding real raster 3D renders.
+
+NUMERICAL CHECKS
+- Rigid rotation/translation recovery RMSD <1e-10 A (actual ~6.7e-15 A).
+- Proper rotation determinant = +1; no reflection or scaling.
+- Pairwise RMSD matrix is symmetric with a zero diagonal.
+- 11 models each have exactly the same 57 C-alpha residue IDs.
+- Contact identities independently verified using a full heavy-atom
+  distance matrix, agreeing with the earlier independent TypeScript parser.
+- 40 <4-Angstrom residue pairs; threshold counts are monotonic.
+- Interface sizes are exactly 47 Elafin residues by 240 elastase residues.
+- Figure limits include all plotted values; labels visually inspected.
+
+REPRODUCING
+Run from the extracted repository-shaped archive:
+  python scripts/drylab/analyze_structures.py
+  node scripts/drylab/render_structures.mjs
+  python scripts/drylab/plot_structures.py
+Python packages: NumPy, SciPy, Matplotlib. Rendering requires Node.js,
+Playwright and an installed Chromium/Edge browser. No online PDB service
+is needed at render time: structures and pinned viewer code are bundled.
+No dependencies or user source material were modified for the analysis.

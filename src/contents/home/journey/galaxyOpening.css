@@ -1,0 +1,128 @@
+@font-face {
+  font-family: "SYPHU Nunito";
+  src: url("../../../../public/assets/fonts/Nunito-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+}
+.galaxy-opening {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+  background: #faf8ef;
+  color: #fff5da;
+  font-family: "SYPHU Nunito", "Trebuchet MS", sans-serif;
+}
+.galaxy-opening__night {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 42%, #164940 0%, #082e2e 55%, #052527 100%);
+  opacity: calc(1 - var(--opening-daylight));
+}
+.galaxy-opening__nebula, .galaxy-opening__stars, .galaxy-opening__wash {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.galaxy-opening__nebula { inset: 0; opacity: calc(.48 * (1 - var(--opening-daylight))); }
+.galaxy-opening__stars { inset: 0; opacity: calc(.45 - var(--opening-daylight) * .25); }
+.galaxy-opening__wash {
+  right: -10%; bottom: -10%; width: 87%;
+  opacity: calc(.42 * var(--opening-daylight));
+}
+.galaxy-opening__cosmos {
+  position: absolute;
+  left: calc(50% + var(--opening-travel) * 19%);
+  top: calc(43% + var(--opening-travel) * 7%);
+  width: min(calc(48vw - var(--opening-travel) * 4vw), calc(74svh - var(--opening-travel) * 5svh), 820px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+.galaxy-opening__globe {
+  position: relative; display: block; width: 100%; height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 32px #082e2b22);
+  animation: galaxy-drift 12s ease-in-out infinite alternate;
+}
+.galaxy-opening__painted {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 0 0 calc(var(--opening-data) * 100%));
+}
+.galaxy-opening__orbit {
+  position: absolute; width: 210%; max-width: none; height: auto;
+  left: -55%; top: -3%;
+  opacity: calc(.86 - var(--opening-daylight) * .51);
+  transform: scale(calc(1 - var(--opening-travel) * .14));
+}
+.galaxy-opening__wordmark {
+  position: absolute; left: 5%; right: 5%; bottom: 8%; margin: 0;
+  font-family: inherit;
+  font-size: clamp(35px, 4.25vw, 68px);
+  font-weight: 900; letter-spacing: .005em; line-height: 1.1;
+  text-align: center; color: #fff4d9;
+  text-shadow: 0 2px 16px #d7f4bd18;
+}
+.galaxy-opening__world-title {
+  position: absolute;
+  left: 6%; top: calc(36% - var(--opening-details) * 17%); width: 45%; margin: 0;
+  font-family: inherit;
+  font-size: clamp(42px, calc(6.4vw - var(--opening-details) * 1.8vw), 100px);
+  font-weight: 950; letter-spacing: -.045em; line-height: 1.06; color: #244e43;
+}
+.galaxy-opening__world-title span { color: #c68f70; }
+.galaxy-opening--static { position: relative; height: calc(100svh - 56px); min-height: 520px; }
+.galaxy-opening--static .galaxy-opening__globe,
+.galaxy-opening[data-world="true"] .galaxy-opening__globe { animation: none; }
+
+/* Existing menu structure and header geometry are unchanged. */
+body:has(.galaxy-opening[data-theme="dark"]) .navbar {
+  background: #082b2bee !important;
+  border-bottom-color: transparent;
+  --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='%23f8f2df' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+body:has(.galaxy-opening[data-theme="dark"]) .navbar :is(.navbar-brand, .nav-link) { color: #f8f2df; }
+body:has(.galaxy-opening[data-theme="dark"]) .navbar .nav-link:is(:hover, :focus-visible) { color: #d9c99b; }
+body:has(.galaxy-opening[data-theme="dark"]) .navbar-toggler { border-color: #d2e0c94d; }
+body:has(.continuous-journey) .navbar { transition: background-color .5s ease, border-color .5s ease; }
+body:has(.continuous-journey) .navbar .navbar-brand { font-family: "SYPHU Nunito", "Trebuchet MS", sans-serif; }
+@keyframes galaxy-drift {
+  from { transform: translateY(0) rotate(-.5deg); }
+  to { transform: translateY(-7px) rotate(.5deg); }
+}
+@media (max-width: 1050px) and (orientation: portrait) {
+  .galaxy-opening__cosmos {
+    left: 50%; top: calc(43% + var(--opening-travel) * 16%);
+    width: min(calc(94vw - var(--opening-travel) * 8vw), 63svh);
+  }
+  .galaxy-opening__wordmark { bottom: 14%; font-size: clamp(32px, 6.4vw, 58px); }
+  .galaxy-opening__world-title {
+    top: calc(8% - var(--opening-details) * 2%); left: 7%; width: 86%;
+    font-size: clamp(39px, 7.6vw, 66px);
+  }
+  .galaxy-opening__nebula { width: 165%; max-width: none; left: -32%; object-fit: contain; }
+}
+@media (max-width: 700px) {
+  .galaxy-opening__cosmos {
+    left: 50%; top: calc(43% + var(--opening-travel) * 15%);
+    width: min(calc(98vw - var(--opening-travel) * 7vw), 62svh);
+  }
+  .galaxy-opening__orbit { width: 167%; left: -33.5%; top: 4%; }
+  .galaxy-opening__wordmark { bottom: 17%; font-size: clamp(28px, 7.9vw, 50px); }
+  .galaxy-opening__world-title { font-size: clamp(36px, 10vw, 56px); }
+  .galaxy-opening__stars { opacity: .24; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .galaxy-opening__cosmos { width: 69svh; top: 42%; }
+  .galaxy-opening__wordmark { bottom: 5%; font-size: 28px; }
+  .galaxy-opening__world-title { font-size: 36px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .galaxy-opening__globe { animation: none; }
+  body:has(.continuous-journey) .navbar { transition: none; }
+}
+

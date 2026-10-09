@@ -1,0 +1,16 @@
+{
+  "structure-nmr-ensemble": {
+    "title": "How variable are deposited Elafin conformers?",
+    "caption": "(a) Eleven deposited 2REL Cα traces after generalized Procrustes alignment on mature residues 9–57, the UniProt WAP domain. Gold marks residues 1–8. (b) Pairwise RMSD after separate optimal Kabsch fits over all 57 Cα atoms. (c) Per-residue root-mean-square distance to the aligned ensemble mean, comparing full-length and WAP-domain fits. (d) The same 55 model pairs evaluated over either fitted residue set. Horizontal lines mark medians. These are structural-ensemble statistics, not MD-RMSF, kinetic dynamics, statistical confidence intervals or independent biological replicates.",
+    "takeaway": "Mean pairwise RMSD is 3.43 Å over residues 1–57 and 2.46 Å over WAP residues 9–57. Under WAP fitting, the mean N-terminal dispersion (1–8) is 5.73 Å versus 1.53 Å in the domain; fitting and residue choice must therefore be stated when comparing structures."
+  },
+  "structure-interface": {
+    "title": "Where does Elafin contact its reference elastase?",
+    "caption": "(a) Published 1FLE X-ray complex, human Elafin chain I and porcine pancreatic elastase chain E, shown as a cartoon from deposited secondary-structure records. (b) Four selected residues in ball-and-stick representation; dashed lines show atom-to-atom geometric distances (ALA24 O–GLY193 N and ARG22 N–VAL216 O). Other residues are omitted for clarity. Carbon colors follow the chains, oxygen is red and nitrogen blue. (c) The 14 Elafin and 22 elastase residues participating in at least one <4 Å contact; cells show minimum protein heavy-atom distances, with values <4 Å annotated. (d) Contact counts across cutoffs 3.0–6.0 Å. Elafin residues 1–10 have no coordinates. Waters, non-protein records and hydrogens are excluded; crystal symmetry mates are not included. Geometric contacts alone do not establish hydrogen bonds, affinity or efficacy.",
+    "takeaway": "At the declared <4 Å cutoff, 40 residue pairs involve 14 Elafin and 22 elastase residues. The count rises from 6 pairs at 3 Å to 90 pairs at 6 Å, showing why cutoff choice must accompany interface claims. The enzyme is porcine pancreatic elastase, not human neutrophil elastase; the structure is a reference for hypotheses and future experiments."
+  },
+  "structure-full-distance-map": {
+    "title": "Complete cross-chain distance matrix",
+    "caption": "All 47 × 240 cross-chain residue combinations in deposited 1FLE. Every value is the shortest distance between the two residues’ protein heavy atoms. The color scale saturates outside 2–6 Å; the CSV retains all uncapped numeric values and author insertion codes."
+  }
+}

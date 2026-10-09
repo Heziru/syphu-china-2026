@@ -1,0 +1,62 @@
+{
+  "00-model-overview": [
+    2315,
+    1689
+  ],
+  "01-ecological-landscape": [
+    2489,
+    1732
+  ],
+  "02-uncertainty-sensitivity": [
+    2490,
+    1732
+  ],
+  "03-spatial-transport": [
+    2492,
+    1732
+  ],
+  "04-transport-landscape": [
+    2492,
+    1732
+  ],
+  "05-numerical-verification": [
+    2397,
+    1637
+  ],
+  "06-binding-kinetics": [
+    2628,
+    1746
+  ],
+  "07-release-law-sensitivity": [
+    2492,
+    1732
+  ],
+  "1fle-cartoon": [
+    2400,
+    2000
+  ],
+  "1fle-interface-detail": [
+    2400,
+    2000
+  ],
+  "2rel-aligned-ensemble": [
+    2400,
+    2000
+  ],
+  "2rel-cartoon": [
+    2400,
+    2000
+  ],
+  "structure-full-distance-map": [
+    4180,
+    1680
+  ],
+  "structure-interface": [
+    3782,
+    3094
+  ],
+  "structure-nmr-ensemble": [
+    3633,
+    2780
+  ]
+}

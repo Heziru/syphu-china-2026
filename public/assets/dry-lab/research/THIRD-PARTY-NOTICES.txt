@@ -1,0 +1,13 @@
+Third-party material in the SYPHU-China research archive
+
+Team repository license: LICENSE (CC BY 4.0).
+3Dmol.js 2.5.5: local vendor/3Dmol-LICENSE.txt and the accompanying license file.
+KaTeX: research/KaTeX-LICENSE.txt. No KaTeX executable is needed by the analyses.
+PDB, UniProt and GTEx: archived records retain accession identifiers, citations
+and source links. Team licensing does not replace the original database terms.
+OpenMM, NumPy, SciPy, Matplotlib, Pillow and Playwright: separate dependencies;
+install them from their official distributions under their respective licenses.
+Force-field data are resolved by the installed OpenMM distribution; serialized
+systems record the calculation. See atomistic/README.md for methods/citations.
+HDOCKlite: separately licensed academic solver, not included or relicensed here.
+Only this project's inputs, output coordinates and analysis scripts are bundled.

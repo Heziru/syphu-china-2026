@@ -1,0 +1,98 @@
+{
+  "reviewedOn": "2026-10-09",
+  "scope": "Non-biological presentation review of four Best Model winners from 2023–2025. No biological literature, constructs, datasets, parameter transfer or optimization is included.",
+  "method": "Read the model pages and their rendered article structure; verify award status separately against university reports. This is a presentation audit, not an independent reproduction or validation of the teams' research.",
+  "reviews": [
+    {
+      "team": "Peking",
+      "year": 2025,
+      "award": "Best Model",
+      "modelUrl": "https://2025.igem.wiki/peking/model/",
+      "awardVerification": {
+        "publisher": "Peking University Center for Quantitative Biology",
+        "type": "University report",
+        "date": "2025-11-07",
+        "url": "https://www.oir.pku.edu.cn/cqb/info/1065/3453.htm",
+        "finding": "The university report explicitly lists Best Model as a win (Top 1), distinct from nominations."
+      },
+      "organization": "A contents-led, continuous research article repeats background, assumptions, mathematical formulation, computational method and results across modules.",
+      "figuresAndEquations": "Numbered equations, nearby symbol definitions and parameter tables support numbered figures with explanatory captions. Workflow diagrams introduce computational stages before detailed plots.",
+      "codeAndReferences": "Data-source and parameter-source subsections make provenance visible. Numbered citations accompany the argument; a separate code repository is organized by model module.",
+      "codeUrl": "https://github.com/JianzheLi/iGEM-Peking2025",
+      "validationPresentation": "Methods, computational checks, results and later interpretation occupy identifiable subsections; readers can trace a claim back to the relevant setup. These observations do not establish that every reported result has external validation.",
+      "reusableLesson": "Repeat one compact scientific reading pattern across modules, with locally defined quantities and sources rather than an isolated reference dump."
+    },
+    {
+      "team": "Heidelberg",
+      "year": 2024,
+      "award": "Best Model",
+      "modelUrl": "https://2024.igem.wiki/heidelberg/model",
+      "awardVerification": {
+        "publisher": "Heidelberg University, Institute of Pharmacy and Molecular Biotechnology",
+        "type": "University report",
+        "url": "https://www.ipmb.uni-heidelberg.de/en/newsroom/ipmb-team-wins-igem-2024",
+        "finding": "The university report explicitly includes Best Model among the team's awards."
+      },
+      "organization": "A concise overview introduces the framework, followed by assumptions, methods, implementation, results, discussion and references. Navigation supports a long article rather than fragmenting it into disconnected cards.",
+      "figuresAndEquations": "Lettered multi-panel figures receive panel-specific captions. Parameter sections sit near implementation details; collapsible method panels reduce visual load without replacing the main explanation.",
+      "codeAndReferences": "A dedicated user-manual and implementation section separates execution instructions from scientific interpretation. A full reference list follows the discussion.",
+      "validationPresentation": "Prediction-versus-measurement comparisons appear within the results narrative, alongside alternative conditions and a discussion of how the comparison affected later work.",
+      "reusableLesson": "Place the comparison plot beside the claim it tests. Keep enough static explanation visible for the article to remain understandable without opening every detail panel."
+    },
+    {
+      "team": "ZJU-China",
+      "year": 2023,
+      "award": "Best Model",
+      "modelUrl": "https://2023.igem.wiki/zju-china/model",
+      "awardVerification": {
+        "publisher": "Zhejiang University Biology Experimental Teaching Center",
+        "type": "University report",
+        "date": "2023-11-30",
+        "url": "https://zjubiolab.zju.edu.cn/page/article/show/77496cbed8a84e698cbbd2b1460d745d",
+        "finding": "The university report explicitly lists Best Model among the team's awards."
+      },
+      "organization": "Nested contents introduce numbered modules and subsections. A workflow figure precedes derivations; an appendix holds additional detail.",
+      "figuresAndEquations": "Numbered equations are accompanied by local definitions. Observation tables, fitted-parameter tables and comparison plots are placed within the same analytical sequence. Figures have sequential identifiers and captions.",
+      "codeAndReferences": "References and derivation appendices are available. No clearly labeled executable-code download was identified on the inspected main model page; this is not a claim that none exists elsewhere.",
+      "validationPresentation": "The narrative compares fitted curves with observations and explicitly notes an interval beyond which the approximation loses agreement. Later comparison sections link back to the model development.",
+      "reusableLesson": "Show the valid range of a fit and its discrepancies, not only the best-looking result. Separate observed values, fitted parameters and predictions visually."
+    },
+    {
+      "team": "UToronto",
+      "year": 2024,
+      "award": "Best Model",
+      "modelUrl": "https://2024.igem.wiki/utoronto/model.html",
+      "awardVerification": {
+        "publisher": "University of Toronto Engineering News",
+        "type": "University report",
+        "date": "2024-11-21",
+        "url": "https://news.engineering.utoronto.ca/u-of-t-student-team-earns-international-prizes-for-leveraging-ai-to-tackle-antibiotic-resistance/",
+        "finding": "The report explicitly identifies the 2024 Best Model win and shows the award. The correct wiki slug is utoronto."
+      },
+      "organization": "A paper-like sequence runs from abstract, background and objectives through methods, batch-by-batch results, discussion, limitations, next steps and references.",
+      "figuresAndEquations": "Workflow illustrations and distributions support each results batch. An appendix groups architecture, hyperparameters, hardware and evaluation definitions; tables carry implementation details. The page does not force a long equation sequence where a workflow explanation is clearer.",
+      "codeAndReferences": "A separate Software page and the wiki GitLab repository are linked. Numbered references support the main text, with further references in the appendix.",
+      "wikiCodeUrl": "https://gitlab.igem.org/2024/utoronto/",
+      "validationPresentation": "The article explicitly distinguishes failed early tests, promising later tests and work still awaiting completion. Discussion connects each revision with feedback, making the iteration visible.",
+      "reusableLesson": "Report successive attempts and unresolved checks honestly. Keep computational evaluation, completed experimental checks and planned work as separate evidence categories."
+    }
+  ],
+  "recommendedArticlePattern": [
+    "Open with the research question, a compact overview figure and a navigable contents list.",
+    "For each module, use a continuous question → assumptions → equations or workflow → parameters and provenance → results → checks → interpretation sequence.",
+    "Define each symbol and unit next to its first equation. State whether values are measured, sourced, fitted or illustrative.",
+    "Give figures stable numbers and lettered panels where useful. Captions should state what is shown, conditions, provenance and the narrow conclusion supported.",
+    "Pair results with an explicit comparison or diagnostic. State the range tested and any disagreement; use verification, calibration and validation precisely.",
+    "Keep negative and unfinished results visible with their correct status. A planned check must not appear as a completed validation.",
+    "Put runnable scripts, input descriptions, environment information and figure-data downloads near the corresponding methods; retain a consolidated reproducibility index.",
+    "Use optional expanders for lengthy derivations and implementation detail. The central scientific argument should remain readable without interacting with controls.",
+    "Close with limitations and the next measurements needed, followed by complete linked references. Cite sources at the claim as well as in the bibliography."
+  ],
+  "boundaries": [
+    "An award verifies recognition by the competition, not independent correctness of every claim on a wiki.",
+    "Borrow presentation principles, not text, artwork, numerical results or biological models.",
+    "This review does not determine which equations or methods were originally invented by the teams; attribution must be checked individually.",
+    "The four pages were read, but their software and research were not independently reproduced.",
+    "These presentation practices do not guarantee publication, performance or an award."
+  ]
+}

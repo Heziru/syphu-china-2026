@@ -1,0 +1,100 @@
+.journey-person.journey-person--modular {
+  left: 38%;
+  top: 12%;
+  width: 59%;
+  height: 79%;
+  overflow: visible;
+}
+
+.journey-person__figure {
+  position: absolute;
+  inset: 8% 23% 5% 29%;
+  display: grid;
+  place-items: center;
+}
+
+.journey-person__figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.journey-person__vignettes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.journey-person__vignette {
+  position: absolute;
+  display: block;
+  width: 32%;
+  height: 38%;
+  object-fit: contain;
+  opacity: var(--life-opacity, 0);
+  transform: translateY(var(--life-rise, 0px));
+  filter: drop-shadow(0 9px 10px #4866500b);
+  user-select: none;
+}
+
+.journey-person__vignette--meal {
+  left: 0;
+  top: 0;
+}
+
+.journey-person__vignette--transit {
+  right: 0;
+  top: 31%;
+  width: 29%;
+  height: 43%;
+}
+
+.journey-person__vignette--rest {
+  left: 0;
+  bottom: 0;
+  width: 34%;
+}
+
+@media (min-width: 701px) and (max-width: 1050px) and (orientation: portrait) {
+  .journey-person.journey-person--modular {
+    left: 6%;
+    top: 34%;
+    width: 88%;
+    height: 59%;
+  }
+}
+
+@media (max-width: 700px) {
+  .journey-person.journey-person--modular {
+    left: 2%;
+    top: 35%;
+    width: 96%;
+    height: 57%;
+  }
+
+  .journey-person__figure {
+    inset: 12% 24% 6% 29%;
+  }
+
+  .journey-person__vignette--meal {
+    top: 1%;
+  }
+
+  .journey-person__vignette--transit {
+    top: 31%;
+    height: 45%;
+  }
+
+  .journey-person__vignette--rest {
+    bottom: 0;
+    width: 35%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-person__vignette {
+    opacity: 1;
+    transform: none;
+  }
+}

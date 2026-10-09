@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "completed_production_ns": 3,
+  "DCD_NPZ_checks": [
+    {
+      "replica": 1,
+      "DCD_atoms": 830,
+      "DCD_frames": 200,
+      "NPZ_frames_including_t0": 201,
+      "maximum_DCD_NPZ_coordinate_difference_A": 1.9073486328125e-06,
+      "NPZ_sha256": "65e02a4c3f78e8094d24070ddbfdc1d383b1b3a0ff007adc4d7a74d6dc4bd915",
+      "DCD_sha256": "88c732a7286a3abd9ebedcbc6302ddb8cea685bef423ea2600e92aedc662cf02"
+    },
+    {
+      "replica": 2,
+      "DCD_atoms": 830,
+      "DCD_frames": 200,
+      "NPZ_frames_including_t0": 201,
+      "maximum_DCD_NPZ_coordinate_difference_A": 2.86102294921875e-06,
+      "NPZ_sha256": "168a0d80edc2c18e73e95e3ec6a89d2c0b6c3128cf976cb4e3bc92c305e2f866",
+      "DCD_sha256": "ac318f96117978c267008d579feea83469c78e7302e85410ffe7467bec60572c"
+    },
+    {
+      "replica": 3,
+      "DCD_atoms": 830,
+      "DCD_frames": 200,
+      "NPZ_frames_including_t0": 201,
+      "maximum_DCD_NPZ_coordinate_difference_A": 1.9073486328125e-06,
+      "NPZ_sha256": "c0144834097e74079811848bb121a8267b7edfac8e0eb503cbe7535802e32c67",
+      "DCD_sha256": "5a6e32db62429dde85527b7635ce3c3315226bcb503d96382ee43dbf0f65ff78"
+    }
+  ],
+  "figures": {
+    "docking-validation": {
+      "dimensions": [
+        3708,
+        2945
+      ],
+      "nonwhite_fraction": 0.052564546348646435
+    },
+    "docking-human-ne": {
+      "dimensions": [
+        3613,
+        2981
+      ],
+      "nonwhite_fraction": 0.06368463503471056
+    },
+    "md-dynamics": {
+      "dimensions": [
+        4218,
+        2569
+      ],
+      "nonwhite_fraction": 0.10377349958591892
+    },
+    "md-topology-contacts": {
+      "dimensions": [
+        4406,
+        1659
+      ],
+      "nonwhite_fraction": 0.07208004756514556
+    }
+  },
+  "checks": [
+    "Three completed and separately seeded 1 ns trajectories",
+    "DCD and saved NPZ represent the same actual protein coordinates",
+    "Original docking ranks preserved; known-pose reference and human prediction remain distinct",
+    "Real deposited secondary-structure records survive PDB parsing; figures are not all-coil placeholders"
+  ]
+}

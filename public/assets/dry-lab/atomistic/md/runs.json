@@ -1,0 +1,110 @@
+[
+  {
+    "replica": 1,
+    "seed": 20261110,
+    "barostat_seed": 20261111,
+    "production_ps": 1000.0,
+    "equilibration_ps": 100,
+    "equilibration": [
+      {
+        "label": "NVT restrained",
+        "duration_ps": 20,
+        "backbone_k_kJ_mol_nm2": 1000,
+        "potential_energy_kJ_mol": -207359.3323074847
+      },
+      {
+        "label": "NPT restrained",
+        "duration_ps": 30,
+        "backbone_k_kJ_mol_nm2": 250,
+        "potential_energy_kJ_mol": -211393.4537832978
+      },
+      {
+        "label": "NPT unrestrained",
+        "duration_ps": 50,
+        "backbone_k_kJ_mol_nm2": 0,
+        "potential_energy_kJ_mol": -210826.96074553963
+      }
+    ],
+    "production_frames_in_npz": 201,
+    "production_frames_in_dcd": 200,
+    "frame_interval_ps": 5,
+    "production_wall_seconds": 786.9913830000442,
+    "total_wall_seconds": 888.2502574000973,
+    "platform": "OpenCL",
+    "protein_atoms": 830,
+    "complete": true,
+    "interpretation": "Independent velocity seeds from one minimized NMR conformer; short numerical pilots, not independent structural starting conformers or converged stability/affinity evidence."
+  },
+  {
+    "replica": 2,
+    "seed": 20261211,
+    "barostat_seed": 20261212,
+    "production_ps": 1000.0,
+    "equilibration_ps": 100,
+    "equilibration": [
+      {
+        "label": "NVT restrained",
+        "duration_ps": 20,
+        "backbone_k_kJ_mol_nm2": 1000,
+        "potential_energy_kJ_mol": -207709.66452170722
+      },
+      {
+        "label": "NPT restrained",
+        "duration_ps": 30,
+        "backbone_k_kJ_mol_nm2": 250,
+        "potential_energy_kJ_mol": -211239.6357032184
+      },
+      {
+        "label": "NPT unrestrained",
+        "duration_ps": 50,
+        "backbone_k_kJ_mol_nm2": 0,
+        "potential_energy_kJ_mol": -211180.5548662669
+      }
+    ],
+    "production_frames_in_npz": 201,
+    "production_frames_in_dcd": 200,
+    "frame_interval_ps": 5,
+    "production_wall_seconds": 774.8488987998571,
+    "total_wall_seconds": 866.3972750999965,
+    "platform": "OpenCL",
+    "protein_atoms": 830,
+    "complete": true,
+    "interpretation": "Independent velocity seeds from one minimized NMR conformer; short numerical pilots, not independent structural starting conformers or converged stability/affinity evidence."
+  },
+  {
+    "replica": 3,
+    "seed": 20261312,
+    "barostat_seed": 20261313,
+    "production_ps": 1000.0,
+    "equilibration_ps": 100,
+    "equilibration": [
+      {
+        "label": "NVT restrained",
+        "duration_ps": 20,
+        "backbone_k_kJ_mol_nm2": 1000,
+        "potential_energy_kJ_mol": -207986.6359094713
+      },
+      {
+        "label": "NPT restrained",
+        "duration_ps": 30,
+        "backbone_k_kJ_mol_nm2": 250,
+        "potential_energy_kJ_mol": -211097.4488449192
+      },
+      {
+        "label": "NPT unrestrained",
+        "duration_ps": 50,
+        "backbone_k_kJ_mol_nm2": 0,
+        "potential_energy_kJ_mol": -211487.86127076508
+      }
+    ],
+    "production_frames_in_npz": 201,
+    "production_frames_in_dcd": 200,
+    "frame_interval_ps": 5,
+    "production_wall_seconds": 762.8285205999855,
+    "total_wall_seconds": 847.6305563000496,
+    "platform": "OpenCL",
+    "protein_atoms": 830,
+    "complete": true,
+    "interpretation": "Independent velocity seeds from one minimized NMR conformer; short numerical pilots, not independent structural starting conformers or converged stability/affinity evidence."
+  }
+]

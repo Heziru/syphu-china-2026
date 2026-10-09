@@ -1,0 +1,24 @@
+{
+  "experiment": "1fle-redocking",
+  "receptor_residues": 240,
+  "ligand_residues": 47,
+  "receptor_source": "1FLE chain E, porcine pancreatic elastase",
+  "ligand_source": "1FLE chain I, human Elafin resolved residues 11\u201357",
+  "ligand_rigid_transform": {
+    "euler_xyz_deg": [
+      37,
+      -63,
+      101
+    ],
+    "translation_A": [
+      80,
+      -40,
+      65
+    ],
+    "center_before_transform": true
+  },
+  "method": "HDOCKlite 1.2 rigid-body global docking; 1.2 A grid, 15 degree rotation; no residue restraints",
+  "status": "Bound-structure redocking benchmark, not a new experimental complex.",
+  "receptor.pdb_sha256": "2136b234df225071267adbd72c62830d6d4008e0e1f608eb7b0f60ce3ddc904b",
+  "ligand-independent.pdb_sha256": "611d0a4b2c7498e2d9472d4dbc61395601cf3b20deb5e3a54e7a74d7c2276a75"
+}

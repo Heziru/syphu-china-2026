@@ -1,0 +1,24 @@
+{
+  "experiment": "human-ne-elafin",
+  "receptor_residues": 218,
+  "ligand_residues": 57,
+  "receptor_source": "2Z7F chain E, human neutrophil elastase; SLPI chain I removed",
+  "ligand_source": "2REL first NMR model, chain A, mature human Elafin residues 1\u201357, renamed I",
+  "ligand_rigid_transform": {
+    "euler_xyz_deg": [
+      37,
+      -63,
+      101
+    ],
+    "translation_A": [
+      80,
+      -40,
+      65
+    ],
+    "center_before_transform": true
+  },
+  "method": "HDOCKlite 1.2 rigid-body global docking; 1.2 A grid, 15 degree rotation; no residue restraints",
+  "status": "Exploratory cross-docking prediction; no experimentally established Elafin\u2013human-NE pose used for scoring or validation.",
+  "receptor.pdb_sha256": "30a39215fc54ca16e50f5d67da1861ae5cddabc39f04889674bf3567a047f612",
+  "ligand-independent.pdb_sha256": "771909a34ea0eb11fa520f8be2debf9cc038db2246b90100a60e89879287a0e0"
+}

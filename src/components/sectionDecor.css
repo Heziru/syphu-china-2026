@@ -1,0 +1,209 @@
+/* Three quiet layers: organic footing, directional paths, independent PNGs. */
+.section-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  isolation: isolate;
+  color: #91ac94;
+}
+.section-decor img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
+}
+.decor-blob { position: absolute; background: #cbd6be; }
+.decor-blob--upper {
+  left: -10%; top: -19%; width: 30%; height: 38%;
+  border-radius: 36% 64% 68% 32% / 51% 24% 76% 49%;
+  opacity: .28; transform: rotate(-19deg);
+}
+.decor-blob--side {
+  right: -9%; top: -16%; width: 27%; height: 35%;
+  border-radius: 68% 32% 35% 65% / 35% 54% 46% 65%;
+  opacity: .25; transform: rotate(19deg);
+}
+.decor-blob--ground {
+  left: -9%; bottom: -23%; width: 123%; height: 34%;
+  border-radius: 48% 62% 0 0 / 54% 90% 0 0;
+  background: #c9d9c5; opacity: .4;
+}
+.section-decor .decor-wash {
+  right: -7%; bottom: -9%; width: 43%; height: 48%;
+  opacity: .19;
+}
+.decor-path { position: absolute; z-index: 1; }
+.section-decor .decor-path--upper {
+  left: 9%; top: -9%; width: 39%; height: 32%; opacity: .54;
+  transform: rotate(10deg);
+}
+.decor-path--side {
+  right: 0; top: 26%; width: 25%; height: 16%; opacity: .54;
+}
+.section-decor .decor-accent {
+  z-index: 2; width: clamp(78px, 10vw, 158px); height: 19%;
+  opacity: .68;
+}
+.section-decor .decor-accent--1 { right: 3%; top: 36%; }
+.section-decor .decor-accent--2 { left: 2%; bottom: 2%; width: 12%; height: 19%; }
+.section-decor .decor-accent--3 { right: 5%; bottom: 3%; width: 13%; height: 20%; }
+.section-decor .decor-accent--4 { right: 3%; top: 20%; width: 7%; height: 15%; opacity: .48; }
+
+/* Evidence: book to the side, foliage under the architecture and photo. */
+.section-decor--research .decor-blob--upper { width: 32%; height: 44%; }
+.section-decor--research .decor-blob--ground { height: 36%; bottom: -23%; }
+.section-decor--research .decor-accent--1 { right: 1.5%; top: 36%; width: 9%; height: 18%; opacity: .74; }
+.section-decor--research .decor-accent--2 { left: -1%; bottom: 0; width: 13%; height: 24%; opacity: .75; }
+.section-decor--research .decor-accent--3 { right: 2%; bottom: 1%; width: 14%; height: 24%; opacity: .82; }
+.section-decor--research .decor-wash { right: 33%; top: -2%; bottom: auto; width: 26%; height: 30%; opacity: .36; }
+
+/* Biology keeps the central anatomy clear; accents form an upper-to-lower arc. */
+.section-decor--local .decor-accent--1,
+.section-decor--cell .decor-accent--1 { left: 30%; right: auto; top: 5%; width: 15%; height: 14%; opacity: .6; }
+.section-decor--local .decor-accent--2,
+.section-decor--cell .decor-accent--2 { left: 4%; bottom: 9%; width: 7%; height: 10%; opacity: .48; }
+.section-decor--cell .decor-accent--3 { right: 4%; bottom: 2%; width: 10%; height: 17%; opacity: .55; }
+.section-decor--cell .decor-accent--2 { left: 43%; bottom: 5%; }
+.section-decor--cell .decor-path--side,
+.section-decor--local .decor-path--side { top: 19%; right: -5%; width: 29%; }
+.section-decor--cell .decor-blob--ground,
+.section-decor--local .decor-blob--ground { bottom: -25%; }
+.section-decor--life .decor-accent--1 { right: 2%; top: 8%; width: 10%; height: 16%; opacity: .55; }
+.section-decor--life .decor-accent--2 { left: 7%; bottom: 5%; width: 8%; height: 13%; opacity: .53; }
+.section-decor--life .decor-accent--3 { right: 2%; bottom: 1%; width: 16%; height: 12%; }
+.section-decor--life .decor-path--side { top: 72%; right: 0; width: 17%; }
+.section-decor--care .decor-accent--1 { left: 7%; right: auto; top: 7%; width: 9%; height: 16%; opacity: .6; }
+.section-decor--care .decor-accent--2 { left: auto; right: 3%; bottom: 6%; width: 10%; height: 15%; }
+.section-decor--care .decor-accent--3 { left: 2%; right: auto; bottom: 2%; }
+.section-decor--care .decor-path--upper { left: 20%; top: -8%; width: 35%; }
+.section-decor--world .decor-accent--1 { right: 2%; top: 34%; width: 9%; opacity: .45; }
+.section-decor--world .decor-accent--2 { left: 6%; bottom: 2%; width: 13%; height: 11%; }
+.section-decor--world .decor-path--upper { left: 30%; top: -1%; width: 30%; height: 16%; }
+.section-decor--product .decor-accent--1 { left: 4%; right: auto; top: 6%; width: 9%; height: 16%; opacity: .55; }
+.section-decor--product .decor-accent--2 { left: auto; right: 7%; bottom: 3%; width: 7%; height: 10%; opacity: .4; }
+.section-decor--product .decor-accent--3 { left: 3%; right: auto; bottom: 2%; }
+.section-decor--product .decor-path--side { top: 3%; }
+
+/* Inner pages: the illustration vignette has its own protected text gutter. */
+.section-decor--subdued .decor-blob { opacity: .2; }
+.section-decor--subdued .decor-path { opacity: .3; }
+.section-decor--subdued .decor-accent { opacity: .45; }
+.section-decor--subdued .decor-wash { opacity: .13; }
+
+@media (min-width: 701px) and (max-width: 1050px) {
+  .section-decor .decor-accent--3,
+  .section-decor .decor-accent--4 { display: none; }
+  .section-decor .decor-accent--1 { width: 11%; height: 13%; }
+  .section-decor .decor-path--side { width: 21%; right: -5%; opacity: .3; }
+  .section-decor--research .decor-accent--1 { right: 1%; top: 45%; }
+}
+@media (max-width: 700px) {
+  .section-decor .decor-blob--upper { left: -25%; top: -10%; width: 58%; height: 21%; opacity: .2; }
+  .section-decor .decor-blob--side { right: -28%; top: 40%; width: 47%; height: 32%; opacity: .22; }
+  .section-decor .decor-blob--ground { left: -18%; bottom: -12%; width: 136%; height: 19%; opacity: .33; }
+  .section-decor .decor-wash { width: 64%; height: 30%; bottom: -6%; }
+  .section-decor .decor-path--upper { left: auto; right: 2%; top: 0; width: 38%; height: 8%; opacity: .43; }
+  .section-decor .decor-path--side,
+  .section-decor .decor-accent--2,
+  .section-decor .decor-accent--3,
+  .section-decor .decor-accent--4 { display: none; }
+  .section-decor .decor-accent--1 { left: auto; right: 4%; top: auto; bottom: 1%; width: 21%; height: 11%; opacity: .6; }
+  .section-decor--research .decor-accent--1 { right: 2%; bottom: 21%; width: 18%; height: 10%; }
+  .section-decor--research .decor-wash { top: auto; right: -8%; bottom: 0; width: 70%; height: 23%; }
+  .section-decor--care .decor-accent--1 { right: 6%; bottom: 2%; }
+  .section-decor--local .decor-accent--1,
+  .section-decor--cell .decor-accent--1 { right: 3%; bottom: 1%; width: 27%; height: 8%; }
+  .section-decor--subdued .decor-path { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-decor, .section-decor * { animation: none !important; transition: none !important; }
+}
+
+/* Homepage art direction. Inner-page vignette styling above stays unchanged.
+   One pale foundation, one quiet direction, and only a few independent assets. */
+.continuous-journey .section-decor .decor-blob--upper {
+  left: -11%; top: -24%; width: 27%; height: 37%; opacity: .17;
+}
+.continuous-journey .section-decor .decor-blob--side {
+  right: -18%; top: 25%; width: 38%; height: 47%; opacity: .13;
+}
+.continuous-journey .section-decor .decor-blob--ground {
+  left: -12%; bottom: -24%; width: 125%; height: 32%; opacity: .3;
+}
+.continuous-journey .section-decor .decor-wash {
+  right: 2%; bottom: 13%; width: 52%; height: 56%; opacity: .24;
+}
+.continuous-journey .section-decor .decor-path--upper {
+  left: 32%; top: 1%; width: 21%; height: 14%; opacity: .36; transform: rotate(-5deg);
+}
+.continuous-journey .section-decor .decor-path--side,
+.continuous-journey .section-decor .decor-accent--4 { display: none; }
+.continuous-journey .section-decor .decor-accent {
+  width: 8%; height: 11%; opacity: .48;
+}
+.continuous-journey .section-decor .decor-accent--1 {
+  left: auto; right: 4%; top: 7%; bottom: auto;
+}
+.continuous-journey .section-decor .decor-accent--2 {
+  left: 4%; right: auto; top: auto; bottom: 4%;
+}
+.continuous-journey .section-decor .decor-accent--3 {
+  left: auto; right: 3%; top: auto; bottom: 2%; width: 11%; height: 13%;
+}
+
+/* No alternate bacterium is introduced as a decorative version of the EcN IP. */
+.continuous-journey .section-decor--cell .decor-accent--2,
+.continuous-journey .section-decor--local .decor-accent--2,
+.continuous-journey .section-decor--product .decor-accent--2,
+.continuous-journey .section-decor--product .decor-accent--1,
+.continuous-journey .section-decor--life .decor-accent--3 { display: none; }
+.continuous-journey .section-decor--care .decor-accent--1 { left: 24%; right: auto; top: 5%; width: 6%; height: 9%; opacity: .4; }
+.continuous-journey .section-decor--care .decor-accent--2 { left: auto; right: 2%; bottom: 4%; width: 8%; }
+.continuous-journey .section-decor--care .decor-accent--3 { left: 0; right: auto; bottom: 0; opacity: .35; }
+.continuous-journey .section-decor--life .decor-accent--1 { right: 0; top: 7%; width: 7%; height: 10%; opacity: .35; }
+.continuous-journey .section-decor--life .decor-accent--2 { left: 8%; bottom: 5%; width: 6%; height: 9%; opacity: .38; }
+.continuous-journey .section-decor--local .decor-accent--1,
+.continuous-journey .section-decor--cell .decor-accent--1 { right: 8%; top: 4%; width: 10%; height: 8%; opacity: .35; }
+.continuous-journey .section-decor--cell .decor-accent--3 { right: 1%; bottom: 2%; width: 7%; opacity: .32; }
+.continuous-journey .section-decor--product .decor-path--upper { left: 7%; top: 3%; width: 18%; opacity: .25; }
+.continuous-journey .section-decor--product .decor-wash { left: 3%; right: auto; bottom: 19%; width: 46%; opacity: .3; }
+.continuous-journey .section-decor--product .decor-accent--3 { left: 2%; right: auto; width: 8%; opacity: .35; }
+
+/* Research follows the eye from the heading to the scientist, then the campus. */
+.continuous-journey .section-decor--research .decor-path--upper { left: 34%; top: 3%; width: 22%; height: 12%; opacity: .42; }
+.continuous-journey .section-decor--research .decor-path--side { display: block; right: -2%; top: 30%; width: 21%; height: 10%; opacity: .32; }
+.continuous-journey .section-decor--research .decor-wash { left: 51%; right: auto; top: 5%; bottom: auto; width: 34%; height: 39%; opacity: .33; }
+.continuous-journey .section-decor--research .decor-accent--1 { right: 2%; top: 40%; width: 7%; height: 11%; opacity: .58; }
+.continuous-journey .section-decor--research .decor-accent--2 { left: -1%; bottom: 0; width: 9%; height: 15%; opacity: .62; }
+.continuous-journey .section-decor--research .decor-accent--3 { right: 1%; bottom: 0; width: 10%; height: 15%; opacity: .64; }
+.continuous-journey .section-decor--research .decor-blob--ground { bottom: -22%; height: 30%; opacity: .34; }
+/* The Three.js campus has its own ground; its accents can sit in front of it. */
+.continuous-journey .cosmic-journey__art > .section-decor--research { isolation: auto; z-index: auto; }
+.continuous-journey .cosmic-journey__art > .section-decor--research .decor-accent { z-index: 3; }
+.continuous-journey .cosmic-journey__art > .section-decor--research .decor-blob--ground { display: none; }
+.continuous-journey .section-decor--subdued .decor-accent { opacity: .3; }
+
+@media (min-width: 701px) and (max-width: 1050px) {
+  .continuous-journey .section-decor .decor-accent--3 { display: none; }
+  .continuous-journey .section-decor--research .decor-accent--1 { right: 1%; top: 40%; width: 8%; }
+  .continuous-journey .section-decor--research .decor-wash { left: 52%; top: 9%; width: 41%; height: 29%; }
+}
+@media (max-width: 700px) {
+  .continuous-journey .section-decor .decor-blob--upper { left: -33%; top: -11%; width: 60%; height: 20%; opacity: .12; }
+  .continuous-journey .section-decor .decor-blob--side { right: -34%; top: 43%; width: 59%; height: 29%; opacity: .11; }
+  .continuous-journey .section-decor .decor-blob--ground { left: -18%; bottom: -13%; width: 138%; height: 20%; opacity: .25; }
+  .continuous-journey .section-decor .decor-wash { left: auto; right: -2%; top: auto; bottom: 14%; width: 85%; height: 39%; opacity: .2; }
+  .continuous-journey .section-decor .decor-path--upper { left: auto; right: 6%; top: 2%; width: 25%; height: 6%; opacity: .28; }
+  .continuous-journey .section-decor .decor-path--side,
+  .continuous-journey .section-decor .decor-accent--2,
+  .continuous-journey .section-decor .decor-accent--3 { display: none; }
+  .continuous-journey .section-decor .decor-accent--1 { left: auto; right: 2%; top: auto; bottom: 2%; width: 16%; height: 8%; opacity: .4; }
+  .continuous-journey .section-decor--research .decor-wash { right: 3%; bottom: auto; top: 32%; width: 50%; height: 28%; opacity: .28; }
+  .continuous-journey .section-decor--research .decor-accent--1 { right: 2%; bottom: 3%; width: 14%; height: 8%; opacity: .4; }
+  .continuous-journey .section-decor--product .decor-accent--3 { display: block; left: 2%; right: auto; bottom: 1%; width: 15%; height: 8%; opacity: .28; }
+}

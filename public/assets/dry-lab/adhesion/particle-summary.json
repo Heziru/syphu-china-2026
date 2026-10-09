@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "status": "Uncalibrated illustrative transport scenario",
+  "parameters": {
+    "L_um": 1800.0,
+    "H_um": 180.0,
+    "U_um_s": 90.0,
+    "D_um2_s": 100.0,
+    "kappa_um_s": 1.0,
+    "koff_s": 0.005,
+    "ks_s": 0.002
+  },
+  "units": {
+    "length": "\u00b5m",
+    "time": "s"
+  },
+  "seed": 202610093,
+  "particles": 4000,
+  "display_particles": 600,
+  "dt_s": 0.01,
+  "end_s": 180,
+  "geometry_note": "Strip-coordinate dynamics mapped onto a schematic colon; two reactive walls; not organ CFD or patient anatomy.",
+  "final_counts": {
+    "free": 22,
+    "attached": 295,
+    "exited": 3512,
+    "shed": 171
+  },
+  "ever_attached_fraction": 0.18875,
+  "attachment_events": 890,
+  "detachment_events": 424,
+  "mean_wall_time_within_180s": 20.845905000000197,
+  "dimensions": {
+    "particle-transport": {
+      "width": 2040,
+      "height": 1422
+    },
+    "particle-validation": {
+      "width": 2735,
+      "height": 807
+    }
+  },
+  "validation": {
+    "main": {
+      "max_count_closure_error": 0,
+      "invalid_positions": 0,
+      "finite_coordinates": true,
+      "adsorption_crossing_probability": 0.01772453850905516
+    },
+    "no_binding": {
+      "kappa_um_s": 0,
+      "max_attached": 0,
+      "max_shed": 0,
+      "total_attachment_events": 0
+    },
+    "competing_hazards": {
+      "n": 200000,
+      "t_s": 60,
+      "expected": {
+        "free": 0.24496655727495947,
+        "attached": 0.6570468198150567,
+        "exited": 0.0,
+        "shed": 0.09798662290998378
+      },
+      "observed": {
+        "free": 0.24455,
+        "attached": 0.657425,
+        "exited": 0.0,
+        "shed": 0.098025
+      },
+      "max_absolute_fraction_error": 0.0004165572749594837,
+      "within_four_binomial_standard_errors": true
+    },
+    "step_ensembles": [
+      {
+        "dt_s": 0.04,
+        "repeats": 6,
+        "particles_per_repeat": 6000,
+        "mean": {
+          "free": 0.008916666666666666,
+          "attached": 0.1421111111111111,
+          "exited": 0.8327222222222223,
+          "shed": 0.01625
+        },
+        "standard_error": {
+          "free": 0.000581743866255525,
+          "attached": 0.0014373758668893982,
+          "exited": 0.001408746925900658,
+          "shed": 0.0006480026291670484
+        },
+        "ci95_halfwidth": {
+          "free": 0.001495420215589294,
+          "attached": 0.003694892294407888,
+          "exited": 0.0036212992587287282,
+          "shed": 0.001665743787981389
+        }
+      },
+      {
+        "dt_s": 0.02,
+        "repeats": 6,
+        "particles_per_repeat": 6000,
+        "mean": {
+          "free": 0.007694444444444445,
+          "attached": 0.13972222222222222,
+          "exited": 0.8358888888888889,
+          "shed": 0.016694444444444442
+        },
+        "standard_error": {
+          "free": 0.0005891246907358136,
+          "attached": 0.0022134549274944325,
+          "exited": 0.002346655092564049,
+          "shed": 0.0005330149512646011
+        },
+        "ci95_halfwidth": {
+          "free": 0.0015143932289303436,
+          "attached": 0.005689867030616883,
+          "exited": 0.006032268955448597,
+          "shed": 0.0013701585518433588
+        }
+      },
+      {
+        "dt_s": 0.01,
+        "repeats": 6,
+        "particles_per_repeat": 6000,
+        "mean": {
+          "free": 0.009083333333333334,
+          "attached": 0.1443333333333333,
+          "exited": 0.831111111111111,
+          "shed": 0.015472222222222222
+        },
+        "standard_error": {
+          "free": 0.00017612074982385962,
+          "attached": 0.002639093559314415,
+          "exited": 0.002212199620399069,
+          "shed": 0.0006000257196133603
+        },
+        "ci95_halfwidth": {
+          "free": 0.0004527328003758611,
+          "attached": 0.006784005966118423,
+          "exited": 0.005686640160999397,
+          "shed": 0.0015424152157527122
+        }
+      }
+    ],
+    "step_comparisons": [
+      {
+        "coarse_dt_s": 0.04,
+        "fine_dt_s": 0.01,
+        "absolute_fraction_difference": {
+          "free": 0.0001666666666666674,
+          "attached": 0.0022222222222222088,
+          "exited": 0.0016111111111112297,
+          "shed": 0.0007777777777777783
+        },
+        "pooled_standard_error": {
+          "free": 0.0006078194176270159,
+          "attached": 0.003005139630288562,
+          "exited": 0.0026226694533868235,
+          "shed": 0.000883141139119302
+        },
+        "ci95_intervals_overlap": {
+          "free": true,
+          "attached": true,
+          "exited": true,
+          "shed": true
+        }
+      },
+      {
+        "coarse_dt_s": 0.02,
+        "fine_dt_s": 0.01,
+        "absolute_fraction_difference": {
+          "free": 0.0013888888888888892,
+          "attached": 0.004611111111111094,
+          "exited": 0.004777777777777881,
+          "shed": 0.00122222222222222
+        },
+        "pooled_standard_error": {
+          "free": 0.0006148873228105184,
+          "attached": 0.003444444444444446,
+          "exited": 0.0032249988037130447,
+          "shed": 0.0008025807139902728
+        },
+        "ci95_intervals_overlap": {
+          "free": true,
+          "attached": true,
+          "exited": true,
+          "shed": true
+        }
+      }
+    ],
+    "interpretation": "Three resolutions with six independent seeds each. Error bars are 95% t intervals across seeds, not experimental uncertainty. Agreement within sampling error is a resolution check, not a measured order or proof of exact convergence.",
+    "display_geometry": {
+      "free_display_positions_checked": 10740,
+      "outside_polygon": 0,
+      "boundary_self_intersections": 0,
+      "polyline_tolerance_schematic_units": 0.1
+    }
+  },
+  "limitations": [
+    "Strip dynamics embedded into a schematic colon silhouette; curvature does not alter flow or diffusion.",
+    "Both walls are reactive; the absorbing outlet uses endpoint detection, not exact Brownian first-passage. Earlier field model has one reactive wall and an advective outlet.",
+    "No growth, mucus penetration, chemotaxis, finite receptor occupancy or strain-specific binding mechanism.",
+    "Effective dispersion and all reaction rates are scenario assumptions, not fitted construct measurements.",
+    "No PspA-induced adhesion or Elafin secretion is assumed. Retention is not therapeutic efficacy.",
+    "Displayed dots are a fixed 600-ID subset; counters include all 4000 particles.",
+    "Short finite time-step simulations and Monte Carlo intervals do not establish biological validation."
+  ],
+  "references": [
+    {
+      "title": "Erban & Chapman (2007), Reactive boundary conditions for stochastic simulations of reaction-diffusion processes",
+      "url": "https://doi.org/10.1088/1478-3975/4/1/003"
+    },
+    {
+      "title": "Singer et al. (2008), Partially Reflected Diffusion",
+      "url": "https://doi.org/10.1137/060663258"
+    }
+  ],
+  "script_sha256": "97dc6dcc3786b703763f09d5ec7ee8545913cb315e0e965282591a1094bf6a86",
+  "elapsed_s": 9.340163707733154
+}

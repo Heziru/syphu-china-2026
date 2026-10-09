@@ -1,0 +1,11 @@
+import { launchReviewBrowser } from '../browser-review.mjs';
+import { mkdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const output = new URL('../../outputs/dry-lab-research/', import.meta.url);
+await mkdir(output, {recursive:true});
+const browser = await launchReviewBrowser();
+const page = await browser.newPage({viewport:{width:1440,height:1000}});
+await page.goto('https://2025.igem.wiki/peking/model/', {waitUntil:'domcontentloaded',timeout:60000});
+await page.locator('text=Dissolution Kinetics Modeling of pH-Sensitive Microspheres').last().scrollIntoViewIfNeeded();
+await page.screenshot({path:fileURLToPath(new URL('peking-reference-layout.png',output))});
+await browser.close();

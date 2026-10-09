@@ -1,0 +1,161 @@
+.research-collage {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  color: #284f47;
+  pointer-events: none;
+}
+
+.research-collage__copy {
+  position: absolute;
+  left: 7%;
+  top: 13%;
+  width: 41%;
+  z-index: 1;
+}
+
+.research-collage__eyebrow {
+  margin: 0 0 clamp(14px, 2.4svh, 24px);
+  color: #7b9682;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.research-collage__copy h2 {
+  margin: 0;
+  font-size: clamp(38px, min(5.3vw, 8.6svh), 82px);
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -.045em;
+}
+
+.research-collage__controls {
+  display: flex;
+  gap: 26px;
+  margin-top: clamp(16px, 2.8svh, 27px);
+  width: fit-content;
+  pointer-events: auto;
+}
+
+.research-collage__controls button {
+  min-height: 44px;
+  padding: 8px 1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #71877c;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.research-collage__controls button[aria-pressed="true"] {
+  color: #284f47;
+  border-bottom-color: #cc9d77;
+}
+
+.research-collage__controls button:hover { color: #284f47; }
+.research-collage__controls button:focus-visible {
+  outline: 2px solid #416d60;
+  outline-offset: 5px;
+}
+
+.research-collage__photo {
+  position: absolute;
+  left: 7%;
+  top: 51%;
+  width: min(31vw, 445px);
+  margin: 0;
+  z-index: 1;
+}
+
+.research-collage__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 6px solid #fffdf6;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px #2a554312;
+}
+
+.research-collage__photo figcaption {
+  margin-top: 11px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #647d70;
+}
+
+/* The person has a stable, separate reading area above the campus building. */
+.research-collage__scene {
+  position: absolute;
+  left: 54%;
+  top: 7%;
+  width: 26%;
+  height: 37%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.research-collage__scene img {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  object-fit: contain;
+  opacity: 1;
+  user-select: none;
+}
+
+.research-collage__scene figcaption {
+  flex: 0 0 auto;
+  margin: -5px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #647d70;
+}
+
+@media (min-width: 701px) and (max-aspect-ratio: 1/1) {
+  .research-collage__copy { top: 10%; width: 47%; }
+  .research-collage__copy h2 { font-size: clamp(38px, 6vw, 62px); }
+  .research-collage__scene { top: 8%; left: 55%; width: 36%; height: 32%; }
+  .research-collage__photo { top: 39%; width: 36%; }
+}
+
+@media (max-width: 700px) {
+  .research-collage__copy { left: 7%; top: 6%; width: 86%; }
+  .research-collage__eyebrow { font-size: 9px; margin-bottom: 13px; }
+  .research-collage__copy h2 { font-size: clamp(34px, min(9.7vw, 6.2svh), 48px); }
+  .research-collage__controls { margin-top: 9px; gap: 24px; }
+  .research-collage__controls button { font-size: 14px; }
+  .research-collage__photo { top: 40%; left: 7%; width: 37%; }
+  .research-collage__photo img { border-width: 4px; border-radius: 10px; }
+  .research-collage__photo figcaption { font-size: 10px; max-width: 17em; margin-top: 7px; }
+  .research-collage__scene { top: 31%; left: 48%; width: 45%; height: 27%; }
+  .research-collage__scene figcaption { margin-top: -4px; font-size: 11px; }
+}
+
+/* Reduced-motion reading mode has no WebGL campus beneath the collage. */
+.research-collage--static {
+  position: relative;
+  min-height: 680px;
+  height: 85svh;
+  isolation: isolate;
+}
+.research-collage--static .research-collage__photo { top: 48%; width: 39%; }
+.research-collage--static .research-collage__scene { left: 55%; top: 27%; width: 34%; height: 52%; }
+@media (max-width: 700px) {
+  .research-collage--static { min-height: 620px; height: 90svh; }
+  .research-collage--static .research-collage__copy { top: 8%; }
+  .research-collage--static .research-collage__photo { top: 48%; width: 44%; }
+  .research-collage--static .research-collage__scene { top: 43%; left: 53%; width: 43%; height: 35%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .research-collage__controls button { transition: none; }
+}

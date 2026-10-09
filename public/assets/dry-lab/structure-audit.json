@@ -1,0 +1,261 @@
+{
+  "audited_on": "2026-10-08",
+  "source_root": "submission-root",
+  "structures": [
+    {
+      "file": "wiki-root/public/assets/dry-lab/structures/1fle.pdb",
+      "bytes": 224532,
+      "sha256": "50027986c3d2e2f73de90caaa8b0579322e71d592c47140f1d517360c52789bd",
+      "model_count": 1,
+      "chains": {
+        "E": {
+          "atom_count": 1822,
+          "residue_count": 240,
+          "first_residue": "16",
+          "last_residue": "245"
+        },
+        "I": {
+          "atom_count": 341,
+          "residue_count": 47,
+          "first_residue": "11",
+          "last_residue": "57"
+        }
+      },
+      "title": "CRYSTAL STRUCTURE OF ELAFIN COMPLEXED WITH PORCINE PANCREATIC ELASTASE",
+      "ssbond_records": [
+        "SSBOND   1 CYS E   42    CYS E   58                          1555   1555  2.09  ",
+        "SSBOND   2 CYS E  136    CYS E  201                          1555   1555  1.97  ",
+        "SSBOND   3 CYS E  168    CYS E  182                          1555   1555  2.02  ",
+        "SSBOND   4 CYS E  191    CYS E  220                          1555   1555  2.07  ",
+        "SSBOND   5 CYS I   16    CYS I   45                          1555   1555  2.00  ",
+        "SSBOND   6 CYS I   23    CYS I   49                          1555   1555  2.06  ",
+        "SSBOND   7 CYS I   32    CYS I   44                          1555   1555  2.04  ",
+        "SSBOND   8 CYS I   38    CYS I   53                          1555   1555  2.06  "
+      ],
+      "id": "1FLE",
+      "source": "https://www.rcsb.org/structure/1FLE",
+      "method": "X-ray diffraction",
+      "resolution_A": 1.9,
+      "identity": {
+        "E": "Sus scrofa pancreatic elastase (P00772), 240 residues",
+        "I": "Homo sapiens Elafin (P19957), 57 deposited residues; 11-57 modeled"
+      },
+      "use": "Published experimental reference complex; not team docking and not human neutrophil elastase",
+      "reactive_loop": "Mature Elafin Ala24=P1, Met25=P1 prime (not source report Met78)."
+    },
+    {
+      "file": "submission-root/data/pdb/2rel.pdb",
+      "bytes": 762939,
+      "sha256": "87de7296beac51c1ae41d812f8f78ed9c560d401dcfd44e35e6f472b4310a2ac",
+      "model_count": 11,
+      "chains": {
+        "A": {
+          "atom_count": 830,
+          "residue_count": 57,
+          "first_residue": "1",
+          "last_residue": "57"
+        }
+      },
+      "title": "SOLUTION STRUCTURE OF R-ELAFIN, A SPECIFIC INHIBITOR OF ELASTASE, NMR, 11 STRUCTURES",
+      "ssbond_records": [
+        "SSBOND   1 CYS A   16    CYS A   45                          1555   1555  2.02  ",
+        "SSBOND   2 CYS A   23    CYS A   49                          1555   1555  2.01  ",
+        "SSBOND   3 CYS A   32    CYS A   44                          1555   1555  2.02  ",
+        "SSBOND   4 CYS A   38    CYS A   53                          1555   1555  2.02  "
+      ],
+      "id": "2REL",
+      "source": "https://www.rcsb.org/structure/2REL",
+      "method": "Solution NMR",
+      "resolution_A": null,
+      "identity": {
+        "A": "Homo sapiens recombinant Elafin (P19957), 57 residues"
+      },
+      "use": "Show conformer 1 of 11; not MD and not a docking pose"
+    },
+    {
+      "file": "submission-root/data/pdb/2z7f.pdb",
+      "bytes": 226557,
+      "sha256": "8613786d7e868ca183e8c0777637661a00d9d5c8b063f4a66ceb4da60c989515",
+      "model_count": 1,
+      "chains": {
+        "E": {
+          "atom_count": 1636,
+          "residue_count": 218,
+          "first_residue": "16",
+          "last_residue": "243"
+        },
+        "I": {
+          "atom_count": 374,
+          "residue_count": 50,
+          "first_residue": "58",
+          "last_residue": "107"
+        }
+      },
+      "title": "CRYSTAL STRUCTURE OF THE COMPLEX OF HUMAN NEUTROPHIL ELASTASE WITH 1/2SLPI",
+      "ssbond_records": [
+        "SSBOND   1 CYS E   42    CYS E   58                          1555   1555  2.07  ",
+        "SSBOND   2 CYS E  136    CYS E  201                          1555   1555  2.06  ",
+        "SSBOND   3 CYS E  168    CYS E  182                          1555   1555  2.02  ",
+        "SSBOND   4 CYS E  191    CYS E  220                          1555   1555  2.06  ",
+        "SSBOND   5 CYS I   64    CYS I   93                          1555   1555  2.03  ",
+        "SSBOND   6 CYS I   71    CYS I   97                          1555   1555  2.05  ",
+        "SSBOND   7 CYS I   80    CYS I   92                          1555   1555  2.05  ",
+        "SSBOND   8 CYS I   86    CYS I  101                          1555   1555  2.03  "
+      ],
+      "id": "2Z7F",
+      "source": "https://www.rcsb.org/structure/2Z7F",
+      "method": "X-ray diffraction",
+      "resolution_A": 1.7,
+      "identity": {
+        "E": "Homo sapiens neutrophil elastase (P08246), 218 residues",
+        "I": "Homo sapiens SLPI WAP2 domain (P03973), 50 residues (58-107)"
+      },
+      "use": "Exclude as Elafin validation; valid only if explicitly relabeled HNE–SLPI reference"
+    }
+  ],
+  "md": [
+    {
+      "file": "submission-root/data/processed/elafin_ne_md_log.txt",
+      "rows": 200,
+      "header": [
+        "Step",
+        "Time (ps)",
+        "Potential Energy (kJ/mole)",
+        "Kinetic Energy (kJ/mole)",
+        "Total Energy (kJ/mole)",
+        "Temperature (K)",
+        "Box Volume (nm^3)",
+        "Density (g/mL)",
+        "Speed (ns/day)"
+      ],
+      "first_time_ps": 609.9999999993992,
+      "last_time_ps": 2599.999999952342,
+      "corrected_temperature_mean_K": 310.39709405534046,
+      "corrected_temperature_std_K": 1.2977782353032992,
+      "limitations": [
+        "Input is 2Z7F HNE–SLPI, not Elafin.",
+        "Original JSON mislabels potential energy (column index 2) as temperature; actual temperature index is 5.",
+        "Initial-to-final unaligned displacement is not RMSF or aligned RMSD; periodic boundary and rigid-body motion must be corrected.",
+        "Energy stability alone is not binding-affinity validation."
+      ]
+    },
+    {
+      "file": "submission-root/data/processed/elafin_ne_md_log_500ns.txt",
+      "rows": 10000,
+      "header": [
+        "Step",
+        "Time (ps)",
+        "Potential Energy (kJ/mole)",
+        "Kinetic Energy (kJ/mole)",
+        "Total Energy (kJ/mole)",
+        "Temperature (K)",
+        "Box Volume (nm^3)",
+        "Density (g/mL)",
+        "Speed (ns/day)"
+      ],
+      "first_time_ps": 3449.999999932242,
+      "last_time_ps": 503399.9977070045,
+      "corrected_temperature_mean_K": 310.33537532842047,
+      "corrected_temperature_std_K": 1.4811315616028093,
+      "limitations": [
+        "Input is 2Z7F HNE–SLPI, not Elafin.",
+        "Original JSON mislabels potential energy (column index 2) as temperature; actual temperature index is 5.",
+        "Initial-to-final unaligned displacement is not RMSF or aligned RMSD; periodic boundary and rigid-body motion must be corrected.",
+        "Energy stability alone is not binding-affinity validation."
+      ]
+    }
+  ],
+  "docking_outputs": [
+    {
+      "file": "submission-root/IBD-Engineered-Bacteria/04_computational_modeling/molecular_docking/output/results/HDAC3_pocket_docked.pdbqt",
+      "vina_scores_kcal_mol": [
+        -4.0,
+        -3.9,
+        -3.8,
+        -3.8,
+        -3.7,
+        -3.5,
+        -3.5,
+        -3.4,
+        -3.4
+      ],
+      "status": "Vina pose output exists; preliminary only, not affinity proof or evidence for Elafin"
+    },
+    {
+      "file": "submission-root/IBD-Engineered-Bacteria/04_computational_modeling/molecular_docking/output/results/FXR_pocket_docked.pdbqt",
+      "vina_scores_kcal_mol": [
+        -0.6
+      ],
+      "status": "Vina pose output exists; preliminary only, not affinity proof or evidence for Elafin"
+    },
+    {
+      "file": "submission-root/IBD-Engineered-Bacteria/04_computational_modeling/molecular_docking/output/results/FXR_large_docked.pdbqt",
+      "vina_scores_kcal_mol": [
+        -6.4,
+        -6.3,
+        -6.3,
+        -6.3,
+        -6.3,
+        -6.2,
+        -6.2,
+        -6.2,
+        -6.2
+      ],
+      "status": "Vina pose output exists; preliminary only, not affinity proof or evidence for Elafin"
+    },
+    {
+      "file": "submission-root/IBD-Engineered-Bacteria/04_computational_modeling/molecular_docking/output/results/AhR_docked.pdbqt",
+      "vina_scores_kcal_mol": [
+        -5.9,
+        -5.8,
+        -5.8,
+        -5.6,
+        -5.6,
+        -5.6,
+        -5.5,
+        -5.4,
+        -5.4
+      ],
+      "status": "Vina pose output exists; preliminary only, not affinity proof or evidence for Elafin"
+    },
+    {
+      "file": "submission-root/IBD-Engineered-Bacteria/04_computational_modeling/molecular_docking/output/results/hdac3_test_docked.pdbqt",
+      "vina_scores_kcal_mol": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "status": "Vina pose output exists; preliminary only, not affinity proof or evidence for Elafin"
+    }
+  ],
+  "exclude_claims": [
+    "Source phase3 structural summary labels 2Z7F as Elafin–NE co-crystal, at 1.90 A; both identity and resolution are wrong.",
+    "Source interface residues include HOH waters and then count them as Elafin residues.",
+    "Source elafin_docking_real.py contains hard-coded grid, alanine ddG, inhibitor comparisons, designed peptide Ki; Vina unavailable there. These are not executed Elafin docking results.",
+    "Source elafin_docking_analysis.py binding energies are literal dictionary values, not computed from poses.",
+    "Source NMR flexibility lacks documented structural superposition; do not quote ensemble displacements as dynamics.",
+    "AhR receptor 5NJ8 is AHR–ARNT–DNA bHLH/PAS-A complex, not the ligand-binding PAS-B domain; do not use its IPA score as valid AhR ligand binding.",
+    "HDAC3 docking requires validated zinc/cofactor handling, protonation, and a redocking control; file presence does not validate the preparation or metal scoring.",
+    "FXR GW4064 is a synthetic agonist comparator, not a microbial metabolite; provided scores are weak and grid-sensitive."
+  ],
+  "recommended_wiki": [
+    "Interactive 1FLE experimental geometry with species-aware chain labels and geometric 4A heavy-atom residue contacts.",
+    "Interactive 2REL first NMR conformer with explicit single-conformer label.",
+    "Transparent methods/limitations note: corrected structure identity, no validated Elafin–human NE docking in delivered files.",
+    "Do not publish Elafin affinity, mutation improvements or MD stability claims from these scripts."
+  ],
+  "official_sources": [
+    "https://www.rcsb.org/structure/1FLE",
+    "https://www.rcsb.org/structure/2REL",
+    "https://www.rcsb.org/structure/2Z7F",
+    "https://www.rcsb.org/structure/4A69",
+    "https://www.rcsb.org/structure/5NJ8",
+    "https://www.rcsb.org/structure/1OSH"
+  ],
+  "pathConventions": {
+    "submission-root": "Submitted Elafin-IBD research project root, containing data and 08_clinical_genetics. Paths are relative to this root; local user directories are omitted.",
+    "wiki-root": "The wiki repository root. Published audit copies preserve source-relative paths; original submitted files remain unchanged."
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "source": "submission-root",
+  "date": "2026-10-08",
+  "scope": "Numerical reproducibility and model-to-project compatibility, not biological validation.",
+  "dosing": {
+    "script": "11_dosing_modeling/dosing_model.py",
+    "selfTestPassed": true,
+    "selfTestDetails": {
+      "e_star_nM": 89.29282485760046,
+      "err_closed_form": 0.0009250547451031385
+    },
+    "selfTestLog": "[自检1] PD 稳态复现: IBD(0.03)=('1.7914', '99.2041', '0.9840') (参考 1.80/99.2/0.984); 健康(0.35)=('349.9407', '0.3256', '0.0045') (参考 350/0.33/0.0045) -> PASS\n[自检2] 缓解阈值: I_ss(E*)=0.2 -> E*=89.3 nM (期望 85-105 nM, 09 期 90-140 nM 诱导带内) -> PASS\n[自检3] 闭式解锚定: 每日 1e11 第 6-7 天平台 E=202.7 nM, B_tot=1.56e+11 CFU, 闭式 E_ss=202.9 nM (偏差 0.09%) -> PASS\n",
+    "defaultExpression": "Constitutive (and_gate=False)",
+    "singleInput60DaysMucosalPopulationCFU": 9270319461.37113,
+    "positiveEquilibriumWithoutFurtherInputCFU": 9270319461.371115,
+    "washoutAudit": "The positive post-input population is built into logistic growth plus recycling. A washout half-life does not imply clearance when reproduction continues.",
+    "recommendedWikiUse": "Qualitative transport / secretion / sensitivity framework only; assumptions must remain visible.",
+    "doNotPresentAsEvidence": [
+      "89.3 nM is an internally defined model threshold, not a measured remission concentration.",
+      "3e10 CFU/day and other human dosing suggestions are unsupported clinical recommendations.",
+      "LHS success fraction quantifies the selected parameter prior, not a patient response rate or validated robustness.",
+      "Parameters tagged L have descriptive comments but no exact supporting source next to each estimate.",
+      "The 09 PD block is an uncalibrated mutually repressive abstraction, not measured Elafin–NE kinetics."
+    ]
+  },
+  "ros": {
+    "script": "04_computational_modeling/ros_gradient_poxys_model.py",
+    "gradientNumericReproduction": {
+      "healthy": {
+        "computed": 0.0738525827519654,
+        "saved": 0.0738525827519008
+      },
+      "ibd": {
+        "computed": 4.394269222750685,
+        "saved": 4.394269222768756
+      },
+      "severe": {
+        "computed": 14.637687649929722,
+        "saved": 14.63768764992751
+      }
+    },
+    "recommendedWikiUse": "A qualitative sensing / diffusion hypothesis only; do not relabel an AND-gated payload as current PspA support.",
+    "architectureMismatch": "PoxyS x pPepT AND -> effector in source; current project uses ROS -> proposed PspA support plus constitutive Elafin.",
+    "caveats": [
+      "Healthy/IBD/severe parameter sets and layers are assumed; no individual-level fitting or uncertainty calibration was found.",
+      "PoxyS half activation, Hill exponent and basal expression lack an exact calibration data source.",
+      "Rate comments group production and first-order consumption under one unit; consumption multiplied by concentration requires inverse-time units.",
+      "EcN placement at the epithelium is assumed rather than measured."
+    ]
+  },
+  "ode": {
+    "script": "09_systems_biology/elafin_ode_numerical.py",
+    "finding": "The source calls parameters CALIBRATED but immediately says Designed to produce desired steady states. No observation-to-parameter fit or held-out validation is present.",
+    "recommendedWikiUse": "Archive as an earlier abstraction and explain why it does not establish therapeutic bistability."
+  },
+  "microbiome": {
+    "dataFound": false,
+    "evidence": [
+      "IBD-Engineered-Bacteria/ROADMAP_NEXT.md line 13 lists iHMP multiomics as not started.",
+      "FINAL_DELIVERY/02_WetLab_Design/ELAFIN_WETLAB_MASTER_PLAN.md lines 192 and 299 propose future 16S/metagenomic measurements.",
+      "File and content inspection found dosing simulations, host gene expression, GWAS and FBA tables, but no measured microbial abundance matrix, co-culture trajectory or inferred ecological interaction coefficients."
+    ],
+    "added": "ecology_scenarios.py and ecology-scenarios.json provide an explicitly uncalibrated alternative.",
+    "claim": "Exploratory interaction scenario, not inferred microbiome interactions."
+  },
+  "pathConventions": {
+    "submission-root": "Submitted Elafin-IBD research project root, containing data and 08_clinical_genetics. Paths are relative to this root; local user directories are omitted.",
+    "wiki-root": "The wiki repository root. Published audit copies preserve source-relative paths; original submitted files remain unchanged."
+  }
+}

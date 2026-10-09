@@ -178,12 +178,14 @@ export function DataGlobe({
   onSelect,
   selected,
   inspection = 0,
+  illustrationHandoff = false,
 }: {
   progress: MutableRefObject<number>;
   year: number;
   onSelect: (s: string) => void;
   selected: string | null;
   inspection?: number;
+  illustrationHandoff?: boolean;
 }) {
   const [assets, setAssets] = useState<Assets | null>(null);
   const gl = useThree((s) => s.gl);
@@ -262,6 +264,25 @@ export function DataGlobe({
     spin = useRef<Group>(null),
     meshes = useRef<Mesh[]>([]);
   const aspect = useThree((s) => s.viewport.aspect);
+  const size = useThree((s) => s.size);
+  // Match the painted globe's CSS box before the data view takes over. The
+  // sticky canvas excludes the shared 56px navigation from its viewport height.
+  const screenHeight = size.height + 56;
+  const screenWidth = typeof window === "undefined" ? size.width : window.innerWidth;
+  const phone = screenWidth <= 700;
+  const portrait = screenWidth <= 1050 && screenWidth < screenHeight;
+  const shortLandscape = screenHeight <= 520 && screenWidth > screenHeight;
+  const paintedWidth = shortLandscape
+    ? screenHeight * 0.69
+    : phone
+      ? Math.min(screenWidth * 0.91, screenHeight * 0.62)
+      : portrait
+        ? Math.min(screenWidth * 0.86, screenHeight * 0.63)
+        : Math.min(screenWidth * 0.44, screenHeight * 0.69, 820);
+  const paintedX = phone || portrait ? 0 : 0.19 * 9 * aspect;
+  const paintedTop = shortLandscape ? 0.42 : phone ? 0.58 : portrait ? 0.59 : 0.5;
+  // The opaque disc spans 85% of the PNG; the rest is its transparent rim.
+  const paintedScale = (paintedWidth * 0.85 * 9) / (Math.max(1, size.height) * 4.1);
   const focusLongitude = geo.find((r) => r.name === selected)?.focusLongitude;
   const holdBlend = useRef(0),
     holdAngle = useRef(0),
@@ -273,7 +294,15 @@ export function DataGlobe({
     if (!rig.current || !spin.current) return;
     const step = Math.min(dt, 0.25),
       p = progress.current,
-      pose = earthPose(p, clock.elapsedTime, aspect);
+      leave = smooth(0.225, 0.275, p),
+      pose = illustrationHandoff
+        ? {
+            x: paintedX,
+            y: (0.5 - paintedTop) * 9 - leave * 8,
+            scale: paintedScale * (1 - leave * 0.65),
+            visible: p < 0.27,
+          }
+        : earthPose(p, clock.elapsedTime, aspect);
     holdBlend.current +=
       (inspection - holdBlend.current) * (1 - Math.exp(-7 * step));
     if (inspection > 0.5) {
@@ -295,8 +324,7 @@ export function DataGlobe({
     spin.current.rotation.y += delta * (1 - Math.exp(-12 * step));
     spin.current.rotation.z = -0.1;
     spin.current.rotation.x = 0.08;
-    yearBlend.current +=
-      ((year === 2019 ? 1 : 0) - yearBlend.current) * (1 - Math.exp(-9 * step));
+    yearBlend.current = Math.max(0, Math.min(1, (year - 1990) / 29));
     const heat = smooth(0.135, 0.16, p);
     meshes.current.forEach((mesh, i) => {
       if (!mesh || !geo[i]) return;

@@ -8,18 +8,19 @@ import {
   useState,
   type MutableRefObject,
   type ReactNode,
+  type CSSProperties,
 } from "react";
 import { Group } from "three";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CampusPlanet } from "./CampusPlanet";
-import { SolarSystem, StarField } from "./OrbitArt";
 import { DataGlobe } from "./DataGlobe";
 import { assetUrl } from "../../../utils/assetUrl";
 import { ScienceAnatomy } from "../science/ScienceAnatomy";
 import { PersonScene } from "./PersonScene";
-import { OpeningSequence } from "./OpeningSequence";
-import { SOLAR_BACKDROP } from "./solarArtwork";
+import { HomeHeroLanding } from "./HomeHeroLanding";
+import { GalaxyOpening } from "./GalaxyOpening";
 import { TreatmentBridge } from "./TreatmentBridge";
+import { ProductChapter, warmProduct } from "./ProductChapter";
 import { DeliveryJourney } from "../science/DeliveryJourney";
 import { campusDeparture } from "./orbitalSceneMotion";
 import { SceneErrorBoundary } from "../ui/SceneErrorBoundary";
@@ -28,23 +29,22 @@ import {
   clamp,
   smooth,
   stageAt,
-  sciencePhase,
   journeyPosition,
   storyScrollPosition,
-  bridgeScrollPosition,
+  WALL_AT,
+  PRODUCT_AT,
+  productScrollPosition,
   deliveryScrollPosition,
-  BRIDGE_AT,
-  BRIDGE_LENGTH,
-  DELIVERY_LENGTH,
+  STORY_SCROLL_HEIGHT,
+  worldYearMix,
 } from "./storyTimeline";
-import {
-  TapControl,
-  GlobeCaption,
-  ScienceCaption,
-  StoryCopy,
-} from "./JourneyOverlay";
+import { GlobeCaption, StoryCopy } from "./JourneyOverlay";
+import { LabInvitation } from "./LabInvitation";
+import { ResearchCollage } from "./ResearchCollage";
+import { SectionDecor } from "../../../components/SectionDecor";
 import "./cosmicJourney.css";
 import "./continuousJourney.css";
+import "./homeArtDirection.css";
 type Progress = MutableRefObject<number>;
 // The SVG reading progress must not reconcile the hidden WebGL scene every frame.
 const JourneySpace = memo(function JourneySpace({
@@ -75,28 +75,35 @@ const JourneySpace = memo(function JourneySpace({
 function JourneyScene({
   progress,
   year,
-  selected,
-  onSelect,
   inspection,
 }: {
   progress: Progress;
   year: number;
-  selected: string | null;
-  onSelect: (s: string) => void;
   inspection: number;
 }) {
   const viewport = useThree((s) => s.viewport),
-    solar = useRef(0),
     campus = useRef(0),
     campusHost = useRef<Group>(null);
   useFrame(() => {
     const p = progress.current;
-    solar.current = p;
-    campus.current = p < 0.77 ? 0 : clamp((p - 0.78) / 0.22);
+    // Settle the research building before its reading interval, then hold the view.
+    campus.current = p < 0.909
+      ? clamp((p - 0.78) / 0.22)
+      : p < 0.932
+        ? (0.909 - 0.78) / 0.22 + (0.81 - (0.909 - 0.78) / 0.22) * smooth(0.909, 0.932, p)
+        : p < 0.965
+          ? 0.81
+          : 0.81 + 0.19 * smooth(0.965, 1, p);
     if (campusHost.current) {
-      campusHost.current.visible = p < 0.13 || p > 0.772;
+      campusHost.current.visible = p > 0.772;
       const depart = campusDeparture(p) * (1 - smooth(0.772, 0.795, p));
-      campusHost.current.position.set(depart * 12, depart * 3, 0);
+      const researchFraming = smooth(0.919, 0.932, p) * (1 - smooth(0.965, 0.987, p));
+      // The research building sits beside the photo, on a low horizon.
+      campusHost.current.position.set(
+        depart * 12 + researchFraming * (viewport.aspect < 1 ? 0 : 0.43),
+        depart * 3 - researchFraming * (viewport.aspect < 1 ? 1.65 : 1.5),
+        0,
+      );
     }
   });
   return (
@@ -112,14 +119,12 @@ function JourneyScene({
         intensity={0.65}
         color="#c4dddc"
       />
-      <StarField progress={progress} />
-      <SolarSystem progress={solar} narrow={viewport.aspect < 1} />
       <DataGlobe
         progress={progress}
         year={year}
-        selected={selected}
-        onSelect={onSelect}
-        inspection={progress.current < 0.27 ? inspection : 0}
+        selected={null}
+        onSelect={() => {}}
+        illustrationHandoff
       />
       <group ref={campusHost}>
         <Suspense fallback={null}>
@@ -142,27 +147,38 @@ export function CosmicJourney({
   children: ReactNode;
   onLabReady: (n: boolean) => void;
 }) {
-  const sectionRef = useRef<HTMLElement>(null),
-    stickyRef = useRef<HTMLDivElement>(null),
-    progress = useRef(0),
-    docked = useRef(false),
-    currentStage = useRef(0);
-  const [stage, setStage] = useState(0),
-    [active, setActive] = useState(true),
-    [failed, setFailed] = useState(false),
-    [inLab, setInLab] = useState(false);
-  const [year, setYear] = useState(2019),
-    [selected, setSelected] = useState<string | null>(null),
-    [inspection, setInspection] = useState(0);
-  const [sceneProgress, setSceneProgress] = useState(0);
-  const [bridgeProgress, setBridgeProgress] = useState<number | null>(null);
-  const [deliveryProgress, setDeliveryProgress] = useState<number | null>(null);
-  const inReading = bridgeProgress !== null || deliveryProgress !== null;
-  const [staticScience, setStaticScience] = useState(0.365);
+  const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const progress = useRef(0);
+  const docked = useRef(false);
+  const [active, setActive] = useState(true);
+  const [failed, setFailed] = useState(false);
+  const [inLab, setInLab] = useState(false);
+  const [position, setPosition] = useState(() => journeyPosition(0));
   const staticIntro = reduced || failed;
   const route = useLocation();
   const navigate = useNavigate();
   const onSceneError = useCallback(() => setFailed(true), []);
+  const sceneProgress = position.progress;
+  const stage = stageAt(sceneProgress);
+  const sceneLocal = clamp(
+    (sceneProgress - NARRATIVE[stage].at) /
+      ((NARRATIVE[stage + 1]?.at ?? 1.015) - NARRATIVE[stage].at),
+  );
+  const sceneDrift = smooth(0.15, 0.8, sceneLocal);
+  const inReading =
+    position.bridge !== null ||
+    position.delivery !== null ||
+    position.product !== null;
+  const inspection =
+    sceneProgress >= 0.54 && sceneProgress < 0.776
+      ? smooth(0.54, 0.6, sceneProgress)
+      : 0;
+
+  useEffect(() => {
+    if (!staticIntro && sceneProgress > PRODUCT_AT - 0.13) warmProduct();
+  }, [staticIntro, sceneProgress]);
+
   useEffect(() => {
     if (!inLab || staticIntro) return;
     const previous = document.body.style.overflow;
@@ -171,6 +187,7 @@ export function CosmicJourney({
       document.body.style.overflow = previous;
     };
   }, [inLab, staticIntro]);
+
   useEffect(() => {
     if (staticIntro) {
       onLabReady(true);
@@ -182,37 +199,27 @@ export function CosmicJourney({
       const section = sectionRef.current,
         sticky = stickyRef.current;
       if (!section || !sticky) return;
-      const rect = section.getBoundingClientRect(),
-        range = Math.max(1, section.offsetHeight - sticky.offsetHeight);
-      const position = journeyPosition(
+      const rect = section.getBoundingClientRect();
+      const range = Math.max(1, section.offsetHeight - sticky.offsetHeight);
+      const next = journeyPosition(
         docked.current ? 1 : clamp((56 - rect.top) / range),
       );
-      const p = position.progress;
-      setBridgeProgress(position.bridge);
-      setDeliveryProgress(position.delivery);
-      progress.current = p;
-      setSceneProgress(p);
-      const nextStage = stageAt(p);
-      if (currentStage.current !== nextStage) {
-        currentStage.current = nextStage;
-        setInspection(0);
-        setSelected(null);
-      }
-      setStage(nextStage);
-      sticky.style.setProperty(
-        "--intro-opacity",
-        String(1 - smooth(0.975, 0.992, p)),
-      );
+      progress.current = next.progress;
+      setPosition(next);
       sticky.style.setProperty(
         "--person-opacity",
-        String(smooth(0.245, 0.267, p) * (1 - smooth(0.298, 0.323, p))),
+        String(
+          smooth(0.245, 0.259, next.progress) *
+            (1 - smooth(0.308, 0.32, next.progress)),
+        ),
       );
-      setActive(!document.hidden && p < 0.996 && rect.bottom > 56);
-      onLabReady(p > 0.95);
-      if (p >= 0.993) {
-        docked.current = true;
-        setInLab(true);
-      }
+      setActive(
+        !document.hidden &&
+          !docked.current &&
+          rect.bottom > 56 &&
+          rect.top < innerHeight,
+      );
+      onLabReady(next.progress > 0.95);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -228,54 +235,64 @@ export function CosmicJourney({
       cancelAnimationFrame(frame);
     };
   }, [staticIntro, onLabReady]);
-  // The lab is the final camera position inside a sticky story, not its DOM top.
-  // Resolve this deep link after the lazy-loaded scene has mounted.
-  useEffect(() => {
-    if (route.hash !== "#laboratory") return;
-    const frame = requestAnimationFrame(() => {
+
+  const enterLab = useCallback(() => {
+    if (staticIntro) {
+      document
+        .getElementById("laboratory")
+        ?.scrollIntoView({ behavior: "instant" });
+      return;
+    }
+    const section = sectionRef.current,
+      sticky = stickyRef.current;
+    if (!section || !sticky) return;
+    docked.current = true;
+    setInLab(true);
+    onLabReady(true);
+    window.scrollTo({
+      top:
+        section.getBoundingClientRect().top +
+        scrollY -
+        56 +
+        section.offsetHeight -
+        sticky.offsetHeight,
+      behavior: "instant",
+    });
+    window.dispatchEvent(new Event("scroll"));
+  }, [staticIntro, onLabReady]);
+
+  const exploreStory = useCallback(
+    (target = 0.145) => {
       if (staticIntro) {
-        document.getElementById("laboratory")?.scrollIntoView();
+        document
+          .getElementById(target > 0.4 ? "home-signal" : "home-story")
+          ?.scrollIntoView({
+            behavior: reduced ? "instant" : "smooth",
+          });
         return;
       }
-      const section = sectionRef.current,
-        sticky = stickyRef.current;
+      const section = sectionRef.current;
+      const sticky = stickyRef.current;
       if (!section || !sticky) return;
+      const range = Math.max(1, section.offsetHeight - sticky.offsetHeight);
       window.scrollTo({
         top:
           section.getBoundingClientRect().top +
           scrollY -
           56 +
-          section.offsetHeight -
-          sticky.offsetHeight,
-        behavior: "instant",
+          storyScrollPosition(target) * range,
+        behavior: "smooth",
       });
-      window.dispatchEvent(new Event("scroll"));
-    });
+    },
+    [staticIntro, reduced],
+  );
+
+  useEffect(() => {
+    if (route.hash !== "#laboratory") return;
+    const frame = requestAnimationFrame(enterLab);
     return () => cancelAnimationFrame(frame);
-  }, [route.hash, staticIntro]);
-  const jump = (p: number, chapter: "story" | "why" | "delivery" = "story") => {
-    const node = sectionRef.current,
-      sticky = stickyRef.current;
-    if (!node || !sticky) return;
-    if (docked.current) {
-      docked.current = false;
-      setInLab(false);
-      document.body.style.overflow = "";
-    }
-    window.scrollTo({
-      top:
-        node.getBoundingClientRect().top +
-        scrollY -
-        56 +
-        (node.offsetHeight - sticky.offsetHeight) *
-          (chapter === "why"
-            ? bridgeScrollPosition(p)
-            : chapter === "delivery"
-              ? deliveryScrollPosition(p)
-              : storyScrollPosition(p)),
-      behavior: reduced ? "instant" : "smooth",
-    });
-  };
+  }, [route.hash, enterLab]);
+
   const replay = () => {
     docked.current = false;
     setInLab(false);
@@ -285,38 +302,22 @@ export function CosmicJourney({
     window.dispatchEvent(new Event("scroll"));
     if (route.hash) navigate("/", { replace: true });
   };
-  // Manual playback and dragging advance the document too, so the next wheel
-  // event continues from the capsule instead of returning to an old scroll point.
-  const syncDelivery = useCallback((value: number) => {
-    const node = sectionRef.current,
-      sticky = stickyRef.current;
-    if (!node || !sticky) return;
-    window.scrollTo({
-      top:
-        node.getBoundingClientRect().top +
-        scrollY -
-        56 +
-        (node.offsetHeight - sticky.offsetHeight) *
-          deliveryScrollPosition(Math.min(0.998, Math.max(0.002, value))),
-      behavior: "instant",
-    });
-  }, []);
-  const readDelivery = useCallback(() => {
-    const node = sectionRef.current,
-      sticky = stickyRef.current;
-    if (!node || !sticky) return 0;
-    const raw =
-      (56 - node.getBoundingClientRect().top) /
-      Math.max(1, node.offsetHeight - sticky.offsetHeight);
-    return clamp(
-      (raw * (1 + BRIDGE_LENGTH + DELIVERY_LENGTH) -
-        BRIDGE_AT -
-        BRIDGE_LENGTH) /
-        DELIVERY_LENGTH,
-    );
-  }, []);
-  const campusPhoto =
-    stage === 9 ? "library" : stage === 10 ? "research" : null;
+  const campusPhoto = stage === 9 ? "library" : null;
+  const campusLocal = campusPhoto
+    ? clamp((sceneProgress - NARRATIVE[stage].at) / 0.064)
+    : 0;
+  const chapter =
+    position.bridge !== null
+      ? "why"
+      : position.delivery !== null
+        ? "delivery"
+        : position.product !== null
+          ? "product"
+          : NARRATIVE[stage].id;
+  const localSurface =
+    !inReading && sceneProgress >= 0.467 && sceneProgress < 0.54;
+  const decorVariant = stage === 1 ? "world" : stage === 2 ? "life" : stage < 5 ? "local" : stage < 8 ? "cell" : stage < 11 ? "research" : "lab";
+
   return (
     <section
       ref={sectionRef}
@@ -325,158 +326,211 @@ export function CosmicJourney({
         (staticIntro ? " cosmic-journey--static" : "")
       }
       aria-label="From a changing world to the SYPHU-China laboratory"
-      data-stage={
-        bridgeProgress !== null
-          ? "why"
-          : deliveryProgress !== null
-            ? "delivery"
-            : NARRATIVE[stage].id
-      }
-      data-opening="day"
+      data-stage={chapter}
+      data-opening="galaxy"
+      style={{ "--story-scroll-height": `${STORY_SCROLL_HEIGHT}svh` } as CSSProperties}
     >
       <div
         ref={stickyRef}
-        className={"cosmic-journey__sticky" + (inLab ? " is-in-lab" : "")}
+        className={
+          "cosmic-journey__sticky" + (inLab && !staticIntro ? " is-in-lab" : "")
+        }
       >
-        <div className="cosmic-journey__art" aria-hidden={inLab} inert={inLab}>
-          {!staticIntro && sceneProgress < 0.155 && (
-            <img
-              className="solar-painted-backdrop"
-              src={SOLAR_BACKDROP}
-              alt=""
-              fetchPriority="high"
-              aria-hidden="true"
-              style={{
-                opacity: 1 - smooth(0.085, 0.155, sceneProgress),
-                transform: `scale(${1 + smooth(0.08, 0.155, sceneProgress) * 0.08})`,
-              }}
-            />
-          )}
+        <div
+          className="cosmic-journey__art"
+          style={
+            {
+              "--scene-shift": `${sceneDrift * 12}px`,
+              "--scene-scale": 0.96 + sceneDrift * 0.04,
+            } as CSSProperties
+          }
+          aria-hidden={inLab && !staticIntro}
+          inert={inLab && !staticIntro}
+        >
           {!staticIntro && (
-            <div className="cosmic-journey__space">
-              <JourneySpace
-                running={active && !inReading}
-                onError={onSceneError}
-                progress={progress}
-                year={year}
-                selected={selected}
-                onSelect={setSelected}
-                inspection={inspection}
-              />
-            </div>
-          )}
-          <div className="cosmic-journey__paper" />
-          {staticIntro ? (
             <>
-              <div className="journey-static">
-                <h1>Let life respond.</h1>
-                <p>
-                  Explore our design for environment-dependent survival, Elafin
-                  production and a gradual exit.
-                </p>
-                <button
-                  onClick={() =>
-                    document.getElementById("laboratory")?.scrollIntoView()
-                  }
-                >
-                  Enter the laboratory ↗
-                </button>
+              {sceneProgress >= 0.062 && (
+                <h1 className="story-sr-only">
+                  LBP–MOTOTYPE: a living response to a changing environment
+                </h1>
+              )}
+              {(stage === 1 || stage === 2 || stage === 8 || stage === 9) && !inReading && (
+                <StoryCopy stage={stage} progress={sceneProgress} backLayer />
+              )}
+              <div
+                className="cosmic-journey__space"
+                style={{ clipPath: sceneProgress < 0.174
+                  ? `inset(0 ${(1 - smooth(0.153, 0.174, sceneProgress)) * 100}% 0 0)`
+                  : undefined }}
+              >
+                <JourneySpace
+                  running={active && !inReading}
+                  onError={onSceneError}
+                  progress={progress}
+                  year={1990 + worldYearMix(sceneProgress) * 29}
+                  inspection={0}
+                />
               </div>
+            </>
+          )}
+          {!staticIntro && !inReading && !localSurface && (stage === 2 || stage >= 8) && (
+            <SectionDecor variant={decorVariant} />
+          )}
+          {staticIntro ? (
+            <div className="journey-reading">
+              <GalaxyOpening staticView />
+              <GalaxyOpening staticView worldView />
+              <section id="home-story" className="journey-reading-context">
+                <SectionDecor variant="life" subdued />
+                <p>Inflammatory bowel disease reaches across borders.</p>
+                <GlobeCaption />
+                <h2>A day, interrupted.</h2>
+                <p>
+                  A meal. A journey. A night’s sleep. IBD can change the
+                  ordinary.
+                </p>
+                <picture className="journey-static-mascot">
+                  <source
+                    srcSet={assetUrl(
+                      "assets/story/within/why-human-digestive-mascot.webp",
+                    )}
+                    type="image/webp"
+                  />
+                  <img
+                    src={assetUrl(
+                      "assets/story/within/why-human-digestive-mascot.png",
+                    )}
+                    alt="A person with the digestive system illustrated inside"
+                    loading="lazy"
+                  />
+                </picture>
+                <div
+                  className="journey-static-life"
+                  aria-label="Scenes of meals, travel, and rest"
+                >
+                  {[
+                    ["04_life-meal.png", "A person eating a meal"],
+                    ["05_life-transit.png", "A person travelling"],
+                    ["06_life-rest.png", "A person resting"],
+                  ].map(([file, alt]) => (
+                    <img
+                      key={file}
+                      src={assetUrl(`assets/story/modular/${file}`)}
+                      alt={alt}
+                      loading="lazy"
+                    />
+                  ))}
+                </div>
+              </section>
               <TreatmentBridge progress={0} staticView reduced />
               <DeliveryJourney progress={0} reduced />
               <section
+                id="home-colon"
                 className="journey-static-mechanism"
-                aria-label="Explore the proposed mechanism"
+                aria-label="Colon cutaway"
               >
-                <div className="journey-editorial">
-                  <h2>Look within.</h2>
-                  <p>
-                    Follow the capsule, then explore our design at a smaller
-                    scale.
-                  </p>
-                  <nav aria-label="Explore the anatomy and mechanism">
-                    {[
-                      ["Anatomy", 0.365],
-                      ["Wall", 0.449],
-                      ["Cell", 0.584],
-                      ["Payload", 0.669],
-                      ["Exit", 0.75],
-                    ].map(([label, value]) => (
-                      <button
-                        key={label}
-                        aria-pressed={staticScience === value}
-                        onClick={() => setStaticScience(Number(value))}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </nav>
-                </div>
-                <ScienceAnatomy progress={staticScience} inspection={1} />
+                <ScienceAnatomy progress={0.449} staticView />
               </section>
-            </>
+              <HomeHeroLanding onExplore={() => exploreStory(0.575)} />
+              {[0.588, 0.669, 0.75].map((p) => (
+                <section
+                  className="journey-static-mechanism"
+                  key={p}
+                  id={p === 0.588 ? "home-signal" : undefined}
+                  aria-label={NARRATIVE[stageAt(p)].title}
+                >
+                  <ScienceAnatomy progress={p} staticView />
+                </section>
+              ))}
+              <div className="journey-static-product">
+                <ProductChapter progress={0.65} reduced />
+              </div>
+              <section className="journey-reading-context journey-reading-campus">
+                <SectionDecor variant="research" subdued />
+                <h2>Questions find a home.</h2>
+                <p>Shenyang Pharmaceutical University · South Campus</p>
+                <img
+                  src={assetUrl("assets/school/library-photo.png")}
+                  alt="South Campus library"
+                  loading="lazy"
+                />
+              </section>
+              <ResearchCollage progress={0.95} staticMode />
+            </div>
           ) : (
             <>
-              {stage > 0 && !inReading && (
-                <StoryCopy stage={stage}>
-                  {stage === 1 && (
-                    <GlobeCaption
-                      year={year}
-                      onYear={setYear}
-                      selected={selected}
-                      onSelect={setSelected}
-                    />
-                  )}
-                  {stage >= 3 && stage <= 7 && (
-                    <ScienceCaption step={sciencePhase(sceneProgress)} />
-                  )}
-                </StoryCopy>
+              {(stage === 1 || stage === 2 || stage === 8 || stage === 9) && !inReading && (
+                <StoryCopy stage={stage} progress={sceneProgress} />
               )}
-              <OpeningSequence progress={sceneProgress} />
-              {bridgeProgress !== null && (
-                <TreatmentBridge progress={bridgeProgress} />
+              {stage === 11 && !inReading && (
+                <LabInvitation progress={sceneProgress} onEnter={enterLab} />
               )}
-              {deliveryProgress !== null && (
-                <DeliveryJourney
-                  progress={deliveryProgress}
-                  onProgress={syncDelivery}
-                  readProgress={readDelivery}
-                  onContinue={() => jump(0.449)}
+              {sceneProgress < 0.259 && (
+                <GalaxyOpening progress={sceneProgress} />
+              )}
+              {localSurface && (
+                <HomeHeroLanding
+                  progress={sceneProgress}
+                  onExplore={() => exploreStory(0.575)}
+                  onNavigate={exploreStory}
                 />
               )}
-              {stage === 2 && !inReading && <PersonScene />}
-              {!inReading &&
-                sceneProgress >= 0.295 &&
-                sceneProgress <= 0.797 && (
+              {position.bridge !== null && (
+                <TreatmentBridge progress={position.bridge} />
+              )}
+              {position.delivery !== null && (
+                <DeliveryJourney progress={position.delivery} onProgress={(p) => {
+                  const section = sectionRef.current, sticky = stickyRef.current;
+                  if (!section || !sticky) return;
+                  window.scrollTo({ top: section.getBoundingClientRect().top + scrollY - 56 +
+                    deliveryScrollPosition(p) * (section.offsetHeight - sticky.offsetHeight),
+                    behavior: "smooth" });
+                }} />
+              )}
+              {position.product !== null && (
+                <ProductChapter progress={position.product} onStageChange={(p) => {
+                  const section = sectionRef.current, sticky = stickyRef.current;
+                  if (!section || !sticky) return;
+                  window.scrollTo({ top: section.getBoundingClientRect().top + scrollY - 56 +
+                    productScrollPosition(p) * (section.offsetHeight - sticky.offsetHeight),
+                    behavior: "smooth" });
+                }} />
+              )}
+              {stage === 2 && !inReading && (
+                <PersonScene progress={sceneProgress} />
+              )}
+              {((!inReading &&
+                !localSurface &&
+                sceneProgress >= WALL_AT &&
+                sceneProgress < PRODUCT_AT) ||
+                (position.delivery !== null && position.delivery > 0.9)) && (
+                <div
+                  className="journey-science-stage"
+                  style={{
+                    opacity:
+                      position.delivery !== null
+                        ? smooth(0.9, 1, position.delivery)
+                        : 1,
+                  }}
+                >
                   <ScienceAnatomy
-                    progress={sceneProgress}
+                    progress={
+                      position.delivery !== null ? WALL_AT : sceneProgress
+                    }
                     inspection={inspection}
+                    onNavigate={exploreStory}
                   />
-                )}
-              {!inReading &&
-                (stage === 1 || (stage >= 3 && stage <= 6) || campusPhoto) && (
-                  <div className="journey-tap-position">
-                    <TapControl
-                      key={stage}
-                      value={inspection}
-                      mode={stage === 1 || campusPhoto ? "hold" : "tap"}
-                      label={
-                        stage === 1
-                          ? "Focus"
-                          : stage >= 3 && stage <= 6
-                            ? "Look inside"
-                            : "Real campus"
-                      }
-                      onChange={setInspection}
-                    />
-                  </div>
-                )}
-              {campusPhoto && (
+                </div>
+              )}
+              {campusPhoto && !inReading && (
                 <figure
-                  className={
-                    "journey-campus-photo" +
-                    (inspection > 0.2 ? " is-expanded" : "")
-                  }
+                  className="journey-campus-photo"
+                  style={{
+                    opacity:
+                      smooth(0.15, 0.35, campusLocal) *
+                      (1 - smooth(0.9, 1, campusLocal)),
+                    transform: `translateY(${(1 - smooth(0.1, 0.4, campusLocal)) * 30}px) rotate(${-2 + smooth(0.1, 0.5, campusLocal) * 2}deg)`,
+                  }}
                 >
                   <img
                     src={assetUrl(`assets/school/${campusPhoto}-photo.png`)}
@@ -487,70 +541,17 @@ export function CosmicJourney({
                         : "research building")
                     }
                   />
-                  <figcaption>
-                    South Campus ·{" "}
-                    {campusPhoto === "library"
-                      ? "Library"
-                      : "Research building"}
-                  </figcaption>
                 </figure>
+              )}
+              {stage === 10 && !inReading && (
+                <ResearchCollage progress={sceneProgress} />
               )}
             </>
           )}
-          <footer className="cosmic-journey__footer">
-            <span>Scroll ↓</span>
-            <nav aria-label="Story chapters">
-              {[
-                { p: 0, label: "Origins" },
-                { p: 0.17, label: "World" },
-                { p: 0.08, label: "Why" },
-                { p: 0.35, label: "Within" },
-                { p: 0.54, label: "Design" },
-                { p: 0.855, label: "Campus" },
-              ].map((s) => (
-                <button
-                  key={s.label}
-                  aria-current={
-                    bridgeProgress !== null
-                      ? s.label === "Why"
-                      : deliveryProgress !== null
-                        ? s.label === "Within"
-                        : stage === 0
-                          ? s.p === 0
-                          : s.label ===
-                            (stage === 1
-                              ? "World"
-                              : stage < 5
-                                ? "Within"
-                                : stage < 8
-                                  ? "Design"
-                                  : "Campus")
-                  }
-                  onClick={() =>
-                    jump(
-                      s.label === "Within" ? 0.01 : s.p,
-                      s.label === "Why"
-                        ? "why"
-                        : s.label === "Within"
-                          ? "delivery"
-                          : "story",
-                    )
-                  }
-                >
-                  {s.label}
-                </button>
-              ))}
-            </nav>
-            <button onClick={() => jump(1)}>Skip to lab ↗</button>
-          </footer>
         </div>
-        {inLab && (
-          <button
-            className="journey-replay"
-            onClick={replay}
-            aria-label="Replay the story"
-          >
-            ↺
+        {inLab && !staticIntro && (
+          <button className="journey-replay" onClick={replay}>
+            ← Back to the story
           </button>
         )}
         <div

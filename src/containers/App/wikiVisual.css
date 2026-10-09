@@ -58,8 +58,35 @@ a {
   padding: 9px 14px;
 }
 .wiki-page-header {
+  position: relative;
+  isolation: isolate;
   padding: clamp(50px, 9vw, 110px) 0 36px;
-  background: radial-gradient(ellipse at 80% 10%, #e3eae0, transparent 60%);
+  background: #faf8ef;
+}
+.wiki-page-header > .container {
+  position: relative;
+  z-index: 1;
+}
+.wiki-page-header__decor .decor-accent--1 {
+  top: auto;
+  bottom: 7%;
+  right: 5%;
+  width: 8%;
+  height: 45%;
+  opacity: .55;
+}
+.wiki-page-header__decor .decor-accent--2,
+.wiki-page-header__decor .decor-accent--3,
+.wiki-page-header__decor .decor-accent--4,
+.wiki-page-header__decor .decor-path--upper,
+.wiki-page-header__decor .decor-wash {
+  display: none;
+}
+.wiki-page-header__decor .decor-path--side {
+  top: 5%;
+  height: 25%;
+  width: 24%;
+  right: 5%;
 }
 .wiki-page-header h1,
 .wiki-document h2 {

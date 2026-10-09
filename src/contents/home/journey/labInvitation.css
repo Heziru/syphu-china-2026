@@ -1,0 +1,141 @@
+.lab-invitation {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.lab-invitation__layout {
+  position: absolute;
+  inset: 26% auto 17% 6%;
+  width: 44%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: clamp(30px, 5svh, 54px);
+}
+.lab-invitation__title {
+  margin: 0;
+  color: #2f5660;
+  font-size: clamp(43px, 5.35vw, 94px);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.055em;
+  opacity: var(--lab-arrival);
+  transform: translateY(calc((1 - var(--lab-arrival)) * 26px))
+    scale(calc(0.97 + var(--lab-arrival) * 0.03));
+  transform-origin: left center;
+}
+.lab-invitation__title span {
+  display: block;
+  color: #588073;
+}
+.lab-invitation__enter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(22px, 2.6vw, 42px);
+  padding: 9px 10px 9px 28px;
+  border: 1px solid #72988d;
+  border-radius: 999px;
+  background: #315e67;
+  color: #fff5de;
+  font: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 12px 28px #315e6714;
+  opacity: var(--lab-invitation);
+  transform: translateY(calc((1 - var(--lab-invitation)) * 22px));
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.lab-invitation__label {
+  font-size: clamp(22px, 2.2vw, 32px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+.lab-invitation__arrow {
+  display: grid;
+  place-items: center;
+  width: clamp(45px, 4vw, 58px);
+  height: clamp(45px, 4vw, 58px);
+  flex: 0 0 auto;
+  border: 1px solid #fff5de80;
+  border-radius: 50%;
+  background: #f7edcf;
+  color: #315e67;
+  transition: background 180ms ease;
+}
+.lab-invitation__arrow svg {
+  width: 25px;
+  height: 25px;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 180ms ease;
+}
+.lab-invitation__enter:focus-visible {
+  outline: 3px solid #315e67;
+  outline-offset: 6px;
+  box-shadow: 0 0 0 4px #fbf5e8;
+}
+.lab-invitation__enter:disabled {
+  pointer-events: none;
+}
+.lab-invitation__enter:active:not(:disabled) .lab-invitation__arrow svg {
+  transform: translateX(4px);
+}
+@media (hover: hover) and (pointer: fine) {
+  .lab-invitation__enter:hover:not(:disabled) {
+    background: #264e58;
+    border-color: #486f6b;
+    box-shadow: 0 16px 32px #315e6726;
+  }
+  .lab-invitation__enter:hover:not(:disabled) .lab-invitation__arrow {
+    background: #fff9e8;
+  }
+  .lab-invitation__enter:hover:not(:disabled) .lab-invitation__arrow svg {
+    transform: translateX(3px);
+  }
+}
+@media (max-width: 700px) {
+  .lab-invitation__layout {
+    inset: 10% 7% 10%;
+    width: auto;
+    gap: 24px;
+    justify-content: space-between;
+  }
+  .lab-invitation__title {
+    font-size: clamp(38px, 10vw, 64px);
+  }
+  .lab-invitation__enter {
+    padding-left: 24px;
+    gap: 34px;
+  }
+}
+@media (max-height: 500px) and (min-width: 701px) {
+  .lab-invitation__layout {
+    inset-block: 9%;
+    gap: 20px;
+  }
+  .lab-invitation__title {
+    font-size: clamp(38px, 4.6vw, 62px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-invitation__title,
+  .lab-invitation__enter {
+    transform: none;
+  }
+  .lab-invitation__enter,
+  .lab-invitation__arrow,
+  .lab-invitation__arrow svg {
+    transition: none;
+  }
+}

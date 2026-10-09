@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { SectionDecor } from "../../components/SectionDecor";
 import { StackIntro } from "./StackIntro";
 import { InfinitePeople } from "./InfinitePeople";
 import {
@@ -75,7 +76,12 @@ export function TeamPage() {
     <main className="team-page">
       <StackIntro />
       <section className="team-together" aria-labelledby="team-together-title">
-        <div>
+        <SectionDecor
+          variant="research"
+          subdued
+          className="team-together-decor"
+        />
+        <div className="team-together-copy">
           <p className="team-eyebrow">SAME QUESTION. DIFFERENT PERSPECTIVES.</p>
           <h2 id="team-together-title">
             ALL

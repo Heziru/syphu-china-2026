@@ -1,0 +1,21 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.499
+Synthetic example, not wet-lab data. Early readings allow several response profiles.
+
+2
+00:00:04.499 --> 00:00:09.513
+Add the 2 h readings. The set of compatible profiles becomes narrower.
+
+3
+00:00:09.513 --> 00:00:14.512
+Check 4 h against measurements that were not used to fit the curve.
+
+4
+00:00:14.512 --> 00:00:20.518
+Compare held-out errors and the error budget. Passing the model check is a separate result from the observed requirement.
+
+5
+00:00:20.518 --> 00:00:26.520
+Read the run on this page: inputs, settings, results and model limitations.

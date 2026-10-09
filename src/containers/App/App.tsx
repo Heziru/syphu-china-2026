@@ -5,7 +5,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { getPathMapping, stringToSlug } from "../../utils";
 import { useEffect } from "react";
 import { Navbar } from "../../components/Navbar";
-import { Header } from "../../components/Header";
+import { ResearchPageShell } from "../../components/ResearchPageShell";
 import { NotFound } from "../../components/NotFound";
 import { Footer } from "../../components/Footer";
 
@@ -48,15 +48,25 @@ const App = () => {
               key={path}
               path={path}
               element={
-                path === "/" || path === "/team" ? (
+                path === "/" || path === "/team" || path === "/model" || path === "/software" ? (
                   <Component />
                 ) : (
-                  <>
-                    <Header title={title || ""} lead={lead || ""} />
-                    <main className="container wiki-document">
+                  <ResearchPageShell
+                    key={path}
+                    title={title || ""}
+                    eyebrow={
+                      ["/experiments", "/notebook", "/measurement", "/alternative-platform", "/safety-and-security"].includes(path)
+                        ? "WET LAB / " + (title || "").toUpperCase()
+                        : path === "/hardware"
+                          ? "DRY LAB / HARDWARE"
+                          : "SYPHU-CHINA / " + (title || "").toUpperCase()
+                    }
+                    description={lead || ""}
+                  >
+                    <div className="wiki-template-content">
                       <Component />
-                    </main>
-                  </>
+                    </div>
+                  </ResearchPageShell>
                 )
               }
             />
@@ -65,13 +75,13 @@ const App = () => {
         <Route
           path="*"
           element={
-            <>
-              <Header
+            <ResearchPageShell
                 title="Not Found"
-                lead="The requested URL was not found on this server."
-              />
+                description="The requested URL was not found on this server."
+                contents={[]}
+            >
               <NotFound />
-            </>
+            </ResearchPageShell>
           }
         />
       </Routes>

@@ -1,0 +1,13 @@
+{
+  "discarded_attempt": {
+    "stage": "initial NVT equilibration, before production",
+    "implementation": "non-periodic harmonic positional restraint",
+    "failure": "OpenMM raised Particle coordinate is NaN",
+    "use_in_analysis": false
+  },
+  "final_protocol": {
+    "correction": "Use CustomExternalForce periodicdistance(x,y,z,x0,y0,z0)^2; this handles periodic coordinate images.",
+    "verification": "Standalone 20 ps restrained NVT test and complete 100 ps equilibration per published replica, followed by finite-coordinate and covalent-geometry checks."
+  },
+  "runner_revision_note": "During the published run, argument validation and preparation-fingerprint reuse guards were added to run_md.py. These do not change forces, integration, seeds, or dynamics. Original run.json files lack preparation_sha256, so the hardened runner intentionally refuses to silently reuse them; use the analysis scripts or archive replicas before a fresh rerun."
+}

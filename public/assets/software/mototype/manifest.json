@@ -1,0 +1,87 @@
+{
+  "schema": "mototype-source-manifest/1",
+  "engine": "mototype-kinetics/0.2.0",
+  "scope": "Numerical core, CLI, fixtures, checks and Wiki UI sources. Synthetic data only.",
+  "files": [
+    {
+      "path": "LICENSE",
+      "bytes": 18716,
+      "sha256": "cc54a182cd2776819e2584e4b5f70ae41aa50953fcb78d046fbe1fc53807d2c5"
+    },
+    {
+      "path": "README.txt",
+      "bytes": 4846,
+      "sha256": "7a25a7d85069a27d0abdf94e75adad6f01b283063765d60529aafc0de35629f4"
+    },
+    {
+      "path": "examples/model-mismatch.csv",
+      "bytes": 1745,
+      "sha256": "e22c9fb67dda1ada70e6b4d556a71e5de624fc5c5876baa8ee8114614f7aae56"
+    },
+    {
+      "path": "examples/reporting-limit.csv",
+      "bytes": 1747,
+      "sha256": "c7e54a6e8d40204074b60be278ce90bc850a87e50266a1b9d1498074818770cb"
+    },
+    {
+      "path": "examples/synthetic-decay.csv",
+      "bytes": 1225,
+      "sha256": "7d45da54c01b51b9a3a5ea433dc69e066b892e554dcf646359e6a994bdf80151"
+    },
+    {
+      "path": "package.json",
+      "bytes": 87,
+      "sha256": "5d678147867cfb932700e725f58b2a013b469d08e28a3165e8e52023ca3ad4ad"
+    },
+    {
+      "path": "scripts/software/kinetics-check.mjs",
+      "bytes": 8882,
+      "sha256": "09b9b34366525721a909e91c1b2b90d2e17be40848e4950a41c40fe472a8386d"
+    },
+    {
+      "path": "scripts/software/mototype.mjs",
+      "bytes": 2583,
+      "sha256": "03e378b8dc4680802b6435f8fcc610500bb70ff5a02a445a36586a040acd9422"
+    },
+    {
+      "path": "scripts/software/observed-check.mjs",
+      "bytes": 5995,
+      "sha256": "46e4eda33b95843230936715f3a232eec08ab4c4c12595a8757f6bcadddfae9c"
+    },
+    {
+      "path": "scripts/software/replay-check.mjs",
+      "bytes": 5128,
+      "sha256": "68f690a92db0091695fa7610b82ce43d64bf5678995e53dc04a302fb204adfb4"
+    },
+    {
+      "path": "src/contents/software/MototypeWorkbench.tsx",
+      "bytes": 32869,
+      "sha256": "53f3fdb5eb40e5447dd86ec3a2195c18f3a48114ebeffeedfcd80c5426f126ab"
+    },
+    {
+      "path": "src/contents/software/SoftwareDemos.tsx",
+      "bytes": 5530,
+      "sha256": "a56ca267e773a150f498c1de0e36ddf91dfbfca196eb349c0af07ac9cff9e8f4"
+    },
+    {
+      "path": "src/contents/software/engine/kinetics.ts",
+      "bytes": 11236,
+      "sha256": "6acea81eac609e478b6cedc6195a9c333facc5ec1cf03f556c7b633504bbedf6"
+    },
+    {
+      "path": "src/contents/software/engine/mototype.ts",
+      "bytes": 19296,
+      "sha256": "f65f1c4f0bdc295bcb5a773740f7fe831c1ab76c771efe35a0ced79365061373"
+    },
+    {
+      "path": "src/contents/software/engine/runtime.ts",
+      "bytes": 6039,
+      "sha256": "f785be745369582e4c9db71bbed4bbe9c49ac065db0e0073ec01778da0d2a6d6"
+    },
+    {
+      "path": "src/contents/software/software.css",
+      "bytes": 21221,
+      "sha256": "223c30aa077d53c8980261f96146da0092a8cd21ae08d6fba598777c61d6aa89"
+    }
+  ]
+}

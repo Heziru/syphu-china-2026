@@ -37,3 +37,9 @@ outputs/best-wiki-review/profile/
 outputs/lab-focus-review/browser-profile/
 outputs/gallery-review/browser-profile/
 outputs/gallery-review/profile/
+
+# Generated analysis workspaces, browser captures and compiler caches
+outputs/
+__pycache__/
+*.py[cod]
+*.tsbuildinfo

@@ -1,0 +1,108 @@
+SYPHU-China / dry-lab reproducibility package
+
+Extract into a new directory and run commands from that package root. Paths match
+the wiki repository. The bundle is an analysis/data package, not the React site.
+No private Elafin-IBD working directory, virtual environment, executable HDOCK
+distribution or full-solvent trajectory is included.
+
+1. INSTALL THE ANALYSIS ENVIRONMENT
+   Python 3.12.7 was used for the recorded runs.
+     python -m venv .venv
+   Activate that environment using your platform's normal command, then:
+     python -m pip install -r requirements-research.txt
+   For browser-rendered molecular figures only:
+     npm install
+     npx playwright install chromium
+   Alternatively the renderer can use an existing Edge/Chrome installation
+   (set BROWSER_CHANNEL=msedge or chrome). No CDN is required by the renderer.
+
+2. REGENERATE ANALYSES AND FIGURES FROM THE ARCHIVED INPUTS
+     python scripts/drylab/analyze_structures.py
+     node scripts/drylab/render_structures.mjs
+     python scripts/drylab/plot_structures.py
+     python scripts/drylab/binding_kinetics.py
+     python scripts/drylab/research_models.py
+     python scripts/drylab/plot_overview.py
+     python scripts/drylab/adhesion/retention_model.py --output-dir public/assets/dry-lab/adhesion
+     python scripts/drylab/adhesion/particle_transport.py --output-dir public/assets/dry-lab/adhesion
+     python scripts/drylab/atomistic/analyze_docking.py
+     node scripts/drylab/atomistic/render_docking.mjs
+     node scripts/drylab/atomistic/render_docking_closeup.mjs
+     python scripts/drylab/atomistic/analyze_md.py
+     python scripts/drylab/atomistic/plot_atomistic.py
+     python scripts/drylab/atomistic/validate_atomistic.py
+     python scripts/drylab/draw_pathway.py
+
+   These commands use the provided coordinate/pose/trajectory inputs.
+   Reanalysis does not need HDOCK or OpenMM. Browser rendering needs Playwright.
+   Scripts overwrite generated files in the extracted package. Intermediate
+   arrays are written under outputs/. The original team workspace is not used.
+   Module methods and run metadata describe seeds, units and numerical checks.
+   The particle replay uses 600 fixed IDs from 4000 simulated trajectories.
+   Counts include the complete cohort; exited/shed positions are not drawn.
+   The colon outline is a schematic display mapping of strip coordinates,
+   not an organ CFD mesh. See adhesion/particle-README.md for the mapping,
+   time-step checks and the distinction from the finite-volume retention module.
+   The docking close-up is a browser rendering of the archived candidate PDB;
+   it does not run a new docking calculation or infer bond types from distances.
+   Plot appearance can vary slightly with font/browser/graphics versions.
+
+3. OPTIONAL: RERUN THE ATOMISTIC PILOT, RATHER THAN REANALYSE SAVED TRAJECTORIES
+   Read public/assets/dry-lab/atomistic/README.md first.
+   Install that module's pinned requirements, including OpenMM 8.6.1. The runtime
+   requires a working accelerated CPU or OpenCL platform; Reference is rejected.
+     python -m pip install -r public/assets/dry-lab/atomistic/requirements-md.txt
+   On a separate extracted working copy, move the existing md/replica-* folders
+   outside public/assets/dry-lab/atomistic/md before starting new simulations.
+   The runner only reuses completed runs with a matching preparation fingerprint;
+   the archived pilots predate that guard, so they must be moved aside. Retain
+   the original downloaded package as the record of the submitted calculation.
+     python scripts/drylab/atomistic/prepare_md.py
+     python scripts/drylab/atomistic/run_md.py
+     python scripts/drylab/atomistic/analyze_md.py
+     python scripts/drylab/atomistic/plot_atomistic.py --only md
+
+   prepare_md.py rebuilds the solvated starting system. To reuse the archived
+   prepared system instead, omit that step. This pilot uses stochastic dynamics;
+   identical seeds do not promise bitwise identical trajectories on other GPUs,
+   platforms or software versions. Protein-only DCD/NPZ frames and serialized
+   systems/states are supplied. Full-solvent DCDs are excluded from this download.
+
+4. OPTIONAL: RERUN DOCKING WITH A SEPARATELY LICENSED SOLVER
+   HDOCKlite is not redistributed. Follow the atomistic README to obtain the
+   official solver and install it in outputs/dry-lab-atomistic/hdocklite/ under
+   its own license. run_docking.sh requires Linux/WSL and the solver's runtime.
+   Preparation currently imports the OpenMM runtime module, so the optional
+   atomistic Python requirements are needed for this preparation command too.
+     python scripts/drylab/atomistic/prepare_docking.py
+     bash scripts/drylab/atomistic/run_docking.sh
+     python scripts/drylab/atomistic/analyze_docking.py
+     node scripts/drylab/atomistic/render_docking.mjs
+     node scripts/drylab/atomistic/render_docking_closeup.mjs
+     python scripts/drylab/atomistic/plot_atomistic.py --only docking
+
+   run_docking.sh reuses a nonempty docking.out. In a separate working copy,
+   move archived docking result files aside first if a fresh solve is wanted.
+   Preserved input PDBs, complete 100-pose output sets and pose metrics allow
+   the supplied analysis to run without installing the separately licensed solver.
+
+5. RECORDS, ILLUSTRATIONS AND CHECKSUMS
+   literature-2026 contains source/accession and wiki-presentation review records;
+   it is not a downloaded cohort dataset or a claim that every listed study was
+   analysed. Archived GTEx and UniProt records are included with their source IDs.
+   illustrations/project-pathway.svg is regenerated by draw_pathway.py. The
+   bitmap model-overview.png and its generation prompt are design assets, not
+   simulated measurements; image generation is not a deterministic build step.
+   research-bundle-manifest.json lists the size and SHA-256 of every ZIP member
+   except the manifest itself. The packaging script verifies those bytes before
+   publishing the archive. It is a repository utility, not an analysis entrypoint.
+
+   LICENSE covers the team's repository content. Third-party files retain their
+   own terms; see THIRD-PARTY-NOTICES.txt and the local vendor license files.
+
+   Numerical verification checks an implementation; it is not experimental
+   validation. Reference structures, prediction outputs, assumed scenarios and
+   the short atomistic pilot retain their separate status in module metadata.
+   The Peking 2025 wiki is credited for article organization, not models or data.
+   Code and draft presentation were prepared with AI assistance and need team
+   review before submission.

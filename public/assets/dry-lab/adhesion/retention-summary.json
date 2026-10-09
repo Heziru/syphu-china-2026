@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "generatedDate": "2026-10-09",
+  "status": "All adhesion, death and renewal rates are uncalibrated scenarios.",
+  "referenceParameters": {
+    "L": 1800.0,
+    "H": 180.0,
+    "U": 90.0,
+    "D": 100.0,
+    "kappa": 1.0,
+    "koff": 0.005,
+    "shedding": 0.002,
+    "loss": 0.0
+  },
+  "grid": {
+    "nx": 96,
+    "ny": 24,
+    "dt_s": 0.2,
+    "end_s": 600
+  },
+  "physicalScales": {
+    "Re": 0.016199999999999996,
+    "wallShear_Pa": 0.003,
+    "meanTransit_s": 20.0,
+    "PeAxial": 1620.0,
+    "transverseMixingToTransit": 16.2,
+    "DaCapture": 1.8,
+    "KoffTransit": 0.1,
+    "renewalTransit": 0.04
+  },
+  "scenarios": [
+    {
+      "id": "no-binding",
+      "label": "No wall binding",
+      "parameters": {
+        "L": 1800.0,
+        "H": 180.0,
+        "U": 90.0,
+        "D": 100.0,
+        "kappa": 0.0,
+        "koff": 0.005,
+        "shedding": 0.002,
+        "loss": 0.0
+      },
+      "mean_live_s": 19.549573377028736,
+      "wall_live_s": 0.0,
+      "outlet_fraction": 0.9999999999999909,
+      "shed_fraction": 0.0,
+      "dead_fraction": 0.0,
+      "closure": 9.103828801926284e-15,
+      "retained_60s": 7.394786493892955e-05,
+      "retained_300s": 8.724943760411392e-63,
+      "wall_300s": 0.0,
+      "retained_600s": 2.1964213796371932e-147,
+      "mass_error": 2.120525977034049e-14,
+      "minimum_mass": 0.0
+    },
+    {
+      "id": "reversible",
+      "label": "Reversible binding",
+      "parameters": {
+        "L": 1800.0,
+        "H": 180.0,
+        "U": 90.0,
+        "D": 100.0,
+        "kappa": 1.0,
+        "koff": 0.005,
+        "shedding": 0.002,
+        "loss": 0.0
+      },
+      "mean_live_s": 36.15147106288535,
+      "wall_live_s": 17.15699046455497,
+      "outlet_fraction": 0.9656860190708813,
+      "shed_fraction": 0.03431398092910995,
+      "dead_fraction": 0.0,
+      "closure": 8.770761894538737e-15,
+      "retained_60s": 0.0744214722693078,
+      "retained_300s": 0.020928727089693653,
+      "wall_300s": 0.019790726155534163,
+      "retained_600s": 0.004248757718650237,
+      "mass_error": 1.765254609153999e-14,
+      "minimum_mass": 0.0
+    },
+    {
+      "id": "no-renewal",
+      "label": "No mucus renewal",
+      "parameters": {
+        "L": 1800.0,
+        "H": 180.0,
+        "U": 90.0,
+        "D": 100.0,
+        "kappa": 1.0,
+        "koff": 0.005,
+        "shedding": 0.0,
+        "loss": 0.0
+      },
+      "mean_live_s": 46.944014288669976,
+      "wall_live_s": 27.394440911641233,
+      "outlet_fraction": 0.9999999999999911,
+      "shed_fraction": 0.0,
+      "dead_fraction": 0.0,
+      "closure": 8.881784197001252e-15,
+      "retained_60s": 0.08185976960764799,
+      "retained_300s": 0.03705621242652618,
+      "wall_300s": 0.03506368182832715,
+      "retained_600s": 0.01364461203641107,
+      "mass_error": 1.199040866595169e-14,
+      "minimum_mass": 0.0
+    },
+    {
+      "id": "stress",
+      "label": "Stress / no support",
+      "parameters": {
+        "L": 1800.0,
+        "H": 180.0,
+        "U": 90.0,
+        "D": 100.0,
+        "kappa": 1.0,
+        "koff": 0.005,
+        "shedding": 0.002,
+        "loss": 0.004
+      },
+      "mean_live_s": 27.161325305562283,
+      "wall_live_s": 9.344289702280495,
+      "outlet_fraction": 0.8726661193731872,
+      "shed_fraction": 0.018688579404560986,
+      "dead_fraction": 0.10864530122224918,
+      "closure": 2.6645352591003757e-15,
+      "retained_60s": 0.05856287666761685,
+      "retained_300s": 0.006314650006740256,
+      "wall_300s": 0.005971278443848371,
+      "retained_600s": 0.0003867958223620442,
+      "mass_error": 1.567634910770721e-13,
+      "minimum_mass": 0.0
+    },
+    {
+      "id": "support",
+      "label": "Stress / support",
+      "parameters": {
+        "L": 1800.0,
+        "H": 180.0,
+        "U": 90.0,
+        "D": 100.0,
+        "kappa": 1.0,
+        "koff": 0.005,
+        "shedding": 0.002,
+        "loss": 0.001
+      },
+      "mean_live_s": 32.91438613895832,
+      "wall_live_s": 14.271099189007312,
+      "outlet_fraction": 0.9385434154830234,
+      "shed_fraction": 0.02854219837801462,
+      "dead_fraction": 0.032914386138958286,
+      "closure": 3.6637359812630166e-15,
+      "retained_60s": 0.07009249084828982,
+      "retained_300s": 0.01550977347046642,
+      "wall_300s": 0.014666421100173875,
+      "retained_600s": 0.0023333987722891905,
+      "mass_error": 7.51620987671231e-14,
+      "minimum_mass": 0.0
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "U",
+      "prcc": -0.7747318138396595,
+      "low": -0.817983968827712,
+      "high": -0.7348675154450053,
+      "min": 20.0,
+      "max": 300.0
+    },
+    {
+      "parameter": "D",
+      "prcc": -0.2232202665518113,
+      "low": -0.32949815008697086,
+      "high": -0.11745207905449838,
+      "min": 10.0,
+      "max": 330.0
+    },
+    {
+      "parameter": "kappa",
+      "prcc": 0.9522277478988546,
+      "low": 0.942726921452705,
+      "high": 0.9616302754310831,
+      "min": 0.02,
+      "max": 5.0
+    },
+    {
+      "parameter": "koff",
+      "prcc": -0.7702532960794164,
+      "low": -0.8174618988637543,
+      "high": -0.7226372026755764,
+      "min": 0.0005,
+      "max": 0.05
+    },
+    {
+      "parameter": "shedding",
+      "prcc": -0.5269743825391026,
+      "low": -0.6026026970689973,
+      "high": -0.434016437626585,
+      "min": 0.0002,
+      "max": 0.01
+    },
+    {
+      "parameter": "loss",
+      "prcc": -0.5612009580412756,
+      "low": -0.6382446910831412,
+      "high": -0.4652993310778859,
+      "min": 0.0002,
+      "max": 0.01
+    }
+  ],
+  "verification": {
+    "massClosureMax": 1.567634910770721e-13,
+    "infiniteHorizonClosureMax": 3.3084646133829665e-14,
+    "minimumState": 0.0,
+    "preboundAnalyticError": 6.661338147750939e-16,
+    "uniformLossIdentityError": 2.3852447794681098e-17,
+    "noBindingWallMax": 0.0,
+    "spatialBaseWallRelativeError": 5.163021798959555e-05,
+    "parameterAuditMaxWallRelativeError": 0.014171831839996152,
+    "timeBaseError": 0.0037700893199918736,
+    "timeFinestOrder": 1.0078880557498613
+  },
+  "spaceConvergence": [
+    {
+      "nx": 24,
+      "ny": 6,
+      "mean_live_s": 35.619492151400024,
+      "wall_live_s": 16.597794202761467,
+      "outlet_fraction": 0.9668044115944768,
+      "shed_fraction": 0.03319558840552293,
+      "dead_fraction": 0.0,
+      "closure": 2.220446049250313e-16,
+      "wall_relative_to_finest": 0.03264285835463776,
+      "mean_relative_to_finest": 0.013191944815280965
+    },
+    {
+      "nx": 48,
+      "ny": 12,
+      "mean_live_s": 36.11215270556852,
+      "wall_live_s": 17.070552076940388,
+      "outlet_fraction": 0.9658588958461161,
+      "shed_fraction": 0.03414110415388078,
+      "dead_fraction": 0.0,
+      "closure": 3.1086244689504383e-15,
+      "wall_relative_to_finest": 0.005089455759733186,
+      "mean_relative_to_finest": 0.00045680124934044386
+    },
+    {
+      "nx": 96,
+      "ny": 24,
+      "mean_live_s": 36.15147106288535,
+      "wall_live_s": 17.15699046455497,
+      "outlet_fraction": 0.9656860190708813,
+      "shed_fraction": 0.03431398092910995,
+      "dead_fraction": 0.0,
+      "closure": 8.770761894538737e-15,
+      "wall_relative_to_finest": 5.163021798959555e-05,
+      "mean_relative_to_finest": 0.0015460832512277367
+    },
+    {
+      "nx": 192,
+      "ny": 48,
+      "mean_live_s": 36.122268829360095,
+      "wall_live_s": 17.163630732852404,
+      "outlet_fraction": 0.9656727385342871,
+      "shed_fraction": 0.03432726146570482,
+      "dead_fraction": 0.0,
+      "closure": 7.993605777301127e-15,
+      "wall_relative_to_finest": 0.000335379699201388,
+      "mean_relative_to_finest": 0.0007370599459648464
+    },
+    {
+      "nx": 384,
+      "ny": 96,
+      "mean_live_s": 36.09566416108396,
+      "wall_live_s": 17.157876329450097,
+      "outlet_fraction": 0.965684247341101,
+      "shed_fraction": 0.03431575265890019,
+      "dead_fraction": 0.0,
+      "closure": 1.3322676295501878e-15,
+      "wall_relative_to_finest": 0.0,
+      "mean_relative_to_finest": 0.0
+    }
+  ],
+  "timeConvergence": [
+    {
+      "dt_s": 0.8,
+      "l1_mass_error": 0.01590070420030909,
+      "min_state": 0.0,
+      "observed_order": ""
+    },
+    {
+      "dt_s": 0.4,
+      "l1_mass_error": 0.007688120795437134,
+      "min_state": 0.0,
+      "observed_order": 1.0483877511206203
+    },
+    {
+      "dt_s": 0.2,
+      "l1_mass_error": 0.0037700893199918736,
+      "min_state": 0.0,
+      "observed_order": 1.0280322999940341
+    },
+    {
+      "dt_s": 0.1,
+      "l1_mass_error": 0.0018653543313284877,
+      "min_state": 0.0,
+      "observed_order": 1.015149001800654
+    },
+    {
+      "dt_s": 0.05,
+      "l1_mass_error": 0.0009275915908581758,
+      "min_state": 0.0,
+      "observed_order": 1.0078880557498613
+    }
+  ],
+  "ensembleSize": 256,
+  "planeRuns": 968,
+  "parameterGrid": {
+    "nx": 96,
+    "ny": 24
+  },
+  "analysisSeconds": 73.79077219963074
+}

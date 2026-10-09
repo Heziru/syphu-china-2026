@@ -1,0 +1,35 @@
+.heroLanding { position: absolute; inset: 0; z-index: 4; isolation: isolate; overflow: hidden; color: #214f45; }
+.heroContent { position: absolute; left: 7%; top: 9%; z-index: 3; width: 85%; }
+.heroLanding__eyebrow { font-size: 12px; letter-spacing: .17em; font-weight: 800; color: #6c8b7c; margin: 0 0 22px; }
+.heroContent h2 { font: 900 clamp(45px, min(6.7vw, 10svh), 104px)/1.05 "SYPHU Nunito", sans-serif; letter-spacing: -.045em; margin: 0; }
+.heroContent h2 span { color: #d7a48a; }
+.heroLanding__subtitle { font-size: clamp(21px, 2.2vw, 32px); line-height: 1.4; color: #678578; margin: 18px 0 0; }
+.heroVisual { position: absolute; left: 23%; top: 37%; width: 64%; aspect-ratio: 1902 / 827; z-index: 2; max-height: 48%; }
+.heroMucosa { width: 100%; height: 100%; object-fit: contain; display: block; }
+.heroVisual__labels { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.heroVisual__labels path { fill: none; stroke: #3b7164; stroke-width: 1.5; }
+.heroVisual__labels circle { fill: #fbf8ee; stroke: #3b7164; stroke-width: 2; }
+.heroVisual__labels text { font: 500 14px "SYPHU Nunito", sans-serif; fill: #285a4e; }
+.heroScientist { position: absolute; left: 5%; bottom: 18%; width: 16%; height: 27%; object-fit: contain; object-position: bottom; z-index: 3; }
+.heroLanding__follow { position: absolute; right: 7%; bottom: 7.5%; z-index: 5; border: 0; background: transparent; color: #416a59; padding: 10px 0; font: inherit; font-size: 14px; border-bottom: 1px solid #b9cbb8; }
+.heroLanding__follow span { margin-left: 25px; }
+.heroLanding--static { position: relative; height: max(720px, 90svh); }
+@media (min-width: 701px) and (max-width: 1050px) and (orientation: portrait) {
+  .heroContent { top: 10%; }
+  .heroVisual { left: 5%; top: 35%; width: 82%; }
+  .heroScientist { left: 7%; bottom: 18%; width: 24%; height: 23%; }
+  .heroLanding__follow { bottom: 22%; }
+}
+@media (max-width: 700px) {
+  .heroContent { top: 7%; width: 86%; }
+  .heroLanding__eyebrow { font-size: 10px; margin-bottom: 17px; }
+  .heroContent h2 { font-size: clamp(36px, 10.5vw, 49px); max-width: 10ch; }
+  .heroLanding__subtitle { font-size: 19px; max-width: 25ch; margin-top: 17px; }
+  .heroVisual { top: 39%; left: 4%; width: 82%; max-height: none; }
+  .heroVisual__labels text { font-size: 22px; }
+  .heroScientist { width: 25%; height: 23%; bottom: 17%; left: 7%; }
+  .heroLanding__follow { right: 7%; bottom: 24%; font-size: 12px; }
+  .heroLanding__follow span { margin-left: 10px; }
+  .heroLanding--static { height: max(710px, 95svh); }
+}
+

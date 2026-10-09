@@ -1,0 +1,253 @@
+{
+  "preparation": {
+    "input": {
+      "pdb": "2REL",
+      "model": 1,
+      "chain": "A",
+      "species": "Homo sapiens",
+      "residues": 57,
+      "sha256": "87de7296beac51c1ae41d812f8f78ed9c560d401dcfd44e35e6f472b4310a2ac",
+      "disulfides_mature_numbering": [
+        [
+          16,
+          45
+        ],
+        [
+          23,
+          49
+        ],
+        [
+          32,
+          44
+        ],
+        [
+          38,
+          53
+        ]
+      ]
+    },
+    "environment": {
+      "python": "3.12.7",
+      "OpenMM": "8.6.1",
+      "platforms": [
+        "Reference",
+        "CPU",
+        "OpenCL"
+      ],
+      "selected_platform": "OpenCL",
+      "properties": {
+        "Precision": "mixed"
+      }
+    },
+    "system": {
+      "force_fields": [
+        "amber14/protein.ff14SB.xml",
+        "amber14/tip3pfb.xml"
+      ],
+      "water": "TIP3P-FB",
+      "pH_for_protonation": 7.4,
+      "water_model_argument": "tip3p uses the three-site TIP3P-FB force-field parameters",
+      "ionic_strength_M": 0.15,
+      "padding_nm": 1.0,
+      "box_shape": "dodecahedron",
+      "protein_atoms": 830,
+      "total_atoms": 12879,
+      "water_molecules": 4008,
+      "ions": {
+        "NA": 11,
+        "CL": 14
+      },
+      "constraints": 12443,
+      "nonbonded": "PME",
+      "cutoff_nm": 0.9,
+      "ewald_tolerance": 0.0005,
+      "temperature_K": 300,
+      "pressure_bar": 1,
+      "time_step_fs": 2,
+      "friction_ps_inverse": 1
+    },
+    "minimization": {
+      "initial_energy_kJ_mol": -36008.19732540927,
+      "minimized_energy_kJ_mol": -242288.95258729195,
+      "max_iterations": 2000,
+      "force_tolerance_kJ_mol_nm": 10,
+      "wall_seconds_including_benchmark": 31.01704810000956
+    },
+    "benchmark": {
+      "steps": 1000,
+      "simulated_ps": 2,
+      "wall_seconds": 1.305830999976024,
+      "ns_per_day": 132.32952809603444
+    },
+    "status": "Preparation and short performance benchmark; benchmark is not the production trajectory."
+  },
+  "replicas": [
+    {
+      "replica": 1,
+      "seed": 20261110,
+      "barostat_seed": 20261111,
+      "production_ps": 1000.0,
+      "equilibration_ps": 100,
+      "equilibration": [
+        {
+          "label": "NVT restrained",
+          "duration_ps": 20,
+          "backbone_k_kJ_mol_nm2": 1000,
+          "potential_energy_kJ_mol": -207359.3323074847
+        },
+        {
+          "label": "NPT restrained",
+          "duration_ps": 30,
+          "backbone_k_kJ_mol_nm2": 250,
+          "potential_energy_kJ_mol": -211393.4537832978
+        },
+        {
+          "label": "NPT unrestrained",
+          "duration_ps": 50,
+          "backbone_k_kJ_mol_nm2": 0,
+          "potential_energy_kJ_mol": -210826.96074553963
+        }
+      ],
+      "production_frames_in_npz": 201,
+      "production_frames_in_dcd": 200,
+      "frame_interval_ps": 5,
+      "production_wall_seconds": 786.9913830000442,
+      "total_wall_seconds": 888.2502574000973,
+      "platform": "OpenCL",
+      "protein_atoms": 830,
+      "complete": true,
+      "interpretation": "Independent velocity seeds from one minimized NMR conformer; short numerical pilots, not independent structural starting conformers or converged stability/affinity evidence.",
+      "analysis_window_ps": [
+        200,
+        1000.0
+      ],
+      "analysis_frames": 161,
+      "rmsd_reference": "Energy-minimized 2REL conformer 1; C-alpha least-squares proper rotation",
+      "mean_full_CA_RMSD_A": 2.9111449830392067,
+      "mean_WAP_CA_RMSD_A": 2.5177051829455737,
+      "mean_Rg_A": 13.233639401455802,
+      "mean_N_terminal_CA_RMSF_A": 3.1411152448319792,
+      "mean_WAP_CA_RMSF_A": 1.069518322174714,
+      "SS_distance_range_A": [
+        1.8780517578125,
+        2.197359085083008
+      ],
+      "maximum_covalent_bond_A": 2.197359085083008,
+      "mean_temperature_K": 300.34540793343416,
+      "mean_density_g_mL": 1.0245336475374878
+    },
+    {
+      "replica": 2,
+      "seed": 20261211,
+      "barostat_seed": 20261212,
+      "production_ps": 1000.0,
+      "equilibration_ps": 100,
+      "equilibration": [
+        {
+          "label": "NVT restrained",
+          "duration_ps": 20,
+          "backbone_k_kJ_mol_nm2": 1000,
+          "potential_energy_kJ_mol": -207709.66452170722
+        },
+        {
+          "label": "NPT restrained",
+          "duration_ps": 30,
+          "backbone_k_kJ_mol_nm2": 250,
+          "potential_energy_kJ_mol": -211239.6357032184
+        },
+        {
+          "label": "NPT unrestrained",
+          "duration_ps": 50,
+          "backbone_k_kJ_mol_nm2": 0,
+          "potential_energy_kJ_mol": -211180.5548662669
+        }
+      ],
+      "production_frames_in_npz": 201,
+      "production_frames_in_dcd": 200,
+      "frame_interval_ps": 5,
+      "production_wall_seconds": 774.8488987998571,
+      "total_wall_seconds": 866.3972750999965,
+      "platform": "OpenCL",
+      "protein_atoms": 830,
+      "complete": true,
+      "interpretation": "Independent velocity seeds from one minimized NMR conformer; short numerical pilots, not independent structural starting conformers or converged stability/affinity evidence.",
+      "analysis_window_ps": [
+        200,
+        1000.0
+      ],
+      "analysis_frames": 161,
+      "rmsd_reference": "Energy-minimized 2REL conformer 1; C-alpha least-squares proper rotation",
+      "mean_full_CA_RMSD_A": 2.7242633752196297,
+      "mean_WAP_CA_RMSD_A": 1.8068825427962882,
+      "mean_Rg_A": 13.033263301873559,
+      "mean_N_terminal_CA_RMSF_A": 3.531047660883333,
+      "mean_WAP_CA_RMSF_A": 0.8182825020022126,
+      "SS_distance_range_A": [
+        1.886981725692749,
+        2.1777069568634033
+      ],
+      "maximum_covalent_bond_A": 2.1777069568634033,
+      "mean_temperature_K": 300.1200322507007,
+      "mean_density_g_mL": 1.0247997876442407
+    },
+    {
+      "replica": 3,
+      "seed": 20261312,
+      "barostat_seed": 20261313,
+      "production_ps": 1000.0,
+      "equilibration_ps": 100,
+      "equilibration": [
+        {
+          "label": "NVT restrained",
+          "duration_ps": 20,
+          "backbone_k_kJ_mol_nm2": 1000,
+          "potential_energy_kJ_mol": -207986.6359094713
+        },
+        {
+          "label": "NPT restrained",
+          "duration_ps": 30,
+          "backbone_k_kJ_mol_nm2": 250,
+          "potential_energy_kJ_mol": -211097.4488449192
+        },
+        {
+          "label": "NPT unrestrained",
+          "duration_ps": 50,
+          "backbone_k_kJ_mol_nm2": 0,
+          "potential_energy_kJ_mol": -211487.86127076508
+        }
+      ],
+      "production_frames_in_npz": 201,
+      "production_frames_in_dcd": 200,
+      "frame_interval_ps": 5,
+      "production_wall_seconds": 762.8285205999855,
+      "total_wall_seconds": 847.6305563000496,
+      "platform": "OpenCL",
+      "protein_atoms": 830,
+      "complete": true,
+      "interpretation": "Independent velocity seeds from one minimized NMR conformer; short numerical pilots, not independent structural starting conformers or converged stability/affinity evidence.",
+      "analysis_window_ps": [
+        200,
+        1000.0
+      ],
+      "analysis_frames": 161,
+      "rmsd_reference": "Energy-minimized 2REL conformer 1; C-alpha least-squares proper rotation",
+      "mean_full_CA_RMSD_A": 2.808397278510583,
+      "mean_WAP_CA_RMSD_A": 2.0616544641986545,
+      "mean_Rg_A": 12.603848728579917,
+      "mean_N_terminal_CA_RMSF_A": 3.2098082410816873,
+      "mean_WAP_CA_RMSF_A": 0.6905290511002907,
+      "SS_distance_range_A": [
+        1.8894479274749756,
+        2.155635118484497
+      ],
+      "maximum_covalent_bond_A": 2.155635118484497,
+      "mean_temperature_K": 299.84455628376395,
+      "mean_density_g_mL": 1.0248472273573794
+    }
+  ],
+  "number_of_completed_replicas": 3,
+  "total_production_ns": 3.0,
+  "RMSF_method": "Per-replica temporal C-alpha RMSF about its own 200\u20131000 ps mean after WAP residues 9\u201357 fit. This is real MD, not NMR ensemble spread.",
+  "contact_method": "Per-replica temporal CA distance below 8 A, excluding sequence separation <=3; 200\u20131000 ps; not inter-protein binding contacts.",
+  "scope": "Isolated human Elafin, 2REL model 1. 3 completed independent-velocity replicas share one minimized protein/solvent starting configuration. Short pilots do not establish convergence, binding affinity, or clinical efficacy."
+}

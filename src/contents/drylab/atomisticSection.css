@@ -1,0 +1,27 @@
+.atomistic-section { scroll-margin-top: 110px; }
+.atomistic-section .atomistic-equation { display:flex; gap:1.5rem; align-items:center; justify-content:space-between; padding:1rem 0; overflow-x:auto; }
+.atomistic-section .atomistic-equation > span:last-child { color:#66777b; flex:none; }
+.atomistic-section .atomistic-downloads { display:flex; flex-wrap:wrap; gap:.7rem 1.3rem; margin:1rem 0 2rem; }
+.atomistic-section .atomistic-viewer { margin:1rem 0; border:1px solid #dbe4e1; border-radius:8px; background:#fff; overflow:hidden; }
+.atomistic-section .atomistic-viewer-tools { display:flex; align-items:center; flex-wrap:wrap; gap:.9rem; padding:1rem; border-bottom:1px solid #e4e9e7; font-size:.85rem; }
+.atomistic-section .atomistic-viewer-tools label { display:flex; align-items:center; gap:.45rem; }
+.atomistic-section .atomistic-viewer-tools select,.atomistic-section .atomistic-viewer-tools button { color:#26363b; background:#fff; border:1px solid #bac9c5; border-radius:4px; padding:.4rem .6rem; font:inherit; }
+.atomistic-section .atomistic-viewer-tools button:disabled { opacity:.45; }
+.atomistic-section .atomistic-viewer-stage { position:relative; height:440px; width:100%; }
+.atomistic-viewer-frame { position:relative; }
+.atomistic-viewer-loading { position:absolute; inset:45% 12px auto; text-align:center; font-size:14px; }
+.atomistic-viewer-fallback { position:absolute; inset:0; padding:12px; display:flex; flex-direction:column; align-items:center; }
+.atomistic-viewer-fallback p { font-size:14px; }
+.atomistic-viewer-fallback img { min-height:0; flex:1; }
+.atomistic-section .atomistic-viewer-note,.atomistic-section .atomistic-viewer > p,.atomistic-section .atomistic-viewer > [role=status] { padding:0 1rem; font-size:.83rem; color:#61747a; }
+.atomistic-section .atomistic-static-pose { width:100%; max-height:440px; object-fit:contain; }
+.atomistic-section .atomistic-chain-e { color:#287a74; font-weight:650; }
+.atomistic-section .atomistic-chain-i { color:#b85f4d; font-weight:650; }
+.atomistic-section .atomistic-limit { border-left:3px solid #b39547; padding:.3rem 0 .3rem 1.1rem; margin:1.5rem 0; }
+.atomistic-section .atomistic-reference-list { font-size:.85rem; line-height:1.7; }
+@media(max-width:700px) {
+ .atomistic-section .atomistic-viewer-stage { height:320px; }
+ .atomistic-section .atomistic-viewer-tools { gap:.75rem; }
+ .atomistic-section .atomistic-viewer-tools label:first-child { flex-direction:column; align-items:flex-start; width:100%; }
+ .atomistic-section .atomistic-viewer-tools select { width:100%; max-width:100%; }
+}

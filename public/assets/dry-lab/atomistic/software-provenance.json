@@ -1,0 +1,22 @@
+{
+  "Python": "3.12.7",
+  "OpenMM": "8.6.1",
+  "NumPy": "2.1.2",
+  "SciPy": "1.15.2",
+  "Matplotlib": "3.10.1",
+  "Pillow": "11.1.0",
+  "3Dmol.js": "2.5.5",
+  "HDOCKlite": "1.2",
+  "platform": "Windows 11, AMD Ryzen 7 8845H / Radeon 780M; HDOCK under Ubuntu WSL",
+  "binary_source": "https://github.com/huang-laboratory/HDOCKlite",
+  "hdock_license": "Academic noncommercial; do not redistribute outside group/lab. Executables are deliberately excluded from downloadable research bundle.",
+  "hdock_sha256": "334ac3c70300160aac0dc14c89c81d5940eaf621d16e946925409b2fbb546347",
+  "createpl_sha256": "9d7087693ff60b8f0e54d9148943965cfde30744186468fa1621e40b293972bb",
+  "prepared_file_sha256": {
+    "system.xml": "c93789e362c29a3fa7d82b223512bd2acfe755018073851261f7a46e4bbd6680",
+    "minimized-state.xml": "63be2d1ee77c9cad0a4011b9c7971766ec8e7f1b282da02f1a0388d86f310454",
+    "solvated-minimized.pdb": "776d280e15abeb6b68c16bf284ff0221df016847506b4b7d57e21d7ec5205ba9",
+    "protein-prepared.pdb": "162f964e2ecbab08dd1521b4a331ae6e35fddbbb58c769581156628600c6d02c"
+  },
+  "reproduction_note": "The executable MD protocol is unchanged; argument and input-fingerprint guards were added during the original running process. Original metadata is preserved without retrospectively fabricating launch fingerprints."
+}

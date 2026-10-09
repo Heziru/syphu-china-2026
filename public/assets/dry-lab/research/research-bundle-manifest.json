@@ -1,0 +1,2509 @@
+{
+  "date": "2026-10-09",
+  "scope": "Archived inputs, research analyses, retention, particle trajectories, atomistic pilot, molecular close-ups, illustrations and source records",
+  "status": "Computational work and conceptual diagrams; module metadata defines each evidence boundary",
+  "integrity": "Every archive member except this manifest is listed with uncompressed size and SHA-256.",
+  "excluded": [
+    "virtual environments",
+    "HDOCK executables/runtime",
+    "full-solvent trajectories",
+    "private source directories"
+  ],
+  "files": [
+    {
+      "file": "LICENSE",
+      "bytes": 18716,
+      "sha256": "cc54a182cd2776819e2584e4b5f70ae41aa50953fcb78d046fbe1fc53807d2c5"
+    },
+    {
+      "file": "README.txt",
+      "bytes": 6621,
+      "sha256": "506256e3e4e6923168ec2d510bf652bf57eecb3e4d4703e7dec8e0b8cf65067b"
+    },
+    {
+      "file": "THIRD-PARTY-NOTICES.txt",
+      "bytes": 907,
+      "sha256": "eb9cbe5f198708a5c63990d954c247da7fb1e5feeb94cfb9a3cf293eb2c12a6f"
+    },
+    {
+      "file": "package.json",
+      "bytes": 93,
+      "sha256": "c2424d495c9350fd18c81e8e340bd3441c84a5d63faf702cc11004f1a5e83612"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/11-retention-dynamics.pdf",
+      "bytes": 51899,
+      "sha256": "5a163afcd91627721786c5878be193d4e42b73b91f628eb182d91514f82d2574"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/11-retention-dynamics.png",
+      "bytes": 320797,
+      "sha256": "f3b130dce21910d9c56f8d3bd3cdc0c68f82d7835cf5e66d4a8caa69b1192226"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/11-retention-dynamics.svg",
+      "bytes": 132966,
+      "sha256": "bb06caa18087c80abb15ce2868f34fb3b32de72beffc84a92bbec60d0a72129a"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/12-retention-landscapes.pdf",
+      "bytes": 42339,
+      "sha256": "5fffca91bf201be9c00efe2f4a376fa248b30adae1b13ce0e08d9c1caac0a802"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/12-retention-landscapes.png",
+      "bytes": 73508,
+      "sha256": "b4440fdb9b67a9729c78cfd2d0682039120bb31d533798392b2df0f5796c0005"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/12-retention-landscapes.svg",
+      "bytes": 222811,
+      "sha256": "52febc35de9bceea2c10e13a74362b2b96a433c0786fa22ea14cb9e11ed0f83e"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/13-retention-sensitivity.pdf",
+      "bytes": 37381,
+      "sha256": "741b40dfcde8e7b26d27908dd348ebc346343af1178ee1424cde957b758c14d8"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/13-retention-sensitivity.png",
+      "bytes": 188936,
+      "sha256": "5ca6f7120a1168fdbfe35012654200d71908b5f1841b86411d1c1a972b28b5f5"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/13-retention-sensitivity.svg",
+      "bytes": 89342,
+      "sha256": "49bf191b7359e9891e37f88ee3c28708573d061381d96fdaf2f52f807e62151d"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/14-retention-verification.pdf",
+      "bytes": 34192,
+      "sha256": "1bb7aee8944b8b807a1f5a7211570ce44031c79f1dcb1743906c530670373f69"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/14-retention-verification.png",
+      "bytes": 261480,
+      "sha256": "4ba2d2d2afec92c6e3501c641e3d930cff70dc84bc6e97711518ff5147f6173d"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/14-retention-verification.svg",
+      "bytes": 66108,
+      "sha256": "85789d32776d0d609cdac93fc65caeee352b3f94206228a684931d5147c1d856"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/README.md",
+      "bytes": 11759,
+      "sha256": "6bb5417ac3d74cd042ba0201fe4592daeb60a5e0775d499caa0061600ad07b27"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/figure-dimensions.json",
+      "bytes": 314,
+      "sha256": "47d14ce373859c62a6a2db32e65a3354d0c462cad18b3b2e09d99003266eb01b"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-README.md",
+      "bytes": 5160,
+      "sha256": "41dd149767477b8c427791be66e2263e55c0139d97261c85a7998b7ac6bfeaf8"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-counts.csv",
+      "bytes": 13032,
+      "sha256": "bf49c2c1d98537b34cb1450169ed4c41ca4057e78724826f017cb1fb9d8242d1"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-final-cohort.csv",
+      "bytes": 194872,
+      "sha256": "6c18250492904990744c1ad42a7c11effe80ad45f52c41fb710bf576b2d8a552"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-preview.json",
+      "bytes": 78961,
+      "sha256": "cef7ab923d9c8e2b7d9c29bac2c80ebb64f6b1e1c8909738a16074ffb80e0012"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-replay.json",
+      "bytes": 2541299,
+      "sha256": "2a776248f5746c815f66fc81a59f1acd31dd1f9258cadf68674a877dad7df080"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-step-ensemble.csv",
+      "bytes": 1615,
+      "sha256": "70cda33036f77baf97b09ae6ffc1a11022ab9a1c07deb9379269324d5dbf09e1"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-summary.json",
+      "bytes": 7215,
+      "sha256": "a0a68dc0bc83cbdbbf5def6ac7c450b8d2e44f75ce8a23e465ba31717379b809"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-transport.pdf",
+      "bytes": 113415,
+      "sha256": "37bac0eda9b175ed956a8fad1cf499f89be9547d701733f045df1b5a9c7b65e4"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-transport.png",
+      "bytes": 317898,
+      "sha256": "12ad251943b20ff5fc06dbe9031230408a3b3895c9635f239d56fb8c79e79980"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-transport.py",
+      "bytes": 28007,
+      "sha256": "97dc6dcc3786b703763f09d5ec7ee8545913cb315e0e965282591a1094bf6a86"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-transport.svg",
+      "bytes": 387546,
+      "sha256": "69620fd671b69788fa6ca43baf11f3642fc83eead6bbef15f1e40d0151493f31"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-validation.pdf",
+      "bytes": 30843,
+      "sha256": "abe88cbbde72f0e071b691bf74852eef0c77c9e771c6ca1660042bf74c0572c4"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-validation.png",
+      "bytes": 162992,
+      "sha256": "858e1bd805df76008a9f067629d34d8025b6e3b7c53aa7e5c5c4e1dc5f177714"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/particle-validation.svg",
+      "bytes": 51296,
+      "sha256": "9445fc2d2ba8203e50d85df02da35672e0e312bad2ef8a4eb6582666b6eeabf9"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-animation.json",
+      "bytes": 9853418,
+      "sha256": "23fa9dba431306f7d3b7463a890e747859e4d3d21d6cb4c2d361d9a6df7e4629"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-curves.csv",
+      "bytes": 59667,
+      "sha256": "a2ed46d3fe27a51166f09f7a0a284f2cbfdb88f850756e5691add65837bd74d4"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-ensemble.csv",
+      "bytes": 62781,
+      "sha256": "2cc477b460480f9b5c7c826d98781e0664ed195beb7e9d51b42540c5dd2fb6c2"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-grid-audit.csv",
+      "bytes": 3502,
+      "sha256": "f74d78ec64264baeb2f151cb709c1c376ea2579e6ca8c28a57eed8ae06595adc"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-parameter-planes.csv",
+      "bytes": 79460,
+      "sha256": "46dacb1dad933fb3b8798417828db93f569dde3ab00a95167d4ef84975b54c9f"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-preview.json",
+      "bytes": 21090,
+      "sha256": "275e5588814ae95aa974a62cc680c34adb053e79c6c551666c129bf015f962ce"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-sensitivity.csv",
+      "bytes": 491,
+      "sha256": "7894c7f2c067f28e2436ee8ac466699b318b623effcb38e92cb069b26f21f111"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-space-convergence.csv",
+      "bytes": 859,
+      "sha256": "1d8c76a2102112a6d571cceb58a527c52f1dfbda2ed455d7f41f79dc80bd9c3b"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-summary.json",
+      "bytes": 9186,
+      "sha256": "658b992ef783da4c11c0a089b194f9c2cdb86754477b3a8d9748ddb5de737ddf"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention-time-convergence.csv",
+      "bytes": 274,
+      "sha256": "b986a5bbb007c94b21bbf3d58f3d2420a97b4530f8c2ddddf4f5843e87fb0948"
+    },
+    {
+      "file": "public/assets/dry-lab/adhesion/retention_model.py",
+      "bytes": 19585,
+      "sha256": "030f546bc91dc9915d2e3dc9d8c16215c88cdbccf0c806a580308b58a971e136"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/README.md",
+      "bytes": 12111,
+      "sha256": "58eefc6da89d9a060893076251b4088f1a35758a706713a6345fe44ff7118219"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/analyze_docking.py",
+      "bytes": 10356,
+      "sha256": "f78e5b69e930b507e62915059664a98471994cc6ab63c74c0692f9df9df55732"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/analyze_md.py",
+      "bytes": 8460,
+      "sha256": "a390aaa3c29a877cb11e69d04f51de123b80709fbc6b5075f8c583a0b9ed9126"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/attempt-history.json",
+      "bytes": 973,
+      "sha256": "9a40b65e0861be569b18d03b3de351335be62eada0d5d6ce59e124880d3c32e4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/candidate-complex.png",
+      "bytes": 1194666,
+      "sha256": "1f73a450c9484878eeedb7405746d5a2c8a2ac0c16e1dad48b6dd55661d3a017"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/candidate-interface.png",
+      "bytes": 426500,
+      "sha256": "004006eb3797cef046246c0c828e729a5cac2631590ee253d6664c3ec59a1fe4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/closeup-contacts.csv",
+      "bytes": 247,
+      "sha256": "60fd965f3b344c6e74e3af9e534dd00d55d67377885adadf9ae24b1693ca078f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/closeup-metadata.json",
+      "bytes": 4603,
+      "sha256": "428b8bf2ba41fd4ec939121fcb5bac83ae51a934cef87a4f60562cc94604d72c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-closeup-data.json",
+      "bytes": 4603,
+      "sha256": "428b8bf2ba41fd4ec939121fcb5bac83ae51a934cef87a4f60562cc94604d72c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-closeup-unlabelled.png",
+      "bytes": 1714533,
+      "sha256": "3ba9143a05f8f663fee7a9e20db80b3c8485f228106ad1b09ab9784ac90c85d8"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-human-ne.pdf",
+      "bytes": 367291,
+      "sha256": "539dccb4759137cfc3d1174055fa13869abdb167d25b4951c880c55142017ee0"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-human-ne.png",
+      "bytes": 869485,
+      "sha256": "4785d1199cd5dc72cd3edb471aff56a8b53f92a81ff9d74ade059ff4fe72867d"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-human-ne.svg",
+      "bytes": 546454,
+      "sha256": "609c352992eda1616e8566bce08b0cb22f07f517a49cb7b35dbe6ad0672e332c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-interface-closeup.pdf",
+      "bytes": 1269508,
+      "sha256": "4f29dedaaa9f1313abb57056534e76ebad7d4e8164c5b6a7c40910f80da08540"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-interface-closeup.png",
+      "bytes": 1182357,
+      "sha256": "2923da9eb92f2ca3eace0535978eddc4f60c187b5047f47a753b607724664b59"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-interface-closeup.svg",
+      "bytes": 2291968,
+      "sha256": "6f1846655dfb8afd35462f893853f35902b9be9b67069af9f7c5ac900a549703"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-render-metadata.json",
+      "bytes": 9306,
+      "sha256": "e208d12b59a5e17bd80e007698eaea683ad1344dbd8b174c17ffaa47f4a4e202"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-summary.json",
+      "bytes": 66818,
+      "sha256": "0069c790fe64fbb6febc39cf25634956fb666f5b76b17768b0e75011b6abbdcb"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-validation.pdf",
+      "bytes": 362996,
+      "sha256": "de18512a7caf8792e206863fd09affdc181339c76132e38502b3837ba564f811"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-validation.png",
+      "bytes": 870283,
+      "sha256": "bfd9809a217fb0a123bd78123da02c42c7f38c89f821747e8b30dbf5c334366e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking-validation.svg",
+      "bytes": 538349,
+      "sha256": "8271a1d75d24099e5803d9deedefcecc2098ce02feb97445b0436bb68e3ba77f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/createpl.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/docking.out",
+      "bytes": 399868,
+      "sha256": "6c52aa7ac3f39010821c60f9831469edf8243c9100bfc0b5e750a3d44abaf3f7"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/hdock.log",
+      "bytes": 1927,
+      "sha256": "a2d6293909e32dea2c736bc9077c02a0b1347a26316db8f03617c04210e90286"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/input-provenance.json",
+      "bytes": 838,
+      "sha256": "cf2bf2f92855ce86d941d3b82a1c3b025b4932fc1871d6e5e0738a7777178409"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/ligand-independent.pdb",
+      "bytes": 27972,
+      "sha256": "611d0a4b2c7498e2d9472d4dbc61395601cf3b20deb5e3a54e7a74d7c2276a75"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_1.pdb",
+      "bytes": 121333,
+      "sha256": "1261009a72ffbd567bda252a423b32d825d3a502c3db1ce4a67585a375aa0460"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_10.pdb",
+      "bytes": 121334,
+      "sha256": "8fc7422a306db03284e715ce45c8d9f31d0df057e368c1055f1751249c41a32b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_100.pdb",
+      "bytes": 121335,
+      "sha256": "e10ac3c1d57173fda654e52542ec06cfc072b80b7dd05890b5c1467fb6bd2013"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_11.pdb",
+      "bytes": 121334,
+      "sha256": "a36ae7d20344610f30202b2248ba351fd669aea8fec29698016870be736f2b8c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_12.pdb",
+      "bytes": 121334,
+      "sha256": "36e5716314c57eea31d9b09eea77e59c1dc2b5ce34bf5b35ceeb77d58e5a7993"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_13.pdb",
+      "bytes": 121334,
+      "sha256": "1814c43d8b37c519bebce57de5a748e7b248cfcc8c12f34af191759385658e26"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_14.pdb",
+      "bytes": 121334,
+      "sha256": "4f1f1ffb4d260768dbdf26c943b8a1d4ccfc77e5c825e131067b242af25d3e22"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_15.pdb",
+      "bytes": 121334,
+      "sha256": "afc55dab99844d28537bfe935f04abb42217ef829332667e2a7082f3854629c6"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_16.pdb",
+      "bytes": 121334,
+      "sha256": "8eb62594259a0d4bf3498bfb09c5f9f9acb460fec288088807935981262a4858"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_17.pdb",
+      "bytes": 121334,
+      "sha256": "5f3a4f800a94e1c722aa236bcb88f6c9e5a04e709fb6b3712747cba784fc830a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_18.pdb",
+      "bytes": 121334,
+      "sha256": "62879daf6188b8ffef64bb8f069d8a2cd13cb9b25c3e540724a25bc5300a9c62"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_19.pdb",
+      "bytes": 121334,
+      "sha256": "49292a11f4cb4a9dc213cd1bf855dbbdcc6a015375fc8258cf6196f22f62a0c5"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_2.pdb",
+      "bytes": 121333,
+      "sha256": "51822238acb6f7540144b99cc6c1cb5b831143feff57764427cc89a093462474"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_20.pdb",
+      "bytes": 121334,
+      "sha256": "dc6d3526184924a5e42fef08d09fd9861eac7d33c2f3e470b7f442922c25062f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_21.pdb",
+      "bytes": 121334,
+      "sha256": "c9730aa4d60f8e91faa11ff39d4bb1f929c7057d3f22219d8cbd6e8f1760b649"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_22.pdb",
+      "bytes": 121334,
+      "sha256": "32993d46ba381ace38fc568a0875f49d3098ca71cc0cff88212626074e108bc6"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_23.pdb",
+      "bytes": 121334,
+      "sha256": "508b8760924eb1f293c6ff206ee59ddc16977db56eb74db3b1053cb2d4678826"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_24.pdb",
+      "bytes": 121334,
+      "sha256": "5f99b2fad8ab0732be898c227f644820d88f9db1a63cb3fec2cf83d6fa069270"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_25.pdb",
+      "bytes": 121334,
+      "sha256": "6a57bbc39ad170d30e3d31907990a57c7de967e301dfe816afe82749b8ec3bcf"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_26.pdb",
+      "bytes": 121334,
+      "sha256": "db86e9ca71e80e6147ed98fcb2072ead318ffffd63db59cd3515a0fb77cacbe2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_27.pdb",
+      "bytes": 121334,
+      "sha256": "ef36f766642d1ddd7be4e8c54af03a0b18f855e6de0858cb0a29e676f46d409c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_28.pdb",
+      "bytes": 121334,
+      "sha256": "893fb2a71c54e1a8b4e1cc454d9f5707e88b98860c32d7334301e14a37c73649"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_29.pdb",
+      "bytes": 121334,
+      "sha256": "5d38e7f875858a14aff434467541ec8e043c48765d88f4835d27811cd1269d92"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_3.pdb",
+      "bytes": 121333,
+      "sha256": "700a31249c81cb7764999e12e270768455672e3ea333ec45904caa2a1b4bd2b4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_30.pdb",
+      "bytes": 121334,
+      "sha256": "1b8181e6146eba05b1f1c4c9adae4c05bca767c7e830c12631e09c053ce7092b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_31.pdb",
+      "bytes": 121334,
+      "sha256": "1de6155639e801d7db82b99618a309c2d3bc2941e0518930c2ff6e0c25d70e80"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_32.pdb",
+      "bytes": 121334,
+      "sha256": "477bc6f240df8ed2a4293da8da6f11587510c40eb60c5ad99feded0e95186ebd"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_33.pdb",
+      "bytes": 121334,
+      "sha256": "0182b8841618e38c2bb5cdbfbbf91fd2e38e764f731a8a30f32baed537d7e289"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_34.pdb",
+      "bytes": 121334,
+      "sha256": "8e97c8ee7621e5819e5eb7f1d42c882f9d659856c39beb54e55fad1c7056742f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_35.pdb",
+      "bytes": 121334,
+      "sha256": "8207e3e1c576460b78115a45aa9c284baa8b8c4bc6de9999c2cc4538ad5d75f1"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_36.pdb",
+      "bytes": 121334,
+      "sha256": "7342c0da51ce46107570b4b85fd18027d3fb466f1b5d0ec0c0b61d94d3c342b2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_37.pdb",
+      "bytes": 121334,
+      "sha256": "d0c618bd7e7fb34e0170e587eb8835b903ce7c11d0ae0fe67a2ded4982f5a33b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_38.pdb",
+      "bytes": 121334,
+      "sha256": "19213cc75135bff9737608c31a1e87c038535d8f7650d4213ed68d38078410a3"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_39.pdb",
+      "bytes": 121334,
+      "sha256": "b3e32edfa3bf0be7520d0f52b2b544648bec4612763374791b001d4a135a95a0"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_4.pdb",
+      "bytes": 121333,
+      "sha256": "9cadb2bfdbb7aaa4a7139503a8d218ae84533f5c0e953267c4234ac5253d8712"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_40.pdb",
+      "bytes": 121334,
+      "sha256": "458af86cf6e423ce5653e449ec64191eab4772ac003e5e9108795b24e09e3b1f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_41.pdb",
+      "bytes": 121334,
+      "sha256": "c06ce65d973a69142db5953e62f3d8680cd1ebae567663110025698d2c2eeb42"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_42.pdb",
+      "bytes": 121334,
+      "sha256": "0dd99ac87c582a69ca533a47308f515e3b12c07d4531ffd7d8f9b7c4eb823ee7"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_43.pdb",
+      "bytes": 121334,
+      "sha256": "6c23a522471ea043759f01dbca759e2984ef2a82d53181ec363cf23f89af9f2e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_44.pdb",
+      "bytes": 121334,
+      "sha256": "63e468505904ec73c978c7ce17cab29826d1d2c32ebeb0d4c98a7b6ee3b348f5"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_45.pdb",
+      "bytes": 121334,
+      "sha256": "f95b5425d6224119fcd99620c7dbb67f42383098f44cc00930df7374a5294c44"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_46.pdb",
+      "bytes": 121334,
+      "sha256": "dec4896a2a32953019a6ab6581faaf9cfb49955512f661183d771c4a2bd39a7a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_47.pdb",
+      "bytes": 121334,
+      "sha256": "2197ebf87e6e40d8cfcbba0b7ec1d5bd8b7d8fe3e578b496c9bffa48d36bfb17"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_48.pdb",
+      "bytes": 121334,
+      "sha256": "20fe97ff6962ca872e95a75761bd0eea78855c5e0ea498584d8466cf8679e92e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_49.pdb",
+      "bytes": 121334,
+      "sha256": "d0cba46e50dbc336e7ea395d49ebd7a4ed90374eeb1c32ac86444d42ebbf8e95"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_5.pdb",
+      "bytes": 121333,
+      "sha256": "f2490e22a4c72adf4c8f1ba7d2be54167a475ffec4660ed968fe7d5b38ad56d8"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_50.pdb",
+      "bytes": 121334,
+      "sha256": "f7a7b9f3ddf2ef877701f50630b0aac5388d2f1c847614a76c77da4f8cac728c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_51.pdb",
+      "bytes": 121334,
+      "sha256": "c4dedb0dacfbf4a6f35a416916d01b641542400f94b25b3b87c49f7822b6b8bf"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_52.pdb",
+      "bytes": 121334,
+      "sha256": "c25b44d3a74177bb6b247aba0f6f3a37e7a7db6a07f8ad10b407f3e11201e255"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_53.pdb",
+      "bytes": 121334,
+      "sha256": "91b18cdc5cbb07ecd69fa2d31c80a40a7c21880812c5ec3d7f6b5aa4c0d994fa"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_54.pdb",
+      "bytes": 121334,
+      "sha256": "c6aafe74ce0ee7bc4842395d203206d0723327a2f225ab6e1b59405384a1efeb"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_55.pdb",
+      "bytes": 121334,
+      "sha256": "efd1962f242cc10c9217168802779e592990dd95777bdf7a358cc5b0c150d3b5"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_56.pdb",
+      "bytes": 121334,
+      "sha256": "6717a0927ef7e461d56d49b46b6a8aeb76ad0b6d9580b72e995dda3dd6dba00b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_57.pdb",
+      "bytes": 121334,
+      "sha256": "eadc90977575209661605d9c532a1a1b77dd922c90260727fdf41f4a67dcff6d"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_58.pdb",
+      "bytes": 121334,
+      "sha256": "44da79b6b809f8526eb30c808add34d33b5ea2493018bc83d65f3aceb4d795d9"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_59.pdb",
+      "bytes": 121334,
+      "sha256": "5f9b19978060ce7a17c7300de1bb27d81121e68696b88b0d99539f3f5fb98949"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_6.pdb",
+      "bytes": 121333,
+      "sha256": "e2b7b583d98d5fa0228209fd07054828d80389d330c35548e92c5ef967ad4e6c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_60.pdb",
+      "bytes": 121334,
+      "sha256": "4d6782c7b4b74eadb6d38808b25e48643441bc814a3dd354cf98b18b6a2a662c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_61.pdb",
+      "bytes": 121334,
+      "sha256": "ba4cfb17dd1c20fdc88f60144fb01b19909d6dfad9d3c08f51db5cf3fb9a5d86"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_62.pdb",
+      "bytes": 121334,
+      "sha256": "79e081f9d64c4216a3d0136d668ee277dd0485e137fa75253824a26cb1c5cf31"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_63.pdb",
+      "bytes": 121334,
+      "sha256": "7b45bc008f379b38b91c1c3920ef29821b4d5c4471187943adcb824dc827f84d"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_64.pdb",
+      "bytes": 121334,
+      "sha256": "3f2618f8489696d7c568bb34c34a9b6eb2bf6f2d05af26e3572d0d68868ea6ed"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_65.pdb",
+      "bytes": 121334,
+      "sha256": "5e9cfa9730792ba1a86fc409ce531e8f6a0cc75f75ec278435fb84184a54baf0"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_66.pdb",
+      "bytes": 121334,
+      "sha256": "7b5a2e495e74ca225fc6822dcaa8a5253c4c9df017d634910d12629ed2836f72"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_67.pdb",
+      "bytes": 121334,
+      "sha256": "d6d392c8b1e498998b7e7721e77cbf79e60afc89f3787f8cb41ab2e88a16e5fb"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_68.pdb",
+      "bytes": 121334,
+      "sha256": "d397fec807fb500dac4e4560e6e09f97084f8ceb0c85a6c81a6feea56357acb2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_69.pdb",
+      "bytes": 121334,
+      "sha256": "a6df54235b1028517bad82457027aa05000a3db9cb1e758f7025bf0d4d6516fd"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_7.pdb",
+      "bytes": 121333,
+      "sha256": "145cb13114ed646aee3a3bc453305e2945e2598d6ab1f022e57d7f4ad3b16b47"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_70.pdb",
+      "bytes": 121334,
+      "sha256": "caba1bf03d8c5c7c3b18de47ed2159b95c0422fa6c80d531511a57f15566ad56"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_71.pdb",
+      "bytes": 121334,
+      "sha256": "071ce69832bda068d16184ba3f56ad7acdf8002e968935408127b01f2d3ff1ae"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_72.pdb",
+      "bytes": 121334,
+      "sha256": "83bcbc0c481aa902cb80dddac1d27ae5dff7071033a3eee2c870ad41dd0a43d2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_73.pdb",
+      "bytes": 121334,
+      "sha256": "747a3c1b05d7b3b7bd64ec6b5e35d496edb453e1ee3231fa9b992b5461aad1f2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_74.pdb",
+      "bytes": 121334,
+      "sha256": "1521bed64ea9ba85f08d3883655f907de48b90aa2e12d5e245fef588364936b0"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_75.pdb",
+      "bytes": 121334,
+      "sha256": "e13c9ab45e3108f13da0dbb7d6180515cacf25246ecd7b2a1c7008e40545683a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_76.pdb",
+      "bytes": 121334,
+      "sha256": "0f875c26a27abe2efae90adb460b8531cba38e653f8f29d060eaf386197fbbc2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_77.pdb",
+      "bytes": 121334,
+      "sha256": "45fb1f4e836bf26470773af040cf68dacd17afe12b07dcd2d4c22888f605c0de"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_78.pdb",
+      "bytes": 121334,
+      "sha256": "90348f6eea90fcc963187e187a472dd8b42d204c3682f4319ad3363bfb59ecee"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_79.pdb",
+      "bytes": 121334,
+      "sha256": "13621c0a0ecfc8fccb6e5457c13eb70a8cd683a194afd5701140acfd3ecead75"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_8.pdb",
+      "bytes": 121333,
+      "sha256": "bbafbe5de5ebec7087e3e8710cdb551867326540d6dc0a8d32e1a1f91a4c081a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_80.pdb",
+      "bytes": 121334,
+      "sha256": "ecb41bc99fa0ede44b069d1bcd46ab09c81124f7546235435bcea4d8e6236b67"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_81.pdb",
+      "bytes": 121334,
+      "sha256": "c7cd6de0c1e490caac720e65f6081dc5dbe3e146b8841072c4c9a7babb5f0622"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_82.pdb",
+      "bytes": 121334,
+      "sha256": "27f9e5551986a26ecf891961bdc73adf40e6a7df9f0cbd1c20e62ee588e69238"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_83.pdb",
+      "bytes": 121334,
+      "sha256": "a34019f94dc21d48262843ba7bf79ae7d9a4eb450c3e4ab391a9aac4d1e1eb30"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_84.pdb",
+      "bytes": 121334,
+      "sha256": "a79f8958682bc37a2d37bf868dfb1af9559278a60ef48ff479a39d34645a9bdc"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_85.pdb",
+      "bytes": 121334,
+      "sha256": "87ad960b4cafe62ec19b993abb3a8989c8c242fa0d70a547378760b224481ee9"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_86.pdb",
+      "bytes": 121334,
+      "sha256": "8d440dd476b3a6651911e093a3399c4f8b7a38be326a25040ebc0794e98aff23"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_87.pdb",
+      "bytes": 121334,
+      "sha256": "53333d330ff499329b208fa97b9dc7e7cb526ec55da84036549149622f59943c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_88.pdb",
+      "bytes": 121334,
+      "sha256": "083d79484e9ea04a1ca788cf4dd89d93a6641e6c347fdbb290bedceb93374efc"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_89.pdb",
+      "bytes": 121334,
+      "sha256": "806e112cdc730cf68adb260d7ad354c816b038eb1588216b989379c4e7a98b33"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_9.pdb",
+      "bytes": 121333,
+      "sha256": "fecd9c89b391bfbaffd1fb2849887a19bb3732491ac0ab5148bb53aab9fdf0ba"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_90.pdb",
+      "bytes": 121334,
+      "sha256": "1b0e59e36482d3229218123635df366d8d69a845d4baf57144b6a9248d19ce94"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_91.pdb",
+      "bytes": 121334,
+      "sha256": "a9ddd86f40ebe194e37c7fea93e80a53246cdc8fbc552b007c1f0ad50cf2fcb2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_92.pdb",
+      "bytes": 121334,
+      "sha256": "e135ab8e44f02f1ddee4049e551f193dcf12e78e27e1fdeefebe2ebf4d6da05e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_93.pdb",
+      "bytes": 121334,
+      "sha256": "9c0e6758d9555fccc10ed973d83022cca532d9c7c09aed4983f07182bedb48a1"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_94.pdb",
+      "bytes": 121334,
+      "sha256": "140356d7bbf5c9908049ee3e4643e764b773ddfc750422ca8d46e85239a6f99f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_95.pdb",
+      "bytes": 121334,
+      "sha256": "56dfa550c2264bba68fb5127daab14194ca5330628d318697f3d9d13b930b43b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_96.pdb",
+      "bytes": 121334,
+      "sha256": "bef23a132981e33c26b7769e84fabd22fe10b370fc0a9bdca877a0971a43925b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_97.pdb",
+      "bytes": 121334,
+      "sha256": "0cd9f6ff6151e83a939b8d614fcdf0ab60405e864af82498207fc2fe77c5e8af"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_98.pdb",
+      "bytes": 121334,
+      "sha256": "9dfd412aa0b5410694ad10aa03c64721d76a41c540ad3cc69f57df6db450e39e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/model_99.pdb",
+      "bytes": 121334,
+      "sha256": "b8464e3bd422b25f7a727f6ca0a8f1edfaa1dc0341ef1104d86071583abdb3eb"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/native-reference.pdb",
+      "bytes": 177376,
+      "sha256": "a41cb418a4faf89e5b7f1a324037cc96ad53c5594a3d1e1bbde2d8c0c0136fe8"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/pose-metrics.csv",
+      "bytes": 6442,
+      "sha256": "6ec4b45d4ba0fa3c37e60d6fec5de0cde7fd70a7935f660678909605254f6176"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/receptor.pdb",
+      "bytes": 149414,
+      "sha256": "2136b234df225071267adbd72c62830d6d4008e0e1f608eb7b0f60ce3ddc904b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/top1-cartoon.pdb",
+      "bytes": 179335,
+      "sha256": "48265df1e66ee2e2b11e48a17565283ecd86bb90309a51dbe06a770af7435ad5"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/1fle-redocking/top1-contacts-under-4A.csv",
+      "bytes": 4762,
+      "sha256": "0f4e881e67c03edd74d5181e128ad8f6cddae67b42062093d0e1dc6068577f23"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/candidate-contacts-under-4A.csv",
+      "bytes": 3402,
+      "sha256": "60285d9f2cad5230151f27f1bc493713844957ae89e73d658ceb3ee687504019"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/createpl.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/docking.out",
+      "bytes": 399868,
+      "sha256": "fe93a9b7d4fd2f5c26d5e741970980401aa9491d65b3e3a47e2d4b068a6f3a30"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/geometry-candidate.pdb",
+      "bytes": 169823,
+      "sha256": "5e19a3f818d92924ab064e4df3ab79f4c242d30bec72ffce191bfd38ecc8ad5d"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/hdock.log",
+      "bytes": 1927,
+      "sha256": "a9e38c22ddc1328c44f1d69703f3815b0f1fc91568dadd6faefe5b8160013948"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/input-provenance.json",
+      "bytes": 941,
+      "sha256": "199ec1ecd718125dc11161277eb7c2439c13d34c014a712813df96d0e5201078"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/ligand-independent.pdb",
+      "bytes": 33712,
+      "sha256": "771909a34ea0eb11fa520f8be2debf9cc038db2246b90100a60e89879287a0e0"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_1.pdb",
+      "bytes": 114837,
+      "sha256": "650c95c5337cfd0c4334a44c852d418caa2ebf520e23023169561c22d3622cbe"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_10.pdb",
+      "bytes": 114838,
+      "sha256": "b043fa39d4078179c478e8d5a7a671378b49b30ca5be552c6c1141d051bf2e9b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_100.pdb",
+      "bytes": 114839,
+      "sha256": "ed6477238f965923016d54825303df96de1452d440128d0b9b701df066dc85c5"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_11.pdb",
+      "bytes": 114838,
+      "sha256": "41b535ec65b84f7b4f5c352c6f0cf7c56ef8d6ea9b34849e1d73720db7eafa6f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_12.pdb",
+      "bytes": 114838,
+      "sha256": "54e2c70dd88ba532652ca48891d6db44f9fed2efbcf8d89914e93f10938fcefb"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_13.pdb",
+      "bytes": 114838,
+      "sha256": "8b1299cca648cf70f3c15f5da4de1cfa933315a631ac6e399159646e006436b9"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_14.pdb",
+      "bytes": 114838,
+      "sha256": "0af5ede2673ba44a044d5281906eca32569d3d01d3ee2eb7cc07542313c134c1"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_15.pdb",
+      "bytes": 114838,
+      "sha256": "7149f1a3cdf2c7a745b25ee96b72ed2a843d8cfd0337cb5b72060d20e4f25b45"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_16.pdb",
+      "bytes": 114838,
+      "sha256": "03d988f461fce438fa6137b47a351b5f01c631c104c7eae97691f3e3e1b5a103"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_17.pdb",
+      "bytes": 114838,
+      "sha256": "28cb5d87e99232c6dfb0e1d6711aa0401fd1b9066a26da3ee8e8227b011200df"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_18.pdb",
+      "bytes": 114838,
+      "sha256": "48941895232edc850fb6bc36846a17c1e80f88236c1d45d0cd7df0b962aea848"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_19.pdb",
+      "bytes": 114838,
+      "sha256": "3e864ca1569d104c3f518590b6f80976654350b5c4cffd458a85f9252fe0e9a4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_2.pdb",
+      "bytes": 114837,
+      "sha256": "c64d605aa61972f7fe43ca263622fc6c47d6c7be0cb21fe8b44948d9d748c57b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_20.pdb",
+      "bytes": 114838,
+      "sha256": "3b21ea9cdd0f4210f69ae7720a20fab3b09ff8b7c4c10a6c1e22d1efd07552a6"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_21.pdb",
+      "bytes": 114838,
+      "sha256": "4568c99226094e0c4b27a030d3ee16eb63203090cb59960c61884adba8cbe287"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_22.pdb",
+      "bytes": 114838,
+      "sha256": "d9447a721dce4ea74896d911be90bbf12178b14431440e5e4658c72ae8d5317f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_23.pdb",
+      "bytes": 114838,
+      "sha256": "08092b843e93aaceb272639de3098b54ff2dfbb5697c0436294a412a8f81f38e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_24.pdb",
+      "bytes": 114838,
+      "sha256": "bfdc03771607e8bcbfa9746609a40abbf539da4a65daac5c576c7cfbcb95a043"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_25.pdb",
+      "bytes": 114838,
+      "sha256": "f42ead2627a9f4f889bcffaf8e7fc516d78b47ffbe01b7676bedb9ac8faf8be9"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_26.pdb",
+      "bytes": 114838,
+      "sha256": "c16602c342187774ea9ab10d41f5786a7ffbbf25fe492b3a497c0249100ca2e7"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_27.pdb",
+      "bytes": 114838,
+      "sha256": "8bf8b414247cd742917e082be4d746ced925058e10d51a134890815d9701ad74"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_28.pdb",
+      "bytes": 114838,
+      "sha256": "14650a3dbae26d88dc264b26c03e1847faa130d74c3ca0fb8520bd9625591d1d"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_29.pdb",
+      "bytes": 114838,
+      "sha256": "80783a4d22a84ae2bead7b39306f792361cd350c5fe466473bcc92c4f6fca0af"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_3.pdb",
+      "bytes": 114837,
+      "sha256": "34f651be88557e7f84b6d1d4dc02aa36665adab0742dd027634fbd117f3820f6"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_30.pdb",
+      "bytes": 114838,
+      "sha256": "3fd7f930e24f85702cf9bbfc3ddfbfda198390563a25babbcdbcf8c1d743af8c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_31.pdb",
+      "bytes": 114838,
+      "sha256": "d1be9c0682c37c252b95f53227f684c5de611e251539d1ade2ff1e95df649dec"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_32.pdb",
+      "bytes": 114838,
+      "sha256": "7ff5aa9ad4edb65e6448af40eeeff53e7c0c50953fee0c91f4cf856b3f1551f6"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_33.pdb",
+      "bytes": 114838,
+      "sha256": "50d71e187e403b939c23b99f5078b6c7667fceb60669356a70deb6c787a802cd"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_34.pdb",
+      "bytes": 114838,
+      "sha256": "e1dfbda04f8aef1c6467bc7d29245dbd8675ec0ca391f4c906876335be4f3e4b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_35.pdb",
+      "bytes": 114838,
+      "sha256": "99abbcdd3168546f44b0430a1e253856a0aef80f110a61d0124dcd6b7cf17609"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_36.pdb",
+      "bytes": 114838,
+      "sha256": "2cfb82fdc2cc43f27230f88187510d3b80cdbb51a486eaff515fb0ac81ae62cc"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_37.pdb",
+      "bytes": 114838,
+      "sha256": "277ef4840be1c0f7e07eb27e28d20899d22440e7ad744c4cb85e78fb7933f899"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_38.pdb",
+      "bytes": 114838,
+      "sha256": "dbd1f0a27566e186dd7bfb577b3a9872c4f5322f3c12d763313c8202126e7e25"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_39.pdb",
+      "bytes": 114838,
+      "sha256": "8a75cd63fab2125ca6d4a1fda750314f4ee802a83578eaa48d9c41b088c8b564"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_4.pdb",
+      "bytes": 114837,
+      "sha256": "08041f9f5d2154df11a60846272e953fd14bd6918b7def1f012bc3caf08bedf1"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_40.pdb",
+      "bytes": 114838,
+      "sha256": "6d5bed0f68821af09c9b728a0cf3c8aae7c1fd8b1af178915f66bd0a900ebe07"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_41.pdb",
+      "bytes": 114838,
+      "sha256": "cdc50a64e94df619db25b3b7a55b43e5e9a43b069c5dea8b2a59ee1c645db8be"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_42.pdb",
+      "bytes": 114838,
+      "sha256": "3065ba4c3b60e4c761880bc9381bd9e3e72b80b8481634f60b3a2bf5d16407bf"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_43.pdb",
+      "bytes": 114838,
+      "sha256": "d39d9eb5926cde369b04cd2ec62b0a40daf85393d90793d4b9e0693c7f63a89c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_44.pdb",
+      "bytes": 114838,
+      "sha256": "2b1c6f526892fd24f3a76df1af568269dc26ccdfbffdbdfb7d757fa92ef66f0c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_45.pdb",
+      "bytes": 114838,
+      "sha256": "bae5fdb8a0f3af5e0041e249b9f0d750e72a14ddb71d9c7d8f995a12e7584781"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_46.pdb",
+      "bytes": 114838,
+      "sha256": "fde16864b4cde942d6b5cf41e5c3b605e306d4607e34c0ef6edabbb2c84c4db4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_47.pdb",
+      "bytes": 114838,
+      "sha256": "5ee09d1bc513698fdcbda5fc5f1f7069b4a0048b49c7f41e8f578829e5c7675f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_48.pdb",
+      "bytes": 114838,
+      "sha256": "b0fa7a2a30831a3c3d80611d3198b6a23c55dde1500a4d8f246cabfd40bc217e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_49.pdb",
+      "bytes": 114838,
+      "sha256": "d6ac5c2ded0d3ccaf2b725906550d3cb0263246262e843942d02e90679ce4622"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_5.pdb",
+      "bytes": 114837,
+      "sha256": "b242b28b91d77352e79e3840090d4a5794cf8549c64d6bfc38fdc1d754007810"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_50.pdb",
+      "bytes": 114838,
+      "sha256": "c010f1a9bf4fe98a3882791f6f619eb915ba570d1e0ea4b0f985600f4e84de4e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_51.pdb",
+      "bytes": 114838,
+      "sha256": "9f5eac2d822601a0fe2ad1cf2561bb2c84d6bcc18b23c968e1b06b4df260aeba"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_52.pdb",
+      "bytes": 114838,
+      "sha256": "0151470c63b0ab94240f7ae8fe2096d70bed7ccd45d66728abe1271371c9a5e4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_53.pdb",
+      "bytes": 114838,
+      "sha256": "5dabc5689c894ba73a0b3011b9c6fb7448179e4391625215757d14fd7bfd2892"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_54.pdb",
+      "bytes": 114838,
+      "sha256": "29c7ab4befb94f89ca767503d0831a2766d240602b064fb6b9cd61b129fdf660"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_55.pdb",
+      "bytes": 114838,
+      "sha256": "93344b18bf29bf5463b7aa674709b8214e28451e51d5d80e1afafe34c9b099cc"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_56.pdb",
+      "bytes": 114838,
+      "sha256": "e6735be35bf94083a6551542300725a11740840456ad9f13ef9361a47bb3c25a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_57.pdb",
+      "bytes": 114838,
+      "sha256": "1137c9f5b85bf09e1d7da69051d26d1405fe70f138e020988288c49047e773ae"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_58.pdb",
+      "bytes": 114838,
+      "sha256": "9ac20bcb09b9c82305da08f8f5204046abd9a06728b1e4764752d327ab209667"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_59.pdb",
+      "bytes": 114838,
+      "sha256": "898754ef9ce195d2123ffb4aadeb28f60d45355f3a33ac08eb3694974e53e39a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_6.pdb",
+      "bytes": 114837,
+      "sha256": "24c7e3aaa00f5bad55ae02ee4481894260bcf5eb8ea7a4e4030fb6587b6a1368"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_60.pdb",
+      "bytes": 114838,
+      "sha256": "225f07e4782f0b52d22e2bd8b1264a3cd8ce679ccca45d8181a94ec491861cb5"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_61.pdb",
+      "bytes": 114838,
+      "sha256": "fe4205e4e32ac5002b9326b247e62ae144f89f4f87b989146f043f849bfc564c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_62.pdb",
+      "bytes": 114838,
+      "sha256": "2be31ccb3fd16d0979c50f529a5d6f4664143e28f367f7221873b80f4b2b722a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_63.pdb",
+      "bytes": 114838,
+      "sha256": "5514862f84db7d11474c8c18281ba655c83a7f9e10c5b5714f6cea944c3d0f1c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_64.pdb",
+      "bytes": 114838,
+      "sha256": "3bb1c9028d2c003efba5ea727c917d70c89963014f0836383595ca9294282118"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_65.pdb",
+      "bytes": 114838,
+      "sha256": "fa5b556e01baa9fa6a8ba87686ed0cd76ef4d8b66d29336275dbd0110c082f46"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_66.pdb",
+      "bytes": 114838,
+      "sha256": "7a42cbdd306c33df37bbbd0d604c9ead67af38ab24d049541b219f246c19e9d6"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_67.pdb",
+      "bytes": 114838,
+      "sha256": "5bf8adbd9b2b7e8d7f33cdfa1a623f2cbd52cbbd414b15c6c9ca0e65cccd3aa4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_68.pdb",
+      "bytes": 114838,
+      "sha256": "1fe2fd7a6e4a46882af38f7e2840825e610cf540368ffdb3ce6024647ab82c58"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_69.pdb",
+      "bytes": 114838,
+      "sha256": "44ee12bbd9e6347d083519fb869d68cff38c9f81665a1bb5f5ca86419c21c69f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_7.pdb",
+      "bytes": 114837,
+      "sha256": "d61c84bc5476f0ad48107b685e7110c3a4e34d88bbd6057cc8e4a6ff70793977"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_70.pdb",
+      "bytes": 114838,
+      "sha256": "988b8238276f072a2fe933287216a65bc158bcfca77007582c2d8f959ba27b6a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_71.pdb",
+      "bytes": 114838,
+      "sha256": "d06e4f2fd178538915a62f6388743ff5badc2ccbe9d8fbadd1fb5aaa236b897c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_72.pdb",
+      "bytes": 114838,
+      "sha256": "fcc0c2bbe1feb67e4c8260dcc657124780b5cc8e5e4dc04af454d916c70a24a7"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_73.pdb",
+      "bytes": 114838,
+      "sha256": "3ebed1d99c42759c823819c3a5f3216499334873c25a2df4e04ea0eedb036a64"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_74.pdb",
+      "bytes": 114838,
+      "sha256": "42bfcebf7dd429234221bc00d6c785b466112081b34b002a23363d9dec692513"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_75.pdb",
+      "bytes": 114838,
+      "sha256": "46766f59d83a90df33f512ae911668dd1afe3454558b56986e974ace526442e7"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_76.pdb",
+      "bytes": 114838,
+      "sha256": "3556e6cfe069be6dc7817c84a3b2caead46bb7ba16ba56dde2f261fceb0c2eec"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_77.pdb",
+      "bytes": 114838,
+      "sha256": "aa5542b8b3a03c41d8304b07532510dc9ed98bf20ecd79b7b793ca2b82435461"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_78.pdb",
+      "bytes": 114838,
+      "sha256": "b75a6c2f5737bc5ae2b30e690223cb50f6f0b55ca9b3ad8695288f498801fd5c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_79.pdb",
+      "bytes": 114838,
+      "sha256": "ab7db64ca277f9c698f18e6364f168cd42cc0b17f5385ad74cf159f6995c0234"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_8.pdb",
+      "bytes": 114837,
+      "sha256": "58b093f1d2fafe07305cb95308cc167b293a6335377c1fd4d7eb121d9bef4fc4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_80.pdb",
+      "bytes": 114838,
+      "sha256": "a71898e3c0f8e62a0154d9112a9502f19c34791f6035edb263715014798ca653"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_81.pdb",
+      "bytes": 114838,
+      "sha256": "46c0aac94b22f002522aca1d2964a606df1a710b398c2e31c902c69aedabadae"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_82.pdb",
+      "bytes": 114838,
+      "sha256": "b91c7a2633a08ba9984b0841fdb1df9f2c7f19fc20aba13ee56311925abd85c8"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_83.pdb",
+      "bytes": 114838,
+      "sha256": "057e1069278c6e8d44f1ced321e6e692879ebe535ffb94a63643cee1a61afcfa"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_84.pdb",
+      "bytes": 114838,
+      "sha256": "4ea436f9700bdebdc394b1bb12ae4bd861626fe3d84836489607e9fb5b3ec3b0"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_85.pdb",
+      "bytes": 114838,
+      "sha256": "7462b8ec832e6d2a85fe7c29acb190e81cb646be084d220d7721ca3236c5d165"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_86.pdb",
+      "bytes": 114838,
+      "sha256": "1051562ffb584001edc71ac231026dd5938dc3ba769fbfb184011470921a27d0"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_87.pdb",
+      "bytes": 114838,
+      "sha256": "22e8c6b884930a9dfb6a40b61088a4f2119ab5a46f1d33e1d4d9bf0481807449"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_88.pdb",
+      "bytes": 114838,
+      "sha256": "2511a1f2e4c482a8a78a85ae367fdbc52838f6456ee0c17f284571ec704e6925"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_89.pdb",
+      "bytes": 114838,
+      "sha256": "5e2f5dfdc9acf27543c6a591ecedd5e0cdbfdbfafa3634eae2562529f10868e0"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_9.pdb",
+      "bytes": 114837,
+      "sha256": "d5f86a8d8701defeec94f005037caeb00fb3f3dca42aed61d7ef2109c9df62e6"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_90.pdb",
+      "bytes": 114838,
+      "sha256": "c6fa507152b003bb6c3f8b09eca64682d1334794b3e29f559873a8b347fa9d08"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_91.pdb",
+      "bytes": 114838,
+      "sha256": "b4fae3fe69690a92c9ea896033634c800d548e2358269b40262c4772bfe1b5bc"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_92.pdb",
+      "bytes": 114838,
+      "sha256": "9a3888f0d48fdee8de511a7809145607b93825923a97ec34421e5dd8ad7f6f01"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_93.pdb",
+      "bytes": 114838,
+      "sha256": "e29e60125119bfdac8d8c4e55ff4ea0b0c39ed1d9cf28b2562ad2cb4235148fc"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_94.pdb",
+      "bytes": 114838,
+      "sha256": "0927f9ba25cc51a5246150093b303be7b81ba373c9c6cca938a5412b1a7deefe"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_95.pdb",
+      "bytes": 114838,
+      "sha256": "22f83f4a7c1234e99eeb5a445790af31a5a2a2c4d9d537a5101dc161fbf7b9ec"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_96.pdb",
+      "bytes": 114838,
+      "sha256": "edd7ef535541f1fc88ac29ab8549215b836547f1ef0ca9cb1ca920ef66efa06e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_97.pdb",
+      "bytes": 114838,
+      "sha256": "fa1cb7340bd67aed7f3460d5ee9033bab7800c11b54652e5a17340138c86fc1e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_98.pdb",
+      "bytes": 114838,
+      "sha256": "e64da069e93be9c78054f20c71b2b405c751cce3ba585a20a46275ecb6944aa2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/model_99.pdb",
+      "bytes": 114838,
+      "sha256": "0c2efdbe96770f2364fe143a5b6fa78fcf34e90e85005ca69621dc46a27d3d58"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/pose-metrics.csv",
+      "bytes": 3665,
+      "sha256": "cb4457a3996d3da62756807953f100e8798d527270ba67cef704dd28a6344a4c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/receptor.pdb",
+      "bytes": 134162,
+      "sha256": "30a39215fc54ca16e50f5d67da1861ae5cddabc39f04889674bf3567a047f612"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/top1-cartoon.pdb",
+      "bytes": 169823,
+      "sha256": "4743fc1ecdc8126add8e4c4e9b4f055c333beae73ee1cf5d6df6d681a3a11c30"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/docking/human-ne-elafin/top1-contacts-under-4A.csv",
+      "bytes": 4501,
+      "sha256": "62b52f7341ecee3c61ddc6439376cc43f2651512e9e4dc9a51dadddc49609580"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/figure-dimensions.json",
+      "bytes": 534,
+      "sha256": "d9d9b6c60d85476968d3331f530e44a74212438eb2fc5ae04a7ee1d9cb7e7b18"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/human-ne-complex.png",
+      "bytes": 896507,
+      "sha256": "eaa7e263098b33f507c91d83b3f95befc7398b36e4abb5056d89874bf7aa0d61"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/human-ne-interface.png",
+      "bytes": 513386,
+      "sha256": "8da211796e07bb2084057bc50ccb45a0a3a5449f329bac8bdd6b528b90b14c80"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/inputs/2z7f-original.pdb",
+      "bytes": 226557,
+      "sha256": "8613786d7e868ca183e8c0777637661a00d9d5c8b063f4a66ceb4da60c989515"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md-dynamics.pdf",
+      "bytes": 60936,
+      "sha256": "5d3c60d4e9d7abc275b7ed8879b9477182de7605b40a7238753b70f0b11de022"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md-dynamics.png",
+      "bytes": 1494200,
+      "sha256": "2c5fab8b6de71ec96646d2be4d3a4349de9794d03dd3d4d69d88d9cca2ba6c62"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md-dynamics.svg",
+      "bytes": 141671,
+      "sha256": "b5184fb11d16d840845118c23e9377e8707593da38f27c1007dafd42c1483369"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md-summary.json",
+      "bytes": 8587,
+      "sha256": "f1019cb301995a438cfb03ab8c854e81d459c34ba75acfe42c097dc023378cd5"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md-topology-contacts.pdf",
+      "bytes": 38841,
+      "sha256": "b6a8ea6b3212daef29a84c094e03b65026147a292eb59949c81fd9d151539a07"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md-topology-contacts.png",
+      "bytes": 382868,
+      "sha256": "c771d92badfa7d5b869a9e32847628249f4608d4115b63631bc5ed3568301954"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md-topology-contacts.svg",
+      "bytes": 47606,
+      "sha256": "948021c8ab50b074d44457ca42e1adf20e8f2ac971980edb8ad718d70b5b53fa"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/2rel-original.pdb",
+      "bytes": 762939,
+      "sha256": "87de7296beac51c1ae41d812f8f78ed9c560d401dcfd44e35e6f472b4310a2ac"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/integrator-template.xml",
+      "bytes": 208,
+      "sha256": "ea097cf0f3117c896c8997d4a38de4f3fc5b717c47327b85a5f199cf44bbd33d"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/minimized-state.xml",
+      "bytes": 1084744,
+      "sha256": "63be2d1ee77c9cad0a4011b9c7971766ec8e7f1b282da02f1a0388d86f310454"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/preparation.json",
+      "bytes": 1894,
+      "sha256": "694d5721cba48670e3f8b18df3c6e82c0bd1cc66d121ed98c36a530b1a07bfa7"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/protein-prepared.pdb",
+      "bytes": 68360,
+      "sha256": "162f964e2ecbab08dd1521b4a331ae6e35fddbbb58c769581156628600c6d02c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/analysis-arrays.npz",
+      "bytes": 277245,
+      "sha256": "eeaa8b186f834853eeda4dfb92e91d92081ece31db8a7c9437c5e2f89d434b40"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/contact-occupancy.csv",
+      "bytes": 16865,
+      "sha256": "1051a4465430fd7a2bd2b685af8489a2eef461d559c6f1c40b436a0f2133df0b"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/dynamics.csv",
+      "bytes": 20609,
+      "sha256": "93225a57730ddb0172bad26ede388d86001c61c608a0d5fb43bfda3bba11c7a1"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/final-state.xml",
+      "bytes": 2164197,
+      "sha256": "c2f3f9bb5e906e9141085dbbc5c5a99b6d3a136c2a5d54b64f1d4ae11292702c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/integrator.xml",
+      "bytes": 208,
+      "sha256": "bf461a36b8c9b77104f3ad9ea1bce0440dda6f96fad0ea2d5fa7eb8b26790e39"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/production-end-aligned.pdb",
+      "bytes": 68156,
+      "sha256": "974a44441ea1980676b3c9d6d1fa25cc737379809349a369a14e3b8bc1e80a11"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/production-start-aligned.pdb",
+      "bytes": 68156,
+      "sha256": "93f12357cad37d725f1163b8f894049c696017ca70c5e42d9b4c587e9deb7657"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/production-start-state.xml",
+      "bytes": 2166810,
+      "sha256": "7ac6519ce52cdccde54907a75f84da041ff48533f0ca5e9cd617a881297f5f4d"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/production-system.xml",
+      "bytes": 3448811,
+      "sha256": "a8b7a3bdba50ec817f530380af3c639ed7618264bf7bac714f94f506eadf70ef"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/protein-coordinates.npz",
+      "bytes": 1859927,
+      "sha256": "65e02a4c3f78e8094d24070ddbfdc1d383b1b3a0ff007adc4d7a74d6dc4bd915"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/protein-final.pdb",
+      "bytes": 68360,
+      "sha256": "63864a6fb17fc7b66e78a4e702cd034d1e710a21ae2f347085dc0cfe9dbcf871"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/protein-trajectory.dcd",
+      "bytes": 2008276,
+      "sha256": "88c732a7286a3abd9ebedcbc6302ddb8cea685bef423ea2600e92aedc662cf02"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/rmsf.csv",
+      "bytes": 2235,
+      "sha256": "84871ce6bbaeadcffcc63ea0ba2b6a63c27442415b00e046c7771ea604ff8e05"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/run.json",
+      "bytes": 1112,
+      "sha256": "614f18d6fa3ea4c50a458230d132fe3339e02b35366423ddcd17e5498c29beab"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-1/thermodynamics.csv",
+      "bytes": 24116,
+      "sha256": "d1b0a5ae3ee37762df96bd2c037dfe427e53aee9021f29fbc26855f9b3b225f3"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/analysis-arrays.npz",
+      "bytes": 277280,
+      "sha256": "c859c9bc723a0c683fba249f3eed736ade59b9ec198b018b6a3b705d0f8107c2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/contact-occupancy.csv",
+      "bytes": 16856,
+      "sha256": "dd7556bca171c22849bf50ba4e2914c60f2318a71d6de206f0e6f4e869d86d90"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/dynamics.csv",
+      "bytes": 20638,
+      "sha256": "f06f21b64bff415ea070fc1954ec28af7b1f2158313d406d75ae4d29b8996584"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/final-state.xml",
+      "bytes": 2164083,
+      "sha256": "45a0764eb5f774c5707f81be315210adb799a28d142604ab1bd3dc86a5196bf1"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/integrator.xml",
+      "bytes": 208,
+      "sha256": "19d0a6f5ebfef453127a8445dd3d47750cd166c3f0318db6df86f3683adcccbc"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/production-end-aligned.pdb",
+      "bytes": 68156,
+      "sha256": "0bd4f7ccbc015650c8b1380eea9d42189f53832d0c7d817caea6380d9e2a43f2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/production-start-aligned.pdb",
+      "bytes": 68156,
+      "sha256": "31603695b88dbb2959d091c963e6b85430addae8fbc58f03bb626962928524ab"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/production-start-state.xml",
+      "bytes": 2166471,
+      "sha256": "f89314d9a02dd36e7b47a34c5d1169bb1c02303edb249b4bc91fc579920062fa"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/production-system.xml",
+      "bytes": 3448811,
+      "sha256": "1740d047145cea1ab63afd7bc7748449b0ddc107095b4135c93d546ea437c91f"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/protein-coordinates.npz",
+      "bytes": 1864266,
+      "sha256": "168a0d80edc2c18e73e95e3ec6a89d2c0b6c3128cf976cb4e3bc92c305e2f866"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/protein-final.pdb",
+      "bytes": 68360,
+      "sha256": "9b6e4b49a6555817189fe78c02d315584b8a2e9857c5c6834d443d11ce3a5999"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/protein-trajectory.dcd",
+      "bytes": 2008276,
+      "sha256": "ac318f96117978c267008d579feea83469c78e7302e85410ffe7467bec60572c"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/rmsf.csv",
+      "bytes": 2236,
+      "sha256": "664650f31dbd223f08cd8c567470c3d089d3c7613ffedc6042d87c9526e78d54"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/run.json",
+      "bytes": 1112,
+      "sha256": "e869ef395f16ee76809dac00cfa2ceae6e82d4d2678f8662e3b4f5ba831d8978"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-2/thermodynamics.csv",
+      "bytes": 24144,
+      "sha256": "989c87db9d58304525f47b27fd16b40c71fea9808fbd6bbbaaced0552850a9db"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/analysis-arrays.npz",
+      "bytes": 277352,
+      "sha256": "7ed1addb9f17ccd09e10a1d078c4ba284d021a337023cbaed418fd399921b241"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/contact-occupancy.csv",
+      "bytes": 16613,
+      "sha256": "b5173f0f85db38abe887f2260d24907fd0e04fc3674e1103e03ef701957c89e4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/dynamics.csv",
+      "bytes": 20578,
+      "sha256": "eac3ecc8c9f4d8612dab16a61be20eccc8a1cfedd4f39acedfc030135758ecae"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/final-state.xml",
+      "bytes": 2164280,
+      "sha256": "f0dce916e8d7221dccbe9197697b82f33e75b9ffac230d52192a9fd2213fed30"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/integrator.xml",
+      "bytes": 208,
+      "sha256": "841420942628cf175dea097b6bfc8ae9413cef4ed45091a9d18c74ae8ea4a13e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/production-end-aligned.pdb",
+      "bytes": 68156,
+      "sha256": "46cf12dd874c36643e2a5fc90c1377a0fd281a3177870d66f53d2883eb412b4e"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/production-start-aligned.pdb",
+      "bytes": 68156,
+      "sha256": "1d1c04f5aa2923e5f5c13daf77fc75dc90d41ff3d55837b8a7f4736e3650de6a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/production-start-state.xml",
+      "bytes": 2166512,
+      "sha256": "9c5f01cadbacd4e59b6f833a7b3d50f7efbf1346d8bccddf158163ac11c29f89"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/production-system.xml",
+      "bytes": 3448811,
+      "sha256": "ffacd962f3562f5b79662387a62f1042ce9cba4ce0e156b5d784cfebb7e40ce4"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/protein-coordinates.npz",
+      "bytes": 1863043,
+      "sha256": "c0144834097e74079811848bb121a8267b7edfac8e0eb503cbe7535802e32c67"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/protein-final.pdb",
+      "bytes": 68360,
+      "sha256": "aafa5f1ee0385fdd066892231fe3f237e27615744a5bd671982caf211f61c251"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/protein-trajectory.dcd",
+      "bytes": 2008276,
+      "sha256": "5a6e32db62429dde85527b7635ce3c3315226bcb503d96382ee43dbf0f65ff78"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/rmsf.csv",
+      "bytes": 2248,
+      "sha256": "b139f66820cb800deb09398af0ac9b3bae1fe6d4c14a54effb4267853a7c4116"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/run.json",
+      "bytes": 1112,
+      "sha256": "824071f40cc1b19d5419f1a0fde0d83775fbeec412c9fcf54c4a420191ad0f7a"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/replica-3/thermodynamics.csv",
+      "bytes": 24121,
+      "sha256": "6b8354909a0f909894cb481e4199dd689588e99a97d7398ba1d470e07979a6d9"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/runs.json",
+      "bytes": 3564,
+      "sha256": "09f7660b835b0eee2df370d3abd9e256516e30659864023312a238a42a9c6f04"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/solvated-minimized.pdb",
+      "bytes": 1056434,
+      "sha256": "776d280e15abeb6b68c16bf284ff0221df016847506b4b7d57e21d7ec5205ba9"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/system.xml",
+      "bytes": 3427943,
+      "sha256": "c93789e362c29a3fa7d82b223512bd2acfe755018073851261f7a46e4bbd6680"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/topology-atoms.csv",
+      "bytes": 802198,
+      "sha256": "49c62435221056691b7d3d09d2820b01fcc486fe3d42b098fcbab97bb4b2fb21"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/md/topology-bonds.csv",
+      "bytes": 152281,
+      "sha256": "3e926d5ec751abb7b4837ddbc41d06a84927a73cc0ccb78477d3733f369936fd"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/plot_atomistic.py",
+      "bytes": 14678,
+      "sha256": "fcc6b143461b368a5fdc41972e760b2312fccb25dc74f1d1a40a44ebcddbbff2"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/prepare_docking.py",
+      "bytes": 3124,
+      "sha256": "70afcbcb1e333988b1d4152a10bf4952d42e1c0c569a0a20f885b340f7c9a633"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/prepare_md.py",
+      "bytes": 5895,
+      "sha256": "534aed79b21843cd390ba3a0754a70fa3a5a99334dffb1103178bdd8b801d162"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/redocking-interface.png",
+      "bytes": 341746,
+      "sha256": "ee487bccb29fcaef21dca8f419b4eba0090d2cccf37db5448e5de3a7fd8a0887"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/redocking-overlay.png",
+      "bytes": 1150401,
+      "sha256": "6c4a3d400b72d1f41e738af7abc93f856fb8c43e3067385f9984615654dd8049"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/render_docking.mjs",
+      "bytes": 5481,
+      "sha256": "644416d486312f0d3df712654faf2a0af37269948d92fe8248ea2f7154a46b36"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/render_docking_closeup.mjs",
+      "bytes": 11327,
+      "sha256": "29fbfec151f11c9015077ae62084d2dae8347b62f46f3a24b7273931cde19b82"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/requirements-analysis.txt",
+      "bytes": 65,
+      "sha256": "e74d996fa67b2f785edfe3fce2907adb49f5911196c50355cee23b4d2c05d4d3"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/requirements-md.txt",
+      "bytes": 45,
+      "sha256": "5134cd69dd5be718aa0b7f99a827f02f110cc11f220acd242f6f6965b6c31324"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/run_docking.sh",
+      "bytes": 614,
+      "sha256": "94f6caba1aa4acaa02c013385d2f571a6fc46856d336c4147b425d5de7bba307"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/run_md.py",
+      "bytes": 7145,
+      "sha256": "868515f16a27b9cc3e90003b7f468b241702f46ab79cd42641713e2f0259cd69"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/runtime.py",
+      "bytes": 1734,
+      "sha256": "f559ec36d6803fd5ed4dfb20da9bbd75b176938e30aaca6fbe7a4cce6e2cf832"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/software-provenance.json",
+      "bytes": 1334,
+      "sha256": "c801a78c0f72eba43bb85059632f3626c4b63e4c0804849ecdf2ebb05c135404"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/validate_atomistic.py",
+      "bytes": 4374,
+      "sha256": "b945d6f11a41d07aa58419577f6b3dffcb9b4e162a0b2a48eda76e42111544c1"
+    },
+    {
+      "file": "public/assets/dry-lab/atomistic/validation.json",
+      "bytes": 2179,
+      "sha256": "a7211d95e69414141952433a45acacffcae5816fd9beee7726dfd6fcca844d7e"
+    },
+    {
+      "file": "public/assets/dry-lab/evidence-audit.json",
+      "bytes": 18692,
+      "sha256": "5f5ea44e72dd6ec628685b7aa2454212cbcae0ba7359a5b2aed534bb3815081a"
+    },
+    {
+      "file": "public/assets/dry-lab/fetch-tissue-context.ps1",
+      "bytes": 1414,
+      "sha256": "331f74789dbbbfacb9bcad0f7e2965e5c7e90b448e329a82fca9020a11b7b32c"
+    },
+    {
+      "file": "public/assets/dry-lab/illustrations/draw_pathway.py",
+      "bytes": 6191,
+      "sha256": "6590fb32d4418ff9416644d25893e2b464373f0e19a8703b80fad3ec5b59aeaf"
+    },
+    {
+      "file": "public/assets/dry-lab/illustrations/model-overview.png",
+      "bytes": 1751050,
+      "sha256": "7195c0dbc7e39caa5508019cec17f778838419cc38da1910ca71c5621f9b3f93"
+    },
+    {
+      "file": "public/assets/dry-lab/illustrations/overview-prompt.txt",
+      "bytes": 3693,
+      "sha256": "bda20ad45ad8e9777a78f43827344b22329c077be451d8b250bae8b388f0bb21"
+    },
+    {
+      "file": "public/assets/dry-lab/illustrations/project-pathway.svg",
+      "bytes": 7725,
+      "sha256": "3c5ce15f05cc44230ffdb465b5990e08f1b49fb792e10c41ad898f9ccced4b14"
+    },
+    {
+      "file": "public/assets/dry-lab/literature-2026/data-sources.json",
+      "bytes": 5468,
+      "sha256": "39d96b67a68e60f251f4166690f9f8d06d82ede072d2ea9eaecabbc7b4ae2b4a"
+    },
+    {
+      "file": "public/assets/dry-lab/literature-2026/wiki-presentation-audit.json",
+      "bytes": 9017,
+      "sha256": "1060818b20932749b5258b0a364e142d48f7dea47c2c57ab2fa079396bef9418"
+    },
+    {
+      "file": "public/assets/dry-lab/model-audit.json",
+      "bytes": 4633,
+      "sha256": "a56be9828cf1b167a9ed7a6e17dce0a88c206f2ba946743de6b03919abb893c9"
+    },
+    {
+      "file": "public/assets/dry-lab/research/00-model-overview.pdf",
+      "bytes": 33263,
+      "sha256": "38a46bc02686d396485a6e9d94b24271d61fed7c6bb8bf823f97db11b1d76feb"
+    },
+    {
+      "file": "public/assets/dry-lab/research/00-model-overview.png",
+      "bytes": 255837,
+      "sha256": "08ae7ef07b308bbfd9ec14ddb27116bd031e406c7d41b5b347ee4b2b4491eb70"
+    },
+    {
+      "file": "public/assets/dry-lab/research/00-model-overview.svg",
+      "bytes": 33440,
+      "sha256": "b40556045fb4401f1fc9d70d7ced9d7ded2a2213dae9581133b28f7df7300da5"
+    },
+    {
+      "file": "public/assets/dry-lab/research/01-ecological-landscape.pdf",
+      "bytes": 48452,
+      "sha256": "7d1a4b8497af13f6ef008561343a58d79e8595730a8b986d583e92d6389d2443"
+    },
+    {
+      "file": "public/assets/dry-lab/research/01-ecological-landscape.png",
+      "bytes": 317265,
+      "sha256": "49f60627bafa28b985bcd5f9b37ddf745987d8011998b0038f4fe6df46b6b069"
+    },
+    {
+      "file": "public/assets/dry-lab/research/01-ecological-landscape.svg",
+      "bytes": 98888,
+      "sha256": "c6249a6a67faaecaef07760e850d80a4dee8624918ed25a96355e1ae1ac13df8"
+    },
+    {
+      "file": "public/assets/dry-lab/research/02-uncertainty-sensitivity.pdf",
+      "bytes": 127651,
+      "sha256": "55925f3fbd9a124fd2ce4378518dd960db81d7a7662b03d0bd85d7cb91248e6b"
+    },
+    {
+      "file": "public/assets/dry-lab/research/02-uncertainty-sensitivity.png",
+      "bytes": 387446,
+      "sha256": "69a3ed0a4f8702b450fd415775c6b5f72c5118e5f5611b0efac4d232ea3b457d"
+    },
+    {
+      "file": "public/assets/dry-lab/research/02-uncertainty-sensitivity.svg",
+      "bytes": 280697,
+      "sha256": "3c0795bcd191abaffbc35b10ce2cdaa567d7eacb08dace9cf7457e85d30600e0"
+    },
+    {
+      "file": "public/assets/dry-lab/research/03-spatial-transport.pdf",
+      "bytes": 51148,
+      "sha256": "3005105bf854720e625faa62a5017b6f9f4360b52916f885286a9a0a23c5553f"
+    },
+    {
+      "file": "public/assets/dry-lab/research/03-spatial-transport.png",
+      "bytes": 405910,
+      "sha256": "c84c8ea46952c44737d5729350fbbed8f5d882b086c357b482d4f2321c36f476"
+    },
+    {
+      "file": "public/assets/dry-lab/research/03-spatial-transport.svg",
+      "bytes": 102793,
+      "sha256": "478d389a8a8e323178c24b15540fbad395b99e98485661e12c07ca311fb642d6"
+    },
+    {
+      "file": "public/assets/dry-lab/research/04-transport-landscape.pdf",
+      "bytes": 69517,
+      "sha256": "4e9e7dbb0c7690b6bfa7c34fdf75e3b9deec58db9d129570d7ed4a9ac2d85bf8"
+    },
+    {
+      "file": "public/assets/dry-lab/research/04-transport-landscape.png",
+      "bytes": 535218,
+      "sha256": "6b6480b425d45072296481c0324d3f097c7fb09ee44ec3b40c5a0f1e9cacdd95"
+    },
+    {
+      "file": "public/assets/dry-lab/research/04-transport-landscape.svg",
+      "bytes": 138018,
+      "sha256": "99ad286756641eb2aab446635a0e4d43d8ba05682bca780412d54f02de586ccc"
+    },
+    {
+      "file": "public/assets/dry-lab/research/05-numerical-verification.pdf",
+      "bytes": 31883,
+      "sha256": "868bb2d6293789816257e077ea1c77d92c43c4fab5cbb6e56d9797381b9f79d1"
+    },
+    {
+      "file": "public/assets/dry-lab/research/05-numerical-verification.png",
+      "bytes": 309892,
+      "sha256": "b0af1e14e76289fbfa1cfcb175fdd81a4d54532ef191097c7b496c4a333ae4f0"
+    },
+    {
+      "file": "public/assets/dry-lab/research/05-numerical-verification.svg",
+      "bytes": 58660,
+      "sha256": "6f0379b2bbf7c96ec75b8a748d4fadc484cf2ff3e77a3de477f9f1598d8ec09d"
+    },
+    {
+      "file": "public/assets/dry-lab/research/06-binding-kinetics.pdf",
+      "bytes": 54658,
+      "sha256": "b4406cd9df5ed5900840b999565f918d2d0316b5939ed867310a16049970f9c6"
+    },
+    {
+      "file": "public/assets/dry-lab/research/06-binding-kinetics.png",
+      "bytes": 386691,
+      "sha256": "68a3609f9c9dda5c2b38fb68132400cb3b24166e4042e9c4d55a954425fe5c2e"
+    },
+    {
+      "file": "public/assets/dry-lab/research/06-binding-kinetics.svg",
+      "bytes": 136936,
+      "sha256": "4f717fa0f287f4af8cdfa2f46f0b37958ea9e7042e34d2b311a88a1290a325fe"
+    },
+    {
+      "file": "public/assets/dry-lab/research/07-release-law-sensitivity.pdf",
+      "bytes": 41938,
+      "sha256": "2b16c8aa02abcd54d25f2732c9d7c4ec30d2a54f1f0d33670b9f05fde8e77bc2"
+    },
+    {
+      "file": "public/assets/dry-lab/research/07-release-law-sensitivity.png",
+      "bytes": 375458,
+      "sha256": "1f04d32d56904571bd8eceddfa7fd8b80eaf9ec5b66cf28c5ecb0f63e43c4d0d"
+    },
+    {
+      "file": "public/assets/dry-lab/research/07-release-law-sensitivity.svg",
+      "bytes": 75421,
+      "sha256": "b182397c735fc382c5061d36d818acde3eb27a03fae40ccbfeb69e295e386b7d"
+    },
+    {
+      "file": "public/assets/dry-lab/research/1fle-cartoon.png",
+      "bytes": 1095450,
+      "sha256": "3148aa7f8dff6920f07005fcad39b529af57fde5dbd742b0fe51a38a7211b314"
+    },
+    {
+      "file": "public/assets/dry-lab/research/1fle-contact-threshold-sensitivity.csv",
+      "bytes": 282,
+      "sha256": "7410b9d2ba7c663dd1cef55d582f143b7b09d44d99633271d996d5392718d049"
+    },
+    {
+      "file": "public/assets/dry-lab/research/1fle-interface-detail.png",
+      "bytes": 329686,
+      "sha256": "e3173df0136b65eb5722d197e5410cd268a0d7d02aeeb8129c618ab266f51758"
+    },
+    {
+      "file": "public/assets/dry-lab/research/1fle-minimum-heavy-atom-distance-matrix.csv",
+      "bytes": 212096,
+      "sha256": "fa4bdecb9cfb0a6d60526b987a0c1f041b82681df15c76f902de0a8543c33cd7"
+    },
+    {
+      "file": "public/assets/dry-lab/research/1fle-residue-contacts-under-6A.csv",
+      "bytes": 3697,
+      "sha256": "563baa49945913cf3a677432d839ed265a129df9083c666317acdcc9d2cbbd3b"
+    },
+    {
+      "file": "public/assets/dry-lab/research/2rel-aligned-ensemble.png",
+      "bytes": 1144366,
+      "sha256": "e97222dd3bb49e69a3dfb1ac3b7c1cf55ad891f60396c79cec5ced33e8b3d966"
+    },
+    {
+      "file": "public/assets/dry-lab/research/2rel-cartoon.png",
+      "bytes": 557959,
+      "sha256": "e19d9924365de98d59e9ed9948cbd03a99d58a48f7558a9f20fb663d5ed2dad4"
+    },
+    {
+      "file": "public/assets/dry-lab/research/2rel-ensemble-dispersion.csv",
+      "bytes": 2652,
+      "sha256": "c52ef9bde0d1849cf5216b249e360d7a7bfb17f0e70f622c57c42141d16f333a"
+    },
+    {
+      "file": "public/assets/dry-lab/research/2rel-pairwise-rmsd.csv",
+      "bytes": 2392,
+      "sha256": "aafbece59f3f836ad21d64b5020477b46e514803e64ef73cfa411ef34bad7ffc"
+    },
+    {
+      "file": "public/assets/dry-lab/research/2rel-rmsd-matrix.csv",
+      "bytes": 2198,
+      "sha256": "46584c69300e0879e3db56e3773e51f931014befd10e11ff40c745f9101b3ae0"
+    },
+    {
+      "file": "public/assets/dry-lab/research/KaTeX-LICENSE.txt",
+      "bytes": 1107,
+      "sha256": "766ccc1f306c885aa45542a9846bbd0a505b27a0374f146778171c2254ce18e3"
+    },
+    {
+      "file": "public/assets/dry-lab/research/REPRODUCIBILITY.txt",
+      "bytes": 6729,
+      "sha256": "94ffd81eef680cb97a35a386ee519d16e3920e2dd13a8841954caf743b0824e1"
+    },
+    {
+      "file": "public/assets/dry-lab/research/THIRD-PARTY-NOTICES.txt",
+      "bytes": 920,
+      "sha256": "f71852b28df88af1ba7561f606e0be711f1bbd43f7eb0150e687f08bd3df0e66"
+    },
+    {
+      "file": "public/assets/dry-lab/research/analyze_structures.py",
+      "bytes": 12907,
+      "sha256": "e0b9d22206aefd031cef1fa6b009cf2bf1fc504efcf646fbbb36deb6bca8f5f0"
+    },
+    {
+      "file": "public/assets/dry-lab/research/baseline-ecology.csv",
+      "bytes": 183690,
+      "sha256": "4b9f73c0dde085742f513f9f1804a657968be62e2d7b3070653f0647662cff55"
+    },
+    {
+      "file": "public/assets/dry-lab/research/binding-dissociation.csv",
+      "bytes": 9294,
+      "sha256": "5d52ef65517109d04913b0678e805d230a1e1c9ba6fa2408990bc918621ca3c0"
+    },
+    {
+      "file": "public/assets/dry-lab/research/binding-isotherms.csv",
+      "bytes": 19725,
+      "sha256": "94c21423d94c11647364e05023a5620846a25356cba3127662a02a905a1da035"
+    },
+    {
+      "file": "public/assets/dry-lab/research/binding-parameter-surface.csv",
+      "bytes": 1137335,
+      "sha256": "05998cd6994fbca92642bdee496023692583dcf6792c326545a3a6f8ce79e034"
+    },
+    {
+      "file": "public/assets/dry-lab/research/binding-summary.json",
+      "bytes": 2419,
+      "sha256": "fb888040f585a97bfb855747cbf45ca95412cf8083dafd60144753fe5328c788"
+    },
+    {
+      "file": "public/assets/dry-lab/research/binding-trajectories.csv",
+      "bytes": 41168,
+      "sha256": "d5d861be2a5aec1a204ef0a34df87b840f8070a94615de4234aad8f973f17e83"
+    },
+    {
+      "file": "public/assets/dry-lab/research/binding_kinetics.py",
+      "bytes": 8309,
+      "sha256": "95f4d2dd823a1a6b92caa68288499ffec4717409eb9114d8b8a4a3d91e514e32"
+    },
+    {
+      "file": "public/assets/dry-lab/research/competition-regimes.csv",
+      "bytes": 1140719,
+      "sha256": "973be5dfbe3d49a2571ba69f05767db4d3b774566ac788c43db08894a8cfe3e9"
+    },
+    {
+      "file": "public/assets/dry-lab/research/coupled-spatial-timeseries.csv",
+      "bytes": 163055,
+      "sha256": "5762d400bb021df8f3eeaf8c82fd24f6cf6c4ad353ed1ea7b6e76eb32036a6df"
+    },
+    {
+      "file": "public/assets/dry-lab/research/coupled-time-convergence.csv",
+      "bytes": 387,
+      "sha256": "8e12fa63f91ae899fa7705ac7dd95ecab55d061829c29abed458b2374202775a"
+    },
+    {
+      "file": "public/assets/dry-lab/research/critical-slowing-validation.csv",
+      "bytes": 326,
+      "sha256": "648cb16be4f7caa807962b36bcaa69e57dfd310d3623fc868664ad7fcf40f159"
+    },
+    {
+      "file": "public/assets/dry-lab/research/discontinuous-startup-errors.csv",
+      "bytes": 189,
+      "sha256": "8e4d6aca842b30692bab06d2fdcc627ff2fa0c4fd04e454f30a25535536900ca"
+    },
+    {
+      "file": "public/assets/dry-lab/research/equilibrium-validation.csv",
+      "bytes": 16633,
+      "sha256": "35fee1b746a1dd7fd156d667e820fd0a33dc16e90cebabc2975f2cec03abbb7c"
+    },
+    {
+      "file": "public/assets/dry-lab/research/figure-dimensions.json",
+      "bytes": 855,
+      "sha256": "46bbeee062ee1fc782fb918f3f4b24bc38d1ff28e0be75501aaa22c5cbc750b7"
+    },
+    {
+      "file": "public/assets/dry-lab/research/global-rank-sensitivity.csv",
+      "bytes": 2037,
+      "sha256": "d56f889c383ccbb2166e761f8a2c82f3657bd7f415687125f68c54a18eec7343"
+    },
+    {
+      "file": "public/assets/dry-lab/research/invasion-plane.csv",
+      "bytes": 1354033,
+      "sha256": "529ebd9f514eeff0dc6a110177fe74605a429114f76b0f80fa21aff05302cd1a"
+    },
+    {
+      "file": "public/assets/dry-lab/research/manifest.json",
+      "bytes": 11909,
+      "sha256": "7355f2aae57ad064921de26cc29f04f2924dc343845752905da9f2337121ea3e"
+    },
+    {
+      "file": "public/assets/dry-lab/research/ode-convergence.csv",
+      "bytes": 153,
+      "sha256": "0d1488a7925a6569512f44a721f3ae8532526c945f1a7501edcd38156e448fbf"
+    },
+    {
+      "file": "public/assets/dry-lab/research/package_research.py",
+      "bytes": 15318,
+      "sha256": "1294f7427eded93c7432abdbedeebf986d0d86a600b49b02e3181a057825a6b2"
+    },
+    {
+      "file": "public/assets/dry-lab/research/package_structures.py",
+      "bytes": 2208,
+      "sha256": "d059c798ad8110a8d431c0f2129560ef23230666b835d9d2c4da6db2ea58160f"
+    },
+    {
+      "file": "public/assets/dry-lab/research/parameter-ensemble.csv",
+      "bytes": 140133,
+      "sha256": "3c533714bb3c90a07baadb4b0e092bac0ad9f13b2531a9452887c366bbb97e7b"
+    },
+    {
+      "file": "public/assets/dry-lab/research/plot_overview.py",
+      "bytes": 5662,
+      "sha256": "fc57c64183cf7abdc61a8e1449f8d65e770436462db3808ff35d6b89859c3b95"
+    },
+    {
+      "file": "public/assets/dry-lab/research/plot_structures.py",
+      "bytes": 13920,
+      "sha256": "0674c679c37160329423702e4b08cf4c437c8c31a62b52d8c191b6bb8dfcf7be"
+    },
+    {
+      "file": "public/assets/dry-lab/research/references.json",
+      "bytes": 4559,
+      "sha256": "042c7c661b87b903c1caa23164e541325d031f9240a30c5cf7eb66aba7b8cc78"
+    },
+    {
+      "file": "public/assets/dry-lab/research/release-law-scenarios.csv",
+      "bytes": 139050,
+      "sha256": "2e5e5b1366147192c32b67b9e4989b978338de5345d5df4b689498e0782970e8"
+    },
+    {
+      "file": "public/assets/dry-lab/research/release-structural-sensitivity.csv",
+      "bytes": 99875,
+      "sha256": "934b492648206b187dffdd64f24f884bb0edf20ce7fa4b5d2550092a379b31de"
+    },
+    {
+      "file": "public/assets/dry-lab/research/render_structures.mjs",
+      "bytes": 6015,
+      "sha256": "c1e820c8891860b97515aaa48fad4e39ed17043b5aefbd0692593294ffa08508"
+    },
+    {
+      "file": "public/assets/dry-lab/research/requirements-research.txt",
+      "bytes": 65,
+      "sha256": "e74d996fa67b2f785edfe3fce2907adb49f5911196c50355cee23b4d2c05d4d3"
+    },
+    {
+      "file": "public/assets/dry-lab/research/research-report.md",
+      "bytes": 23497,
+      "sha256": "119af68c9bd1789bb844eea4c8654e3f2b1c130329cfd52e9cfd30f2a6b38c23"
+    },
+    {
+      "file": "public/assets/dry-lab/research/research-summary.json",
+      "bytes": 12279,
+      "sha256": "05cfafd6c759f8c79aefee74e1d0029d8936ded2c6e6bb894f4505c0da810d63"
+    },
+    {
+      "file": "public/assets/dry-lab/research/research_models.py",
+      "bytes": 39875,
+      "sha256": "a34104fc4efe7d4abfebc61c6c906dce5d5359138c5e761b1efee678eedd8d3f"
+    },
+    {
+      "file": "public/assets/dry-lab/research/space-convergence.csv",
+      "bytes": 479,
+      "sha256": "d5d36d26af7cf3cf574715c403328f5a10bc5ddf8089c339253dac624c19c713"
+    },
+    {
+      "file": "public/assets/dry-lab/research/spatial-preview.json",
+      "bytes": 439365,
+      "sha256": "85932661f982ff629899c66fcc6f18eac395cddb632192ba9000afb26b568c82"
+    },
+    {
+      "file": "public/assets/dry-lab/research/spatial-profiles.csv",
+      "bytes": 952846,
+      "sha256": "9aab4131e88bd5f48ccb0144b7d2cc098efbec117d3f5df0e132b4eaed17d2d9"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-figure-captions.json",
+      "bytes": 2726,
+      "sha256": "8d4ead7375b54aa6ad3dc42c1f97b8e32b026f5e7002e88b4f93b408d0ea2a88"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-full-distance-map.pdf",
+      "bytes": 36008,
+      "sha256": "d2b77f484eae10bb5f3f0bb26add835e80ee231faea851121032d2f0edc815fc"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-full-distance-map.png",
+      "bytes": 215415,
+      "sha256": "ed2682e6918ea69f0360ee81659c7bccba8a0d19001a56f0099a713e0ddeb753"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-full-distance-map.svg",
+      "bytes": 47266,
+      "sha256": "ab3f55d7a28d49fe921db6ec27d46992400f9e62573b77985469c5178af29f19"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-interface.pdf",
+      "bytes": 613607,
+      "sha256": "130352d63d49c7ba25e5be131db2d57f5d9193b7d3b7955a0f59206ef96aaf7c"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-interface.png",
+      "bytes": 1209929,
+      "sha256": "92a0f6d6bdb013e2b8e0abbf48c13ab466c71db63e7c28b6e8c61cbb23a71909"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-interface.svg",
+      "bytes": 906453,
+      "sha256": "7a11fdf9068133aad1c3b7ae2b9b170a33049b34220cdc95438363b161e902e7"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-manifest.json",
+      "bytes": 3334,
+      "sha256": "510cf12e2b3d92d49589d4f04a3b128c7a31c82c71f35723cb497600a15c9888"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-methods.txt",
+      "bytes": 7461,
+      "sha256": "807da59a3050a922c6abc7b2ef0be5ef8be1ae120e1417be5f8aa8839f226e51"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-nmr-ensemble.pdf",
+      "bytes": 570000,
+      "sha256": "ce247895a3099f8ec80f900d75945507e030394119170fa4eb40d739221f174c"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-nmr-ensemble.png",
+      "bytes": 1197055,
+      "sha256": "2a595b43dcb1669590db05070f02e624a330529a96c5867448c83db99cecbe57"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-nmr-ensemble.svg",
+      "bytes": 861310,
+      "sha256": "bcaafd6e727a965f1ef1b8bc4f0711493854c8e5ba2c317d61d7dca5c6e8aab0"
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-summary.json",
+      "bytes": 20372,
+      "sha256": "68b14ce8987276d2bef7ce69f50d6e6ff29c966652e09f623bc59a9619066534"
+    },
+    {
+      "file": "public/assets/dry-lab/research/time-convergence.csv",
+      "bytes": 201,
+      "sha256": "0ab29829e72bf73a5c51634992152be15033e5a2ac698b7431b08f5ab9b7d13b"
+    },
+    {
+      "file": "public/assets/dry-lab/research/transport-landscape-validation.csv",
+      "bytes": 3789,
+      "sha256": "5ffe5bffc8337541e6886c321001c94313582e9c97fb68376ec1f5a9ea118bf0"
+    },
+    {
+      "file": "public/assets/dry-lab/research/transport-parameter-surface.csv",
+      "bytes": 795973,
+      "sha256": "f11652b248527eccd22f9ace9c328906d6ef2d18813c44c6c410ae0723b5280d"
+    },
+    {
+      "file": "public/assets/dry-lab/structure-audit.json",
+      "bytes": 11435,
+      "sha256": "2959647d2df67bc9da4028401d9ecff913fd9acfd962d5b8d91826459d0a1ecb"
+    },
+    {
+      "file": "public/assets/dry-lab/structures/1fle.pdb",
+      "bytes": 224532,
+      "sha256": "50027986c3d2e2f73de90caaa8b0579322e71d592c47140f1d517360c52789bd"
+    },
+    {
+      "file": "public/assets/dry-lab/structures/2rel.pdb",
+      "bytes": 762939,
+      "sha256": "87de7296beac51c1ae41d812f8f78ed9c560d401dcfd44e35e6f472b4310a2ac"
+    },
+    {
+      "file": "public/assets/dry-lab/tissue-context-gtex-v8-full.json",
+      "bytes": 13867,
+      "sha256": "211e2a2cd9f87f8c931aa37e0f236a7f14e1431166066311b99608e033ca953a"
+    },
+    {
+      "file": "public/assets/dry-lab/tissue-context.json",
+      "bytes": 2563,
+      "sha256": "8275f0078e177ca9c10200985559d56b4c11b97ad74ae623d08ca59a1bb07e92"
+    },
+    {
+      "file": "public/assets/dry-lab/uniprot-P19957.json",
+      "bytes": 61111,
+      "sha256": "eb39bb1705a12c69e015d657634dcb1cec6fd66d8affe230ca64c34c1c37d7c1"
+    },
+    {
+      "file": "public/assets/dry-lab/vendor/3Dmol-2.5.5.min.js",
+      "bytes": 537792,
+      "sha256": "f7cc78921ae72e7623e89cdd111434f58c2efddd2ffda1cd212644b406fb8016"
+    },
+    {
+      "file": "public/assets/dry-lab/vendor/3Dmol-2.5.5.min.js.LICENSE.txt",
+      "bytes": 120,
+      "sha256": "ae3bfc688d0c9687b76e0ecc7fece0b393bcb4acf2aee09e19dda697eaa10b16"
+    },
+    {
+      "file": "public/assets/dry-lab/vendor/3Dmol-LICENSE.txt",
+      "bytes": 4283,
+      "sha256": "4c6eaaed856f3f28a3b1a98e74f4a8a71618de7d51ea4155c29f6f793bcef861"
+    },
+    {
+      "file": "public/assets/dry-lab/vendor/provenance.json",
+      "bytes": 3783,
+      "sha256": "b76b5cd4ddc1fe0a31c19b0f641276d40a9d2d85fcebde0c8d9dbfeb4db087fb"
+    },
+    {
+      "file": "requirements-research.txt",
+      "bytes": 61,
+      "sha256": "fbf975abd6dfe017965837795e7bbb2abf0f717498d2655331f02bc6fefd1236"
+    },
+    {
+      "file": "scripts/browser-review.mjs",
+      "bytes": 1090,
+      "sha256": "312387f64f2a501096c9c53058c73d947ee25fc21c8e9a27a10497db65555ffa"
+    },
+    {
+      "file": "scripts/drylab/adhesion/README.md",
+      "bytes": 11759,
+      "sha256": "6bb5417ac3d74cd042ba0201fe4592daeb60a5e0775d499caa0061600ad07b27"
+    },
+    {
+      "file": "scripts/drylab/adhesion/particle_transport.py",
+      "bytes": 28007,
+      "sha256": "97dc6dcc3786b703763f09d5ec7ee8545913cb315e0e965282591a1094bf6a86"
+    },
+    {
+      "file": "scripts/drylab/adhesion/retention_model.py",
+      "bytes": 19585,
+      "sha256": "030f546bc91dc9915d2e3dc9d8c16215c88cdbccf0c806a580308b58a971e136"
+    },
+    {
+      "file": "scripts/drylab/analyze_structures.py",
+      "bytes": 12907,
+      "sha256": "e0b9d22206aefd031cef1fa6b009cf2bf1fc504efcf646fbbb36deb6bca8f5f0"
+    },
+    {
+      "file": "scripts/drylab/atomistic/analyze_docking.py",
+      "bytes": 10356,
+      "sha256": "f78e5b69e930b507e62915059664a98471994cc6ab63c74c0692f9df9df55732"
+    },
+    {
+      "file": "scripts/drylab/atomistic/analyze_md.py",
+      "bytes": 8460,
+      "sha256": "a390aaa3c29a877cb11e69d04f51de123b80709fbc6b5075f8c583a0b9ed9126"
+    },
+    {
+      "file": "scripts/drylab/atomistic/plot_atomistic.py",
+      "bytes": 14678,
+      "sha256": "fcc6b143461b368a5fdc41972e760b2312fccb25dc74f1d1a40a44ebcddbbff2"
+    },
+    {
+      "file": "scripts/drylab/atomistic/prepare_docking.py",
+      "bytes": 3124,
+      "sha256": "70afcbcb1e333988b1d4152a10bf4952d42e1c0c569a0a20f885b340f7c9a633"
+    },
+    {
+      "file": "scripts/drylab/atomistic/prepare_md.py",
+      "bytes": 5895,
+      "sha256": "534aed79b21843cd390ba3a0754a70fa3a5a99334dffb1103178bdd8b801d162"
+    },
+    {
+      "file": "scripts/drylab/atomistic/render_docking.mjs",
+      "bytes": 5481,
+      "sha256": "644416d486312f0d3df712654faf2a0af37269948d92fe8248ea2f7154a46b36"
+    },
+    {
+      "file": "scripts/drylab/atomistic/render_docking_closeup.mjs",
+      "bytes": 11327,
+      "sha256": "29fbfec151f11c9015077ae62084d2dae8347b62f46f3a24b7273931cde19b82"
+    },
+    {
+      "file": "scripts/drylab/atomistic/run_docking.sh",
+      "bytes": 614,
+      "sha256": "94f6caba1aa4acaa02c013385d2f571a6fc46856d336c4147b425d5de7bba307"
+    },
+    {
+      "file": "scripts/drylab/atomistic/run_md.py",
+      "bytes": 7145,
+      "sha256": "868515f16a27b9cc3e90003b7f468b241702f46ab79cd42641713e2f0259cd69"
+    },
+    {
+      "file": "scripts/drylab/atomistic/runtime.py",
+      "bytes": 1734,
+      "sha256": "f559ec36d6803fd5ed4dfb20da9bbd75b176938e30aaca6fbe7a4cce6e2cf832"
+    },
+    {
+      "file": "scripts/drylab/atomistic/validate_atomistic.py",
+      "bytes": 4374,
+      "sha256": "b945d6f11a41d07aa58419577f6b3dffcb9b4e162a0b2a48eda76e42111544c1"
+    },
+    {
+      "file": "scripts/drylab/binding_kinetics.py",
+      "bytes": 8309,
+      "sha256": "95f4d2dd823a1a6b92caa68288499ffec4717409eb9114d8b8a4a3d91e514e32"
+    },
+    {
+      "file": "scripts/drylab/draw_pathway.py",
+      "bytes": 6191,
+      "sha256": "6590fb32d4418ff9416644d25893e2b464373f0e19a8703b80fad3ec5b59aeaf"
+    },
+    {
+      "file": "scripts/drylab/package_research.py",
+      "bytes": 15318,
+      "sha256": "1294f7427eded93c7432abdbedeebf986d0d86a600b49b02e3181a057825a6b2"
+    },
+    {
+      "file": "scripts/drylab/package_structures.py",
+      "bytes": 2208,
+      "sha256": "d059c798ad8110a8d431c0f2129560ef23230666b835d9d2c4da6db2ea58160f"
+    },
+    {
+      "file": "scripts/drylab/plot_overview.py",
+      "bytes": 5662,
+      "sha256": "fc57c64183cf7abdc61a8e1449f8d65e770436462db3808ff35d6b89859c3b95"
+    },
+    {
+      "file": "scripts/drylab/plot_structures.py",
+      "bytes": 13920,
+      "sha256": "0674c679c37160329423702e4b08cf4c437c8c31a62b52d8c191b6bb8dfcf7be"
+    },
+    {
+      "file": "scripts/drylab/render_structures.mjs",
+      "bytes": 6015,
+      "sha256": "c1e820c8891860b97515aaa48fad4e39ed17043b5aefbd0692593294ffa08508"
+    },
+    {
+      "file": "scripts/drylab/research-report.md",
+      "bytes": 23497,
+      "sha256": "119af68c9bd1789bb844eea4c8654e3f2b1c130329cfd52e9cfd30f2a6b38c23"
+    },
+    {
+      "file": "scripts/drylab/research_models.py",
+      "bytes": 39875,
+      "sha256": "a34104fc4efe7d4abfebc61c6c906dce5d5359138c5e761b1efee678eedd8d3f"
+    }
+  ]
+}

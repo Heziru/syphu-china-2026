@@ -1,0 +1,2789 @@
+{
+  "entryType": "UniProtKB reviewed (Swiss-Prot)",
+  "primaryAccession": "P19957",
+  "secondaryAccessions": [
+    "E1P618",
+    "Q6FG74"
+  ],
+  "uniProtkbId": "ELAF_HUMAN",
+  "entryAudit": {
+    "firstPublicDate": "1991-02-01",
+    "lastAnnotationUpdateDate": "2026-09-02",
+    "lastSequenceUpdateDate": "1992-12-01",
+    "entryVersion": 221,
+    "sequenceVersion": 3
+  },
+  "annotationScore": 5.0,
+  "organism": {
+    "scientificName": "Homo sapiens",
+    "commonName": "Human",
+    "taxonId": 9606,
+    "lineage": [
+      "Eukaryota",
+      "Metazoa",
+      "Chordata",
+      "Craniata",
+      "Vertebrata",
+      "Euteleostomi",
+      "Mammalia",
+      "Eutheria",
+      "Euarchontoglires",
+      "Primates",
+      "Haplorrhini",
+      "Catarrhini",
+      "Hominidae",
+      "Homo"
+    ]
+  },
+  "proteinExistence": "1: Evidence at protein level",
+  "proteinDescription": {
+    "recommendedName": {
+      "fullName": {
+        "value": "Elafin"
+      }
+    },
+    "alternativeNames": [
+      {
+        "fullName": {
+          "value": "Elastase-specific inhibitor"
+        },
+        "shortNames": [
+          {
+            "value": "ESI"
+          }
+        ]
+      },
+      {
+        "fullName": {
+          "value": "Peptidase inhibitor 3"
+        },
+        "shortNames": [
+          {
+            "value": "PI-3"
+          }
+        ]
+      },
+      {
+        "fullName": {
+          "value": "Protease inhibitor WAP3"
+        }
+      },
+      {
+        "fullName": {
+          "value": "Skin-derived antileukoproteinase"
+        },
+        "shortNames": [
+          {
+            "value": "SKALP"
+          }
+        ]
+      },
+      {
+        "fullName": {
+          "value": "WAP four-disulfide core domain protein 14"
+        }
+      }
+    ],
+    "flag": "Precursor"
+  },
+  "genes": [
+    {
+      "geneName": {
+        "value": "PI3"
+      },
+      "synonyms": [
+        {
+          "value": "WAP3"
+        },
+        {
+          "value": "WFDC14"
+        }
+      ]
+    }
+  ],
+  "comments": [
+    {
+      "texts": [
+        {
+          "evidences": [
+            {
+              "evidenceCode": "ECO:0000269",
+              "source": "PubMed",
+              "id": "29483648"
+            }
+          ],
+          "value": "Neutrophil and pancreatic elastase-specific inhibitor of skin. It may prevent elastase-mediated tissue proteolysis. Has been shown to inhibit the alpha-4-beta-2/CHRNA2-CHRNB2 nicotinic acetylcholine receptor and to produce a weak inhibition on Kv11.1/KCNH2/ERG1 and on the transient receptor potential cation channel subfamily V member 1 (TRPV1) (PubMed:29483648)"
+        }
+      ],
+      "commentType": "FUNCTION"
+    },
+    {
+      "commentType": "SUBCELLULAR LOCATION",
+      "subcellularLocations": [
+        {
+          "location": {
+            "value": "Secreted",
+            "id": "SL-0243"
+          }
+        }
+      ]
+    },
+    {
+      "texts": [
+        {
+          "value": "Consists of two domains: the transglutaminase substrate domain (cementoin moiety) and the elastase inhibitor domain. The transglutaminase substrate domain serves as an anchor to localize elafin covalently to specific sites on extracellular matrix proteins"
+        }
+      ],
+      "commentType": "DOMAIN"
+    }
+  ],
+  "features": [
+    {
+      "type": "Signal",
+      "location": {
+        "start": {
+          "value": 1,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 22,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "7685029"
+        }
+      ]
+    },
+    {
+      "type": "Propeptide",
+      "location": {
+        "start": {
+          "value": 23,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 60,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "1536690"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "2394696"
+        }
+      ],
+      "featureId": "PRO_0000041357"
+    },
+    {
+      "type": "Chain",
+      "location": {
+        "start": {
+          "value": 61,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 117,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "Elafin",
+      "featureId": "PRO_0000041358"
+    },
+    {
+      "type": "Repeat",
+      "location": {
+        "start": {
+          "value": 29,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 54,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "SVP-1 clotting 1"
+    },
+    {
+      "type": "Repeat",
+      "location": {
+        "start": {
+          "value": 55,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 72,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "SVP-1 clotting 2"
+    },
+    {
+      "type": "Domain",
+      "location": {
+        "start": {
+          "value": 69,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 117,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "WAP",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000255",
+          "source": "PROSITE-ProRule",
+          "id": "PRU00722"
+        }
+      ]
+    },
+    {
+      "type": "Region",
+      "location": {
+        "start": {
+          "value": 29,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 72,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "2 X tandem repeats of SVP-1 like motif"
+    },
+    {
+      "type": "Disulfide bond",
+      "location": {
+        "start": {
+          "value": 76,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 105,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "29483648"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "8794736"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "9171290"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "1FLE"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "2REL"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "6ATU"
+        }
+      ]
+    },
+    {
+      "type": "Disulfide bond",
+      "location": {
+        "start": {
+          "value": 83,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 109,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "29483648"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "8794736"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "9171290"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "1FLE"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "2REL"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "6ATU"
+        }
+      ]
+    },
+    {
+      "type": "Disulfide bond",
+      "location": {
+        "start": {
+          "value": 92,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 104,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "29483648"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "8794736"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "9171290"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "1FLE"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "2REL"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "6ATU"
+        }
+      ]
+    },
+    {
+      "type": "Disulfide bond",
+      "location": {
+        "start": {
+          "value": 98,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 113,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "29483648"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "8794736"
+        },
+        {
+          "evidenceCode": "ECO:0000269",
+          "source": "PubMed",
+          "id": "9171290"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "1FLE"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "2REL"
+        },
+        {
+          "evidenceCode": "ECO:0000312",
+          "source": "PDB",
+          "id": "6ATU"
+        }
+      ]
+    },
+    {
+      "type": "Natural variant",
+      "location": {
+        "start": {
+          "value": 17,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 17,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "in dbSNP:rs17333103",
+      "featureCrossReferences": [
+        {
+          "database": "dbSNP",
+          "id": "rs17333103"
+        }
+      ],
+      "featureId": "VAR_052947",
+      "alternativeSequence": {
+        "originalSequence": "T",
+        "alternativeSequences": [
+          "M"
+        ]
+      }
+    },
+    {
+      "type": "Natural variant",
+      "location": {
+        "start": {
+          "value": 34,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 34,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "in dbSNP:rs2664581",
+      "featureCrossReferences": [
+        {
+          "database": "dbSNP",
+          "id": "rs2664581"
+        }
+      ],
+      "featureId": "VAR_024695",
+      "alternativeSequence": {
+        "originalSequence": "T",
+        "alternativeSequences": [
+          "P"
+        ]
+      }
+    },
+    {
+      "type": "Sequence conflict",
+      "location": {
+        "start": {
+          "value": 91,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 92,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "in Ref. 10; AA sequence",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000305"
+        }
+      ],
+      "alternativeSequence": {
+        "originalSequence": "RC",
+        "alternativeSequences": [
+          "CP"
+        ]
+      }
+    },
+    {
+      "type": "Beta strand",
+      "location": {
+        "start": {
+          "value": 65,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 69,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "2REL"
+        }
+      ]
+    },
+    {
+      "type": "Beta strand",
+      "location": {
+        "start": {
+          "value": 72,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 74,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "6ATU"
+        }
+      ]
+    },
+    {
+      "type": "Helix",
+      "location": {
+        "start": {
+          "value": 75,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 78,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "1FLE"
+        }
+      ]
+    },
+    {
+      "type": "Beta strand",
+      "location": {
+        "start": {
+          "value": 81,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 84,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "1FLE"
+        }
+      ]
+    },
+    {
+      "type": "Helix",
+      "location": {
+        "start": {
+          "value": 88,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 90,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "1FLE"
+        }
+      ]
+    },
+    {
+      "type": "Helix",
+      "location": {
+        "start": {
+          "value": 95,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 97,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "1FLE"
+        }
+      ]
+    },
+    {
+      "type": "Beta strand",
+      "location": {
+        "start": {
+          "value": 98,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 101,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "1FLE"
+        }
+      ]
+    },
+    {
+      "type": "Beta strand",
+      "location": {
+        "start": {
+          "value": 103,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 106,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "1FLE"
+        }
+      ]
+    },
+    {
+      "type": "Beta strand",
+      "location": {
+        "start": {
+          "value": 108,
+          "modifier": "EXACT"
+        },
+        "end": {
+          "value": 114,
+          "modifier": "EXACT"
+        }
+      },
+      "description": "",
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0007829",
+          "source": "PDB",
+          "id": "1FLE"
+        }
+      ]
+    }
+  ],
+  "keywords": [
+    {
+      "id": "KW-0002",
+      "category": "Technical term",
+      "name": "3D-structure"
+    },
+    {
+      "id": "KW-0903",
+      "category": "Technical term",
+      "name": "Direct protein sequencing"
+    },
+    {
+      "id": "KW-1015",
+      "category": "PTM",
+      "name": "Disulfide bond"
+    },
+    {
+      "id": "KW-0646",
+      "category": "Molecular function",
+      "name": "Protease inhibitor"
+    },
+    {
+      "id": "KW-1267",
+      "category": "Technical term",
+      "name": "Proteomics identification"
+    },
+    {
+      "id": "KW-1185",
+      "category": "Technical term",
+      "name": "Reference proteome"
+    },
+    {
+      "id": "KW-0677",
+      "category": "Domain",
+      "name": "Repeat"
+    },
+    {
+      "id": "KW-0964",
+      "category": "Cellular component",
+      "name": "Secreted"
+    },
+    {
+      "id": "KW-0722",
+      "category": "Molecular function",
+      "name": "Serine protease inhibitor"
+    },
+    {
+      "id": "KW-0732",
+      "category": "Domain",
+      "name": "Signal"
+    }
+  ],
+  "references": [
+    {
+      "referenceNumber": 1,
+      "citation": {
+        "id": "1339270",
+        "citationType": "journal article",
+        "authors": [
+          "Saheki T.",
+          "Ito F.",
+          "Hagiwara H.",
+          "Saito Y.",
+          "Kuroki J.",
+          "Tachibana S.",
+          "Hirose S."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "1339270"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1016/s0006-291x(05)80981-7"
+          }
+        ],
+        "title": "Primary structure of the human elafin precursor preproelafin deduced from the nucleotide sequence of its gene and the presence of unique repetitive sequences in the prosegment.",
+        "publicationDate": "1992",
+        "journal": "Biochem. Biophys. Res. Commun.",
+        "firstPage": "240",
+        "lastPage": "245",
+        "volume": "185"
+      },
+      "referencePositions": [
+        "NUCLEOTIDE SEQUENCE [GENOMIC DNA]"
+      ]
+    },
+    {
+      "referenceNumber": 2,
+      "citation": {
+        "id": "7685029",
+        "citationType": "journal article",
+        "authors": [
+          "Molhuizen H.O.F.",
+          "Alkemade H.A.C.",
+          "Zeeuwen P.L.J.M.",
+          "de Jongh G.J.",
+          "Wieringa B.",
+          "Schalkwijk J."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "7685029"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1016/s0021-9258(19)50303-9"
+          }
+        ],
+        "title": "SKALP/elafin: an elastase inhibitor from cultured human keratinocytes. Purification, cDNA sequence, and evidence for transglutaminase cross-linking.",
+        "publicationDate": "1993",
+        "journal": "J. Biol. Chem.",
+        "firstPage": "12028",
+        "lastPage": "12032",
+        "volume": "268"
+      },
+      "referencePositions": [
+        "NUCLEOTIDE SEQUENCE [MRNA]",
+        "PROTEIN SEQUENCE OF 23-48 AND 85-100"
+      ],
+      "referenceComments": [
+        {
+          "value": "Keratinocyte",
+          "type": "TISSUE"
+        }
+      ]
+    },
+    {
+      "referenceNumber": 3,
+      "citation": {
+        "id": "8476637",
+        "citationType": "journal article",
+        "authors": [
+          "Sallenave J.-M.",
+          "Silva A."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "8476637"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1165/ajrcmb/8.4.439"
+          }
+        ],
+        "title": "Characterization and gene sequence of the precursor of elafin, an elastase-specific inhibitor in bronchial secretions.",
+        "publicationDate": "1993",
+        "journal": "Am. J. Respir. Cell Mol. Biol.",
+        "firstPage": "439",
+        "lastPage": "445",
+        "volume": "8"
+      },
+      "referencePositions": [
+        "NUCLEOTIDE SEQUENCE [GENOMIC DNA]"
+      ],
+      "referenceComments": [
+        {
+          "value": "Placenta",
+          "type": "TISSUE"
+        }
+      ]
+    },
+    {
+      "referenceNumber": 4,
+      "citation": {
+        "id": "CI-D49P6QQO8F5LU",
+        "citationType": "submission",
+        "authors": [
+          "Ebert L.",
+          "Schick M.",
+          "Neubert P.",
+          "Schatten R.",
+          "Henze S.",
+          "Korn B."
+        ],
+        "title": "Cloning of human full open reading frames in Gateway(TM) system entry vector (pDONR201).",
+        "publicationDate": "JUN-2004",
+        "submissionDatabase": "EMBL/GenBank/DDBJ databases"
+      },
+      "referencePositions": [
+        "NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA]"
+      ]
+    },
+    {
+      "referenceNumber": 5,
+      "citation": {
+        "id": "11780052",
+        "citationType": "journal article",
+        "authors": [
+          "Deloukas P.",
+          "Matthews L.H.",
+          "Ashurst J.L.",
+          "Burton J.",
+          "Gilbert J.G.R.",
+          "Jones M.",
+          "Stavrides G.",
+          "Almeida J.P.",
+          "Babbage A.K.",
+          "Bagguley C.L.",
+          "Bailey J.",
+          "Barlow K.F.",
+          "Bates K.N.",
+          "Beard L.M.",
+          "Beare D.M.",
+          "Beasley O.P.",
+          "Bird C.P.",
+          "Blakey S.E.",
+          "Bridgeman A.M.",
+          "Brown A.J.",
+          "Buck D.",
+          "Burrill W.D.",
+          "Butler A.P.",
+          "Carder C.",
+          "Carter N.P.",
+          "Chapman J.C.",
+          "Clamp M.",
+          "Clark G.",
+          "Clark L.N.",
+          "Clark S.Y.",
+          "Clee C.M.",
+          "Clegg S.",
+          "Cobley V.E.",
+          "Collier R.E.",
+          "Connor R.E.",
+          "Corby N.R.",
+          "Coulson A.",
+          "Coville G.J.",
+          "Deadman R.",
+          "Dhami P.D.",
+          "Dunn M.",
+          "Ellington A.G.",
+          "Frankland J.A.",
+          "Fraser A.",
+          "French L.",
+          "Garner P.",
+          "Grafham D.V.",
+          "Griffiths C.",
+          "Griffiths M.N.D.",
+          "Gwilliam R.",
+          "Hall R.E.",
+          "Hammond S.",
+          "Harley J.L.",
+          "Heath P.D.",
+          "Ho S.",
+          "Holden J.L.",
+          "Howden P.J.",
+          "Huckle E.",
+          "Hunt A.R.",
+          "Hunt S.E.",
+          "Jekosch K.",
+          "Johnson C.M.",
+          "Johnson D.",
+          "Kay M.P.",
+          "Kimberley A.M.",
+          "King A.",
+          "Knights A.",
+          "Laird G.K.",
+          "Lawlor S.",
+          "Lehvaeslaiho M.H.",
+          "Leversha M.A.",
+          "Lloyd C.",
+          "Lloyd D.M.",
+          "Lovell J.D.",
+          "Marsh V.L.",
+          "Martin S.L.",
+          "McConnachie L.J.",
+          "McLay K.",
+          "McMurray A.A.",
+          "Milne S.A.",
+          "Mistry D.",
+          "Moore M.J.F.",
+          "Mullikin J.C.",
+          "Nickerson T.",
+          "Oliver K.",
+          "Parker A.",
+          "Patel R.",
+          "Pearce T.A.V.",
+          "Peck A.I.",
+          "Phillimore B.J.C.T.",
+          "Prathalingam S.R.",
+          "Plumb R.W.",
+          "Ramsay H.",
+          "Rice C.M.",
+          "Ross M.T.",
+          "Scott C.E.",
+          "Sehra H.K.",
+          "Shownkeen R.",
+          "Sims S.",
+          "Skuce C.D.",
+          "Smith M.L.",
+          "Soderlund C.",
+          "Steward C.A.",
+          "Sulston J.E.",
+          "Swann R.M.",
+          "Sycamore N.",
+          "Taylor R.",
+          "Tee L.",
+          "Thomas D.W.",
+          "Thorpe A.",
+          "Tracey A.",
+          "Tromans A.C.",
+          "Vaudin M.",
+          "Wall M.",
+          "Wallis J.M.",
+          "Whitehead S.L.",
+          "Whittaker P.",
+          "Willey D.L.",
+          "Williams L.",
+          "Williams S.A.",
+          "Wilming L.",
+          "Wray P.W.",
+          "Hubbard T.",
+          "Durbin R.M.",
+          "Bentley D.R.",
+          "Beck S.",
+          "Rogers J."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "11780052"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1038/414865a"
+          }
+        ],
+        "title": "The DNA sequence and comparative analysis of human chromosome 20.",
+        "publicationDate": "2001",
+        "journal": "Nature",
+        "firstPage": "865",
+        "lastPage": "871",
+        "volume": "414"
+      },
+      "referencePositions": [
+        "NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]"
+      ]
+    },
+    {
+      "referenceNumber": 6,
+      "citation": {
+        "id": "CI-5GBD0VIIJ7C63",
+        "citationType": "submission",
+        "authors": [
+          "Mural R.J.",
+          "Istrail S.",
+          "Sutton G.G.",
+          "Florea L.",
+          "Halpern A.L.",
+          "Mobarry C.M.",
+          "Lippert R.",
+          "Walenz B.",
+          "Shatkay H.",
+          "Dew I.",
+          "Miller J.R.",
+          "Flanigan M.J.",
+          "Edwards N.J.",
+          "Bolanos R.",
+          "Fasulo D.",
+          "Halldorsson B.V.",
+          "Hannenhalli S.",
+          "Turner R.",
+          "Yooseph S.",
+          "Lu F.",
+          "Nusskern D.R.",
+          "Shue B.C.",
+          "Zheng X.H.",
+          "Zhong F.",
+          "Delcher A.L.",
+          "Huson D.H.",
+          "Kravitz S.A.",
+          "Mouchard L.",
+          "Reinert K.",
+          "Remington K.A.",
+          "Clark A.G.",
+          "Waterman M.S.",
+          "Eichler E.E.",
+          "Adams M.D.",
+          "Hunkapiller M.W.",
+          "Myers E.W.",
+          "Venter J.C."
+        ],
+        "publicationDate": "SEP-2005",
+        "submissionDatabase": "EMBL/GenBank/DDBJ databases"
+      },
+      "referencePositions": [
+        "NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]"
+      ]
+    },
+    {
+      "referenceNumber": 7,
+      "citation": {
+        "id": "15489334",
+        "citationType": "journal article",
+        "authoringGroup": [
+          "The MGC Project Team"
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "15489334"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1101/gr.2596504"
+          }
+        ],
+        "title": "The status, quality, and expansion of the NIH full-length cDNA project: the Mammalian Gene Collection (MGC).",
+        "publicationDate": "2004",
+        "journal": "Genome Res.",
+        "firstPage": "2121",
+        "lastPage": "2127",
+        "volume": "14"
+      },
+      "referencePositions": [
+        "NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA]"
+      ],
+      "referenceComments": [
+        {
+          "value": "Brain",
+          "type": "TISSUE"
+        }
+      ]
+    },
+    {
+      "referenceNumber": 8,
+      "citation": {
+        "id": "2394696",
+        "citationType": "journal article",
+        "authors": [
+          "Wiedow O.",
+          "Schroeder J.-M.",
+          "Gregory H.",
+          "Young J.A.",
+          "Christophers E."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "2394696"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1016/s0021-9258(18)77182-2"
+          }
+        ],
+        "title": "Elafin: an elastase-specific inhibitor of human skin. Purification, characterization, and complete amino acid sequence.",
+        "publicationDate": "1990",
+        "journal": "J. Biol. Chem.",
+        "firstPage": "14791",
+        "lastPage": "14795",
+        "volume": "265"
+      },
+      "referencePositions": [
+        "PROTEIN SEQUENCE OF 61-117"
+      ],
+      "referenceComments": [
+        {
+          "value": "Stratum corneum",
+          "type": "TISSUE"
+        }
+      ]
+    },
+    {
+      "referenceNumber": 9,
+      "citation": {
+        "id": "CI-8D0D3DVFCIFEQ",
+        "citationType": "journal article",
+        "authors": [
+          "Wiedow O.",
+          "Schroeder J.-M.",
+          "Gregory H.",
+          "Young J.A.",
+          "Christophers E."
+        ],
+        "publicationDate": "1991",
+        "journal": "J. Biol. Chem.",
+        "firstPage": "3356",
+        "lastPage": "3356",
+        "volume": "266"
+      },
+      "referencePositions": [
+        "ERRATUM OF PUBMED:2394696"
+      ]
+    },
+    {
+      "referenceNumber": 10,
+      "citation": {
+        "id": "2039600",
+        "citationType": "journal article",
+        "authors": [
+          "Sallenave J.-M.",
+          "Ryle A.P."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "2039600"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1515/bchm3.1991.372.1.13"
+          }
+        ],
+        "title": "Purification and characterization of elastase-specific inhibitor. Sequence homology with mucus proteinase inhibitor.",
+        "publicationDate": "1991",
+        "journal": "Biol. Chem. Hoppe-Seyler",
+        "firstPage": "13",
+        "lastPage": "21",
+        "volume": "372"
+      },
+      "referencePositions": [
+        "PROTEIN SEQUENCE OF 70-94"
+      ],
+      "referenceComments": [
+        {
+          "value": "Sputum",
+          "type": "TISSUE"
+        }
+      ]
+    },
+    {
+      "referenceNumber": 11,
+      "citation": {
+        "id": "1536690",
+        "citationType": "journal article",
+        "authors": [
+          "Sallenave J.-M.",
+          "Marsden M.D.",
+          "Ryle A.P."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "1536690"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1515/bchm3.1992.373.1.27"
+          }
+        ],
+        "title": "Isolation of elafin and elastase-specific inhibitor (ESI) from bronchial secretions. Evidence of sequence homology and immunological cross-reactivity.",
+        "publicationDate": "1992",
+        "journal": "Biol. Chem. Hoppe-Seyler",
+        "firstPage": "27",
+        "lastPage": "33",
+        "volume": "373"
+      },
+      "referencePositions": [
+        "PROTEIN SEQUENCE OF 61-77"
+      ],
+      "referenceComments": [
+        {
+          "value": "Sputum",
+          "type": "TISSUE"
+        }
+      ]
+    },
+    {
+      "referenceNumber": 12,
+      "citation": {
+        "id": "2001428",
+        "citationType": "journal article",
+        "authors": [
+          "Schalkwijk J.",
+          "de Roo C.",
+          "de Jongh G.J."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "2001428"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1016/0925-4439(91)90053-c"
+          }
+        ],
+        "title": "Skin-derived antileukoproteinase (SKALP), an elastase inhibitor from human keratinocytes. Purification and biochemical properties.",
+        "publicationDate": "1991",
+        "journal": "Biochim. Biophys. Acta",
+        "firstPage": "148",
+        "lastPage": "154",
+        "volume": "1096"
+      },
+      "referencePositions": [
+        "PROTEIN SEQUENCE OF 85-100"
+      ],
+      "referenceComments": [
+        {
+          "value": "Keratinocyte",
+          "type": "TISSUE"
+        }
+      ]
+    },
+    {
+      "referenceNumber": 13,
+      "citation": {
+        "id": "8794736",
+        "citationType": "journal article",
+        "authors": [
+          "Tsunemi M.",
+          "Matsuura Y.",
+          "Sakakibara S.",
+          "Katsube Y."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "8794736"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1021/bi960900l"
+          }
+        ],
+        "title": "Crystal structure of an elastase-specific inhibitor elafin complexed with porcine pancreatic elastase determined at 1.9-A resolution.",
+        "publicationDate": "1996",
+        "journal": "Biochemistry",
+        "firstPage": "11570",
+        "lastPage": "11576",
+        "volume": "35"
+      },
+      "referencePositions": [
+        "X-RAY CRYSTALLOGRAPHY (1.9 ANGSTROMS)",
+        "DISULFIDE BOND"
+      ]
+    },
+    {
+      "referenceNumber": 14,
+      "citation": {
+        "id": "9171290",
+        "citationType": "journal article",
+        "authors": [
+          "Francart C.",
+          "Dauchez M.",
+          "Alix A.J.P.",
+          "Lippens G."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "9171290"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1006/jmbi.1997.0983"
+          }
+        ],
+        "title": "Solution structure of R-elafin, a specific inhibitor of elastase.",
+        "publicationDate": "1997",
+        "journal": "J. Mol. Biol.",
+        "firstPage": "666",
+        "lastPage": "677",
+        "volume": "268"
+      },
+      "referencePositions": [
+        "STRUCTURE BY NMR",
+        "DISULFIDE BOND"
+      ]
+    },
+    {
+      "referenceNumber": 15,
+      "citation": {
+        "id": "29483648",
+        "citationType": "journal article",
+        "authors": [
+          "Correnti C.E.",
+          "Gewe M.M.",
+          "Mehlin C.",
+          "Bandaranayake A.D.",
+          "Johnsen W.A.",
+          "Rupert P.B.",
+          "Brusniak M.Y.",
+          "Clarke M.",
+          "Burke S.E.",
+          "De Van Der Schueren W.",
+          "Pilat K.",
+          "Turnbaugh S.M.",
+          "May D.",
+          "Watson A.",
+          "Chan M.K.",
+          "Bahl C.D.",
+          "Olson J.M.",
+          "Strong R.K."
+        ],
+        "citationCrossReferences": [
+          {
+            "database": "PubMed",
+            "id": "29483648"
+          },
+          {
+            "database": "DOI",
+            "id": "10.1038/s41594-018-0033-9"
+          }
+        ],
+        "title": "Screening, large-scale production and structure-based classification of cystine-dense peptides.",
+        "publicationDate": "2018",
+        "journal": "Nat. Struct. Mol. Biol.",
+        "firstPage": "270",
+        "lastPage": "278",
+        "volume": "25"
+      },
+      "referencePositions": [
+        "X-RAY CRYSTALLOGRAPHY (2.40 ANGSTROMS) OF 61-117",
+        "SYNTHESIS OF 61-117",
+        "DISULFIDE BONDS",
+        "FUNCTION"
+      ]
+    }
+  ],
+  "uniProtKBCrossReferences": [
+    {
+      "database": "EMBL",
+      "id": "Z18538",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "CAA79223.1"
+        },
+        {
+          "key": "Status",
+          "value": "-"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "mRNA"
+        }
+      ]
+    },
+    {
+      "database": "EMBL",
+      "id": "D13156",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "BAA02441.1"
+        },
+        {
+          "key": "Status",
+          "value": "-"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "Genomic_DNA"
+        }
+      ]
+    },
+    {
+      "database": "EMBL",
+      "id": "S58717",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "AAB26371.1"
+        },
+        {
+          "key": "Status",
+          "value": "-"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "Genomic_DNA"
+        }
+      ]
+    },
+    {
+      "database": "EMBL",
+      "id": "L10343",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "AAA36483.1"
+        },
+        {
+          "key": "Status",
+          "value": "-"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "Genomic_DNA"
+        }
+      ]
+    },
+    {
+      "database": "EMBL",
+      "id": "CR542234",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "CAG47030.1"
+        },
+        {
+          "key": "Status",
+          "value": "-"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "mRNA"
+        }
+      ]
+    },
+    {
+      "database": "EMBL",
+      "id": "AL049767",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "-"
+        },
+        {
+          "key": "Status",
+          "value": "NOT_ANNOTATED_CDS"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "Genomic_DNA"
+        }
+      ]
+    },
+    {
+      "database": "EMBL",
+      "id": "CH471077",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "EAW75873.1"
+        },
+        {
+          "key": "Status",
+          "value": "-"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "Genomic_DNA"
+        }
+      ]
+    },
+    {
+      "database": "EMBL",
+      "id": "CH471077",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "EAW75874.1"
+        },
+        {
+          "key": "Status",
+          "value": "-"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "Genomic_DNA"
+        }
+      ]
+    },
+    {
+      "database": "EMBL",
+      "id": "BC010952",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "AAH10952.1"
+        },
+        {
+          "key": "Status",
+          "value": "-"
+        },
+        {
+          "key": "MoleculeType",
+          "value": "mRNA"
+        }
+      ]
+    },
+    {
+      "database": "CCDS",
+      "id": "CCDS13344.1",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PIR",
+      "id": "JH0614",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "JH0614"
+        }
+      ]
+    },
+    {
+      "database": "RefSeq",
+      "id": "NP_002629.1",
+      "properties": [
+        {
+          "key": "NucleotideSequenceId",
+          "value": "NM_002638.4"
+        }
+      ]
+    },
+    {
+      "database": "PDB",
+      "id": "1FLE",
+      "properties": [
+        {
+          "key": "Method",
+          "value": "X-ray"
+        },
+        {
+          "key": "Resolution",
+          "value": "1.90 A"
+        },
+        {
+          "key": "Chains",
+          "value": "I=61-117"
+        }
+      ]
+    },
+    {
+      "database": "PDB",
+      "id": "2REL",
+      "properties": [
+        {
+          "key": "Method",
+          "value": "NMR"
+        },
+        {
+          "key": "Resolution",
+          "value": "-"
+        },
+        {
+          "key": "Chains",
+          "value": "A=61-117"
+        }
+      ]
+    },
+    {
+      "database": "PDB",
+      "id": "6ATU",
+      "properties": [
+        {
+          "key": "Method",
+          "value": "X-ray"
+        },
+        {
+          "key": "Resolution",
+          "value": "2.40 A"
+        },
+        {
+          "key": "Chains",
+          "value": "A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R=61-117"
+        }
+      ]
+    },
+    {
+      "database": "PDBsum",
+      "id": "1FLE",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PDBsum",
+      "id": "2REL",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PDBsum",
+      "id": "6ATU",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "AlphaFoldDB",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "BMRB",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "MDposit",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "SMR",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "BioGRID",
+      "id": "111284",
+      "properties": [
+        {
+          "key": "Interactions",
+          "value": "10"
+        }
+      ]
+    },
+    {
+      "database": "FunCoup",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Number of interactors",
+          "value": "3"
+        }
+      ]
+    },
+    {
+      "database": "IntAct",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Interactions",
+          "value": "4"
+        }
+      ]
+    },
+    {
+      "database": "MINT",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "NDEx",
+      "id": "IQUERY-CP-PI3",
+      "properties": [
+        {
+          "key": "Evidences",
+          "value": "1 NDEx IQuery Curated Pathway"
+        }
+      ]
+    },
+    {
+      "database": "STRING",
+      "id": "9606.ENSP00000243924",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "MEROPS",
+      "id": "I17.002",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "iPTMnet",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PhosphoSitePlus",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "BioMuta",
+      "id": "PI3",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "DMDM",
+      "id": "119262",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "jPOST",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "MassIVE",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PaxDb",
+      "id": "9606-ENSP00000243924",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PeptideAtlas",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PRIDE",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "ProteomicsDB",
+      "id": "53703",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "Antibodypedia",
+      "id": "1726",
+      "properties": [
+        {
+          "key": "antibodies",
+          "value": "284 antibodies from 33 providers"
+        }
+      ]
+    },
+    {
+      "database": "DNASU",
+      "id": "5266",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "Ensembl",
+      "id": "ENST00000243924.4",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "ENSP00000243924.3"
+        },
+        {
+          "key": "GeneId",
+          "value": "ENSG00000124102.6"
+        }
+      ]
+    },
+    {
+      "database": "Ensembl",
+      "id": "ENST00000971330.1",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "ENSP00000641389.1"
+        },
+        {
+          "key": "GeneId",
+          "value": "ENSG00000124102.6"
+        }
+      ]
+    },
+    {
+      "database": "GeneID",
+      "id": "5266",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "KEGG",
+      "id": "hsa:5266",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "MANE-Select",
+      "id": "ENST00000243924.4",
+      "properties": [
+        {
+          "key": "ProteinId",
+          "value": "ENSP00000243924.3"
+        },
+        {
+          "key": "RefSeqNucleotideId",
+          "value": "NM_002638.4"
+        },
+        {
+          "key": "RefSeqProteinId",
+          "value": "NP_002629.1"
+        }
+      ]
+    },
+    {
+      "database": "UCSC",
+      "id": "uc002xng.4",
+      "properties": [
+        {
+          "key": "OrganismName",
+          "value": "human"
+        }
+      ]
+    },
+    {
+      "database": "AGR",
+      "id": "HGNC:8947",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "ClinPGx",
+      "id": "PA33283",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "CTD",
+      "id": "5266",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "DisGeNET",
+      "id": "5266",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "GeneCards",
+      "id": "PI3",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "HGNC",
+      "id": "HGNC:8947",
+      "properties": [
+        {
+          "key": "GeneName",
+          "value": "PI3"
+        }
+      ]
+    },
+    {
+      "database": "HPA",
+      "id": "ENSG00000124102",
+      "properties": [
+        {
+          "key": "ExpressionPatterns",
+          "value": "Tissue enhanced (cervix, esophagus, lymphoid tissue, vagina)"
+        }
+      ]
+    },
+    {
+      "database": "MIM",
+      "id": "182257",
+      "properties": [
+        {
+          "key": "Type",
+          "value": "gene"
+        }
+      ]
+    },
+    {
+      "database": "OpenTargets",
+      "id": "ENSG00000124102",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "VEuPathDB",
+      "id": "HostDB:ENSG00000124102",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "eggNOG",
+      "id": "ENOG502SZ79",
+      "properties": [
+        {
+          "key": "ToxonomicScope",
+          "value": "Eukaryota"
+        }
+      ]
+    },
+    {
+      "database": "GeneTree",
+      "id": "ENSGT00530000064218",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "HOGENOM",
+      "id": "CLU_149429_0_0_1",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "InParanoid",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "OMA",
+      "id": "QCAMLNP",
+      "properties": [
+        {
+          "key": "Fingerprint",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "OrthoDB",
+      "id": "5104187at2759",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PAN-GO",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Number of GO annotations",
+          "value": "4 GO annotations based on evolutionary models"
+        }
+      ]
+    },
+    {
+      "database": "PhylomeDB",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "PathwayCommons",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "Reactome",
+      "id": "R-HSA-6803157",
+      "properties": [
+        {
+          "key": "PathwayName",
+          "value": "Antimicrobial peptides"
+        }
+      ]
+    },
+    {
+      "database": "Reactome",
+      "id": "R-HSA-6809371",
+      "properties": [
+        {
+          "key": "PathwayName",
+          "value": "Formation of the cornified envelope"
+        }
+      ]
+    },
+    {
+      "database": "SignaLink",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "Agora",
+      "id": "ENSG00000124102",
+      "properties": [
+        {
+          "key": "NominatedTarget",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "BioGRID-ORCS",
+      "id": "5266",
+      "properties": [
+        {
+          "key": "hits",
+          "value": "13 hits in 1138 CRISPR screens"
+        }
+      ]
+    },
+    {
+      "database": "ChiTaRS",
+      "id": "PI3",
+      "properties": [
+        {
+          "key": "OrganismName",
+          "value": "human"
+        }
+      ]
+    },
+    {
+      "database": "EvolutionaryTrace",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "GeneWiki",
+      "id": "Elafin",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "GenomeRNAi",
+      "id": "5266",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "Pharos",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "DevelopmentLevel",
+          "value": "Tbio"
+        }
+      ]
+    },
+    {
+      "database": "PRO",
+      "id": "PR:P19957",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "Proteomes",
+      "id": "UP000005640",
+      "properties": [
+        {
+          "key": "Component",
+          "value": "Chromosome 20"
+        }
+      ]
+    },
+    {
+      "database": "RNAct",
+      "id": "P19957",
+      "properties": [
+        {
+          "key": "moleculeType",
+          "value": "protein"
+        }
+      ]
+    },
+    {
+      "database": "Bgee",
+      "id": "ENSG00000124102",
+      "properties": [
+        {
+          "key": "ExpressionPatterns",
+          "value": "Expressed in lower esophagus mucosa and 123 other cell types or tissues"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0001533",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "C:cornified envelope"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "IDA:CAFA"
+        }
+      ],
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000314",
+          "source": "PubMed",
+          "id": "7543090"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0005829",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "C:cytosol"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "TAS:Reactome"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0031012",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "C:extracellular matrix"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "TAS:ProtInc"
+        }
+      ],
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000304",
+          "source": "PubMed",
+          "id": "8476637"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0005576",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "C:extracellular region"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "TAS:Reactome"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0004866",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "F:endopeptidase inhibitor activity"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "TAS:ProtInc"
+        }
+      ],
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000304",
+          "source": "PubMed",
+          "id": "2394696"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0004867",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "F:serine-type endopeptidase inhibitor activity"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "IBA:GO_Central"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0030280",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "F:structural constituent of skin epidermis"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "IDA:CAFA"
+        }
+      ],
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000314",
+          "source": "PubMed",
+          "id": "7543090"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0019731",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "P:antibacterial humoral response"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "IBA:GO_Central"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0007620",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "P:copulation"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "IEA:InterPro"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0070268",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "P:cornification"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "IDA:UniProtKB"
+        }
+      ],
+      "evidences": [
+        {
+          "evidenceCode": "ECO:0000314",
+          "source": "PubMed",
+          "id": "7543090"
+        }
+      ]
+    },
+    {
+      "database": "GO",
+      "id": "GO:0045087",
+      "properties": [
+        {
+          "key": "GoTerm",
+          "value": "P:innate immune response"
+        },
+        {
+          "key": "GoEvidenceType",
+          "value": "IBA:GO_Central"
+        }
+      ]
+    },
+    {
+      "database": "CDD",
+      "id": "cd00199",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "WAP"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "DisProt",
+      "id": "DP03225",
+      "properties": [
+        {
+          "key": "Description",
+          "value": "-"
+        }
+      ]
+    },
+    {
+      "database": "FunFam",
+      "id": "4.10.75.10:FF:000001",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "Anosmin 1"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "Gene3D",
+      "id": "4.10.75.10",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "Elafin-like"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "InterPro",
+      "id": "IPR036645",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "Elafin-like_sf"
+        }
+      ]
+    },
+    {
+      "database": "InterPro",
+      "id": "IPR002098",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "SVP_I"
+        }
+      ]
+    },
+    {
+      "database": "InterPro",
+      "id": "IPR019541",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "Trappin_transglut-bd_rpt"
+        }
+      ]
+    },
+    {
+      "database": "InterPro",
+      "id": "IPR008197",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "WAP_dom"
+        }
+      ]
+    },
+    {
+      "database": "InterPro",
+      "id": "IPR050514",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "WAP_four-disulfide_core"
+        }
+      ]
+    },
+    {
+      "database": "PANTHER",
+      "id": "PTHR19441:SF30",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "ELAFIN"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "PANTHER",
+      "id": "PTHR19441",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "WHEY ACDIC PROTEIN WAP"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "Pfam",
+      "id": "PF10511",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "Cementoin"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "Pfam",
+      "id": "PF00095",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "WAP"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "PRINTS",
+      "id": "PR00003",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "4DISULPHCORE"
+        }
+      ]
+    },
+    {
+      "database": "SMART",
+      "id": "SM00217",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "WAP"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "SUPFAM",
+      "id": "SSF57256",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "Elafin-like"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "database": "PROSITE",
+      "id": "PS00313",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "SVP_I"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "database": "PROSITE",
+      "id": "PS51390",
+      "properties": [
+        {
+          "key": "EntryName",
+          "value": "WAP"
+        },
+        {
+          "key": "MatchStatus",
+          "value": "1"
+        }
+      ]
+    }
+  ],
+  "sequence": {
+    "value": "MRASSFLIVVVFLIAGTLVLEAAVTGVPVKGQDTVKGRVPFNGQDPVKGQVSVKGQDKVKAQEPVKGPVSTKPGSCPIILIRCAMLNPPNRCLKDTDCPGIKKCCEGSCGMACFVPQ",
+    "length": 117,
+    "molWeight": 12270,
+    "crc64": "A51D46257E5B03EF",
+    "md5": "CCB88982EBCA7BA81341A943E18C2140"
+  },
+  "extraAttributes": {
+    "countByCommentType": {
+      "FUNCTION": 1,
+      "SUBCELLULAR LOCATION": 1,
+      "DOMAIN": 1
+    },
+    "countByFeatureType": {
+      "Signal": 1,
+      "Propeptide": 1,
+      "Chain": 1,
+      "Repeat": 2,
+      "Domain": 1,
+      "Region": 1,
+      "Disulfide bond": 4,
+      "Natural variant": 2,
+      "Sequence conflict": 1,
+      "Beta strand": 6,
+      "Helix": 3
+    },
+    "uniParcId": "UPI0000000CAE"
+  }
+}

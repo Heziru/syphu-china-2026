@@ -1,0 +1,64 @@
+{
+  "title": "Tissue context matters",
+  "gene": {
+    "symbol": "PI3",
+    "gencodeId": "ENSG00000124102.4",
+    "uniprotId": "P19957"
+  },
+  "dataset": "GTEx v8",
+  "populationContext": "Adult reference tissues; not an IBD-versus-control comparison",
+  "tissueContext": "Non-diseased reference tissues from the GTEx adult resource",
+  "unit": "TPM",
+  "statistic": "Median gene expression",
+  "retrievedAt": "2026-10-08",
+  "source": {
+    "organization": "GTEx Consortium / Broad Institute",
+    "url": "https://gtexportal.org/api/v2/expression/medianGeneExpression?gencodeId=ENSG00000124102.4&datasetId=gtex_v8",
+    "portal": "https://gtexportal.org/home/gene/PI3",
+    "documentation": "https://gtexportal.org/api/v2/redoc",
+    "fullResponseFile": "tissue-context-gtex-v8-full.json",
+    "reproductionScript": "fetch-tissue-context.ps1"
+  },
+  "method": "Read the official GTEx API v2 medianGeneExpression endpoint for GTEx v8 and ENSG00000124102.4. Retain the returned median TPM without normalization or imputation. Select six tissues relevant to the genetic instruments and gastrointestinal delivery context; the complete response includes 54 tissues.",
+  "selectionRationale": "Whole blood and lung are the submitted genetic-instrument tissue sources; esophageal mucosa, terminal ileum, transverse colon and sigmoid colon provide gastrointestinal context.",
+  "caution": "Bulk-tissue transcript abundance is not local protein concentration, therapeutic efficacy, disease causality or an IBD differential-expression estimate.",
+  "scaleSuggestion": "Use a log10 axis because median TPM spans orders of magnitude; display the untransformed medianTPM in labels and tooltips.",
+  "tissues": [
+    {
+      "id": "Esophagus_Mucosa",
+      "label": "Esophagus · mucosa",
+      "medianTPM": 1294.97,
+      "role": "Gastrointestinal context"
+    },
+    {
+      "id": "Whole_Blood",
+      "label": "Whole blood",
+      "medianTPM": 93.0533,
+      "role": "Genetic instrument tissue"
+    },
+    {
+      "id": "Colon_Transverse",
+      "label": "Colon · transverse",
+      "medianTPM": 17.116,
+      "role": "Intestinal context"
+    },
+    {
+      "id": "Small_Intestine_Terminal_Ileum",
+      "label": "Terminal ileum",
+      "medianTPM": 13.6518,
+      "role": "Intestinal context"
+    },
+    {
+      "id": "Lung",
+      "label": "Lung",
+      "medianTPM": 11.785,
+      "role": "Genetic instrument tissue"
+    },
+    {
+      "id": "Colon_Sigmoid",
+      "label": "Colon · sigmoid",
+      "medianTPM": 0.651203,
+      "role": "Intestinal context"
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+.molecularViewer {
+  --mv-ink: #234b43;
+  --mv-muted: #657d72;
+  --mv-line: #d7e0d2;
+  color: var(--mv-ink);
+  border: 1px solid var(--mv-line);
+  border-radius: 28px;
+  background: #fcfbf5;
+  overflow: hidden;
+  margin: 2rem 0;
+  box-shadow: 0 14px 40px #294b3910;
+}
+.molecularViewer__heading {
+  padding: 1.8rem 2rem 1rem;
+}
+.molecularViewer__eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  font-weight: 800;
+  color: var(--mv-muted);
+}
+.molecularViewer__heading h3 {
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  margin: 0.5rem 0;
+  font-weight: 850;
+  line-height: 1.2;
+}
+.molecularViewer__heading p,
+.molecularViewer__context,
+.molecularViewer__instructions {
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--mv-muted);
+  margin: 0.35rem 0;
+}
+.molecularViewer__tabs {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0 2rem 1.2rem;
+  flex-wrap: wrap;
+}
+.molecularViewer button {
+  border: 1px solid var(--mv-line);
+  background: #fffdf6;
+  color: var(--mv-ink);
+  border-radius: 12px;
+  padding: 0.6rem 0.85rem;
+  font: inherit;
+  cursor: pointer;
+  line-height: 1.25;
+}
+.molecularViewer button:hover {
+  border-color: #608d79;
+  background: #edf2e8;
+}
+.molecularViewer button:focus-visible,
+.molecularViewer a:focus-visible,
+.molecularViewer summary:focus-visible {
+  outline: 3px solid #bb8147;
+  outline-offset: 3px;
+}
+.molecularViewer button:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+.molecularViewer__tabs button {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+.molecularViewer__tabs button span {
+  font-weight: 500;
+}
+.molecularViewer__tabs button[aria-pressed="true"] {
+  background: #285448;
+  border-color: #285448;
+  color: #fffdf0;
+}
+.molecularViewer__stage {
+  height: 430px;
+  position: relative;
+  background: #f0f4ed;
+  border-block: 1px solid var(--mv-line);
+  isolation: isolate;
+}
+.molecularViewer__stage canvas {
+  touch-action: none;
+}
+.molecularViewer__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 3rem;
+  text-align: center;
+  color: var(--mv-muted);
+}
+.molecularViewer__fallback {
+  padding: 2.7rem 1.2rem 4rem;
+  gap: 0.5rem;
+}
+.molecularViewer__fallback img {
+  width: 100%;
+  max-height: 215px;
+  min-height: 0;
+  object-fit: contain;
+}
+.molecularViewer__fallback p {
+  max-width: 62ch;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+.molecularViewer__fallback a {
+  font-size: 0.8rem;
+  color: var(--mv-ink);
+  text-underline-offset: 3px;
+}
+.molecularViewer__representation {
+  position: absolute;
+  top: 1rem;
+  left: 1.2rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  background: #fcfbf5d9;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  pointer-events: none;
+}
+.molecularViewer__viewControls {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.3rem;
+}
+.molecularViewer__viewControls button {
+  min-height: 38px;
+  min-width: 38px;
+  background: #fffdf2ec;
+  padding: 0.35rem 0.7rem;
+}
+.molecularViewer__options {
+  padding: 1.1rem 2rem 0.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1.3rem;
+}
+.molecularViewer__options label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+.molecularViewer__options input {
+  accent-color: #356c59;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+.molecularViewer__options i {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.molecularViewer__options small {
+  color: var(--mv-muted);
+}
+.molecularViewer__interfaceKey {
+  background: #e6bc66;
+}
+.molecularViewer__instructions {
+  padding: 0.4rem 2rem 0;
+  font-size: 0.75rem;
+}
+.molecularViewer__context {
+  padding: 0.65rem 2rem 1rem;
+  max-width: 100ch;
+}
+.molecularViewer__contacts {
+  border-top: 1px solid var(--mv-line);
+  margin: 0 2rem;
+  padding: 0.9rem 0;
+}
+.molecularViewer__contacts summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+.molecularViewer__contacts p {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--mv-muted);
+  margin: 0.7rem 0;
+}
+.molecularViewer__contacts small {
+  font-size: 0.72rem;
+  color: var(--mv-muted);
+}
+.molecularViewer__contactList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.molecularViewer__contactList span {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border-bottom: 1px solid #e4e9df;
+  padding: 0.35rem 0;
+  font-size: 0.75rem;
+}
+.molecularViewer__sources {
+  display: flex;
+  gap: 0.6rem 1.5rem;
+  flex-wrap: wrap;
+  padding: 0.8rem 2rem 1.5rem;
+}
+.molecularViewer__sources a {
+  color: var(--mv-ink);
+  font-size: 0.8rem;
+  text-underline-offset: 4px;
+}
+@media (max-width: 650px) {
+  .molecularViewer {
+    border-radius: 20px;
+  }
+  .molecularViewer__heading {
+    padding: 1.25rem 1.1rem 0.8rem;
+  }
+  .molecularViewer__tabs {
+    padding: 0 1.1rem 0.9rem;
+    gap: 0.4rem;
+  }
+  .molecularViewer__tabs button {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.75rem;
+    flex: 1;
+  }
+  .molecularViewer__tabs button span {
+    line-height: 1.3;
+  }
+  .molecularViewer__stage {
+    height: 330px;
+  }
+  .molecularViewer__representation {
+    left: 0.7rem;
+    top: 0.7rem;
+    font-size: 0.6rem;
+  }
+  .molecularViewer__options {
+    padding: 1rem 1.1rem 0.1rem;
+    gap: 0.65rem;
+  }
+  .molecularViewer__options label {
+    font-size: 0.77rem;
+  }
+  .molecularViewer__instructions,
+  .molecularViewer__context {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+  }
+  .molecularViewer__contacts {
+    margin: 0 1.1rem;
+  }
+  .molecularViewer__contactList {
+    grid-template-columns: 1fr;
+  }
+  .molecularViewer__sources {
+    padding: 0.8rem 1.1rem 1.1rem;
+  }
+  .molecularViewer__viewControls {
+    bottom: 0.7rem;
+    right: 0.7rem;
+  }
+}

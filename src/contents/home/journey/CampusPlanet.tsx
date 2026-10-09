@@ -34,7 +34,7 @@ function Tree({ x, z, scale = 1 }: { x: number; z: number; scale?: number }) {
 function CampusSite({ research = false }: { research?: boolean }) {
   return (
     <group>
-      <group scale={research ? 0.6 : 0.49}>
+      <group scale={research ? 0.56 : 0.49}>
         <BlenderAsset name={research ? "research-building" : "library"} />
       </group>
       {[-3.1, -2.75, 2.75, 3.1].map((x, i) => (
@@ -79,9 +79,9 @@ function StoryPlanetSurface({
     () =>
       new ShaderMaterial({
         uniforms: {
-          base: { value: new Color("#b7d5ce") },
-          band: { value: new Color("#82aaa8") },
-          line: { value: new Color("#6f9297") },
+          base: { value: new Color("#d8e2cb") },
+          band: { value: new Color("#c0d1b8") },
+          line: { value: new Color("#a0b99a") },
           artwork: { value: artwork },
           artRect: { value: new Vector4(...SOLAR_ART.campus) },
           artReady: { value: 0 },

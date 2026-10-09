@@ -1,0 +1,493 @@
+{
+  "title": "From ecological persistence to spatial Elafin transport",
+  "status": "Exploratory mathematical research; all numerical parameters uncalibrated",
+  "architecture": "External ROS input → proposed PspA-related support. Elafin intracellular expression is constitutive. A constant q approximates effective extracellular release; it is not a verified secretion process or direct ROS gate.",
+  "seed": 20261008,
+  "reproduce": "python scripts/drylab/research_models.py",
+  "environment": {
+    "python": "3.12.7",
+    "numpy": "2.1.2",
+    "scipy": "1.15.2",
+    "matplotlib": "3.10.1"
+  },
+  "references": [
+    {
+      "url": "https://doi.org/10.1371/journal.pcbi.1003388",
+      "use": "General ecological model form; no numeric parameters borrowed"
+    },
+    {
+      "url": "https://doi.org/10.7554/eLife.25051",
+      "use": "Limitations of pairwise interaction models"
+    },
+    {
+      "url": "https://2025.igem.wiki/peking/model/",
+      "use": "Presentation structure only; no scientific equations, data or parameter claims copied"
+    }
+  ],
+  "ecology": {
+    "parameters": {
+      "rE": 1.0,
+      "rR": 0.8,
+      "beta": 0.25,
+      "washE": 0.1,
+      "washR": 0.1,
+      "stress": 0.35,
+      "gamma": 2.0,
+      "supportRate": 0.8,
+      "q": 0.3,
+      "loss": 0.5,
+      "alpha": 0.8
+    },
+    "initial": [
+      0.08,
+      0.8,
+      0.0,
+      0.0
+    ],
+    "allNumericalParameters": "assumed, not calibrated",
+    "steadySupport": 1,
+    "residentOnlyPopulation": 0.875,
+    "constantSupportInvasionRate": 0.08333333333333326,
+    "constantSupportEquilibrium": [
+      0.10416666666666657,
+      0.8489583333333334
+    ],
+    "supportThreshold": 0.3750000000000002,
+    "instantaneousRareInvasionThresholdCrossingAfterSignalOff": 9.223957892276621,
+    "thresholdInterpretation": "Criterion is for a rare invader at the resident-only equilibrium; not a finite-population collapse or clearance time.",
+    "constantSupportValidation": {
+      "count": 100,
+      "integrationHorizon": 1600,
+      "maxErrorAwayFromBoundary": 1.8714840788192078e-10,
+      "nearBoundaryCount": 2,
+      "maxErrorAll": 0.00032119990052099077,
+      "criticalExtensionHorizon": 24000,
+      "maxErrorAfterCriticalExtension": 3.010314220119881e-11
+    },
+    "convergence": [
+      [
+        0.08,
+        5.4237623614561414e-08
+      ],
+      [
+        0.04,
+        3.3013332068065893e-09
+      ],
+      [
+        0.02,
+        2.0355295227147963e-10
+      ],
+      [
+        0.01,
+        1.2591816478391138e-11
+      ]
+    ],
+    "invariantControlsPassed": true,
+    "ensemble": {
+      "n": 512,
+      "seed": 20261008,
+      "distribution": "independent uniform, Latin hypercube",
+      "ranges": {
+        "alpha": [
+          0.35,
+          1.25
+        ],
+        "beta": [
+          0.1,
+          0.6
+        ],
+        "stress": [
+          0.2,
+          0.5
+        ],
+        "gamma": [
+          0.0,
+          4.0
+        ],
+        "washE": [
+          0.05,
+          0.2
+        ],
+        "q": [
+          0.15,
+          0.6
+        ],
+        "loss": [
+          0.25,
+          1.0
+        ],
+        "supportRate": [
+          0.4,
+          1.6
+        ]
+      },
+      "bootstrapReplicates": 256,
+      "outputNames": [
+        "EcN_AUC_0_24",
+        "relative_Elafin_AUC_0_24",
+        "EcN_at_24"
+      ],
+      "outputQuantiles": [
+        [
+          0.2045842597532545,
+          0.0957183091233279,
+          1.010886058760741e-06
+        ],
+        [
+          0.942406483214254,
+          0.6044012763932655,
+          0.0042901277211244695
+        ],
+        [
+          6.677469051655496,
+          4.654536717132105,
+          0.2717403326594425
+        ]
+      ],
+      "PRCC": [
+        [
+          -0.9916396034262763,
+          -0.9785271945999314,
+          -0.9952782624221602
+        ],
+        [
+          0.20930624835551473,
+          0.10938508311639536,
+          0.227994679662419
+        ],
+        [
+          -0.8511803390379216,
+          -0.6991740272244598,
+          -0.9544268492232667
+        ],
+        [
+          0.8496261441436,
+          0.701827700199937,
+          0.6740580227679909
+        ],
+        [
+          -0.8250273257790932,
+          -0.6653798697188152,
+          -0.89076149321173
+        ],
+        [
+          0.043493727057870704,
+          0.8438231703945387,
+          0.013960549823017067
+        ],
+        [
+          -0.04018672929015287,
+          -0.8353230673442708,
+          -0.043524331921614916
+        ],
+        [
+          -0.0686494698763245,
+          -0.09490261177432488,
+          -0.302096198449815
+        ]
+      ],
+      "PRCCBootstrap95": [
+        [
+          [
+            -0.9924845387043701,
+            -0.9822708841936089,
+            -0.9957964325586465
+          ],
+          [
+            0.10953108724587511,
+            0.02055003094903914,
+            0.12287542026893433
+          ],
+          [
+            -0.8657515095447755,
+            -0.7444011086044878,
+            -0.9596005464653703
+          ],
+          [
+            0.8040553520179821,
+            0.6225446848403862,
+            0.5515093884194655
+          ],
+          [
+            -0.8478105644846609,
+            -0.713599402861919,
+            -0.9044480284325892
+          ],
+          [
+            -0.03850356209749833,
+            0.7905496367863125,
+            -0.09469893286090528
+          ],
+          [
+            -0.12432269655451246,
+            -0.8685809208893348,
+            -0.1302151087418369
+          ],
+          [
+            -0.14755963760307578,
+            -0.1803410824947639,
+            -0.3536678585524231
+          ]
+        ],
+        [
+          [
+            -0.9885045520406833,
+            -0.9707376772958847,
+            -0.9918666629360711
+          ],
+          [
+            0.29074032517418635,
+            0.19337369246157587,
+            0.2990897837682358
+          ],
+          [
+            -0.8006898144294025,
+            -0.6188832751373494,
+            -0.928828580055226
+          ],
+          [
+            0.8617266331263677,
+            0.7448753383502188,
+            0.709315149614993
+          ],
+          [
+            -0.7689985870360241,
+            -0.5800541969309422,
+            -0.8340845775526812
+          ],
+          [
+            0.13066357585785532,
+            0.8701457813147913,
+            0.08803661255183644
+          ],
+          [
+            0.048611550672219526,
+            -0.7754087989729154,
+            0.049089271433682774
+          ],
+          [
+            0.044012938822064265,
+            0.005232466503968571,
+            -0.17496778645601946
+          ]
+        ]
+      ]
+    },
+    "baseline": {
+      "withSupport": {
+        "x24": 0.007916918296535373,
+        "L_AUC": 0.7259385993785026
+      },
+      "withoutSupport": {
+        "x24": 0.0016563783140721548,
+        "L_AUC": 0.2719433209174178
+      }
+    }
+  },
+  "transport": {
+    "parameters": {
+      "Da": 1.0,
+      "Bi": 1.0,
+      "delta": 1.0,
+      "cells": 120,
+      "dt": 0.02
+    },
+    "source": "j(tau)=q*x(tau); q is a constant assumed effective extracellular release coefficient, not validated secretion",
+    "allNumericalParameters": "assumed dimensionless scenarios",
+    "steadyUnitSource": {
+      "wallConcentration": 0.36787944117144233,
+      "outflowFraction": 0.36787944117144233,
+      "mass": 0.6321205588285577
+    },
+    "massBalance": {
+      "integratedSource": 0.36992883740278415,
+      "integratedOutflow": 0.13540048850003975,
+      "integratedDomainLoss": 0.2328764137459643,
+      "remainingMassOverDelta": 0.0016519351568805545,
+      "absoluteResidual": 1.0044460922731258e-13,
+      "maxStepResidual": 2.2435742838750918e-16
+    },
+    "spaceConvergence": [
+      [
+        15,
+        0.06666666666666667,
+        6.924376886419115e-05,
+        0.00015641593113580043
+      ],
+      [
+        30,
+        0.03333333333333333,
+        1.803937376765319e-05,
+        3.911689658442352e-05
+      ],
+      [
+        60,
+        0.016666666666666666,
+        4.603592288376923e-06,
+        9.780031703376935e-06
+      ],
+      [
+        120,
+        0.008333333333333333,
+        1.1627854501483625e-06,
+        2.4450584076851634e-06
+      ],
+      [
+        240,
+        0.004166666666666667,
+        2.9219278963044104e-07,
+        6.112677853331583e-07
+      ],
+      [
+        480,
+        0.0020833333333333333,
+        7.323596384889441e-08,
+        1.5281715431969545e-07
+      ]
+    ],
+    "spaceObservedOrders": [
+      1.9405349945226213,
+      1.9703172829787583,
+      1.9851751442145162,
+      1.992592441696458,
+      1.9962963883426832
+    ],
+    "timeConvergence": [
+      [
+        0.08,
+        0.00018603537166181274
+      ],
+      [
+        0.04,
+        4.644746019119934e-05
+      ],
+      [
+        0.02,
+        1.1608038219448188e-05
+      ],
+      [
+        0.01,
+        2.9017705384200444e-06
+      ],
+      [
+        0.005,
+        7.254277126504144e-07
+      ]
+    ],
+    "timeObservedOrders": [
+      2.0019053374927642,
+      2.0004755356877846,
+      2.000118828704817,
+      2.0000296757459255
+    ],
+    "timeVerification": "Smooth positive lowest eigenmode, RMS over matched times, compared with exact semidiscrete exponential; not an empirical biological validation",
+    "discontinuousStartupErrors": [
+      [
+        0.08,
+        0.010606338801938398
+      ],
+      [
+        0.04,
+        0.0032067918023075404
+      ],
+      [
+        0.02,
+        0.0005624335053420193
+      ],
+      [
+        0.01,
+        2.193636407243904e-05
+      ],
+      [
+        0.005,
+        4.938197240011988e-07
+      ]
+    ],
+    "coupledTimeConvergence": [
+      [
+        0.04,
+        5.93998459634754e-06,
+        1.7970705426528788e-07,
+        1.3272264792401527e-06
+      ],
+      [
+        0.02,
+        8.440040153183045e-08,
+        4.473540693439304e-08,
+        3.3039335537302074e-07
+      ],
+      [
+        0.01,
+        4.443056209404994e-11,
+        1.0671313943610983e-08,
+        7.881299090984499e-08
+      ],
+      [
+        0.005,
+        8.860818329070597e-12,
+        2.1352715706690617e-09,
+        1.577004854120577e-08
+      ]
+    ],
+    "landscapeValidation": {
+      "count": 49,
+      "cells": 240,
+      "maxRelativeProfileError": 8.086078331889196e-06,
+      "maxRelativeOutflowError": 0.0001836226852784396
+    },
+    "closedNoLossAccumulationError": 1.0147438445073931e-13,
+    "linearSourceScaleResidual": 0.0,
+    "limitChecksPassed": true,
+    "coupledOutput": {
+      "withSupportOutflowAUC": 0.13540048850003975,
+      "withoutSupportOutflowAUC": 0.050403326446783206
+    },
+    "landscapeGrid": [
+      101,
+      101
+    ],
+    "landscapeRanges": {
+      "Da": [
+        0.03,
+        30
+      ],
+      "Bi": [
+        0.03,
+        30
+      ]
+    }
+  },
+  "releaseStructure": {
+    "sourceLaw": "j=q0*x*[epsilon+(1-epsilon)/(1+eta*p)]",
+    "interpretation": "An explicitly hypothetical loss of damage-associated release under support; no direct ROS-to-expression gate is added.",
+    "assumptions": "epsilon and eta are unmeasured; this is a structural counterexample, not a supported release mechanism",
+    "epsilonExample": 0.05,
+    "etaExamples": [
+      0,
+      2,
+      8,
+      32
+    ],
+    "outflowAUCRatios": [
+      2.68634032801383,
+      1.6539087687521163,
+      1.1333607923696238,
+      0.7944001238626696
+    ],
+    "etaRange": [
+      0,
+      64
+    ],
+    "epsilonRange": [
+      0,
+      1
+    ],
+    "surfaceSize": [
+      65,
+      51
+    ],
+    "linearMixtureCheckError": 1.1102230246251565e-16,
+    "conclusion": "More retained EcN does not determine more extracellular Elafin without a release law; the constant-q benefit is conditional."
+  },
+  "elapsedSeconds": 37.82422269997187
+}

@@ -62,13 +62,15 @@ export function earthPose(p: number, time: number, aspect: number) {
   const start = p < 0.078 ? origin : departure;
   const initial = aspect < 1 ? 0.16 : 0.23;
   return {
-    x: start[0] * (1 - arrive) + (aspect < 1 ? 0 : 2.65) * arrive,
+    x: start[0] * (1 - arrive) + (aspect < 1 ? 0 : aspect * 9 * 0.01) * arrive,
     y:
       start[1] * (1 - arrive) +
-      (aspect < 1 ? -0.05 : -0.15) * arrive -
+      (aspect < 1 ? -0.24 : -0.3) * arrive -
       leave * 8,
     scale:
-      (initial + (Math.min(1.25, aspect * 1.5) - initial) * arrive) *
+      (initial +
+        (Math.min(1.32, aspect * (aspect < 1 ? 1.6 : 0.75)) - initial) *
+          arrive) *
       (1 - leave * 0.65),
     visible: p < 0.27,
   };

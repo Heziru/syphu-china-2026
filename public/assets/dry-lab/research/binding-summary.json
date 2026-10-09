@@ -1,0 +1,62 @@
+{
+  "analysis": "Mass-action reanalysis with literature rate constants, not team assay data",
+  "source": {
+    "authors": "Ying QL; Simon SR",
+    "year": 1993,
+    "doi": "10.1021/bi00058a021",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/8439544/",
+    "conditions": "pH 8.0; 25 degrees C; human leukocyte elastase; reference buffer"
+  },
+  "parameters": {
+    "kon_M_inv_s_inv": 3600000.0,
+    "koff_s_inv": 0.0006,
+    "kon_nM_inv_min_inv": 0.21600000000000003,
+    "koff_min_inv": 0.036,
+    "KD_nM_derived": 0.16666666666666663,
+    "dissociation_half_time_min_derived": 19.25408834888737
+  },
+  "concentration_status": "Total enzyme/inhibitor concentrations are chosen scenarios, not measured local gut values.",
+  "baseline_E_total_nM": 1.0,
+  "scenarios": [
+    {
+      "I_total_nM": 0.25,
+      "equilibrium_bound_fraction": 0.20660022588365437,
+      "bound_fraction_at_120_min": 0.20660022588278823
+    },
+    {
+      "I_total_nM": 1.0,
+      "equilibrium_bound_fraction": 0.6666666666666667,
+      "bound_fraction_at_120_min": 0.6666666665125219
+    },
+    {
+      "I_total_nM": 4.0,
+      "equilibrium_bound_fraction": 0.9482152608042848,
+      "bound_fraction_at_120_min": 0.9482152608504153
+    }
+  ],
+  "exact_half_binding": {
+    "formula": "I_T,50 = E_T/2 + K_D",
+    "I_T50_at_E_T1_nM": 0.6666666666666666,
+    "interpretation": "Half the enzyme is bound; not an IC50 prediction in the presence of competing substrate."
+  },
+  "checks": {
+    "max_equilibrium_flux_residual_nM_per_min": 3.503863865716994e-13,
+    "max_numerical_vs_equilibrium_error_nM": 4.528459385255701e-09,
+    "all_equilibria_and_trajectories_within_mass_bounds": true,
+    "parameter_pairs_tested": 30,
+    "max_trajectory_vs_closed_form_error_nM": 3.6768108202522853e-07,
+    "timepoints_per_closed_form_check": 601
+  },
+  "limitations": [
+    "Binding fraction is not a tissue efficacy endpoint or substrate-dependent activity assay.",
+    "A closed well-mixed reference buffer omits substrate competition, production, proteolysis and clearance.",
+    "The koff describes dissociation of bound complex, not loss of free Elafin.",
+    "Kinetic constants for human leukocyte elastase cannot be validated by the porcine enzyme in PDB 1FLE."
+  ],
+  "environment": {
+    "python": "3.12.7",
+    "numpy": "2.1.2",
+    "scipy": "1.15.2",
+    "matplotlib": "3.10.1"
+  }
+}

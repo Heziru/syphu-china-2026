@@ -1,0 +1,104 @@
+/* Shared article typography for Software, Model, Wet Lab and supporting pages. */
+.research-shell.research-shell {
+  --research-ink: #243c33;
+  --research-muted: #65736b;
+  --research-rule: #d6ddd5;
+  --research-accent: #315f4d;
+  --research-paper: #fafaf6;
+  background: var(--research-paper);
+  color: var(--research-ink);
+  font: 17px/1.8 Arial, Helvetica, sans-serif;
+  min-height: 65vh;
+}
+.research-shell *, .research-shell *::before, .research-shell *::after { box-sizing: border-box; }
+.research-shell :is(section, [id]) { scroll-margin-top: 90px; }
+.research-shell a { color: var(--research-accent); text-underline-offset: 4px; }
+.research-shell :is(a, button, summary, input, select, [tabindex]):focus-visible { outline: 2px solid var(--research-accent); outline-offset: 4px; }
+.research-shell-header { background: #edf0e6; border-bottom: 1px solid var(--research-rule); padding: 42px 38px 40px; }
+.research-shell-header-inner { max-width: 1200px; margin: auto; }
+.research-shell-meta { display: flex; justify-content: space-between; gap: 20px; color: var(--research-muted); font: 12px/1.5 Arial, Helvetica, sans-serif; letter-spacing: .09em; margin-bottom: 36px; }
+.research-shell-hero { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 50px; align-items: center; }
+.research-shell-hero-copy { min-width: 0; }
+.research-shell.research-shell .research-shell-header h1 { font: italic 900 clamp(62px, 7.4vw, 106px)/1.02 "Arial Black", Arial, Helvetica, sans-serif; letter-spacing: -.065em; color: #315f4d; margin: 0 0 27px; text-transform: none; -webkit-text-stroke: 0; text-shadow: none; overflow-wrap: break-word; }
+.research-shell.research-shell .research-shell-header--long-title h1 { font-size: clamp(46px, 5.4vw, 76px); }
+.research-shell.research-shell .research-shell-subtitle { font: 400 clamp(25px, 2.5vw, 34px)/1.25 Georgia, "Times New Roman", serif; letter-spacing: -.7px; color: #56694e; margin: 0 0 24px; }
+.research-shell-header-bottom { display: flex; flex-direction: column; gap: 24px; align-items: start; }
+.research-shell-artwork { position: relative; isolation: isolate; aspect-ratio: 1; width: 100%; }
+.research-shell-artwork::before { content: ""; position: absolute; z-index: -1; inset: 13% 2% 6% 3%; background: #f4dfaa; border-radius: 38% 62% 48% 52% / 59% 36% 64% 41%; transform: rotate(-9deg); }
+.research-shell-artwork img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.research-shell-description { max-width: 800px; color: #4b6054; font-size: 17px; line-height: 1.8; }
+.research-shell-description p:last-child { margin-bottom: 0; }
+.research-shell-actions { flex: none; }
+.research-shell-layout { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 50px; max-width: 1440px; margin: auto; padding: 0 38px; align-items: start; }
+.research-shell-layout--without-contents { grid-template-columns: minmax(0, 1fr); max-width: 1200px; }
+.research-shell-sidebar { position: sticky; top: 92px; padding: 47px 0 32px; max-height: calc(100vh - 92px); overflow-y: auto; font: 14px/1.5 Arial, Helvetica, sans-serif; }
+.research-shell-sidebar > p { color: var(--research-muted); font-size: 12px; margin: 0 0 15px; }
+.research-shell-sidebar ol, .research-shell-mobile-contents ol { list-style: none; padding: 0; margin: 0; }
+.research-shell-sidebar li, .research-shell-mobile-contents li { margin: 0; }
+.research-shell-sidebar nav a, .research-shell-mobile-contents nav a { display: flex; gap: 14px; padding: 10px 0; text-decoration: none; color: #4d6155; font-size: 14px; line-height: 1.4; }
+.research-shell-sidebar nav a > span, .research-shell-mobile-contents nav a > span { color: #929b8e; font: 11px/1.9 monospace; flex: none; }
+.research-shell-sidebar nav a:hover, .research-shell-mobile-contents nav a:hover { color: #192e20; text-decoration: underline; }
+.research-shell-sidebar-extra { margin-top: 23px; padding-top: 20px; border-top: 1px solid var(--research-rule); font-size: 12px; }
+.research-shell-body { min-width: 0; padding-bottom: 56px; }
+.research-shell-mobile-contents { display: none; }
+.research-shell.research-shell .research-shell-body h2 { color: var(--research-ink); font: 400 clamp(28px, 2.6vw, 37px)/1.23 Georgia, "Times New Roman", serif; letter-spacing: -.65px; margin: 0 0 23px; text-transform: none; -webkit-text-stroke: 0; text-shadow: none; }
+:where(.research-shell .research-shell-body) :is(h3, h4) { color: var(--research-ink); font: 600 21px/1.4 Arial, Helvetica, sans-serif; letter-spacing: -.3px; margin: 35px 0 14px; }
+:where(.research-shell .research-shell-body) p { font-family: Arial, Helvetica, sans-serif; font-size: 17px; line-height: 1.8; margin: 0 0 20px; }
+:where(.research-shell .research-shell-body) li { line-height: 1.8; }
+.research-shell .research-shell-body > section > h3 { font: 600 21px/1.4 Arial, Helvetica, sans-serif; letter-spacing: -.3px; margin: 35px 0 14px; }
+.research-shell-body > section, .research-shell-body .research-section, .research-shell-body .project-evidence__section, .research-shell-body .project-evidence__references { padding: 49px 0; border: 0; border-bottom: 1px solid var(--research-rule); margin: 0; }
+.research-shell.research-shell .research-shell-body .research-section-label, .research-shell.research-shell .project-evidence__section-heading > span, .research-shell.research-shell .project-evidence__eyebrow { display: block; font: 11px/1.5 Arial, Helvetica, sans-serif; letter-spacing: .12em; color: #74806d; margin: 0 0 15px; text-transform: uppercase; }
+.research-shell-body > .wiki-template-content { padding: 49px 0; }
+.research-shell-body > .wiki-template-content:has(> .project-evidence) { padding-top: 0; }
+.research-shell .wiki-template-content > .row { margin: 0; display: block; }
+.research-shell .wiki-template-content > .row > [class*="col"] { width: 100%; padding: 0; }
+.research-shell .wiki-template-content > .row + .row { margin-top: 42px; padding-top: 42px; border-top: 1px solid var(--research-rule); }
+.research-shell .wiki-template-content > .row > [class*="col"] + [class*="col"] { margin-top: 42px; padding-top: 42px; border-top: 1px solid var(--research-rule); }
+.research-shell .wiki-template-content .bd-callout { border: 0; border-left: 2px solid var(--research-rule); border-radius: 0; background: transparent; padding: 0 0 0 22px; box-shadow: none; margin: 0 0 35px; }
+.research-shell .project-evidence { max-width: none; color: var(--research-ink); }
+.research-shell .project-evidence__section { display: block; }
+.research-shell .project-evidence__section-heading { position: relative; max-width: none; }
+.research-shell .project-evidence__section-body { min-width: 0; }
+.research-shell .project-evidence__illustration { float: right; width: min(28%, 200px); padding: 0; margin: 0 0 20px 28px; }
+.research-shell .project-evidence__section::after { content: ""; display: block; clear: both; }
+.research-shell .project-evidence__illustration-decor { display: none; }
+.research-shell .project-evidence__chapter-art { width: 100%; min-width: 0; max-width: 100%; height: auto; }
+.research-shell .project-evidence__nav { border: 0; border-radius: 0; padding: 0; background: transparent; gap: 0 23px; margin: 0; padding-top: 34px; }
+.research-shell .project-evidence__nav a { border-radius: 0; padding: 7px 0; font-size: 13px; font-weight: 400; background: transparent; border-bottom: 1px solid transparent; }
+.research-shell .project-evidence__nav a[aria-current="page"] { background: transparent; border-bottom-color: var(--research-accent); font-weight: 700; }
+.research-shell .project-evidence__chain > div { border-radius: 0; background: transparent; border-color: var(--research-rule); }
+.research-shell .project-evidence__detail, .research-shell .project-evidence__scenario { border-radius: 0; background: transparent; border-color: var(--research-rule); }
+.research-shell .project-evidence__end { margin-top: 30px; border: 0; }
+.research-shell.research-shell .research-shell-body :is(figcaption, .research-table-caption) { font-size: 14px; line-height: 1.65; color: var(--research-muted); }
+.research-shell.research-shell .research-shell-body .research-code-header { font-family: Arial, Helvetica, sans-serif; }
+@media (max-width: 1000px) {
+  .research-shell-header { padding: 48px 26px 32px; }
+  .research-shell-hero { grid-template-columns: minmax(0, 1fr) 260px; gap: 30px; }
+  .research-shell-layout { display: block; padding: 0 26px; }
+  .research-shell-sidebar { display: none; }
+  .research-shell-mobile-contents { display: block; margin: 28px 0 0; padding: 14px 0; border-bottom: 1px solid var(--research-rule); font: 14px/1.5 Arial, Helvetica, sans-serif; }
+  .research-shell-mobile-contents summary { cursor: pointer; font-weight: 600; }
+  .research-shell-mobile-contents nav { padding: 14px 0 0; }
+}
+@media (max-width: 640px) {
+  .research-shell-header { padding: 35px 20px 28px; }
+  .research-shell-meta { font-size: 10px; gap: 16px; margin-bottom: 25px; }
+  .research-shell-hero { grid-template-columns: 1fr; gap: 24px; }
+  .research-shell.research-shell .research-shell-header h1 { margin-bottom: 20px; font-size: clamp(56px, 14vw, 78px); }
+  .research-shell.research-shell .research-shell-header--long-title h1 { font-size: clamp(39px, 9.5vw, 60px); }
+  .research-shell-artwork { width: 220px; justify-self: center; }
+  .research-shell.research-shell .research-shell-subtitle { margin-bottom: 23px; }
+  .research-shell-header-bottom { flex-direction: column; align-items: start; gap: 22px; }
+  .research-shell-layout { padding: 0 20px; }
+  .research-shell-body > section, .research-shell-body .research-section, .research-shell-body .project-evidence__section, .research-shell-body .project-evidence__references { padding: 35px 0; }
+  .research-shell .project-evidence__illustration { float: none; width: 110px; max-width: 100%; margin: 0 0 18px; }
+  .research-shell .project-evidence__nav { gap: 0 15px; }
+  .research-shell-body > .wiki-template-content { padding-top: 35px; }
+}
+@media print {
+  .research-shell-sidebar, .research-shell-mobile-contents, .research-shell-actions, .research-shell-artwork { display: none; }
+  .research-shell-hero { display: block; }
+  .research-shell-layout { display: block; padding: 0; }
+  .research-shell-header { padding: 20px 0; background: transparent; }
+  .research-shell.research-shell { background: white; }
+}

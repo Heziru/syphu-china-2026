@@ -1,0 +1,42 @@
+{
+  "candidate-complex": [
+    2400,
+    2000
+  ],
+  "candidate-interface": [
+    2400,
+    2000
+  ],
+  "docking-human-ne": [
+    3613,
+    2981
+  ],
+  "docking-validation": [
+    3708,
+    2945
+  ],
+  "human-ne-complex": [
+    2400,
+    2000
+  ],
+  "human-ne-interface": [
+    2400,
+    2000
+  ],
+  "md-dynamics": [
+    4218,
+    2569
+  ],
+  "md-topology-contacts": [
+    4406,
+    1659
+  ],
+  "redocking-interface": [
+    2400,
+    2000
+  ],
+  "redocking-overlay": [
+    2400,
+    2000
+  ]
+}

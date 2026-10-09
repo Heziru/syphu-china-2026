@@ -1,0 +1,2704 @@
+{
+  "software": "HDOCKlite 1.2",
+  "official_source": "https://github.com/huang-laboratory/HDOCKlite",
+  "bibliography": [
+    "https://doi.org/10.1038/s41596-020-0312-x",
+    "https://doi.org/10.1093/nar/gkx407"
+  ],
+  "parameters": {
+    "grid_spacing_A": 1.2,
+    "rotation_step_degrees": 15,
+    "rotations": 4392,
+    "docking_mode": "ab initio global rigid-body",
+    "contact_restraints": null,
+    "createpl_clustering_RMSD_A": 5.0,
+    "reported_poses": 100,
+    "rank_definition": "Original rank among createpl clustered representatives; not raw search-row index."
+  },
+  "metrics": {
+    "L_RMSD": "All ligand N, CA, C, O atoms after least-squares fitting receptor N, CA, C, O to native 1FLE.",
+    "i_RMSD": "Best-fit N, CA, C, O RMSD over native interface residues whose interchain heavy atoms are less than 10 A apart.",
+    "Fnat": "Fraction of native interchain residue contacts recovered, using strictly <5 A heavy-atom distance in native and pose.",
+    "HDOCK_reported_RMSD": "Not used: HDOCK computes this against the deliberately translated independent ligand input, not the native complex."
+  },
+  "caveats": [
+    "HDOCK score is a ranking potential in arbitrary units, not a binding free energy, Kd, or inhibition measurement.",
+    "Bound redocking is an easier retrospective benchmark; no independent unbound-complex or prospective experimental validation is claimed.",
+    "Human NE receptor comes from 2Z7F with SLPI removed; its conformation may be biased toward SLPI.",
+    "Only 2REL conformer 1 is cross-docked; induced fit, NMR ensemble variation, protonation, glycans and solvent are not sampled."
+  ],
+  "cases": {
+    "1fle-redocking": {
+      "input": {
+        "experiment": "1fle-redocking",
+        "receptor_residues": 240,
+        "ligand_residues": 47,
+        "receptor_source": "1FLE chain E, porcine pancreatic elastase",
+        "ligand_source": "1FLE chain I, human Elafin resolved residues 11\u201357",
+        "ligand_rigid_transform": {
+          "euler_xyz_deg": [
+            37,
+            -63,
+            101
+          ],
+          "translation_A": [
+            80,
+            -40,
+            65
+          ],
+          "center_before_transform": true
+        },
+        "method": "HDOCKlite 1.2 rigid-body global docking; 1.2 A grid, 15 degree rotation; no residue restraints",
+        "status": "Bound-structure redocking benchmark, not a new experimental complex.",
+        "receptor.pdb_sha256": "2136b234df225071267adbd72c62830d6d4008e0e1f608eb7b0f60ce3ddc904b",
+        "ligand-independent.pdb_sha256": "611d0a4b2c7498e2d9472d4dbc61395601cf3b20deb5e3a54e7a74d7c2276a75"
+      },
+      "poses_analysed": 100,
+      "top1": {
+        "rank": 1,
+        "HDOCK_score_arbitrary_units": -343.38,
+        "residue_pairs_under_5A": 75,
+        "interchain_heavy_atom_pairs_under_2A": 0,
+        "ligand_backbone_RMSD_A": 1.1364593790421125,
+        "interface_backbone_RMSD_A": 0.37179290493622696,
+        "fraction_native_contacts": 0.9859154929577465,
+        "recovered_native_contacts": 70
+      },
+      "score_range": [
+        -343.38,
+        -174.18
+      ],
+      "top1_contacts_under_4A": [
+        {
+          "I_residue": "31",
+          "E_residue": "97",
+          "I_resname": "ARG",
+          "E_resname": "ASP",
+          "I_atom": "NH2",
+          "E_atom": "OD2",
+          "I_xyz": [
+            28.502,
+            34.57,
+            35.139
+          ],
+          "E_xyz": [
+            27.519,
+            34.213,
+            32.983
+          ],
+          "distance_A": 2.3962625064879735
+        },
+        {
+          "I_residue": "22",
+          "E_residue": "216",
+          "I_resname": "ARG",
+          "E_resname": "VAL",
+          "I_atom": "N",
+          "E_atom": "O",
+          "I_xyz": [
+            13.743,
+            32.518,
+            32.119
+          ],
+          "E_xyz": [
+            11.667,
+            31.03,
+            31.904
+          ],
+          "distance_A": 2.5632294083831044
+        },
+        {
+          "I_residue": "24",
+          "E_residue": "193",
+          "I_resname": "ALA",
+          "E_resname": "GLY",
+          "I_atom": "O",
+          "E_atom": "N",
+          "I_xyz": [
+            10.903,
+            32.327,
+            41.005
+          ],
+          "E_xyz": [
+            9.909,
+            34.413,
+            42.489
+          ],
+          "distance_A": 2.746213393019555
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "217A",
+          "I_resname": "LEU",
+          "E_resname": "ARG",
+          "I_atom": "O",
+          "E_atom": "N",
+          "I_xyz": [
+            12.543,
+            32.173,
+            27.781
+          ],
+          "E_xyz": [
+            10.727,
+            33.654,
+            29.252
+          ],
+          "distance_A": 2.766777547978876
+        },
+        {
+          "I_residue": "26",
+          "E_residue": "192",
+          "I_resname": "LEU",
+          "E_resname": "GLN",
+          "I_atom": "CD1",
+          "E_atom": "CB",
+          "I_xyz": [
+            9.594,
+            38.763,
+            41.224
+          ],
+          "E_xyz": [
+            9.638,
+            36.428,
+            39.728
+          ],
+          "distance_A": 2.773477420135233
+        },
+        {
+          "I_residue": "24",
+          "E_residue": "195",
+          "I_resname": "ALA",
+          "E_resname": "SER",
+          "I_atom": "O",
+          "E_atom": "N",
+          "I_xyz": [
+            10.903,
+            32.327,
+            41.005
+          ],
+          "E_xyz": [
+            11.035,
+            30.159,
+            42.772
+          ],
+          "distance_A": 2.7999887499773966
+        },
+        {
+          "I_residue": "48",
+          "E_residue": "99",
+          "I_resname": "SER",
+          "E_resname": "VAL",
+          "I_atom": "OG",
+          "E_atom": "CG1",
+          "I_xyz": [
+            20.29,
+            31.852,
+            33.001
+          ],
+          "E_xyz": [
+            20.137,
+            30.284,
+            35.347
+          ],
+          "distance_A": 2.8259067571312433
+        },
+        {
+          "I_residue": "25",
+          "E_residue": "42",
+          "I_resname": "MET",
+          "E_resname": "CYS",
+          "I_atom": "SD",
+          "E_atom": "SG",
+          "I_xyz": [
+            16.384,
+            33.994,
+            43.674
+          ],
+          "E_xyz": [
+            15.223,
+            32.185,
+            45.54
+          ],
+          "distance_A": 2.846464122380605
+        },
+        {
+          "I_residue": "26",
+          "E_residue": "151",
+          "I_resname": "LEU",
+          "E_resname": "LEU",
+          "I_atom": "CD2",
+          "E_atom": "CD2",
+          "I_xyz": [
+            9.215,
+            38.825,
+            43.696
+          ],
+          "E_xyz": [
+            7.386,
+            37.404,
+            45.43
+          ],
+          "distance_A": 2.8933091780865734
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "217",
+          "I_resname": "LEU",
+          "E_resname": "SER",
+          "I_atom": "CD2",
+          "E_atom": "OG",
+          "I_xyz": [
+            10.909,
+            32.464,
+            25.628
+          ],
+          "E_xyz": [
+            8.981,
+            32.035,
+            27.776
+          ],
+          "distance_A": 2.9180693960219664
+        },
+        {
+          "I_residue": "29",
+          "E_residue": "61",
+          "I_resname": "PRO",
+          "E_resname": "ARG",
+          "I_atom": "CG",
+          "E_atom": "CG",
+          "I_xyz": [
+            22.096,
+            36.514,
+            41.941
+          ],
+          "E_xyz": [
+            23.017,
+            35.958,
+            44.673
+          ],
+          "distance_A": 2.9361881751686147
+        },
+        {
+          "I_residue": "19",
+          "E_residue": "217A",
+          "I_resname": "ILE",
+          "E_resname": "ARG",
+          "I_atom": "O",
+          "E_atom": "NE",
+          "I_xyz": [
+            15.557,
+            35.448,
+            27.151
+          ],
+          "E_xyz": [
+            14.105,
+            38.013,
+            27.286
+          ],
+          "distance_A": 2.9505514738773817
+        },
+        {
+          "I_residue": "24",
+          "E_residue": "214",
+          "I_resname": "ALA",
+          "E_resname": "SER",
+          "I_atom": "N",
+          "E_atom": "O",
+          "I_xyz": [
+            12.808,
+            31.553,
+            38.121
+          ],
+          "E_xyz": [
+            14.349,
+            29.034,
+            37.866
+          ],
+          "distance_A": 2.9639613695188425
+        },
+        {
+          "I_residue": "22",
+          "E_residue": "192",
+          "I_resname": "ARG",
+          "E_resname": "GLN",
+          "I_atom": "NH1",
+          "E_atom": "CG",
+          "I_xyz": [
+            13.059,
+            37.589,
+            37.326
+          ],
+          "E_xyz": [
+            10.598,
+            36.42,
+            38.524
+          ],
+          "distance_A": 2.976287284520765
+        },
+        {
+          "I_residue": "24",
+          "E_residue": "194",
+          "I_resname": "ALA",
+          "E_resname": "ASP",
+          "I_atom": "O",
+          "E_atom": "N",
+          "I_xyz": [
+            10.903,
+            32.327,
+            41.005
+          ],
+          "E_xyz": [
+            9.133,
+            31.993,
+            43.376
+          ],
+          "distance_A": 2.977599200698439
+        },
+        {
+          "I_residue": "22",
+          "E_residue": "215",
+          "I_resname": "ARG",
+          "E_resname": "PHE",
+          "I_atom": "O",
+          "E_atom": "CA",
+          "I_xyz": [
+            12.937,
+            31.687,
+            34.655
+          ],
+          "E_xyz": [
+            12.971,
+            28.801,
+            35.454
+          ],
+          "distance_A": 2.994754247012602
+        },
+        {
+          "I_residue": "24",
+          "E_residue": "191",
+          "I_resname": "ALA",
+          "E_resname": "CYS",
+          "I_atom": "O",
+          "E_atom": "O",
+          "I_xyz": [
+            10.903,
+            32.327,
+            41.005
+          ],
+          "E_xyz": [
+            7.912,
+            32.567,
+            40.675
+          ],
+          "distance_A": 3.018705186002768
+        },
+        {
+          "I_residue": "23",
+          "E_residue": "214",
+          "I_resname": "CYS",
+          "E_resname": "SER",
+          "I_atom": "CA",
+          "E_atom": "O",
+          "I_xyz": [
+            14.748,
+            31.863,
+            36.713
+          ],
+          "E_xyz": [
+            14.349,
+            29.034,
+            37.866
+          ],
+          "distance_A": 3.0808847755149817
+        },
+        {
+          "I_residue": "48",
+          "E_residue": "97",
+          "I_resname": "SER",
+          "E_resname": "ASP",
+          "I_atom": "OG",
+          "E_atom": "O",
+          "I_xyz": [
+            20.29,
+            31.852,
+            33.001
+          ],
+          "E_xyz": [
+            23.373,
+            32.097,
+            32.428
+          ],
+          "distance_A": 3.145352603445282
+        },
+        {
+          "I_residue": "24",
+          "E_residue": "192",
+          "I_resname": "ALA",
+          "E_resname": "GLN",
+          "I_atom": "O",
+          "E_atom": "CA",
+          "I_xyz": [
+            10.903,
+            32.327,
+            41.005
+          ],
+          "E_xyz": [
+            9.312,
+            34.977,
+            40.206
+          ],
+          "distance_A": 3.192519694535963
+        },
+        {
+          "I_residue": "25",
+          "E_residue": "192",
+          "I_resname": "MET",
+          "E_resname": "GLN",
+          "I_atom": "O",
+          "E_atom": "CG",
+          "I_xyz": [
+            13.528,
+            36.262,
+            39.796
+          ],
+          "E_xyz": [
+            10.598,
+            36.42,
+            38.524
+          ],
+          "distance_A": 3.198100686344943
+        },
+        {
+          "I_residue": "25",
+          "E_residue": "195",
+          "I_resname": "MET",
+          "E_resname": "SER",
+          "I_atom": "N",
+          "E_atom": "OG",
+          "I_xyz": [
+            12.673,
+            33.511,
+            40.082
+          ],
+          "E_xyz": [
+            13.874,
+            30.769,
+            41.215
+          ],
+          "distance_A": 3.2007271048935166
+        },
+        {
+          "I_residue": "25",
+          "E_residue": "41",
+          "I_resname": "MET",
+          "E_resname": "THR",
+          "I_atom": "CG",
+          "E_atom": "O",
+          "I_xyz": [
+            14.665,
+            34.322,
+            43.183
+          ],
+          "E_xyz": [
+            13.131,
+            34.379,
+            46.035
+          ],
+          "distance_A": 3.2388746502450476
+        },
+        {
+          "I_residue": "21",
+          "E_residue": "216",
+          "I_resname": "ILE",
+          "E_resname": "VAL",
+          "I_atom": "CA",
+          "E_atom": "O",
+          "I_xyz": [
+            14.193,
+            31.593,
+            29.942
+          ],
+          "E_xyz": [
+            11.667,
+            31.03,
+            31.904
+          ],
+          "distance_A": 3.2476282114798787
+        },
+        {
+          "I_residue": "27",
+          "E_residue": "61",
+          "I_resname": "ASN",
+          "E_resname": "ARG",
+          "I_atom": "O",
+          "E_atom": "NH2",
+          "I_xyz": [
+            17.483,
+            39.339,
+            42.834
+          ],
+          "E_xyz": [
+            18.691,
+            37.355,
+            45.155
+          ],
+          "distance_A": 3.283681013740524
+        },
+        {
+          "I_residue": "52",
+          "E_residue": "97",
+          "I_resname": "ALA",
+          "E_resname": "ASP",
+          "I_atom": "CB",
+          "E_atom": "OD2",
+          "I_xyz": [
+            25.654,
+            36.983,
+            32.894
+          ],
+          "E_xyz": [
+            27.519,
+            34.213,
+            32.983
+          ],
+          "distance_A": 3.3405158284312875
+        },
+        {
+          "I_residue": "31",
+          "E_residue": "96",
+          "I_resname": "ARG",
+          "E_resname": "THR",
+          "I_atom": "NH1",
+          "E_atom": "OG1",
+          "I_xyz": [
+            29.403,
+            34.152,
+            37.234
+          ],
+          "E_xyz": [
+            27.846,
+            31.726,
+            38.952
+          ],
+          "distance_A": 3.3557784491828406
+        },
+        {
+          "I_residue": "26",
+          "E_residue": "143",
+          "I_resname": "LEU",
+          "E_resname": "LEU",
+          "I_atom": "CD1",
+          "E_atom": "CD2",
+          "I_xyz": [
+            9.594,
+            38.763,
+            41.224
+          ],
+          "E_xyz": [
+            6.258,
+            38.653,
+            41.608
+          ],
+          "distance_A": 3.359829162323584
+        },
+        {
+          "I_residue": "23",
+          "E_residue": "57",
+          "I_resname": "CYS",
+          "E_resname": "HIS",
+          "I_atom": "CB",
+          "E_atom": "CE1",
+          "I_xyz": [
+            15.986,
+            31.985,
+            37.523
+          ],
+          "E_xyz": [
+            16.374,
+            29.912,
+            40.177
+          ],
+          "distance_A": 3.389924630430591
+        },
+        {
+          "I_residue": "25",
+          "E_residue": "193",
+          "I_resname": "MET",
+          "E_resname": "GLY",
+          "I_atom": "CA",
+          "E_atom": "N",
+          "I_xyz": [
+            13.067,
+            34.327,
+            41.241
+          ],
+          "E_xyz": [
+            9.909,
+            34.413,
+            42.489
+          ],
+          "distance_A": 3.3967431460150164
+        },
+        {
+          "I_residue": "49",
+          "E_residue": "57",
+          "I_resname": "CYS",
+          "E_resname": "HIS",
+          "I_atom": "SG",
+          "E_atom": "CD2",
+          "I_xyz": [
+            18.301,
+            33.576,
+            38.511
+          ],
+          "E_xyz": [
+            17.43,
+            31.534,
+            41.135
+          ],
+          "distance_A": 3.437118124243038
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "218",
+          "I_resname": "LEU",
+          "E_resname": "LEU",
+          "I_atom": "CD1",
+          "E_atom": "CD2",
+          "I_xyz": [
+            11.672,
+            34.26,
+            23.949
+          ],
+          "E_xyz": [
+            8.847,
+            36.091,
+            24.763
+          ],
+          "distance_A": 3.4634927457697984
+        },
+        {
+          "I_residue": "21",
+          "E_residue": "172",
+          "I_resname": "ILE",
+          "E_resname": "TRP",
+          "I_atom": "CG2",
+          "E_atom": "CZ3",
+          "I_xyz": [
+            14.7,
+            29.287,
+            28.839
+          ],
+          "E_xyz": [
+            11.794,
+            28.195,
+            27.293
+          ],
+          "distance_A": 3.4680565162638266
+        },
+        {
+          "I_residue": "23",
+          "E_residue": "192",
+          "I_resname": "CYS",
+          "E_resname": "GLN",
+          "I_atom": "O",
+          "E_atom": "NE2",
+          "I_xyz": [
+            13.055,
+            33.542,
+            37.16
+          ],
+          "E_xyz": [
+            10.375,
+            35.578,
+            36.235
+          ],
+          "distance_A": 3.490461430813983
+        },
+        {
+          "I_residue": "25",
+          "E_residue": "57",
+          "I_resname": "MET",
+          "E_resname": "HIS",
+          "I_atom": "CE",
+          "E_atom": "O",
+          "I_xyz": [
+            17.333,
+            34.795,
+            42.388
+          ],
+          "E_xyz": [
+            20.174,
+            32.787,
+            42.694
+          ],
+          "distance_A": 3.4924176439824635
+        },
+        {
+          "I_residue": "26",
+          "E_residue": "193",
+          "I_resname": "LEU",
+          "E_resname": "GLY",
+          "I_atom": "N",
+          "E_atom": "N",
+          "I_xyz": [
+            12.61,
+            36.578,
+            41.824
+          ],
+          "E_xyz": [
+            9.909,
+            34.413,
+            42.489
+          ],
+          "distance_A": 3.524890211056228
+        },
+        {
+          "I_residue": "21",
+          "E_residue": "99A",
+          "I_resname": "ILE",
+          "E_resname": "ALA",
+          "I_atom": "CD1",
+          "E_atom": "CB",
+          "I_xyz": [
+            17.015,
+            28.962,
+            30.635
+          ],
+          "E_xyz": [
+            19.296,
+            26.401,
+            29.785
+          ],
+          "distance_A": 3.5332961947733725
+        },
+        {
+          "I_residue": "18",
+          "E_residue": "217A",
+          "I_resname": "ILE",
+          "E_resname": "ARG",
+          "I_atom": "CA",
+          "E_atom": "NH2",
+          "I_xyz": [
+            18.184,
+            37.064,
+            23.461
+          ],
+          "E_xyz": [
+            15.88,
+            38.442,
+            25.818
+          ],
+          "distance_A": 3.5724989853042666
+        },
+        {
+          "I_residue": "25",
+          "E_residue": "58",
+          "I_resname": "MET",
+          "E_resname": "CYS",
+          "I_atom": "SD",
+          "E_atom": "SG",
+          "I_xyz": [
+            16.384,
+            33.994,
+            43.674
+          ],
+          "E_xyz": [
+            16.383,
+            30.601,
+            44.811
+          ],
+          "distance_A": 3.5784380670901665
+        },
+        {
+          "I_residue": "21",
+          "E_residue": "215",
+          "I_resname": "ILE",
+          "E_resname": "PHE",
+          "I_atom": "CB",
+          "E_atom": "CD1",
+          "I_xyz": [
+            14.801,
+            30.193,
+            30.103
+          ],
+          "E_xyz": [
+            13.688,
+            27.59,
+            32.385
+          ],
+          "distance_A": 3.6361933391941625
+        },
+        {
+          "I_residue": "21",
+          "E_residue": "175",
+          "I_resname": "ILE",
+          "E_resname": "THR",
+          "I_atom": "CG2",
+          "E_atom": "CG2",
+          "I_xyz": [
+            14.7,
+            29.287,
+            28.839
+          ],
+          "E_xyz": [
+            15.679,
+            25.853,
+            27.936
+          ],
+          "distance_A": 3.6832330906419677
+        },
+        {
+          "I_residue": "21",
+          "E_residue": "99",
+          "I_resname": "ILE",
+          "E_resname": "VAL",
+          "I_atom": "CD1",
+          "E_atom": "CG2",
+          "I_xyz": [
+            17.015,
+            28.962,
+            30.635
+          ],
+          "E_xyz": [
+            18.267,
+            29.261,
+            34.101
+          ],
+          "distance_A": 3.6973045587292344
+        },
+        {
+          "I_residue": "49",
+          "E_residue": "99",
+          "I_resname": "CYS",
+          "E_resname": "VAL",
+          "I_atom": "CB",
+          "E_atom": "CG1",
+          "I_xyz": [
+            19.188,
+            33.479,
+            36.948
+          ],
+          "E_xyz": [
+            20.137,
+            30.284,
+            35.347
+          ],
+          "distance_A": 3.697543373646887
+        },
+        {
+          "I_residue": "29",
+          "E_residue": "60",
+          "I_resname": "PRO",
+          "E_resname": "ASP",
+          "I_atom": "CG",
+          "E_atom": "OD1",
+          "I_xyz": [
+            22.096,
+            36.514,
+            41.941
+          ],
+          "E_xyz": [
+            23.607,
+            33.13,
+            42.213
+          ],
+          "distance_A": 3.71598721741612
+        },
+        {
+          "I_residue": "54",
+          "E_residue": "97",
+          "I_resname": "PHE",
+          "E_resname": "ASP",
+          "I_atom": "CE2",
+          "E_atom": "OD1",
+          "I_xyz": [
+            24.472,
+            35.222,
+            28.504
+          ],
+          "E_xyz": [
+            26.118,
+            33.466,
+            31.364
+          ],
+          "distance_A": 3.7379743177287867
+        },
+        {
+          "I_residue": "23",
+          "E_residue": "215",
+          "I_resname": "CYS",
+          "E_resname": "PHE",
+          "I_atom": "CA",
+          "E_atom": "CA",
+          "I_xyz": [
+            14.748,
+            31.863,
+            36.713
+          ],
+          "E_xyz": [
+            12.971,
+            28.801,
+            35.454
+          ],
+          "distance_A": 3.7574797404643454
+        },
+        {
+          "I_residue": "24",
+          "E_residue": "215",
+          "I_resname": "ALA",
+          "E_resname": "PHE",
+          "I_atom": "N",
+          "E_atom": "CA",
+          "I_xyz": [
+            12.808,
+            31.553,
+            38.121
+          ],
+          "E_xyz": [
+            12.971,
+            28.801,
+            35.454
+          ],
+          "distance_A": 3.835747906210733
+        },
+        {
+          "I_residue": "24",
+          "E_residue": "213",
+          "I_resname": "ALA",
+          "E_resname": "THR",
+          "I_atom": "CB",
+          "E_atom": "CG2",
+          "I_xyz": [
+            10.616,
+            30.692,
+            38.662
+          ],
+          "E_xyz": [
+            9.926,
+            27.131,
+            40.064
+          ],
+          "distance_A": 3.8887562278960095
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "172",
+          "I_resname": "LEU",
+          "E_resname": "TRP",
+          "I_atom": "O",
+          "E_atom": "CH2",
+          "I_xyz": [
+            12.543,
+            32.173,
+            27.781
+          ],
+          "E_xyz": [
+            11.036,
+            28.626,
+            28.359
+          ],
+          "distance_A": 3.8969657427285664
+        },
+        {
+          "I_residue": "46",
+          "E_residue": "217A",
+          "I_resname": "GLU",
+          "E_resname": "ARG",
+          "I_atom": "CB",
+          "E_atom": "NH1",
+          "I_xyz": [
+            18.96,
+            40.682,
+            30.007
+          ],
+          "E_xyz": [
+            16.224,
+            38.574,
+            28.108
+          ],
+          "distance_A": 3.9415176011277717
+        }
+      ],
+      "native_reference_contact_pairs_under_5A": 71,
+      "best_ligand_RMSD_pose": {
+        "rank": 1,
+        "HDOCK_score_arbitrary_units": -343.38,
+        "residue_pairs_under_5A": 75,
+        "interchain_heavy_atom_pairs_under_2A": 0,
+        "ligand_backbone_RMSD_A": 1.1364593790421125,
+        "interface_backbone_RMSD_A": 0.37179290493622696,
+        "fraction_native_contacts": 0.9859154929577465,
+        "recovered_native_contacts": 70
+      },
+      "best_interface_RMSD_pose": {
+        "rank": 1,
+        "HDOCK_score_arbitrary_units": -343.38,
+        "residue_pairs_under_5A": 75,
+        "interchain_heavy_atom_pairs_under_2A": 0,
+        "ligand_backbone_RMSD_A": 1.1364593790421125,
+        "interface_backbone_RMSD_A": 0.37179290493622696,
+        "fraction_native_contacts": 0.9859154929577465,
+        "recovered_native_contacts": 70
+      },
+      "poses_with_ligand_RMSD_below_5A": 2
+    },
+    "human-ne-elafin": {
+      "input": {
+        "experiment": "human-ne-elafin",
+        "receptor_residues": 218,
+        "ligand_residues": 57,
+        "receptor_source": "2Z7F chain E, human neutrophil elastase; SLPI chain I removed",
+        "ligand_source": "2REL first NMR model, chain A, mature human Elafin residues 1\u201357, renamed I",
+        "ligand_rigid_transform": {
+          "euler_xyz_deg": [
+            37,
+            -63,
+            101
+          ],
+          "translation_A": [
+            80,
+            -40,
+            65
+          ],
+          "center_before_transform": true
+        },
+        "method": "HDOCKlite 1.2 rigid-body global docking; 1.2 A grid, 15 degree rotation; no residue restraints",
+        "status": "Exploratory cross-docking prediction; no experimentally established Elafin\u2013human-NE pose used for scoring or validation.",
+        "receptor.pdb_sha256": "30a39215fc54ca16e50f5d67da1861ae5cddabc39f04889674bf3567a047f612",
+        "ligand-independent.pdb_sha256": "771909a34ea0eb11fa520f8be2debf9cc038db2246b90100a60e89879287a0e0"
+      },
+      "poses_analysed": 100,
+      "top1": {
+        "rank": 1,
+        "HDOCK_score_arbitrary_units": -229.06,
+        "residue_pairs_under_5A": 76,
+        "interchain_heavy_atom_pairs_under_2A": 4,
+        "Elafin_A24_C_to_NE_S195_OG_A": 19.28551801222876
+      },
+      "score_range": [
+        -229.06,
+        -171.33
+      ],
+      "top1_contacts_under_4A": [
+        {
+          "I_residue": "31",
+          "E_residue": "191",
+          "I_resname": "ARG",
+          "E_resname": "CYS",
+          "I_atom": "NH1",
+          "E_atom": "SG",
+          "I_xyz": [
+            19.75,
+            107.977,
+            20.081
+          ],
+          "E_xyz": [
+            19.361,
+            107.047,
+            19.65
+          ],
+          "distance_A": 1.0963493968621558
+        },
+        {
+          "I_residue": "42",
+          "E_residue": "40",
+          "I_resname": "LYS",
+          "E_resname": "HIS",
+          "I_atom": "NZ",
+          "E_atom": "O",
+          "I_xyz": [
+            18.181,
+            109.629,
+            7.263
+          ],
+          "E_xyz": [
+            19.347,
+            108.997,
+            6.622
+          ],
+          "distance_A": 1.4730448058358603
+        },
+        {
+          "I_residue": "52",
+          "E_residue": "192",
+          "I_resname": "ALA",
+          "E_resname": "PHE",
+          "I_atom": "CB",
+          "E_atom": "CD1",
+          "I_xyz": [
+            15.011,
+            106.954,
+            17.323
+          ],
+          "E_xyz": [
+            16.176,
+            105.754,
+            17.98
+          ],
+          "distance_A": 1.796906786675361
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "99B",
+          "I_resname": "LEU",
+          "E_resname": "LEU",
+          "I_atom": "N",
+          "E_atom": "CD1",
+          "I_xyz": [
+            14.179,
+            94.354,
+            15.302
+          ],
+          "E_xyz": [
+            15.869,
+            94.103,
+            14.549
+          ],
+          "distance_A": 1.8671127443194213
+        },
+        {
+          "I_residue": "54",
+          "E_residue": "192",
+          "I_resname": "PHE",
+          "E_resname": "PHE",
+          "I_atom": "CZ",
+          "E_atom": "CD2",
+          "I_xyz": [
+            14.387,
+            103.582,
+            15.288
+          ],
+          "E_xyz": [
+            16.149,
+            103.884,
+            16.476
+          ],
+          "distance_A": 2.1464370477607777
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "99",
+          "I_resname": "LEU",
+          "E_resname": "VAL",
+          "I_atom": "O",
+          "E_atom": "O",
+          "I_xyz": [
+            12.17,
+            91.87,
+            15.479
+          ],
+          "E_xyz": [
+            10.996,
+            90.043,
+            15.169
+          ],
+          "distance_A": 2.193696651772982
+        },
+        {
+          "I_residue": "31",
+          "E_residue": "145",
+          "I_resname": "ARG",
+          "E_resname": "GLY",
+          "I_atom": "NH2",
+          "E_atom": "N",
+          "I_xyz": [
+            20.315,
+            110.166,
+            20.084
+          ],
+          "E_xyz": [
+            21.108,
+            112.174,
+            20.678
+          ],
+          "distance_A": 2.2391402367873345
+        },
+        {
+          "I_residue": "57",
+          "E_residue": "61",
+          "I_resname": "GLN",
+          "E_resname": "ASN",
+          "I_atom": "CD",
+          "E_atom": "O",
+          "I_xyz": [
+            8.766,
+            100.983,
+            2.043
+          ],
+          "E_xyz": [
+            10.863,
+            99.985,
+            2.43
+          ],
+          "distance_A": 2.354396313282878
+        },
+        {
+          "I_residue": "49",
+          "E_residue": "218",
+          "I_resname": "CYS",
+          "E_resname": "GLY",
+          "I_atom": "SG",
+          "E_atom": "N",
+          "I_xyz": [
+            12.726,
+            98.503,
+            24.576
+          ],
+          "E_xyz": [
+            14.966,
+            99.342,
+            25.367
+          ],
+          "distance_A": 2.5193653962853406
+        },
+        {
+          "I_residue": "48",
+          "E_residue": "216",
+          "I_resname": "SER",
+          "E_resname": "VAL",
+          "I_atom": "O",
+          "E_atom": "O",
+          "I_xyz": [
+            13.712,
+            98.335,
+            20.429
+          ],
+          "E_xyz": [
+            16.2,
+            97.677,
+            21.055
+          ],
+          "distance_A": 2.648581507146794
+        },
+        {
+          "I_residue": "31",
+          "E_residue": "143",
+          "I_resname": "ARG",
+          "E_resname": "LEU",
+          "I_atom": "NE",
+          "E_atom": "CD1",
+          "I_xyz": [
+            18.153,
+            109.555,
+            19.828
+          ],
+          "E_xyz": [
+            17.214,
+            109.855,
+            17.199
+          ],
+          "distance_A": 2.807732537119586
+        },
+        {
+          "I_residue": "31",
+          "E_residue": "220",
+          "I_resname": "ARG",
+          "E_resname": "CYS",
+          "I_atom": "NH1",
+          "E_atom": "SG",
+          "I_xyz": [
+            19.75,
+            107.977,
+            20.081
+          ],
+          "E_xyz": [
+            18.656,
+            105.396,
+            20.657
+          ],
+          "distance_A": 2.8618478296373513
+        },
+        {
+          "I_residue": "29",
+          "E_residue": "218",
+          "I_resname": "PRO",
+          "E_resname": "GLY",
+          "I_atom": "CD",
+          "E_atom": "O",
+          "I_xyz": [
+            13.499,
+            104.716,
+            27.506
+          ],
+          "E_xyz": [
+            15.449,
+            102.642,
+            26.803
+          ],
+          "distance_A": 2.9322661884624304
+        },
+        {
+          "I_residue": "19",
+          "E_residue": "99B",
+          "I_resname": "ILE",
+          "E_resname": "LEU",
+          "I_atom": "C",
+          "E_atom": "CD1",
+          "I_xyz": [
+            13.24,
+            95.265,
+            15.172
+          ],
+          "E_xyz": [
+            15.869,
+            94.103,
+            14.549
+          ],
+          "distance_A": 2.941090614040991
+        },
+        {
+          "I_residue": "18",
+          "E_residue": "94",
+          "I_resname": "ILE",
+          "E_resname": "TYR",
+          "I_atom": "CG2",
+          "E_atom": "OH",
+          "I_xyz": [
+            12.754,
+            95.071,
+            9.963
+          ],
+          "E_xyz": [
+            14.562,
+            92.889,
+            9.013
+          ],
+          "distance_A": 2.988726819232565
+        },
+        {
+          "I_residue": "31",
+          "E_residue": "17",
+          "I_resname": "ARG",
+          "E_resname": "VAL",
+          "I_atom": "NH2",
+          "E_atom": "CG2",
+          "I_xyz": [
+            20.315,
+            110.166,
+            20.084
+          ],
+          "E_xyz": [
+            22.169,
+            108.638,
+            21.892
+          ],
+          "distance_A": 3.006819582216394
+        },
+        {
+          "I_residue": "31",
+          "E_residue": "144",
+          "I_resname": "ARG",
+          "E_resname": "LEU",
+          "I_atom": "NH2",
+          "E_atom": "C",
+          "I_xyz": [
+            20.315,
+            110.166,
+            20.084
+          ],
+          "E_xyz": [
+            22.441,
+            112.204,
+            20.7
+          ],
+          "distance_A": 3.0087831427339484
+        },
+        {
+          "I_residue": "51",
+          "E_residue": "192",
+          "I_resname": "MET",
+          "E_resname": "PHE",
+          "I_atom": "O",
+          "E_atom": "CE1",
+          "I_xyz": [
+            13.13,
+            106.978,
+            19.628
+          ],
+          "E_xyz": [
+            15.605,
+            104.979,
+            18.977
+          ],
+          "distance_A": 3.2473723223554116
+        },
+        {
+          "I_residue": "17",
+          "E_residue": "57",
+          "I_resname": "PRO",
+          "E_resname": "HIS",
+          "I_atom": "O",
+          "E_atom": "O",
+          "I_xyz": [
+            13.309,
+            97.916,
+            9.458
+          ],
+          "E_xyz": [
+            15.582,
+            97.453,
+            7.067
+          ],
+          "distance_A": 3.3313329164164904
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "99A",
+          "I_resname": "LEU",
+          "E_resname": "ASN",
+          "I_atom": "CD1",
+          "E_atom": "O",
+          "I_xyz": [
+            15.211,
+            91.401,
+            18.341
+          ],
+          "E_xyz": [
+            15.545,
+            89.093,
+            15.942
+          ],
+          "distance_A": 3.3456869249826666
+        },
+        {
+          "I_residue": "49",
+          "E_residue": "217A",
+          "I_resname": "CYS",
+          "E_resname": "ARG",
+          "I_atom": "CB",
+          "E_atom": "CA",
+          "I_xyz": [
+            13.087,
+            98.734,
+            22.818
+          ],
+          "E_xyz": [
+            16.191,
+            97.884,
+            23.857
+          ],
+          "distance_A": 3.381839292456101
+        },
+        {
+          "I_residue": "47",
+          "E_residue": "192",
+          "I_resname": "GLY",
+          "E_resname": "PHE",
+          "I_atom": "CA",
+          "E_atom": "CE2",
+          "I_xyz": [
+            13.129,
+            100.845,
+            16.617
+          ],
+          "E_xyz": [
+            15.565,
+            103.072,
+            17.469
+          ],
+          "distance_A": 3.4087430234618767
+        },
+        {
+          "I_residue": "18",
+          "E_residue": "98",
+          "I_resname": "ILE",
+          "E_resname": "PRO",
+          "I_atom": "CD1",
+          "E_atom": "O",
+          "I_xyz": [
+            10.212,
+            94.416,
+            11.535
+          ],
+          "E_xyz": [
+            11.693,
+            91.349,
+            12.07
+          ],
+          "distance_A": 3.447618743422764
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "98",
+          "I_resname": "LEU",
+          "E_resname": "PRO",
+          "I_atom": "O",
+          "E_atom": "O",
+          "I_xyz": [
+            12.17,
+            91.87,
+            15.479
+          ],
+          "E_xyz": [
+            11.693,
+            91.349,
+            12.07
+          ],
+          "distance_A": 3.4814150858523023
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "215",
+          "I_resname": "LEU",
+          "E_resname": "PHE",
+          "I_atom": "CD1",
+          "E_atom": "CZ",
+          "I_xyz": [
+            15.211,
+            91.401,
+            18.341
+          ],
+          "E_xyz": [
+            18.504,
+            92.074,
+            19.291
+          ],
+          "distance_A": 3.4927464837860778
+        },
+        {
+          "I_residue": "21",
+          "E_residue": "99",
+          "I_resname": "ILE",
+          "E_resname": "VAL",
+          "I_atom": "CB",
+          "E_atom": "O",
+          "I_xyz": [
+            10.102,
+            91.786,
+            18.061
+          ],
+          "E_xyz": [
+            10.996,
+            90.043,
+            15.169
+          ],
+          "distance_A": 3.492985685627695
+        },
+        {
+          "I_residue": "53",
+          "E_residue": "192",
+          "I_resname": "CYS",
+          "E_resname": "PHE",
+          "I_atom": "O",
+          "E_atom": "CB",
+          "I_xyz": [
+            15.69,
+            107.155,
+            12.628
+          ],
+          "E_xyz": [
+            17.109,
+            106.037,
+            15.662
+          ],
+          "distance_A": 3.5310962886899584
+        },
+        {
+          "I_residue": "55",
+          "E_residue": "41",
+          "I_resname": "VAL",
+          "E_resname": "PHE",
+          "I_atom": "CB",
+          "E_atom": "CB",
+          "I_xyz": [
+            14.492,
+            106.039,
+            6.193
+          ],
+          "E_xyz": [
+            17.981,
+            105.799,
+            5.558
+          ],
+          "distance_A": 3.554426254685839
+        },
+        {
+          "I_residue": "42",
+          "E_residue": "41",
+          "I_resname": "LYS",
+          "E_resname": "PHE",
+          "I_atom": "NZ",
+          "E_atom": "N",
+          "I_xyz": [
+            18.181,
+            109.629,
+            7.263
+          ],
+          "E_xyz": [
+            20.105,
+            107.085,
+            5.68
+          ],
+          "distance_A": 3.5608427373305966
+        },
+        {
+          "I_residue": "18",
+          "E_residue": "57",
+          "I_resname": "ILE",
+          "E_resname": "HIS",
+          "I_atom": "CG2",
+          "E_atom": "CB",
+          "I_xyz": [
+            12.754,
+            95.071,
+            9.963
+          ],
+          "E_xyz": [
+            16.254,
+            95.517,
+            9.418
+          ],
+          "distance_A": 3.570145795342259
+        },
+        {
+          "I_residue": "39",
+          "E_residue": "151",
+          "I_resname": "PRO",
+          "E_resname": "ILE",
+          "I_atom": "CG",
+          "E_atom": "CG2",
+          "I_xyz": [
+            18.485,
+            116.786,
+            10.737
+          ],
+          "E_xyz": [
+            21.024,
+            114.399,
+            11.524
+          ],
+          "distance_A": 3.5726263448617193
+        },
+        {
+          "I_residue": "49",
+          "E_residue": "219",
+          "I_resname": "CYS",
+          "E_resname": "GLY",
+          "I_atom": "O",
+          "E_atom": "N",
+          "I_xyz": [
+            13.503,
+            101.271,
+            21.555
+          ],
+          "E_xyz": [
+            15.11,
+            101.999,
+            24.665
+          ],
+          "distance_A": 3.575546531650789
+        },
+        {
+          "I_residue": "20",
+          "E_residue": "177",
+          "I_resname": "LEU",
+          "E_resname": "ARG",
+          "I_atom": "CD1",
+          "E_atom": "NH1",
+          "I_xyz": [
+            15.211,
+            91.401,
+            18.341
+          ],
+          "E_xyz": [
+            16.34,
+            87.988,
+            18.45
+          ],
+          "distance_A": 3.5965387527454746
+        },
+        {
+          "I_residue": "48",
+          "E_residue": "215",
+          "I_resname": "SER",
+          "E_resname": "PHE",
+          "I_atom": "OG",
+          "E_atom": "CB",
+          "I_xyz": [
+            14.432,
+            97.139,
+            18.576
+          ],
+          "E_xyz": [
+            17.635,
+            95.914,
+            17.468
+          ],
+          "distance_A": 3.6038171429749313
+        },
+        {
+          "I_residue": "41",
+          "E_residue": "35",
+          "I_resname": "ILE",
+          "E_resname": "LEU",
+          "I_atom": "CG2",
+          "E_atom": "O",
+          "I_xyz": [
+            15.032,
+            110.787,
+            3.499
+          ],
+          "E_xyz": [
+            17.23,
+            109.964,
+            0.731
+          ],
+          "distance_A": 3.62909864842498
+        },
+        {
+          "I_residue": "52",
+          "E_residue": "143",
+          "I_resname": "ALA",
+          "E_resname": "LEU",
+          "I_atom": "CB",
+          "E_atom": "CD1",
+          "I_xyz": [
+            15.011,
+            106.954,
+            17.323
+          ],
+          "E_xyz": [
+            17.214,
+            109.855,
+            17.199
+          ],
+          "distance_A": 3.6447751645334803
+        },
+        {
+          "I_residue": "19",
+          "E_residue": "215",
+          "I_resname": "ILE",
+          "E_resname": "PHE",
+          "I_atom": "CG2",
+          "E_atom": "CB",
+          "I_xyz": [
+            14.865,
+            97.72,
+            15.829
+          ],
+          "E_xyz": [
+            17.635,
+            95.914,
+            17.468
+          ],
+          "distance_A": 3.69064452365708
+        },
+        {
+          "I_residue": "53",
+          "E_residue": "143",
+          "I_resname": "CYS",
+          "E_resname": "LEU",
+          "I_atom": "N",
+          "E_atom": "CD1",
+          "I_xyz": [
+            14.512,
+            108.595,
+            15.0
+          ],
+          "E_xyz": [
+            17.214,
+            109.855,
+            17.199
+          ],
+          "distance_A": 3.7045924202265503
+        },
+        {
+          "I_residue": "57",
+          "E_residue": "62",
+          "I_resname": "GLN",
+          "E_resname": "VAL",
+          "I_atom": "O",
+          "E_atom": "CG1",
+          "I_xyz": [
+            11.935,
+            104.325,
+            1.477
+          ],
+          "E_xyz": [
+            14.217,
+            101.631,
+            2.673
+          ],
+          "distance_A": 3.7276770246361224
+        },
+        {
+          "I_residue": "49",
+          "E_residue": "216",
+          "I_resname": "CYS",
+          "E_resname": "VAL",
+          "I_atom": "CB",
+          "E_atom": "O",
+          "I_xyz": [
+            13.087,
+            98.734,
+            22.818
+          ],
+          "E_xyz": [
+            16.2,
+            97.677,
+            21.055
+          ],
+          "distance_A": 3.730440590600523
+        },
+        {
+          "I_residue": "50",
+          "E_residue": "192",
+          "I_resname": "GLY",
+          "E_resname": "PHE",
+          "I_atom": "O",
+          "E_atom": "CZ",
+          "I_xyz": [
+            11.758,
+            103.038,
+            19.805
+          ],
+          "E_xyz": [
+            15.281,
+            103.634,
+            18.719
+          ],
+          "distance_A": 3.734453239766166
+        },
+        {
+          "I_residue": "31",
+          "E_residue": "148",
+          "I_resname": "ARG",
+          "E_resname": "ASN",
+          "I_atom": "NH2",
+          "E_atom": "OD1",
+          "I_xyz": [
+            20.315,
+            110.166,
+            20.084
+          ],
+          "E_xyz": [
+            18.373,
+            113.319,
+            19.438
+          ],
+          "distance_A": 3.7590010641126503
+        },
+        {
+          "I_residue": "28",
+          "E_residue": "218",
+          "I_resname": "PRO",
+          "E_resname": "GLY",
+          "I_atom": "CB",
+          "E_atom": "C",
+          "I_xyz": [
+            11.509,
+            102.417,
+            26.609
+          ],
+          "E_xyz": [
+            15.158,
+            101.769,
+            25.979
+          ],
+          "distance_A": 3.7592559104163144
+        },
+        {
+          "I_residue": "57",
+          "E_residue": "35",
+          "I_resname": "GLN",
+          "E_resname": "LEU",
+          "I_atom": "O",
+          "E_atom": "CD1",
+          "I_xyz": [
+            11.935,
+            104.325,
+            1.477
+          ],
+          "E_xyz": [
+            15.717,
+            104.781,
+            1.34
+          ],
+          "distance_A": 3.8118537485061
+        },
+        {
+          "I_residue": "25",
+          "E_residue": "224",
+          "I_resname": "MET",
+          "E_resname": "TYR",
+          "I_atom": "CG",
+          "E_atom": "OH",
+          "I_xyz": [
+            10.528,
+            94.516,
+            28.356
+          ],
+          "E_xyz": [
+            14.081,
+            95.616,
+            29.405
+          ],
+          "distance_A": 3.8644805601788166
+        },
+        {
+          "I_residue": "47",
+          "E_residue": "216",
+          "I_resname": "GLY",
+          "E_resname": "VAL",
+          "I_atom": "O",
+          "E_atom": "O",
+          "I_xyz": [
+            14.092,
+            99.635,
+            18.443
+          ],
+          "E_xyz": [
+            16.2,
+            97.677,
+            21.055
+          ],
+          "distance_A": 3.885868242748328
+        },
+        {
+          "I_residue": "18",
+          "E_residue": "99B",
+          "I_resname": "ILE",
+          "E_resname": "LEU",
+          "I_atom": "CG2",
+          "E_atom": "CD2",
+          "I_xyz": [
+            12.754,
+            95.071,
+            9.963
+          ],
+          "E_xyz": [
+            15.086,
+            93.024,
+            12.406
+          ],
+          "distance_A": 3.9492634756369442
+        }
+      ],
+      "native_reference_contact_pairs_under_5A": null,
+      "posthoc_geometry_screen": {
+        "selection": "Ala24 C to catalytic Ser195 OG <5 A AND zero interchain heavy-atom pairs <2 A; retain the original HDOCK rank.",
+        "caveat": "Mechanism-informed, post-hoc geometric triage; <2 A pairs are a clash flag, not an automatic rejection of all molecular interactions. This is not pose validation.",
+        "sensitivity": [
+          {
+            "distance_cutoff_A": 3,
+            "zero_short_contact_pose_ranks": []
+          },
+          {
+            "distance_cutoff_A": 3.5,
+            "zero_short_contact_pose_ranks": [
+              29
+            ]
+          },
+          {
+            "distance_cutoff_A": 4,
+            "zero_short_contact_pose_ranks": [
+              29
+            ]
+          },
+          {
+            "distance_cutoff_A": 4.5,
+            "zero_short_contact_pose_ranks": [
+              29
+            ]
+          },
+          {
+            "distance_cutoff_A": 5,
+            "zero_short_contact_pose_ranks": [
+              29
+            ]
+          },
+          {
+            "distance_cutoff_A": 5.5,
+            "zero_short_contact_pose_ranks": [
+              29
+            ]
+          },
+          {
+            "distance_cutoff_A": 6,
+            "zero_short_contact_pose_ranks": [
+              29
+            ]
+          }
+        ],
+        "passing_ranks": [
+          29
+        ],
+        "selected": {
+          "rank": 29,
+          "HDOCK_score_arbitrary_units": -187.98,
+          "residue_pairs_under_5A": 56,
+          "interchain_heavy_atom_pairs_under_2A": 0,
+          "Elafin_A24_C_to_NE_S195_OG_A": 3.2977439257771373
+        },
+        "contacts_under_4A": [
+          {
+            "I_residue": "27",
+            "E_residue": "192",
+            "I_resname": "ASN",
+            "E_resname": "PHE",
+            "I_atom": "OD1",
+            "E_atom": "O",
+            "I_xyz": [
+              19.138,
+              109.202,
+              13.44
+            ],
+            "E_xyz": [
+              19.771,
+              107.451,
+              14.578
+            ],
+            "distance_A": 2.182139775541433
+          },
+          {
+            "I_residue": "27",
+            "E_residue": "151",
+            "I_resname": "ASN",
+            "E_resname": "ILE",
+            "I_atom": "ND2",
+            "E_atom": "CD1",
+            "I_xyz": [
+              18.289,
+              109.999,
+              11.593
+            ],
+            "E_xyz": [
+              20.061,
+              111.438,
+              11.044
+            ],
+            "distance_A": 2.34778746908659
+          },
+          {
+            "I_residue": "24",
+            "E_residue": "57",
+            "I_resname": "ALA",
+            "E_resname": "HIS",
+            "I_atom": "CB",
+            "E_atom": "NE2",
+            "I_xyz": [
+              16.808,
+              98.924,
+              13.066
+            ],
+            "E_xyz": [
+              18.044,
+              98.229,
+              11.113
+            ],
+            "distance_A": 2.4134891754470367
+          },
+          {
+            "I_residue": "46",
+            "E_residue": "219",
+            "I_resname": "GLU",
+            "E_resname": "GLY",
+            "I_atom": "OE2",
+            "E_atom": "N",
+            "I_xyz": [
+              13.921,
+              100.714,
+              22.798
+            ],
+            "E_xyz": [
+              15.11,
+              101.999,
+              24.665
+            ],
+            "distance_A": 2.5594208329229473
+          },
+          {
+            "I_residue": "8",
+            "E_residue": "188",
+            "I_resname": "PRO",
+            "E_resname": "GLN",
+            "I_atom": "CB",
+            "E_atom": "NE2",
+            "I_xyz": [
+              20.18,
+              108.21,
+              34.628
+            ],
+            "E_xyz": [
+              21.307,
+              107.621,
+              32.308
+            ],
+            "distance_A": 2.6456473687927495
+          },
+          {
+            "I_residue": "24",
+            "E_residue": "195",
+            "I_resname": "ALA",
+            "E_resname": "SER",
+            "I_atom": "O",
+            "E_atom": "OG",
+            "I_xyz": [
+              17.024,
+              100.442,
+              10.822
+            ],
+            "E_xyz": [
+              19.314,
+              100.258,
+              12.225
+            ],
+            "distance_A": 2.691907316383682
+          },
+          {
+            "I_residue": "22",
+            "E_residue": "216",
+            "I_resname": "ARG",
+            "E_resname": "VAL",
+            "I_atom": "NE",
+            "E_atom": "O",
+            "I_xyz": [
+              14.052,
+              96.049,
+              20.374
+            ],
+            "E_xyz": [
+              16.2,
+              97.677,
+              21.055
+            ],
+            "distance_A": 2.7799368697867943
+          },
+          {
+            "I_residue": "26",
+            "E_residue": "192",
+            "I_resname": "LEU",
+            "E_resname": "PHE",
+            "I_atom": "O",
+            "E_atom": "CB",
+            "I_xyz": [
+              16.285,
+              106.147,
+              12.968
+            ],
+            "E_xyz": [
+              17.109,
+              106.037,
+              15.662
+            ],
+            "distance_A": 2.8193460234600516
+          },
+          {
+            "I_residue": "25",
+            "E_residue": "41",
+            "I_resname": "MET",
+            "E_resname": "PHE",
+            "I_atom": "O",
+            "E_atom": "O",
+            "I_xyz": [
+              17.702,
+              103.707,
+              10.349
+            ],
+            "E_xyz": [
+              19.208,
+              104.482,
+              8.067
+            ],
+            "distance_A": 2.8418629453230144
+          },
+          {
+            "I_residue": "27",
+            "E_residue": "143",
+            "I_resname": "ASN",
+            "E_resname": "LEU",
+            "I_atom": "CB",
+            "E_atom": "CD2",
+            "I_xyz": [
+              16.865,
+              109.935,
+              13.59
+            ],
+            "E_xyz": [
+              18.237,
+              111.561,
+              15.64
+            ],
+            "distance_A": 2.954447494879545
+          },
+          {
+            "I_residue": "11",
+            "E_residue": "222",
+            "I_resname": "THR",
+            "E_resname": "SER",
+            "I_atom": "OG1",
+            "E_atom": "O",
+            "I_xyz": [
+              19.748,
+              103.359,
+              33.829
+            ],
+            "E_xyz": [
+              19.713,
+              102.817,
+              30.905
+            ],
+            "distance_A": 2.974014962975136
+          },
+          {
+            "I_residue": "25",
+            "E_residue": "58",
+            "I_resname": "MET",
+            "E_resname": "CYS",
+            "I_atom": "CE",
+            "E_atom": "O",
+            "I_xyz": [
+              14.223,
+              100.712,
+              6.014
+            ],
+            "E_xyz": [
+              16.734,
+              99.693,
+              4.582
+            ],
+            "distance_A": 3.064980587214219
+          },
+          {
+            "I_residue": "9",
+            "E_residue": "188",
+            "I_resname": "VAL",
+            "E_resname": "GLN",
+            "I_atom": "CG2",
+            "E_atom": "OE1",
+            "I_xyz": [
+              17.452,
+              107.708,
+              30.571
+            ],
+            "E_xyz": [
+              20.281,
+              106.526,
+              30.619
+            ],
+            "distance_A": 3.0663771783653733
+          },
+          {
+            "I_residue": "46",
+            "E_residue": "218",
+            "I_resname": "GLU",
+            "E_resname": "GLY",
+            "I_atom": "OE2",
+            "E_atom": "N",
+            "I_xyz": [
+              13.921,
+              100.714,
+              22.798
+            ],
+            "E_xyz": [
+              14.966,
+              99.342,
+              25.367
+            ],
+            "distance_A": 3.0942155710292734
+          },
+          {
+            "I_residue": "11",
+            "E_residue": "223",
+            "I_resname": "THR",
+            "E_resname": "LEU",
+            "I_atom": "CG2",
+            "E_atom": "CB",
+            "I_xyz": [
+              19.437,
+              101.001,
+              33.428
+            ],
+            "E_xyz": [
+              19.432,
+              98.439,
+              31.645
+            ],
+            "distance_A": 3.121371173058413
+          },
+          {
+            "I_residue": "22",
+            "E_residue": "217A",
+            "I_resname": "ARG",
+            "E_resname": "ARG",
+            "I_atom": "NH2",
+            "E_atom": "CG",
+            "I_xyz": [
+              14.433,
+              93.957,
+              21.148
+            ],
+            "E_xyz": [
+              16.088,
+              95.321,
+              23.575
+            ],
+            "distance_A": 3.238803791525509
+          },
+          {
+            "I_residue": "26",
+            "E_residue": "193",
+            "I_resname": "LEU",
+            "E_resname": "GLY",
+            "I_atom": "O",
+            "E_atom": "N",
+            "I_xyz": [
+              16.285,
+              106.147,
+              12.968
+            ],
+            "E_xyz": [
+              19.497,
+              105.63,
+              13.263
+            ],
+            "distance_A": 3.2666891495824957
+          },
+          {
+            "I_residue": "24",
+            "E_residue": "214",
+            "I_resname": "ALA",
+            "E_resname": "SER",
+            "I_atom": "CB",
+            "E_atom": "O",
+            "I_xyz": [
+              16.808,
+              98.924,
+              13.066
+            ],
+            "E_xyz": [
+              19.049,
+              97.23,
+              14.797
+            ],
+            "distance_A": 3.2997087750284884
+          },
+          {
+            "I_residue": "51",
+            "E_residue": "219",
+            "I_resname": "MET",
+            "E_resname": "GLY",
+            "I_atom": "CE",
+            "E_atom": "CA",
+            "I_xyz": [
+              13.061,
+              104.735,
+              22.473
+            ],
+            "E_xyz": [
+              15.575,
+              103.272,
+              24.078
+            ],
+            "distance_A": 3.3221363608377033
+          },
+          {
+            "I_residue": "21",
+            "E_residue": "99B",
+            "I_resname": "ILE",
+            "E_resname": "LEU",
+            "I_atom": "CG1",
+            "E_atom": "CG",
+            "I_xyz": [
+              12.162,
+              93.825,
+              14.612
+            ],
+            "E_xyz": [
+              15.346,
+              92.8,
+              13.904
+            ],
+            "distance_A": 3.4190269083468774
+          },
+          {
+            "I_residue": "25",
+            "E_residue": "62",
+            "I_resname": "MET",
+            "E_resname": "VAL",
+            "I_atom": "CE",
+            "E_atom": "CG1",
+            "I_xyz": [
+              14.223,
+              100.712,
+              6.014
+            ],
+            "E_xyz": [
+              14.217,
+              101.631,
+              2.673
+            ],
+            "distance_A": 3.465094226713034
+          },
+          {
+            "I_residue": "21",
+            "E_residue": "99",
+            "I_resname": "ILE",
+            "E_resname": "VAL",
+            "I_atom": "CD1",
+            "E_atom": "O",
+            "I_xyz": [
+              12.511,
+              93.134,
+              15.931
+            ],
+            "E_xyz": [
+              10.996,
+              90.043,
+              15.169
+            ],
+            "distance_A": 3.5256417855476974
+          },
+          {
+            "I_residue": "11",
+            "E_residue": "222A",
+            "I_resname": "THR",
+            "E_resname": "GLY",
+            "I_atom": "CG2",
+            "E_atom": "C",
+            "I_xyz": [
+              19.437,
+              101.001,
+              33.428
+            ],
+            "E_xyz": [
+              22.214,
+              100.54,
+              31.283
+            ],
+            "distance_A": 3.5391065256643475
+          },
+          {
+            "I_residue": "46",
+            "E_residue": "192",
+            "I_resname": "GLU",
+            "E_resname": "PHE",
+            "I_atom": "OE1",
+            "E_atom": "CZ",
+            "I_xyz": [
+              13.324,
+              101.766,
+              21.015
+            ],
+            "E_xyz": [
+              15.281,
+              103.634,
+              18.719
+            ],
+            "distance_A": 3.5483642710409513
+          },
+          {
+            "I_residue": "46",
+            "E_residue": "217A",
+            "I_resname": "GLU",
+            "E_resname": "ARG",
+            "I_atom": "OE2",
+            "E_atom": "C",
+            "I_xyz": [
+              13.921,
+              100.714,
+              22.798
+            ],
+            "E_xyz": [
+              16.165,
+              98.958,
+              24.936
+            ],
+            "distance_A": 3.5623189076779758
+          },
+          {
+            "I_residue": "27",
+            "E_residue": "193",
+            "I_resname": "ASN",
+            "E_resname": "GLY",
+            "I_atom": "OD1",
+            "E_atom": "CA",
+            "I_xyz": [
+              19.138,
+              109.202,
+              13.44
+            ],
+            "E_xyz": [
+              20.37,
+              106.103,
+              12.182
+            ],
+            "distance_A": 3.5642936186571417
+          },
+          {
+            "I_residue": "21",
+            "E_residue": "98",
+            "I_resname": "ILE",
+            "E_resname": "PRO",
+            "I_atom": "CG1",
+            "E_atom": "O",
+            "I_xyz": [
+              12.162,
+              93.825,
+              14.612
+            ],
+            "E_xyz": [
+              11.693,
+              91.349,
+              12.07
+            ],
+            "distance_A": 3.5794274681853793
+          },
+          {
+            "I_residue": "12",
+            "E_residue": "223",
+            "I_resname": "LYS",
+            "E_resname": "LEU",
+            "I_atom": "CG",
+            "E_atom": "CD2",
+            "I_xyz": [
+              16.814,
+              98.888,
+              35.691
+            ],
+            "E_xyz": [
+              17.435,
+              97.21,
+              32.504
+            ],
+            "distance_A": 3.654899998631983
+          },
+          {
+            "I_residue": "25",
+            "E_residue": "57",
+            "I_resname": "MET",
+            "E_resname": "HIS",
+            "I_atom": "CE",
+            "E_atom": "O",
+            "I_xyz": [
+              14.223,
+              100.712,
+              6.014
+            ],
+            "E_xyz": [
+              15.582,
+              97.453,
+              7.067
+            ],
+            "distance_A": 3.684667013449112
+          },
+          {
+            "I_residue": "22",
+            "E_residue": "215",
+            "I_resname": "ARG",
+            "E_resname": "PHE",
+            "I_atom": "NH2",
+            "E_atom": "CD2",
+            "I_xyz": [
+              14.433,
+              93.957,
+              21.148
+            ],
+            "E_xyz": [
+              17.699,
+              94.374,
+              19.487
+            ],
+            "distance_A": 3.6877589400610256
+          },
+          {
+            "I_residue": "27",
+            "E_residue": "142",
+            "I_resname": "ASN",
+            "E_resname": "GLY",
+            "I_atom": "OD1",
+            "E_atom": "CA",
+            "I_xyz": [
+              19.138,
+              109.202,
+              13.44
+            ],
+            "E_xyz": [
+              22.751,
+              108.361,
+              13.985
+            ],
+            "distance_A": 3.7494099535793612
+          },
+          {
+            "I_residue": "28",
+            "E_residue": "192",
+            "I_resname": "PRO",
+            "E_resname": "PHE",
+            "I_atom": "CD",
+            "E_atom": "CB",
+            "I_xyz": [
+              13.809,
+              107.132,
+              14.137
+            ],
+            "E_xyz": [
+              17.109,
+              106.037,
+              15.662
+            ],
+            "distance_A": 3.796663008485216
+          },
+          {
+            "I_residue": "25",
+            "E_residue": "193",
+            "I_resname": "MET",
+            "E_resname": "GLY",
+            "I_atom": "O",
+            "E_atom": "N",
+            "I_xyz": [
+              17.702,
+              103.707,
+              10.349
+            ],
+            "E_xyz": [
+              19.497,
+              105.63,
+              13.263
+            ],
+            "distance_A": 3.9257292316205405
+          },
+          {
+            "I_residue": "25",
+            "E_residue": "42",
+            "I_resname": "MET",
+            "E_resname": "CYS",
+            "I_atom": "O",
+            "E_atom": "SG",
+            "I_xyz": [
+              17.702,
+              103.707,
+              10.349
+            ],
+            "E_xyz": [
+              19.792,
+              101.569,
+              7.801
+            ],
+            "distance_A": 3.9282881768016917
+          },
+          {
+            "I_residue": "26",
+            "E_residue": "41",
+            "I_resname": "LEU",
+            "E_resname": "PHE",
+            "I_atom": "CA",
+            "E_atom": "O",
+            "I_xyz": [
+              16.757,
+              106.2,
+              10.617
+            ],
+            "E_xyz": [
+              19.208,
+              104.482,
+              8.067
+            ],
+            "distance_A": 3.9321018552423084
+          }
+        ]
+      }
+    }
+  }
+}

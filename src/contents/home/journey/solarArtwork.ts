@@ -3,6 +3,12 @@ import { assetUrl } from "../../../utils/assetUrl";
 
 export const SOLAR_ARTWORK = assetUrl("assets/story/solar/painted-planets.png");
 export const SOLAR_BACKDROP = assetUrl("assets/story/solar/paper-stardust.png");
+export const SOLAR_STARS_WIDE = assetUrl(
+  "assets/story/solar/painted-stars-wide.png",
+);
+export const SOLAR_STARS_PORTRAIT = assetUrl(
+  "assets/story/solar/painted-stars-portrait.png",
+);
 export type ArtRect = readonly [number, number, number, number];
 
 // Pixel windows into the approved illustration. The source bitmap is unchanged.

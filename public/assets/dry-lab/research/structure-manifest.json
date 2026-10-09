@@ -1,0 +1,97 @@
+{
+  "scope": "Structural reanalysis only; independent of hypothetical ecology/transport models",
+  "method": "structure-methods.txt",
+  "summary": "structure-summary.json",
+  "figures": [
+    "structure-nmr-ensemble",
+    "structure-interface",
+    "structure-full-distance-map"
+  ],
+  "figureFormats": [
+    "png",
+    "svg",
+    "pdf"
+  ],
+  "files": [
+    {
+      "file": "scripts/drylab/analyze_structures.py",
+      "sha256": "e0b9d22206aefd031cef1fa6b009cf2bf1fc504efcf646fbbb36deb6bca8f5f0",
+      "bytes": 12907
+    },
+    {
+      "file": "scripts/drylab/render_structures.mjs",
+      "sha256": "c1e820c8891860b97515aaa48fad4e39ed17043b5aefbd0692593294ffa08508",
+      "bytes": 6015
+    },
+    {
+      "file": "scripts/drylab/plot_structures.py",
+      "sha256": "0674c679c37160329423702e4b08cf4c437c8c31a62b52d8c191b6bb8dfcf7be",
+      "bytes": 13920
+    },
+    {
+      "file": "scripts/drylab/package_structures.py",
+      "sha256": "d059c798ad8110a8d431c0f2129560ef23230666b835d9d2c4da6db2ea58160f",
+      "bytes": 2208
+    },
+    {
+      "file": "scripts/browser-review.mjs",
+      "sha256": "312387f64f2a501096c9c53058c73d947ee25fc21c8e9a27a10497db65555ffa",
+      "bytes": 1090
+    },
+    {
+      "file": "public/assets/dry-lab/structures/1fle.pdb",
+      "sha256": "50027986c3d2e2f73de90caaa8b0579322e71d592c47140f1d517360c52789bd",
+      "bytes": 224532
+    },
+    {
+      "file": "public/assets/dry-lab/structures/2rel.pdb",
+      "sha256": "87de7296beac51c1ae41d812f8f78ed9c560d401dcfd44e35e6f472b4310a2ac",
+      "bytes": 762939
+    },
+    {
+      "file": "public/assets/dry-lab/vendor/3Dmol-2.5.5.min.js",
+      "sha256": "f7cc78921ae72e7623e89cdd111434f58c2efddd2ffda1cd212644b406fb8016",
+      "bytes": 537792
+    },
+    {
+      "file": "public/assets/dry-lab/vendor/3Dmol-2.5.5.min.js.LICENSE.txt",
+      "sha256": "ae3bfc688d0c9687b76e0ecc7fece0b393bcb4acf2aee09e19dda697eaa10b16",
+      "bytes": 120
+    },
+    {
+      "file": "public/assets/dry-lab/vendor/3Dmol-LICENSE.txt",
+      "sha256": "4c6eaaed856f3f28a3b1a98e74f4a8a71618de7d51ea4155c29f6f793bcef861",
+      "bytes": 4283
+    },
+    {
+      "file": "public/assets/dry-lab/vendor/provenance.json",
+      "sha256": "b76b5cd4ddc1fe0a31c19b0f641276d40a9d2d85fcebde0c8d9dbfeb4db087fb",
+      "bytes": 3783
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-methods.txt",
+      "sha256": "807da59a3050a922c6abc7b2ef0be5ef8be1ae120e1417be5f8aa8839f226e51",
+      "bytes": 7461
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-summary.json",
+      "sha256": "68b14ce8987276d2bef7ce69f50d6e6ff29c966652e09f623bc59a9619066534",
+      "bytes": 20372
+    },
+    {
+      "file": "public/assets/dry-lab/research/structure-figure-captions.json",
+      "sha256": "8d4ead7375b54aa6ad3dc42c1f97b8e32b026f5e7002e88b4f93b408d0ea2a88",
+      "bytes": 2726
+    },
+    {
+      "file": "outputs/dry-lab-research/uniprot-P19957-features.json",
+      "sha256": "3f8cbd9ed0969af64a61e52a00d9d0e3ace6ed242c36539a1045323b0060eb45",
+      "bytes": 5333
+    },
+    {
+      "file": "outputs/dry-lab-research/render-provenance.json",
+      "sha256": "b76b5cd4ddc1fe0a31c19b0f641276d40a9d2d85fcebde0c8d9dbfeb4db087fb",
+      "bytes": 3783
+    }
+  ]
+}

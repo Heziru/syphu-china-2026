@@ -1,0 +1,27 @@
+/* Shared homepage type; each original artwork remains an independent layer. */
+body:has(.continuous-journey) .navbar {
+  font-family: "SYPHU Nunito", "Trebuchet MS", sans-serif;
+}
+.continuous-journey {
+  --story-ink: #214f45;
+  --story-sage: #678578;
+  --story-paper: #faf8ef;
+  font-family: "SYPHU Nunito", "Trebuchet MS", sans-serif;
+}
+.continuous-journey .world-type,
+.continuous-journey .story-depth,
+.continuous-journey .journey-editorial { font-family: inherit; }
+.continuous-journey .story-depth--front[data-copy] h2 {
+  font-weight: 900; letter-spacing: -.04em;
+  font-size: clamp(44px, min(5.8vw, 9svh), 84px);
+}
+.continuous-journey .story-depth--front[data-copy] .story-depth__near p { font-weight: 500; }
+.continuous-journey .journey-reading h2 { font-family: inherit; font-weight: 900; }
+/* Navigation and scientific notes have a clear, undecorated footer gutter. */
+.continuous-journey :is(.heroLanding, .science-atlas) .decor-accent--3 { display: none; }
+@media (max-width: 700px) {
+  .continuous-journey .story-depth--front[data-copy] h2 {
+    font-size: clamp(34px, min(10.5vw, 6.5svh), 48px);
+  }
+}
+

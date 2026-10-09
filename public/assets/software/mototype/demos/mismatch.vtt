@@ -1,0 +1,21 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.510
+Choose the synthetic model-mismatch example.
+
+2
+00:00:04.510 --> 00:00:09.523
+The held-out observations fail at the original 5 RFU error budget.
+
+3
+00:00:09.523 --> 00:00:14.531
+Inspect prediction errors. Derived parameters are withheld when this check fails.
+
+4
+00:00:14.531 --> 00:00:19.533
+Increase the exploratory error budget to 20 RFU.
+
+5
+00:00:19.533 --> 00:00:26.538
+The first rejection remains visible. Changing the budget after viewing holdout data is an exploratory reassessment.

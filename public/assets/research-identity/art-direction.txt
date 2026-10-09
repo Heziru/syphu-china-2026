@@ -1,0 +1,72 @@
+SYPHU-China / Research page identity / 9 October 2026
+
+Scope
+Software, Model, the Wet Lab pages and ordinary article pages share
+ResearchPageShell: one header family, typography, reading width, chapter rhythm,
+desktop contents and a keyboard-accessible mobile contents panel.
+The existing Home and Team scene layouts remain separate formats.
+
+Art direction
+The starting point is the team's existing crowned mint-green EcN character in
+assets/story/artist/ecn-original.png. A consistent dark-teal outline, mint body,
+cream paper and pale yellow accents connects three chapter scenes:
+software.png - reporter analysis at a laptop;
+model.png - a symbolic model-building scene;
+wet-lab.png - goggles, a culture dish and a vial.
+These are decorative chapter illustrations, not measured results or diagrams
+from a scientific simulation. Page titles remain live, selectable HTML text.
+The broad italic display title, restrained serif chapter headings and readable
+sans-serif body belong to one shared CSS implementation.
+
+References studied (organization and art direction only; assets not copied)
+https://2025.igem.wiki/sustech-bio/model
+https://2024.igem.wiki/heidelberg/model
+https://2024.igem.wiki/heidelberg/awards
+https://2024.igem.wiki/ju-krakow/model
+https://2024.igem.wiki/ju-krakow/software
+https://2024.igem.wiki/ju-krakow/grand_jamb
+https://2024.igem.wiki/vilnius-lithuania/software/
+https://2025.igem.wiki/bit-china/software
+
+Generation
+Built-in image_gen tool, transparent_background=true; no CLI or API fallback.
+Reference: the existing team EcN illustration; not the SUSTech mascot.
+Original generated files are retained in the Codex generated_images directory.
+The project-bound PNG copies are in this directory.
+
+Final prompt set
+Shared prompt:
+Use case: illustration-story. Asset type: original SYPHU-China iGEM website
+section header illustration, genuine transparent cutout. Reference image is
+the team's EXISTING mascot, not an edit target. Preserve its identity:
+elongated rounded light mint-green bacterium, thick dark teal outline, three
+pale yellow spots, simple navy smiling closed eyes, small yellow crown. Keep
+the distinctive handmade flat 2D ink-and-gouache / printed paper aesthetic.
+Color palette sage, soft mint, deep forest-teal, warm cream and small pale yellow
+accents. Create a carefully composed, expressive single illustration rather
+than generic stock art. No backdrop, no frame, no text or numbers, no letters,
+no gradient glow, no realistic lab photograph, no 3D rendering, no watermarks.
+All objects contained with generous transparent padding. Intended at 350px tall
+beside an oversized page title.
+
+software.png subject:
+The crowned microbe is a small friendly analyst leaning over a cream and sage
+open laptop. The laptop screen contains only a simple dark green descending
+curve and three round observations (no axes numbers). Beside it rests a little
+notebook with one curved line, not text. Three-quarter side view, one coherent
+compact scene, recognizable mascot. Do not add hands resembling a human person;
+use two tiny mitten-shaped simple appendages.
+
+model.png subject:
+The crowned microbe stands as a curious model builder beside a simple
+sculptural curve made from one flexible deep teal arc with three pale yellow
+nodes on a low cream plinth; it lightly holds a small triangular mint ruler.
+One coherent compact scene, mascot recognizable. No pseudo-scientific equations,
+no text; this is symbolic chapter art, not a scientific data plot.
+
+wet-lab.png subject:
+The crowned microbe wears tiny clear protective goggles and looks down at a
+transparent shallow petri dish on a low cream workbench. The dish contains three
+small green colony-like dots. A single small capped mint vial stands at the side.
+One coherent compact laboratory vignette. This is a friendly symbolic
+illustration, not experimental evidence. No human characters, no lettering.

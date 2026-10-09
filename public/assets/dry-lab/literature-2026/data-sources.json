@@ -1,0 +1,106 @@
+{
+  "reviewedOn": "2026-10-09",
+  "sources": [
+    {
+      "name": "UniProt P19957",
+      "url": "https://www.uniprot.org/uniprotkb/P19957/entry",
+      "type": "Human PI3 protein annotation",
+      "use": "Sequence identity, mature-peptide boundaries and disulfide annotation.",
+      "status": "Used",
+      "boundary": "Annotation is not a measurement of the team's expressed product.",
+      "local": "assets/dry-lab/uniprot-P19957.json"
+    },
+    {
+      "name": "PDB 2REL",
+      "url": "https://www.rcsb.org/structure/2REL",
+      "type": "Human Elafin NMR ensemble",
+      "use": "Coordinate comparison and an experimental starting conformation for the MD pilot.",
+      "status": "Used",
+      "boundary": "NMR conformers are not time points; the pilot starts from one conformer.",
+      "local": "assets/dry-lab/structures/2rel.pdb"
+    },
+    {
+      "name": "PDB 1FLE",
+      "url": "https://www.rcsb.org/structure/1FLE",
+      "type": "Elafin–porcine elastase crystal complex",
+      "use": "Reference interface and a bound-structure redocking benchmark.",
+      "status": "Used",
+      "boundary": "The enzyme is porcine pancreatic elastase, not human neutrophil elastase.",
+      "local": "assets/dry-lab/structures/1fle.pdb"
+    },
+    {
+      "name": "PDB 2Z7F",
+      "url": "https://www.rcsb.org/structure/2Z7F",
+      "type": "Human neutrophil elastase bound to SLPI",
+      "use": "Only enzyme chain E is extracted as the receptor for exploratory human NE–Elafin docking.",
+      "status": "Used, receptor only",
+      "boundary": "The deposited inhibitor is SLPI, not Elafin. The original complex and legacy trajectory are not evidence for an Elafin complex.",
+      "local": "assets/dry-lab/atomistic/inputs/2z7f-original.pdb"
+    },
+    {
+      "name": "GTEx v8 · PI3",
+      "url": "https://gtexportal.org/home/gene/PI3",
+      "type": "Normal-tissue bulk RNA expression",
+      "use": "Baseline tissue context from the archived gene-expression snapshot.",
+      "status": "Context only",
+      "boundary": "Tissue medians do not establish IBD-specific effects or protein activity.",
+      "local": "assets/dry-lab/tissue-context-gtex-v8-full.json"
+    },
+    {
+      "name": "IBDMDB / HMP2",
+      "url": "https://www.nature.com/articles/s41586-019-1237-9",
+      "type": "Longitudinal IBD multi-omics",
+      "use": "Candidate external context for temporal community variation and host–microbiome associations.",
+      "status": "Not analyzed here",
+      "boundary": "Repeated samples require subject-aware analysis. Relative abundance alone cannot identify absolute growth or interaction rates.",
+      "accessions": "PRJNA398089; GSE111889; PXD008675; PR000639"
+    },
+    {
+      "name": "GEO GSE75214",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75214",
+      "type": "Human IBD mucosal microarrays",
+      "use": "Candidate independent PI3 expression comparison, stratified by tissue and disease activity.",
+      "status": "Not analyzed here",
+      "boundary": "RMA log2 values need platform annotation; colon and ileum must not be pooled as a disease contrast.",
+      "accessions": "GSE75214 / GPL6244"
+    },
+    {
+      "name": "Pan-GI cell atlas",
+      "url": "https://www.nature.com/articles/s41586-024-07571-1",
+      "type": "Integrated single-cell gastrointestinal atlas",
+      "use": "Candidate cell-type context to distinguish altered expression from altered cell composition.",
+      "status": "Not analyzed here",
+      "boundary": "Donors, not individual cells, are the independent biological units.",
+      "accessions": "E-MTAB-14050; https://gutcellatlas.org/pangi.html"
+    },
+    {
+      "name": "GEO GSE306374",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE306374",
+      "type": "2026 UC spatial transcriptomics",
+      "use": "Candidate spatial context for PI3-expressing epithelial compartments.",
+      "status": "Not analyzed here",
+      "boundary": "Spatial bins and transcripts do not directly measure active extracellular Elafin.",
+      "accessions": "GSE306374; DOI 10.1038/s41467-026-71136-1"
+    }
+  ],
+  "recentPapers": [
+    {
+      "authors": "Muto, T., Ito, G., Katsuda, H. et al.",
+      "year": 2026,
+      "title": "IL-22 induces Paneth cell metaplasia in the colonic epithelium of ulcerative colitis, promoting wound healing via REG3A",
+      "journal": "Nature Communications 17, 4568",
+      "doi": "10.1038/s41467-026-71136-1",
+      "url": "https://www.nature.com/articles/s41467-026-71136-1",
+      "relevance": "PI3 is reported among transcripts in colonic metaplastic Paneth-cell clusters. This supports cell-resolved context, not a blanket Elafin-deficiency claim."
+    },
+    {
+      "authors": "Stojkovic, B., Bekkers, M., Violi, J. P. et al.",
+      "year": 2026,
+      "title": "A microbiome meta-transcriptomics pipeline identifies a neutrophil elastase inhibitor that protects the colonic epithelial barrier",
+      "journal": "Signal Transduction and Targeted Therapy 11, 279",
+      "doi": "10.1038/s41392-026-02774-6",
+      "url": "https://www.nature.com/articles/s41392-026-02774-6",
+      "relevance": "A recent example of linking cohort analysis to protein-function and barrier assays. The studied protein is BMG-1, not this project's Elafin; its results are not transferred to our construct."
+    }
+  ]
+}

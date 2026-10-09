@@ -1,0 +1,13 @@
+observation_id,sample_id,observable_id,time_sample,time_read,time_unit,value,qualifier,lower,upper,lower_closed,upper_closed,bound_kind,unit,scale_id,source_row
+B1-T2,B1,reporter_readout,2,2.05,h,456,exact,,,,,reported_readout,RFU,reader-demo-01,2
+B1-T3,B1,reporter_readout,3,3.05,h,246,exact,,,,,reported_readout,RFU,reader-demo-01,3
+B1-T4,B1,reporter_readout,4,4.05,h,141,exact,,,,,reported_readout,RFU,reader-demo-01,4
+B1-T6,B1,reporter_readout,6,6.05,h,62.25,exact,,,,,reported_readout,RFU,reader-demo-01,5
+B2-T2,B2,reporter_readout,2,2.05,h,480,exact,,,,,reported_readout,RFU,reader-demo-01,6
+B2-T3,B2,reporter_readout,3,3.05,h,260,exact,,,,,reported_readout,RFU,reader-demo-01,7
+B2-T4,B2,reporter_readout,4,4.05,h,150,exact,,,,,reported_readout,RFU,reader-demo-01,8
+B2-T6,B2,reporter_readout,6,6.05,h,67.5,exact,,,,,reported_readout,RFU,reader-demo-01,9
+B3-T2,B3,reporter_readout,2,2.05,h,504,exact,,,,,reported_readout,RFU,reader-demo-01,10
+B3-T3,B3,reporter_readout,3,3.05,h,274,exact,,,,,reported_readout,RFU,reader-demo-01,11
+B3-T4,B3,reporter_readout,4,4.05,h,159,exact,,,,,reported_readout,RFU,reader-demo-01,12
+B3-T6,B3,reporter_readout,6,6.05,h,72.75,exact,,,,,reported_readout,RFU,reader-demo-01,13

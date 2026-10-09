@@ -1,0 +1,82 @@
+{
+  "input": {
+    "pdb": "2REL",
+    "model": 1,
+    "chain": "A",
+    "species": "Homo sapiens",
+    "residues": 57,
+    "sha256": "87de7296beac51c1ae41d812f8f78ed9c560d401dcfd44e35e6f472b4310a2ac",
+    "disulfides_mature_numbering": [
+      [
+        16,
+        45
+      ],
+      [
+        23,
+        49
+      ],
+      [
+        32,
+        44
+      ],
+      [
+        38,
+        53
+      ]
+    ]
+  },
+  "environment": {
+    "python": "3.12.7",
+    "OpenMM": "8.6.1",
+    "platforms": [
+      "Reference",
+      "CPU",
+      "OpenCL"
+    ],
+    "selected_platform": "OpenCL",
+    "properties": {
+      "Precision": "mixed"
+    }
+  },
+  "system": {
+    "force_fields": [
+      "amber14/protein.ff14SB.xml",
+      "amber14/tip3pfb.xml"
+    ],
+    "water": "TIP3P-FB",
+    "pH_for_protonation": 7.4,
+    "water_model_argument": "tip3p uses the three-site TIP3P-FB force-field parameters",
+    "ionic_strength_M": 0.15,
+    "padding_nm": 1.0,
+    "box_shape": "dodecahedron",
+    "protein_atoms": 830,
+    "total_atoms": 12879,
+    "water_molecules": 4008,
+    "ions": {
+      "NA": 11,
+      "CL": 14
+    },
+    "constraints": 12443,
+    "nonbonded": "PME",
+    "cutoff_nm": 0.9,
+    "ewald_tolerance": 0.0005,
+    "temperature_K": 300,
+    "pressure_bar": 1,
+    "time_step_fs": 2,
+    "friction_ps_inverse": 1
+  },
+  "minimization": {
+    "initial_energy_kJ_mol": -36008.19732540927,
+    "minimized_energy_kJ_mol": -242288.95258729195,
+    "max_iterations": 2000,
+    "force_tolerance_kJ_mol_nm": 10,
+    "wall_seconds_including_benchmark": 31.01704810000956
+  },
+  "benchmark": {
+    "steps": 1000,
+    "simulated_ps": 2,
+    "wall_seconds": 1.305830999976024,
+    "ns_per_day": 132.32952809603444
+  },
+  "status": "Preparation and short performance benchmark; benchmark is not the production trajectory."
+}

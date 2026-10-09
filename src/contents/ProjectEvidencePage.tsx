@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
+import { SectionDecor } from "../components/SectionDecor";
 import { LITERATURE } from "./home/data/literature";
 import "./projectEvidence.css";
 
@@ -18,6 +19,53 @@ const PAGE_REFS: Record<EvidenceKind, readonly string[]> = {
   model: ["rubens", "andersen", "wang"],
   results: ["simmonds", "rubens", "wang", "teng", "andersen"],
   safety: ["begley", "hoffmann", "andersen", "teng"],
+};
+
+const SECTION_ART: Record<
+  string,
+  {
+    file: string;
+    alt: string;
+    width: number;
+    height: number;
+    decor: "local" | "lab" | "research" | "cell";
+  }
+> = {
+  "project-context": {
+    file: "colon-mucosa.png",
+    alt: "Illustrated cross-section of the intestinal mucosal surface",
+    width: 1536,
+    height: 1024,
+    decor: "local",
+  },
+  "validation-plan": {
+    file: "culture-dish.png",
+    alt: "Illustrated culture dish representing the planned laboratory tests",
+    width: 1254,
+    height: 1254,
+    decor: "lab",
+  },
+  "model-framework": {
+    file: "model-researcher.png",
+    alt: "Illustration of a researcher working with a laptop and notebook",
+    width: 1254,
+    height: 1254,
+    decor: "research",
+  },
+  "evidence-status": {
+    file: "research-notebook.png",
+    alt: "Illustrated blank research notebook representing evidence still to be documented",
+    width: 1254,
+    height: 1254,
+    decor: "research",
+  },
+  containment: {
+    file: "bacterium-cutaway.png",
+    alt: "Stylized bacterium cutaway representing the proposed chassis under safety review",
+    width: 1254,
+    height: 1254,
+    decor: "cell",
+  },
 };
 
 function Cite({ id }: { id: string }) {
@@ -43,11 +91,30 @@ function Section({
   title: string;
   children: ReactNode;
 }) {
+  const art = SECTION_ART[id];
   return (
     <section id={id} className="project-evidence__section">
       <div className="project-evidence__section-heading">
         <span>{label}</span>
         <h2>{title}</h2>
+        {art && (
+          <div className="project-evidence__illustration">
+            <SectionDecor
+              variant={art.decor}
+              subdued
+              className="project-evidence__illustration-decor"
+            />
+            <img
+              className="project-evidence__chapter-art"
+              src={`${import.meta.env.BASE_URL}assets/evidence/${art.file}`}
+              alt={art.alt}
+              width={art.width}
+              height={art.height}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        )}
       </div>
       <div className="project-evidence__section-body">{children}</div>
     </section>
@@ -158,8 +225,10 @@ function DesignContent() {
         </p>
         <p>
           In VER16.9, Elafin and sfGFP are constitutively expressed from
-          separate expression cassettes on the same plasmid. They are not
-          directly switched on by the ROS-responsive PspA circuit.
+          separate expression cassettes on the same plasmid. The design names
+          J23100 for sfGFP and leaves the Elafin promoter unspecified. These
+          cassettes are not directly switched on by the ROS-responsive PspA
+          circuit.
         </p>
         <ol className="project-evidence__sequence">
           <li>

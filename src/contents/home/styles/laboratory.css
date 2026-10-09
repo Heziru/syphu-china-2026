@@ -545,7 +545,7 @@
   }
 }
 
-.lab-home-active footer:not(.cosmic-journey__footer) {
+.lab-home-active footer.footer {
   display: none;
 }
 

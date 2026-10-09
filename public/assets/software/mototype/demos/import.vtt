@@ -1,0 +1,21 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:05.007
+Import a synthetic CSV directly on the page. No download is needed.
+
+2
+00:00:05.007 --> 00:00:10.009
+Fill the editor with the synthetic example and inspect the CSV text.
+
+3
+00:00:10.009 --> 00:00:15.016
+Confirm the fixed sample, environment and measurement mapping before loading.
+
+4
+00:00:15.016 --> 00:00:20.029
+Load the pasted CSV. The browser validates the input and recomputes the analysis.
+
+5
+00:00:20.029 --> 00:00:26.029
+Use the same fitting and held-out checks for this imported synthetic dataset.

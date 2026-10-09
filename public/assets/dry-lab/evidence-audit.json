@@ -1,0 +1,381 @@
+{
+  "auditDate": "2026-10-08",
+  "scope": "Read-only audit of submitted data/scripts/reports. Original submission unchanged. Added public-database snapshots and this review only to wiki outputs.",
+  "sourceRoot": "submission-root",
+  "overallDecision": {
+    "genetics": "Include a restrained inconclusive/negative exploratory result and quality-control story; do not claim a validated causal effect, protective effect, proven null effect, or formal exclusion of Elafin therapy.",
+    "expression": "Exclude the submitted GEO forest plot, offline GTEx defaults, cell-type percentages, and triple-hit percentage decomposition. They lack traceable underlying measurements. A newly fetched official GTEx v8 expression snapshot is suitable as tissue context, not an IBD case-control comparison.",
+    "sequence": "Use current official UniProt P19957 accession, sequence and feature annotations. Exclude the submitted conservation/rate results because the hardcoded human sequence differs from the official sequence actually fetched."
+  },
+  "archivedMR": [
+    {
+      "outcome": "IBD",
+      "sourceDataset": "de Lange 2017 / GCST004131",
+      "n": 59957,
+      "nInstruments": 4,
+      "beta": 0.018853935794830714,
+      "se": 0.04734165825935816,
+      "p": 0.690444038468796,
+      "ci95Beta": [
+        -0.07393571439351128,
+        0.11164358598317271
+      ],
+      "or": 1.019032793531444,
+      "ci95OR": [
+        0.9287313959833283,
+        1.1181142780179467
+      ],
+      "status": "archived pipeline output, not validated causal estimate",
+      "effectUnits": "Pipeline beta is GWAS log-odds divided by a mixed exposure scale: whole-blood Z-derived effects with assumed EAF 0.5 plus lung GTEx normalized-expression slope. Do not label as a validated logOR per SD of colonic PI3, per protein concentration or therapeutic dose.",
+      "resultPath": "submission-root/08_clinical_genetics/mendelian_randomization/results/real_ibd_mr_results.json",
+      "harmonisedPath": "submission-root/08_clinical_genetics/mendelian_randomization/results/real_ibd_harmonised_data.csv",
+      "rawOutcomePath": "submission-root/data/raw/delange2017_ibd_chr20.tsv",
+      "numericRecalculation": "Basic fixed IVW from the four harmonized rows reproduces stored beta, SE and p; this validates arithmetic only."
+    },
+    {
+      "outcome": "Ulcerative colitis",
+      "sourceDataset": "Pan-UKB ICD10 K51 EUR",
+      "n": 420531,
+      "nCases": 3627,
+      "nControls": 416904,
+      "nInstruments": 4,
+      "beta": -0.0612961294507886,
+      "se": 0.09154391893417725,
+      "p": 0.5031245068220519,
+      "or": 0.9405446755542963,
+      "ci95OR": [
+        0.7860599552155901,
+        1.1253903482093979
+      ],
+      "status": "archived pipeline output, not validated causal estimate",
+      "effectUnits": "Same mixed and partly reconstructed exposure scale as IBD. Do not advertise OR per SD of colon expression.",
+      "resultPath": "submission-root/08_clinical_genetics/mendelian_randomization/results/real_panukb_uc_mr_results.json",
+      "harmonisedPath": "submission-root/08_clinical_genetics/mendelian_randomization/results/real_panukb_uc_harmonised_data.csv",
+      "rawOutcomePath": "submission-root/data/raw/panukb_uc_chr20.tsv"
+    },
+    {
+      "outcome": "Crohn's disease",
+      "sourceDataset": "Pan-UKB ICD10 K50 EUR",
+      "n": 420531,
+      "nCases": 1978,
+      "nControls": 418553,
+      "nInstruments": 4,
+      "beta": 0.0159726561609213,
+      "se": 0.12293155718810281,
+      "p": 0.8966207860053664,
+      "or": 1.0161009009267068,
+      "ci95OR": [
+        0.7985376225326422,
+        1.29293975854201
+      ],
+      "status": "archived pipeline output, not validated causal estimate",
+      "effectUnits": "Same mixed and partly reconstructed exposure scale as IBD. Do not advertise OR per SD of colon expression.",
+      "resultPath": "submission-root/08_clinical_genetics/mendelian_randomization/results/real_panukb_cd_mr_results.json",
+      "harmonisedPath": "submission-root/08_clinical_genetics/mendelian_randomization/results/real_panukb_cd_harmonised_data.csv",
+      "rawOutcomePath": "submission-root/data/raw/panukb_cd_chr20.tsv"
+    }
+  ],
+  "mrAuditIssues": [
+    {
+      "id": "mixed-tissues",
+      "severity": "major",
+      "finding": "Three eQTLGen whole-blood signals and one GTEx lung signal are combined as a single exposure; tissue-specific expression is not one interchangeable exposure.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/run_real_mr.py",
+      "line": 139
+    },
+    {
+      "id": "unknown-eaf-and-units",
+      "severity": "major",
+      "finding": "All eQTLGen effects are reconstructed from Z using EAF=0.5. Derived magnitudes and supposed SD units depend on this unverified assumption.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/run_real_mr.py",
+      "line": 62
+    },
+    {
+      "id": "distance-is-not-ld",
+      "severity": "major",
+      "finding": "250 kb separation replaces LD-based clumping. The four variants cannot be described as demonstrated independent instruments; no LD reference was provided.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/run_real_mr.py",
+      "line": 147
+    },
+    {
+      "id": "gtex-allele-coding",
+      "severity": "major",
+      "finding": "GTEx parser assigns REF as effect allele and comments ref_factor=1 means REF. Official GTEx v8 README says ref_factor=1 means minor allele is ALT. For retained chr20_44403215_G_T_b38 (factor1), G is set as effect allele despite the ALT/minor convention; harmonization must be corrected and verified before causal use.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/run_real_mr.py",
+      "line": 120,
+      "reference": "https://storage.googleapis.com/adult-gtex/bulk-qtl/v8/single-tissue-cis-qtl/README_eQTL_v8.txt"
+    },
+    {
+      "id": "gtex-threshold-and-tissue-claim",
+      "severity": "major",
+      "finding": "Retained lung variant nominal p=2.42895e-5 does not meet the stated p<5e-8 rule (conditional rank2, permutation p=.0477952). Independent-eQTL files lack eGene q values in these rows; absence in colon files is not proof that PI3 expression is not genetically regulated in colon.",
+      "source": "submission-root/data/raw/GTEx_Analysis_v8_eQTL_independent/Lung.v8.independent_eqtls.txt.gz"
+    },
+    {
+      "id": "presso-label",
+      "severity": "major",
+      "finding": "Custom mr_presso computes a chi-square residual statistic identical to Cochran Q and uses leave-one-out chi-square residuals; it is not the published MR-PRESSO bootstrap procedure. Do not claim MR-PRESSO passed.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/mr_elafin_ibd_pipeline.py",
+      "line": 457
+    },
+    {
+      "id": "steiger-label",
+      "severity": "major",
+      "finding": "Custom directionality averages per-SNP normal-tail probabilities. Stored p=.132 for IBD is not significant, yet report labels direction correct. It is an approximate check, not confirmed directionality.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/mr_elafin_ibd_pipeline.py",
+      "line": 509
+    },
+    {
+      "id": "coloc-implementation",
+      "severity": "major",
+      "finding": "coloc_abf uses log(n) for H0 and does not subtract the same-variant term from H3. This differs from official coloc combine.abf. Exact PP4 values should not be shown as validated colocalization probabilities.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/mr_elafin_ibd_pipeline.py",
+      "line": 659,
+      "reference": "https://github.com/chr1swallace/coloc/blob/main/R/claudia.R"
+    },
+    {
+      "id": "coloc-input",
+      "severity": "major",
+      "finding": "Exposure region consists of significant eQTLGen rows and GTEx lead variants, not a complete unselected single-tissue regional summary-statistic dataset.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/run_real_mr.py",
+      "line": 233
+    },
+    {
+      "id": "low-power-sensitivity",
+      "severity": "limitation",
+      "finding": "Four signals with one dominant instrument limit sensitivity-test power. Non-significant heterogeneity/pleiotropy tests do not validate MR assumptions."
+    },
+    {
+      "id": "report-overclaim",
+      "severity": "major",
+      "finding": "Report calls results a clean zero effect and formally excludes the original effect; this overstates an exploratory, methodologically unresolved analysis. It also infers expression changes are disease consequences; these results do not establish that.",
+      "source": "submission-root/08_clinical_genetics/mendelian_randomization/MR_ANALYSIS_REPORT.md"
+    },
+    {
+      "id": "unfinished-subtype-source",
+      "severity": "provenance",
+      "finding": "de Lange UC/CD files are .part incomplete downloads. Available subtype outputs use Pan-UKB, not the de Lange UC/CD cohorts named in the report study-design table.",
+      "source": "submission-root/data/raw"
+    }
+  ],
+  "leadVariantCheck": {
+    "purpose": "Small independent arithmetic and sign check. Not a reanalysis with LD or a validated causal estimate.",
+    "snp": "rs979641",
+    "chromosome": 20,
+    "positionGRCh37": 43786336,
+    "effectAllele": "T",
+    "otherAllele": "C",
+    "exposure": {
+      "source": "eQTLGen whole blood",
+      "n": 31684,
+      "z": -42.3941,
+      "p": 3.2717e-310,
+      "betaReconstructed": -0.32765705454287614,
+      "seReconstructed": 0.007728836195198769,
+      "assumedEaf": 0.5
+    },
+    "outcome": {
+      "source": "de Lange 2017 IBD",
+      "rawMarker": "20:43786336_C_T",
+      "effectAlleleColumn": "T",
+      "beta": -0.0108,
+      "se": 0.016,
+      "pAsReported": 0.5011,
+      "units": "log odds of IBD per T allele"
+    },
+    "waldApproximation": {
+      "beta": 0.032961292455819066,
+      "se": 0.04883154437899121,
+      "p": 0.4996757649435541,
+      "or": 1.0335105338124055,
+      "ci95OR": [
+        0.9391796152433407,
+        1.1373160215199605
+      ],
+      "note": "First-order ratio SE, reconstructed exposure magnitude. The small p discrepancy versus GWAS comes from rounded beta/SE. No evidence of a protective association from this allele; absence of evidence does not test pharmacological Elafin delivery."
+    },
+    "rawVerified": true,
+    "rawExposurePath": "submission-root/data/raw/eqtlgen_pi3_rows.tsv",
+    "rawOutcomePath": "submission-root/data/raw/delange2017_ibd_chr20.tsv",
+    "safeDisplay": "The strongest blood PI3 cis-eQTL (rs979641) was not associated with IBD in the inspected outcome file (p=0.5011)."
+  },
+  "exclusions": [
+    {
+      "item": "Original claimed MR OR=.68, p=2.4e-5; colocalization PP4=.87; rs6013780 IBD locus",
+      "reason": "Literal hardcoded placeholders, contradicted by later available summary statistics",
+      "source": "submission-root/08_clinical_genetics/elafin_clinical_genetics.py",
+      "lines": [
+        57,
+        114,
+        300,
+        301
+      ]
+    },
+    {
+      "item": "GEO meta-analysis log2FC=-2.2800, p=4.27e-60 and forest plots",
+      "reason": "Numerical meta-analysis is computed from a hardcoded list of ten cohort effects/SEs; no supporting GEO matrices, sample metadata, probe-to-gene extraction, contrast or study-level derivations found. Reused controls also need dependence handling.",
+      "source": "submission-root/04_expression_regulation/elafin_expression_real.py",
+      "line": 92
+    },
+    {
+      "item": "GTEx TPM colon285.4, sigmoid198.2, wholeblood.05",
+      "reason": "Archived processed output exactly matches twelve-tissue offline fallback dictionary, not API evidence. Official GTEx v8 query returns materially different values.",
+      "source": "submission-root/04_expression_regulation/elafin_expression_real.py",
+      "line": 78
+    },
+    {
+      "item": "Goblet82% and triple-hit50/30/20%",
+      "reason": "Hardcoded illustrative estimates with no traced underlying single-cell or quantitative data.",
+      "source": "submission-root/04_expression_regulation/elafin_expression_real.py",
+      "line": 197
+    },
+    {
+      "item": "Evolutionary Ka, mouse/human identity and residue conservation",
+      "reason": "Script fetches a human record but performs analysis on a different hardcoded human sequence; nonhuman accession and orthology are not validated. Raw position-wise entropy also skips alignment.",
+      "source": "submission-root/02_sequence_evolution/elafin_evolution_real.py",
+      "line": 165
+    },
+    {
+      "item": "Gene-info residue/domain labels",
+      "reason": "Signal/mature-chain/WAP boundaries and all four disulfide pairs disagree with official UniProt P19957; replace with verified source annotations.",
+      "source": "submission-root/data/processed/elafin_gene_info.json"
+    }
+  ],
+  "verifiedPublicContext": {
+    "uniprot": {
+      "sourceUrl": "https://rest.uniprot.org/uniprotkb/P19957.json",
+      "humanPage": "https://www.uniprot.org/uniprotkb/P19957/entry",
+      "snapshotPath": "wiki-root/outputs/dry-lab-review/uniprot-P19957-2026-10-08.json",
+      "accession": "P19957",
+      "gene": "PI3",
+      "protein": "Elafin",
+      "organism": "Homo sapiens",
+      "lengthAA": 117,
+      "massDa": 12270,
+      "sequence": "MRASSFLIVVVFLIAGTLVLEAAVTGVPVKGQDTVKGRVPFNGQDPVKGQVSVKGQDKVKAQEPVKGPVSTKPGSCPIILIRCAMLNPPNRCLKDTDCPGIKKCCEGSCGMACFVPQ",
+      "signal": [
+        1,
+        22
+      ],
+      "propeptide": [
+        23,
+        60
+      ],
+      "matureChain": [
+        61,
+        117
+      ],
+      "matureLengthAA": 57,
+      "wapDomain": [
+        69,
+        117
+      ],
+      "disulfides": [
+        [
+          76,
+          105
+        ],
+        [
+          83,
+          109
+        ],
+        [
+          92,
+          104
+        ],
+        [
+          98,
+          113
+        ]
+      ],
+      "note": "All numbering is the full 117-aa UniProt precursor. This is database annotation, not a new team discovery."
+    },
+    "gtex": {
+      "sourceUrl": "https://gtexportal.org/api/v2/expression/medianGeneExpression?gencodeId=ENSG00000124102.4&datasetId=gtex_v8",
+      "humanPage": "https://gtexportal.org/home/gene/PI3",
+      "snapshotPath": "wiki-root/outputs/dry-lab-review/gtex-v8-PI3-median-expression-2026-10-08.json",
+      "dataset": "GTEx v8",
+      "gencodeId": "ENSG00000124102.4",
+      "totalTissues": 54,
+      "unit": "median TPM",
+      "selected": [
+        {
+          "tissue": "Esophagus mucosa",
+          "median": 1294.97
+        },
+        {
+          "tissue": "Whole blood",
+          "median": 93.0533
+        },
+        {
+          "tissue": "Skin, sun exposed",
+          "median": 21.5783
+        },
+        {
+          "tissue": "Colon, transverse",
+          "median": 17.116
+        },
+        {
+          "tissue": "Terminal ileum",
+          "median": 13.6518
+        },
+        {
+          "tissue": "Lung",
+          "median": 11.785
+        },
+        {
+          "tissue": "Colon, sigmoid",
+          "median": 0.651203
+        }
+      ],
+      "interpretation": "PI3 expression depends strongly on tissue context. Bulk reference tissues do not measure local inflamed mucosal expression or Elafin protein concentrations. This is not an IBD-versus-control contrast.",
+      "displaySuggestion": "Log-scale dot/bar chart with exact TPM on hover and selected tissues labeled; identify full54-tissue downloadable source and selection rationale (exposure tissue vs intended delivery site).",
+      "retrieved": "2026-10-08"
+    }
+  },
+  "suggestedWikiCopy": {
+    "heading": "Evidence sets the boundary.",
+    "result": "Our exploratory genetic analysis did not provide convincing evidence that genetically predicted PI3 expression protects against IBD. The archived IVW run returned p=0.690. A methods audit identified unresolved instrument and harmonization issues, so we do not treat this as a validated causal estimate.",
+    "decision": "We kept genetic support unresolved and focused our design tests on local protein delivery, protease inhibition and controllable persistence.",
+    "mrFootnote": "Archive: four distance-filtered signals from blood and lung; eQTLGen effect sizes reconstructed with assumed allele frequency. Formal LD filtering, allele verification and standard-package validation are required.",
+    "sequenceTitle": "One sequence. A defined payload.",
+    "sequenceBody": "The reviewed human PI3 precursor contains 117 amino acids. UniProt annotates mature Elafin at residues61–117 and four disulfide bridges. These boundaries define which molecular entity is being modeled.",
+    "expressionTitle": "Tissue context matters.",
+    "expressionBody": "A verified GTEx v8 snapshot shows that PI3 expression differs across reference tissues. Blood-based genetic instruments cannot stand in for local intestinal delivery."
+  },
+  "pathConventions": {
+    "submission-root": "Submitted Elafin-IBD research project root, containing data and 08_clinical_genetics. Paths are relative to this root; local user directories are omitted.",
+    "wiki-root": "The wiki repository root. Published audit copies preserve source-relative paths; original submitted files remain unchanged."
+  },
+  "publishedSnapshots": {
+    "uniprot": "uniprot-P19957.json",
+    "gtex": "tissue-context-gtex-v8-full.json"
+  },
+  "supplementalModuleReview": {
+    "fba": {
+      "status": "Do not present as EcN flux validation",
+      "script": "fba_iml1515.py",
+      "findings": [
+        "Actual COBRA optimization calls exist, but iML1515 input MAT/SBML is not included in the submitted project.",
+        "The supplied model is K-12 MG1655, not EcN, and examines butyrate rather than Elafin burden.",
+        "Exchange and transport reactions reuse EX_but_e; the resulting network needs validation.",
+        "Knockout results are not saved with the delivered result tables."
+      ]
+    },
+    "immunoinformatics": {
+      "status": "Excluded from scientific conclusions",
+      "script": "elafin_immunoinformatics_real.py",
+      "findings": [
+        "Input is an incorrect 126-residue sequence, rather than the official 117-residue precursor.",
+        "The IEDB function returns None; scores are custom heuristics, not verified IEDB, NetMHC or BepiPred results.",
+        "ADA risk below 5 percent is unsupported."
+      ]
+    },
+    "evolution": {
+      "status": "Excluded pending sequence and alignment correction",
+      "findings": [
+        "Incorrect input sequences and conservation calculated without a valid multiple sequence alignment prevent interpretation."
+      ]
+    }
+  }
+}

@@ -1,0 +1,184 @@
+/* One reading column per scene; full scientific context remains in reading mode. */
+.continuous-journey .story-depth--front[data-copy] .story-depth__copy {
+  position: absolute;
+  left: 7%;
+  top: 31%;
+  width: 34%;
+  max-width: 490px;
+  display: grid;
+  gap: clamp(18px, 2.8svh, 28px);
+}
+.continuous-journey .story-depth--front[data-copy] h2,
+.continuous-journey .story-depth--front[data-copy] .story-depth__near {
+  position: static;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  transform-origin: left top;
+}
+.continuous-journey .story-depth--front[data-copy] h2 {
+  font-size: clamp(42px, min(4.9vw, 8svh), 70px);
+  font-weight: 750;
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  color: #244e43;
+}
+.continuous-journey .story-depth--front[data-copy] .story-depth__near p {
+  max-width: 29ch;
+  font-size: clamp(20px, 1.65vw, 25px);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.018em;
+  white-space: normal;
+  color: #668074;
+}
+.continuous-journey .story-depth--front:is([data-copy="campus"], [data-copy="library"], [data-copy="research"]) .story-depth__copy {
+  top: 14%;
+  width: 38%;
+}
+
+.continuous-journey .world-type__topic {
+  left: 7%;
+  top: 20%;
+  width: 31%;
+  font-size: clamp(42px, min(4.6vw, 7.5svh), 68px);
+  font-weight: 750;
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  color: #244e43;
+}
+.continuous-journey .world-type__topic span {
+  color: inherit;
+}
+.continuous-journey .world-type__label {
+  left: 7%;
+  top: 43%;
+  bottom: auto;
+  width: 29%;
+  font-size: clamp(17px, 1.4vw, 21px);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: #668074;
+}
+.continuous-journey .world-type__counts {
+  inset: auto auto 18% 7%;
+  width: 31%;
+  height: auto;
+  color: #244e43;
+}
+.continuous-journey .world-type__counts p {
+  position: static;
+  display: grid;
+  gap: 12px;
+  line-height: 1;
+}
+.continuous-journey .world-type__year {
+  position: static;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: #668074;
+}
+.continuous-journey .world-type__counts strong {
+  position: static;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  text-align: left;
+  font-size: clamp(44px, 4.5vw, 64px);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+.continuous-journey .world-type__counts .world-type__unit {
+  display: inline;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0;
+  margin: 0;
+}
+.continuous-journey .world-type__note {
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: #718174;
+}
+
+/* The globe uses a centred portrait camera before the phone breakpoint. */
+@media (min-width: 701px) and (max-width: 1050px) and (orientation: portrait) {
+  .continuous-journey .world-type__topic {
+    top: 6%;
+    width: 86%;
+    font-size: 48px;
+  }
+  .continuous-journey .world-type__label {
+    top: 22%;
+    width: 86%;
+    font-size: 19px;
+  }
+  .continuous-journey .world-type__counts {
+    bottom: 5%;
+    width: 86%;
+  }
+  .continuous-journey .world-type__counts p {
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+  }
+  .continuous-journey .world-type__counts strong {
+    font-size: 48px;
+  }
+  .continuous-journey .world-type__note {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 700px) {
+  .continuous-journey .story-depth--front[data-copy] .story-depth__copy {
+    left: 7%;
+    top: 12%;
+    width: 86%;
+    max-width: none;
+    gap: 15px;
+  }
+  .continuous-journey .story-depth--front[data-copy] h2 {
+    font-size: clamp(34px, min(10vw, 5.8svh), 48px);
+    line-height: 1.05;
+  }
+  .continuous-journey .story-depth--front[data-copy] .story-depth__near p {
+    font-size: clamp(18px, 4.8vw, 21px);
+    max-width: 30ch;
+    line-height: 1.35;
+  }
+  .continuous-journey .story-depth--front:is([data-copy="campus"], [data-copy="library"], [data-copy="research"]) .story-depth__copy {
+    top: 7%;
+  }
+  .continuous-journey .world-type__topic {
+    top: 7%;
+    left: 7%;
+    width: 86%;
+    font-size: clamp(34px, min(10vw, 5.8svh), 48px);
+  }
+  .continuous-journey .world-type__label {
+    top: 24%;
+    width: 86%;
+    font-size: 17px;
+  }
+  .continuous-journey .world-type__counts {
+    bottom: 6%;
+    width: 86%;
+  }
+  .continuous-journey .world-type__counts p {
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .continuous-journey .world-type__counts strong {
+    font-size: clamp(38px, 11vw, 50px);
+  }
+  .continuous-journey .world-type__counts .world-type__unit {
+    font-size: 17px;
+  }
+  .continuous-journey .world-type__note {
+    grid-column: 1 / -1;
+  }
+}

@@ -1,0 +1,4 @@
+chain_1,residue_1,atom_1,chain_2,residue_2,atom_2,distance_A,interpretation
+I,24,C,E,195,OG,3.2977439257771377,Reactive-site proximity
+I,26,O,E,193,N,3.2666891495824952,Backbone separation
+I,27,OD1,E,192,O,2.182139775541433,Short O···O contact

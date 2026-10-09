@@ -1,0 +1,147 @@
+.particle-transport {
+  width: 100%;
+  min-width: 0;
+}
+.particle-replay {
+  margin: 28px 0 38px;
+  padding-top: 18px;
+  border-top: 1px solid #d3dfd7;
+}
+.particle-replay-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 15px;
+}
+.particle-replay-title span {
+  color: #567064;
+  font-variant-numeric: tabular-nums;
+}
+.particle-replay canvas {
+  display: block;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  height: auto;
+  aspect-ratio: 600 / 800;
+}
+.particle-playback {
+  display: grid;
+  grid-template-columns: 82px 85px minmax(0, 1fr);
+  align-items: center;
+  gap: 15px;
+  margin: 10px 0 18px;
+}
+.particle-playback label {
+  font-size: 13px;
+  display: grid;
+}
+.particle-playback output {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.particle-playback input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 32px;
+  accent-color: #285f50;
+  cursor: pointer;
+}
+.particle-replay button {
+  font: inherit;
+  font-size: 14px;
+  color: #285b4c;
+  border: 1px solid #839e8f;
+  border-radius: 4px;
+  background: #fff;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.particle-replay button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.particle-replay button:hover:enabled {
+  background: #eef4ef;
+}
+.particle-replay button:focus-visible,
+.particle-playback input:focus-visible {
+  outline: 2px solid #285f50;
+  outline-offset: 3px;
+}
+.particle-ledger {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0 12px;
+}
+.particle-ledger > div {
+  border-top: 3px solid;
+  padding-top: 8px;
+}
+.particle-ledger dt {
+  font-weight: 500;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.particle-ledger dt span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: 0 0 7px;
+}
+.particle-ledger dd {
+  margin: 3px 0 0;
+  font-size: 19px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.particle-transport .particle-note {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #61746a;
+  margin: 12px 0 0;
+}
+.particle-transport .particle-error {
+  font-size: 14px;
+  color: #934f42;
+  margin: 12px 0 0;
+}
+@media (max-width: 600px) {
+  .particle-playback {
+    grid-template-columns: 65px 55px minmax(0, 1fr);
+    gap: 9px;
+  }
+  .particle-replay button {
+    font-size: 13px;
+    padding: 7px;
+  }
+  .particle-ledger {
+    gap: 9px;
+  }
+  .particle-ledger dt {
+    font-size: 12px;
+    gap: 4px;
+  }
+  .particle-ledger dd {
+    font-size: 17px;
+  }
+  .particle-replay-title {
+    font-size: 14px;
+  }
+}
+@media (max-width: 350px) {
+  .particle-ledger {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media print {
+  .particle-replay {
+    display: none;
+  }
+}
